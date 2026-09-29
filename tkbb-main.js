@@ -1523,13 +1523,17 @@
 			return h ? '<div><h3>' + title + '</h3>' + h + '</div>' : '';
 		}
 
+		// 회원 이름: 페이지 HTML 에 숨겨 둔 {{$회원명}} (위사 치환 코드). 없으면 '회원'
+		var nmEl = document.getElementById('tkbb-mem-name');
+		var memName = ((nmEl && nmEl.textContent) || '').replace(/\s+/g, ' ').trim() || '회원';
+
 		var logout = document.querySelector('header a[href*="logout"]');
 		var logoutHref = logout ? logout.getAttribute('href') : '/member/logout.php';
 
 		var h = '';
 		h += '<div class="nt"><a href="/#tkbb-live"><em>공지</em><span>이번 주 공동구매 일정을 확인해보세요</span></a>'
 			+ '<button type="button" aria-label="공지 닫기"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>';
-		h += '<div class="hi"><h2>회원<small>님</small></h2><p>오늘도 타코베베와 함께해요</p>'
+		h += '<div class="hi"><h2>' + esc(memName) + '<small>님</small></h2><p>오늘도 타코베베와 함께해요</p>'
 			+ '<a class="gr" href="/member/edit_step1.php"><div><i></i>' + esc(info['회원등급']) + ' <small>내 정보 보기</small></div>' + ARW_D + '</a></div>';
 		h += '<div class="sm">'
 			+ '<a href="/mypage/coupon_down_list.php"><span>쿠폰</span><b>' + num(info['쿠폰']) + '<small>장</small></b></a>'
