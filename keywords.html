@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>주간 검색어 리포트 · takkobebe</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📈</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap">
+<style>
+  :root {
+    --ground: #EAE3DF;
+    --surface: #FBFAF9;
+    --card: #FFFFFF;
+    --ink: #1C1917;
+    --muted: #8A817C;
+    --badge-bg: #F1EDEA;
+    --accent: #F27430;
+    --up: #2E8B57;
+    --down: #B0A49D;
+    --tline: #DDD5D0;
+    --shadow: 0 1px 2px rgba(28, 25, 23, 0.04), 0 6px 20px rgba(28, 25, 23, 0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #181512;
+      --surface: #211D1A;
+      --card: #272220;
+      --ink: #EDE8E4;
+      --muted: #9B928C;
+      --badge-bg: #322C29;
+      --accent: #FF9257;
+      --up: #6FBF8F;
+      --down: #7A716B;
+      --tline: #3B3430;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    font-size: 13.5px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 30px 16px 52px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  header { padding: 4px 6px 2px; }
+  header h1 { margin: 0; font-size: 22px; font-weight: 900; letter-spacing: -0.02em; }
+  header .week {
+    margin-top: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  header .filters {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 11px;
+    border: 1px solid var(--tline);
+    border-radius: 999px;
+    background: var(--surface);
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+
+  .card {
+    background: var(--surface);
+    border-radius: 18px;
+    padding: 18px;
+    box-shadow: var(--shadow);
+  }
+  .card h2 {
+    margin: 0 0 12px;
+    font-size: 14.5px;
+    font-weight: 900;
+    letter-spacing: -0.01em;
+  }
+  .card h2 .sub { font-size: 11.5px; font-weight: 500; color: var(--muted); margin-left: 6px; }
+
+  /* 하이라이트 칩 */
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: var(--badge-bg);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .chip .tag { font-size: 10.5px; font-weight: 900; color: var(--accent); }
+  .chip .tag.up { color: var(--up); }
+
+  /* 순위 테이블 */
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  td { padding: 7px 2px; border-top: 1px solid var(--tline); }
+  tr:first-child td { border-top: none; }
+  td.rank { width: 30px; font-weight: 900; color: var(--muted); font-size: 12.5px; }
+  tr.top3 td.rank { color: var(--accent); }
+  td.kw a { color: var(--ink); text-decoration: none; font-weight: 500; }
+  td.kw a:active { color: var(--accent); }
+  td.diff { width: 58px; text-align: right; font-size: 11.5px; font-weight: 900; white-space: nowrap; }
+  .diff .up { color: var(--up); }
+  .diff .down { color: var(--down); }
+  .diff .same { color: var(--muted); font-weight: 500; }
+  .diff .new { color: var(--accent); }
+
+  /* 인스타그램 해시태그 블록 */
+  .ig-tag { padding: 11px 0; border-top: 1px solid var(--tline); }
+  .ig-tag:first-child { border-top: none; padding-top: 0; }
+  .ig-tag .tname { font-weight: 900; font-size: 13px; color: var(--accent); margin-bottom: 3px; }
+  .ig-post { display: flex; align-items: baseline; gap: 8px; padding: 2px 0; font-size: 12.5px; }
+  .ig-post a {
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+  }
+  .ig-meta { color: var(--muted); font-size: 11px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+  .note {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    padding: 0 10px;
+  }
+  .note a { color: var(--muted); }
+  .state { text-align: center; color: var(--muted); padding: 30px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>📈 주간 검색어 리포트</h1>
+    <div class="week" id="week">불러오는 중…</div>
+    <span class="filters" id="filters"></span>
+  </header>
+
+  <div class="card" id="highlight" hidden>
+    <h2>🔥 이번 주 주목<span class="sub">급상승 · 신규 진입</span></h2>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div id="lists"><div class="state" id="loading">데이터를 불러오는 중입니다…</div></div>
+
+  <div id="yt"></div>
+
+  <div id="ig"></div>
+
+  <p class="note">
+    네이버: 데이터랩 쇼핑인사이트, 여성 30~40대 · 지난주(월~일) 기준, 매주 월요일 자동 반영 · 변동은 그 전주 TOP 60과 비교<br>
+    유튜브: 육아·리빙 시드 기반 인기 자동완성(연령·성별 필터 없음) · 키워드를 누르면 해당 플랫폼 검색 결과로 이동<br>
+    인스타그램: Meta API 기준 해시태그별 인기 게시물 (검색어 순위는 인스타그램이 외부 제공하지 않음)
+  </p>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const shopUrl = (kw) => "https://msearch.shopping.naver.com/search/all?query=" + encodeURIComponent(kw);
+
+// "2026-08-17" → "2026.08.17"
+const dot = (d) => d.replace(/-/g, ".");
+
+function diffHtml(it) {
+  if (it.isNew) return '<span class="new">NEW</span>';
+  if (it.delta > 0) return '<span class="up">▲ ' + it.delta + "</span>";
+  if (it.delta < 0) return '<span class="down">▼ ' + -it.delta + "</span>";
+  return '<span class="same">–</span>';
+}
+
+async function load() {
+  let data;
+  try {
+    const r = await fetch("/api/keywords");
+    data = await r.json();
+    if (!r.ok || !data.categories) throw new Error(data.error || "load failed");
+  } catch (e) {
+    $("loading").textContent = "데이터를 불러오지 못했습니다. 잠시 후 새로고침해 주세요.";
+    return;
+  }
+
+  $("week").textContent = dot(data.week.start) + " ~ " + dot(data.week.end);
+  $("filters").textContent = data.filters;
+
+  // 하이라이트: 순위 5계단 이상 상승 또는 TOP 20 신규 진입
+  const chips = [];
+  for (const cat of data.categories) {
+    for (const it of cat.items) {
+      if (it.isNew || it.delta >= 5) {
+        chips.push(
+          '<a class="chip" href="' + shopUrl(it.keyword) + '" target="_blank" rel="noopener">' +
+            '<span class="tag' + (it.isNew ? "" : " up") + '">' + (it.isNew ? "NEW" : "▲" + it.delta) + "</span>" +
+            esc(it.keyword) +
+          "</a>"
+        );
+      }
+    }
+  }
+  if (chips.length) {
+    $("chips").innerHTML = chips.join("");
+    $("highlight").hidden = false;
+  }
+
+  const CAT_EMOJI = { "출산/육아": "🍼", "생활/건강": "🏠" };
+  $("lists").innerHTML = data.categories
+    .map((cat) => {
+      const rows = cat.items
+        .map(
+          (it) =>
+            '<tr' + (it.rank <= 3 ? ' class="top3"' : "") + '>' +
+              '<td class="rank">' + it.rank + "</td>" +
+              '<td class="kw"><a href="' + shopUrl(it.keyword) + '" target="_blank" rel="noopener">' + esc(it.keyword) + "</a></td>" +
+              '<td class="diff">' + diffHtml(it) + "</td>" +
+            "</tr>"
+        )
+        .join("");
+      const empty = '<div class="state">아직 이번 주 데이터가 없습니다.</div>';
+      return (
+        '<div class="card" style="margin-bottom:14px">' +
+          "<h2>" + (CAT_EMOJI[cat.name] || "🛒") + " " + esc(cat.name) + '<span class="sub">TOP 20</span></h2>' +
+          (cat.items.length ? "<table>" + rows + "</table>" : empty) +
+        "</div>"
+      );
+    })
+    .join("");
+}
+
+async function loadYoutube() {
+  let data;
+  try {
+    const r = await fetch("/api/youtube");
+    data = await r.json();
+    if (!r.ok || !data.groups) throw new Error(data.error || "load failed");
+  } catch (e) {
+    return; // 유튜브 쪽이 실패해도 네이버 리포트는 그대로 보여준다
+  }
+  const ytUrl = (kw) => "https://www.youtube.com/results?search_query=" + encodeURIComponent(kw);
+  $("yt").innerHTML = data.groups
+    .map((g) => {
+      const rows = g.items
+        .map(
+          (it) =>
+            '<tr' + (it.rank <= 3 ? ' class="top3"' : "") + '>' +
+              '<td class="rank">' + it.rank + "</td>" +
+              '<td class="kw"><a href="' + ytUrl(it.keyword) + '" target="_blank" rel="noopener">' + esc(it.keyword) + "</a></td>" +
+            "</tr>"
+        )
+        .join("");
+      return (
+        '<div class="card" style="margin-bottom:14px">' +
+          "<h2>▶️ 유튜브 · " + esc(g.name) + '<span class="sub">인기 자동완성 TOP 15</span></h2>' +
+          (g.items.length ? "<table>" + rows + "</table>" : '<div class="state">데이터를 불러오지 못했습니다.</div>') +
+        "</div>"
+      );
+    })
+    .join("");
+}
+
+async function loadInstagram() {
+  let data;
+  try {
+    const r = await fetch("/api/instagram");
+    data = await r.json();
+  } catch (e) {
+    return;
+  }
+  if (!data || data.configured === false) return; // 아직 연동 전이면 섹션 자체를 숨긴다
+
+  let body;
+  if (data.authError) {
+    body =
+      '<div class="state">인스타그램 연동 토큰이 만료됐거나 권한이 없습니다.<br>토큰을 재발급해 주세요.</div>';
+  } else {
+    body = (data.tags || [])
+      .filter((t) => t.posts && t.posts.length)
+      .map(
+        (t) =>
+          '<div class="ig-tag"><div class="tname">#' + esc(t.tag) + "</div>" +
+          t.posts
+            .map(
+              (p) =>
+                '<div class="ig-post">' +
+                (p.url
+                  ? '<a href="' + p.url + '" target="_blank" rel="noopener">' + esc(p.caption) + "</a>"
+                  : "<span>" + esc(p.caption) + "</span>") +
+                '<span class="ig-meta">❤️ ' + p.likes.toLocaleString() + " · 💬 " + p.comments.toLocaleString() + "</span>" +
+                "</div>"
+            )
+            .join("") +
+          "</div>"
+      )
+      .join("");
+    if (!body) return;
+  }
+  $("ig").innerHTML =
+    '<div class="card" style="margin-bottom:14px">' +
+    '<h2>📸 인스타그램<span class="sub">해시태그 인기 게시물</span></h2>' +
+    body +
+    "</div>";
+}
+
+load();
+loadYoutube();
+loadInstagram();
+</script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<div class="tkbb-dj">
+<style>
+  /* 상세설명은 '넣었습니다/안 넣었습니다' 카드 아래에서 접고, 나머지는 '상세설명 더보기'로 (후기가 가깝게 보이도록) */
+  .wing-detail-more-contents { min-height: 808px; }
+
+  .tkbb-dj {
+    --dj-surface: #F2F5F6;
+    --dj-ink: #161616;
+    --dj-muted: #6E6E6E;
+    --dj-line: #E3E7E9;
+    --dj-point: #D1D798;
+    --dj-deep: #6F7A2A;
+    --dj-white: #FFFFFF;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 8px 4px 0;
+    color: var(--dj-ink);
+    font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+  }
+  .tkbb-dj * { box-sizing: border-box; }
+  .tkbb-dj * { font-size: inherit; line-height: inherit; }
+  /* PC 스킨이 상세설명 이미지에 max-width:50%를 걸어 두어 덮어씀 */
+  .tkbb-dj img { display: block; width: 100%; max-width: 100% !important; height: auto; }
+  .tkbb-dj h2, .tkbb-dj h3, .tkbb-dj p, .tkbb-dj ul, .tkbb-dj ol, .tkbb-dj dl, .tkbb-dj dd, .tkbb-dj figure, .tkbb-dj table { margin: 0; padding: 0; }
+  .tkbb-dj ul, .tkbb-dj ol { list-style: none; }
+
+  .tkbb-dj .dj-block { padding-block: 32px; border-top: 1px solid var(--dj-line); }
+  /* 맨 앞 자식이 <style>이라 :first-child가 안 걸림 → 첫 블록은 first-of-type으로 */
+  .tkbb-dj > .dj-block:first-of-type { padding-top: 8px; border-top: 0; }
+  .tkbb-dj .dj-title { margin-bottom: 14px; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+  .tkbb-dj .dj-lead { margin-bottom: 16px; font-size: 14px; font-weight: 300; }
+  .tkbb-dj .dj-note { margin-top: 12px; font-size: 12.5px; color: var(--dj-muted); }
+
+  .tkbb-dj .dj-intro img { border-radius: 8px; background: var(--dj-surface); }
+  .tkbb-dj .dj-intro h2 { margin-top: 18px; font-size: 22px; font-weight: 500; line-height: 1.3; letter-spacing: -0.02em; }
+  .tkbb-dj .dj-intro h2 span { display: block; font-weight: 300; }
+  .tkbb-dj .dj-intro p { margin-top: 8px; font-size: 14.5px; font-weight: 300; }
+  .tkbb-dj .dj-made-of { margin-top: 18px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tkbb-dj .dj-made-of li { padding: 12px 14px; border-radius: 8px; background: var(--dj-surface); }
+  .tkbb-dj .dj-made-of b { display: block; font-size: 13.5px; font-weight: 500; }
+  .tkbb-dj .dj-made-of span { display: block; margin-top: 4px; font-size: 13px; font-weight: 300; color: var(--dj-muted); }
+
+  .tkbb-dj .dj-steps { display: grid; gap: 14px; }
+  .tkbb-dj .dj-steps li { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 10px; font-size: 14px; font-weight: 300; }
+  .tkbb-dj .dj-steps b { display: block; margin-bottom: 2px; font-size: 14.5px; font-weight: 500; }
+  .tkbb-dj .dj-num { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--dj-point); color: var(--dj-ink); font-size: 12px; font-weight: 500; font-style: normal; }
+
+  .tkbb-dj .dj-photo { margin-top: 18px; }
+  .tkbb-dj .dj-photo img { border-radius: 8px; background: var(--dj-surface); }
+  .tkbb-dj .dj-photo figcaption { margin-top: 8px; font-size: 12.5px; color: var(--dj-muted); }
+
+  .tkbb-dj .dj-spec { margin-top: 18px; display: grid; gap: 10px; font-size: 13.5px; }
+  .tkbb-dj .dj-spec > div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; }
+  .tkbb-dj .dj-spec dt { font-weight: 500; line-height: 1.35; }
+  .tkbb-dj .dj-spec dt small { display: block; margin-top: 2px; font-size: 12px; font-weight: 400; color: var(--dj-muted); }
+  .tkbb-dj .dj-spec dd { font-weight: 300; line-height: 1.55; }
+
+  .tkbb-dj .dj-acc details { border-top: 1px solid var(--dj-line); }
+  .tkbb-dj .dj-acc details:last-child { border-bottom: 1px solid var(--dj-line); }
+  .tkbb-dj .dj-block.dj-faq { padding-bottom: 8px; }
+  .tkbb-dj .dj-acc summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-block: 14px; font-size: 14.5px; cursor: pointer; }
+  .tkbb-dj .dj-acc summary::-webkit-details-marker { display: none; }
+  .tkbb-dj .dj-acc summary svg { width: 18px; height: 18px; flex: none; color: var(--dj-muted); transition: transform .15s; }
+  .tkbb-dj .dj-acc details[open] summary svg { transform: rotate(180deg); }
+  .tkbb-dj .dj-acc .dj-a { padding-bottom: 16px; font-size: 14px; font-weight: 300; }
+  .tkbb-dj .dj-acc .dj-list { padding-bottom: 16px; display: grid; gap: 6px; font-size: 13.5px; font-weight: 300; }
+  .tkbb-dj .dj-acc .dj-list li { position: relative; padding-left: 10px; }
+  .tkbb-dj .dj-acc .dj-list li::before { content: ""; position: absolute; left: 0; top: .62em; width: 3px; height: 3px; border-radius: 50%; background: var(--dj-muted); }
+
+  .tkbb-dj .dj-gosi { padding-bottom: 16px; }
+  .tkbb-dj .dj-gosi table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .tkbb-dj .dj-gosi caption { display: none; }
+  .tkbb-dj .dj-gosi th, .tkbb-dj .dj-gosi td { padding: 9px 2px; border-top: 1px solid var(--dj-line); text-align: left; vertical-align: top; font-weight: 300; line-height: 1.5; }
+  .tkbb-dj .dj-gosi th { width: 38%; padding-right: 10px; color: var(--dj-muted); font-weight: 400; background: transparent; }
+  .tkbb-dj .dj-gosi tr:first-child th, .tkbb-dj .dj-gosi tr:first-child td { border-top: 0; }
+
+  /* 베이비형 · 프리미엄형 비교표 */
+  .tkbb-dj .dj-cmp { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .tkbb-dj .dj-cmp th, .tkbb-dj .dj-cmp td { padding: 10px 6px; text-align: center; vertical-align: middle; border-bottom: 1px solid var(--dj-line); font-weight: 300; line-height: 1.45; }
+  .tkbb-dj .dj-cmp th { font-weight: 500; background: var(--dj-surface); }
+  .tkbb-dj .dj-cmp th:first-child, .tkbb-dj .dj-cmp td:first-child { width: 22%; color: var(--dj-muted); font-weight: 400; }
+
+  @media (min-width: 768px) {
+    .tkbb-dj .dj-block { padding-block: 40px; }
+    .wing-detail-more-contents { min-height: 1253px; }
+    .tkbb-dj .dj-title { font-size: 27px; }
+    .tkbb-dj .dj-intro h2 { font-size: 26px; }
+  }
+</style>
+
+<div class="dj-block dj-intro">
+  <img src="https://takkobebe-link.vercel.app/img/doraji/hero.jpg" alt="배도라지크림 500g 병과 300g 병">
+  <h2><span>국산 배와 도라지를 오래 고아 만든</span>더단 퍼머거 배도라지크림</h2>
+  <p>사계절 내내 꾸준히 찾으시는 배도라지크림입니다. 국산 배와 도라지를 20시간 넘게 고아 곱게 갈아, 이름처럼 숟가락으로 퍼 먹기 좋습니다. 아침에 일어나기 힘들어하는 아이 입에 한 스푼 크게 넣어 주며 하루를 시작해 보세요.</p>
+  <ul class="dj-made-of">
+    <li><b>넣었습니다</b><span>국산 배 · 도라지, 국산 꿀 (베이비형은 유기농 원당)</span></li>
+    <li><b>안 넣었습니다</b><span>보존제, 인공색소, 인공향료</span></li>
+  </ul>
+</div>
+
+<div class="dj-block">
+  <h3 class="dj-title">베이비형과 프리미엄형</h3>
+  <table class="dj-cmp">
+    <thead><tr><th>비교</th><th>베이비형</th><th>프리미엄형</th></tr></thead>
+    <tbody>
+      <tr><td>드시는 분</td><td>10~24개월 아기</td><td>24개월부터 어른까지</td></tr>
+      <tr><td>도라지</td><td>3년 이상 자란 약도라지</td><td>24시간 저온 건조한 약도라지</td></tr>
+      <tr><td>단맛</td><td>유기농 원당</td><td>국산 꿀</td></tr>
+      <tr><td>소비기한</td><td>제조일로부터 2개월</td><td>제조일로부터 3개월</td></tr>
+    </tbody>
+  </table>
+  <p class="dj-note">베이비형은 12개월 미만 아기도 먹을 수 있도록 꿀 대신 유기농 원당을 넣었습니다.</p>
+</div>
+
+<div class="dj-block">
+  <h3 class="dj-title">이렇게 만듭니다</h3>
+  <p class="dj-lead">더단은 25년 전, 두 아들에게 먹일 배숙을 직접 끓이던 엄마의 부엌에서 시작했습니다. 그 마음 그대로, 느리지만 정직하게 만듭니다.</p>
+  <ul class="dj-steps">
+    <li><i class="dj-num" aria-hidden="true">1</i><span><b>재료 준비</b>국산 햇배와 도라지, 국산 꿀을 준비합니다. 베이비형에는 꿀 대신 유기농 비정제 원당을 씁니다.</span></li>
+    <li><i class="dj-num" aria-hidden="true">2</i><span><b>도라지 머리 손질</b>도라지 머리는 독성이 조금 있을 수 있어 한 뿌리씩 손으로 잘라 냅니다.</span></li>
+    <li><i class="dj-num" aria-hidden="true">3</i><span><b>푹 고아 내기</b>모든 재료를 한데 넣고 20시간 넘게 고아 줍니다.</span></li>
+    <li><i class="dj-num" aria-hidden="true">4</i><span><b>곱게 갈기</b>알맞은 점성과 농도, 위생을 위해 핸드믹서로 곱게 갈아 줍니다.</span></li>
+  </ul>
+  <figure class="dj-photo">
+    <img src="https://takkobebe-link.vercel.app/img/doraji/spoon.jpg" alt="나무 숟가락으로 떠낸 배도라지크림" loading="lazy">
+  </figure>
+</div>
+
+<div class="dj-block">
+  <h3 class="dj-title">크기 · 보관 · 원재료</h3>
+  <figure class="dj-photo" style="margin-top:0">
+    <img src="https://takkobebe-link.vercel.app/img/doraji/size.jpg" alt="배도라지크림 500g 병과 500ml 캔 크기 비교" loading="lazy">
+    <figcaption>500g 병을 500ml 캔과 비교한 크기입니다.</figcaption>
+  </figure>
+  <dl class="dj-spec">
+    <div><dt>용량</dt><dd>베이비형 500g · 프리미엄형 300g, 500g</dd></div>
+    <div><dt>보관</dt><dd>냉장 보관 (냉장고 가장 윗칸 권장)</dd></div>
+    <div><dt>베이비형<small>원재료명 및 함량</small></dt><dd>배(국산) 50%, 도라지(국산) 47%, 유기농원당(브라질) 3%</dd></div>
+    <div><dt>프리미엄형<small>원재료명 및 함량</small></dt><dd>배(국산) 46%, 부여 토종 건도라지(국산) 50%, 벌꿀(국내산) 4%</dd></div>
+  </dl>
+  <p class="dj-note">보존제를 넣지 않은 먹거리라 개봉 후에는 되도록 빨리 드셔 주세요.</p>
+</div>
+
+<div class="dj-block dj-faq">
+  <h3 class="dj-title">배송 · 교환 및 상품 정보</h3>
+  <div class="dj-acc">
+    <details>
+      <summary>언제 받을 수 있나요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="dj-a">주문일로부터 1~2일 안에 차례로 보내 드립니다.</p>
+    </details>
+    <details>
+      <summary>드실 때 참고해 주세요<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <ul class="dj-list">
+        <li>보존제를 넣지 않아 개봉 후에는 되도록 빨리 드시고, 물이 들어가지 않게 주의해 주세요.</li>
+        <li>침이 묻은 숟가락이 닿으면 쉽게 상할 수 있으니 깨끗하고 마른 숟가락으로 덜어 드세요.</li>
+        <li>도라지 껍질이 덜 갈린 채 섞여 있을 수 있는데, 그대로 씹어 드셔도 됩니다.</li>
+        <li>냉장고 문 쪽 홈바는 신선도가 떨어지니 가장 윗칸에 보관해 주세요.</li>
+        <li>트라이탄 용기 수급 사정에 따라 일부는 다른 플라스틱 용기로 보내 드릴 수 있습니다. 모든 용기는 세척 · 소독한 뒤 씁니다.</li>
+        <li>땅콩, 호두, 대두, 복숭아가 들어간 제품과 같은 시설에서 만듭니다.</li>
+      </ul>
+    </details>
+    <details>
+      <summary>배송 · 교환 · 환불<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <ul class="dj-list">
+        <li>배송비는 3,500원이며, 7만 원 이상 주문하시면 무료배송입니다.</li>
+        <li>신선식품이라 장터 마감 후에는 취소가 어렵습니다.</li>
+        <li>배송 중 파손되면 운송장 · 상태 사진 · 주문자 정보를 1:1 게시판에 올려 주세요.</li>
+        <li>배송지를 잘못 입력해 생긴 오배송은 책임지기 어렵습니다.</li>
+        <li>네이버페이 주문의 반품 · 교환은 네이버톡톡으로 접수해 주세요.</li>
+      </ul>
+    </details>
+    <details>
+      <summary>상품정보 고시<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <div class="dj-gosi">{{$상품정보고시리스트}}</div>
+    </details>
+  </div>
+</div>
+</div>
+
+{{if(관련상품리스트)}}<div class="detail_related wrap_inner">
+
+				<h3 class="title" style="text-align: left;">함께 본 상품</h3><div style="text-align: left;">{{$관련상품리스트}}</div></div><div style="text-align: left;" align="left">{{endif(관련상품리스트)}}</div>

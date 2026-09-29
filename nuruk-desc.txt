@@ -1,0 +1,209 @@
+<div class="tkbb-nr">
+<style>
+  /* 상세설명은 '넣었습니다/안 넣었습니다' 카드 아래에서 접고, 나머지는 '상세설명 더보기'로 (후기가 가깝게 보이도록) */
+  .wing-detail-more-contents { min-height: 840px; }
+
+  .tkbb-nr {
+    --nr-surface: #F2F5F6;
+    --nr-ink: #161616;
+    --nr-muted: #6E6E6E;
+    --nr-line: #E3E7E9;
+    --nr-point: #D1D798;
+    --nr-deep: #6F7A2A;
+    --nr-white: #FFFFFF;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 8px 4px 0;
+    color: var(--nr-ink);
+    font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+  }
+  .tkbb-nr * { box-sizing: border-box; }
+  .tkbb-nr * { font-size: inherit; line-height: inherit; }
+  /* PC 스킨이 상세설명 이미지에 max-width:50%를 걸어 두어 덮어씀 */
+  .tkbb-nr img { display: block; width: 100%; max-width: 100% !important; height: auto; }
+  .tkbb-nr h2, .tkbb-nr h3, .tkbb-nr p, .tkbb-nr ul, .tkbb-nr ol, .tkbb-nr dl, .tkbb-nr dd { margin: 0; padding: 0; }
+  .tkbb-nr ul, .tkbb-nr ol { list-style: none; }
+
+  .tkbb-nr .nr-block { padding-block: 32px; border-top: 1px solid var(--nr-line); }
+  .tkbb-nr .nr-block:first-child { padding-top: 8px; border-top: 0; }
+  .tkbb-nr .nr-title { margin-bottom: 14px; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+  .tkbb-nr .nr-note { margin-top: 12px; font-size: 12.5px; color: var(--nr-muted); }
+
+  .tkbb-nr .nr-intro img { border-radius: 8px; background: var(--nr-surface); }
+  .tkbb-nr .nr-intro h2 { margin-top: 18px; font-size: 22px; font-weight: 500; line-height: 1.3; letter-spacing: -0.02em; }
+  .tkbb-nr .nr-intro h2 span { display: block; font-weight: 300; }
+  .tkbb-nr .nr-intro p { margin-top: 8px; font-size: 14.5px; font-weight: 300; }
+  .tkbb-nr .nr-made-of { margin-top: 18px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tkbb-nr .nr-made-of li { padding: 12px 14px; border-radius: 8px; background: var(--nr-surface); }
+  .tkbb-nr .nr-made-of b { display: block; font-size: 13.5px; font-weight: 500; }
+  .tkbb-nr .nr-made-of span { display: block; margin-top: 4px; font-size: 13px; font-weight: 300; color: var(--nr-muted); }
+
+  .tkbb-nr .nr-dots { display: grid; gap: 8px; font-size: 14.5px; font-weight: 300; }
+  .tkbb-nr .nr-dots li { position: relative; padding-left: 12px; }
+  .tkbb-nr .nr-dots li::before { content: ""; position: absolute; left: 0; top: .62em; width: 4px; height: 4px; border-radius: 50%; background: var(--nr-point); }
+
+  .tkbb-nr .nr-opts { display: grid; gap: 10px; }
+  .tkbb-nr .nr-opts li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 12px 14px; border: 1px solid var(--nr-line); border-radius: 8px; }
+  .tkbb-nr .nr-opts b { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; }
+  .tkbb-nr .nr-opts i { font-style: normal; font-size: 11px; font-weight: 500; color: var(--nr-ink); background: var(--nr-point); border-radius: 999px; padding: 2px 7px; }
+  .tkbb-nr .nr-opts span { font-size: 14px; font-weight: 500; white-space: nowrap; }
+  .tkbb-nr .nr-opts small { display: block; margin-top: 3px; font-size: 12.5px; font-weight: 300; color: var(--nr-muted); }
+
+  .tkbb-nr .nr-steps { display: grid; gap: 12px; }
+  .tkbb-nr .nr-steps li { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 10px; font-size: 14.5px; font-weight: 300; }
+  .tkbb-nr .nr-steps b { font-weight: 500; }
+  .tkbb-nr .nr-num { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--nr-point); color: var(--nr-ink); font-size: 12px; font-weight: 500; font-style: normal; }
+
+  .tkbb-nr .nr-photo { margin-top: 18px; }
+  .tkbb-nr .nr-photo img { border-radius: 8px; background: var(--nr-surface); }
+  .tkbb-nr .nr-photo figcaption { margin-top: 8px; font-size: 12.5px; color: var(--nr-muted); }
+
+  .tkbb-nr .nr-spec { margin-top: 18px; display: grid; gap: 10px; font-size: 13.5px; }
+  .tkbb-nr .nr-spec > div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; }
+  .tkbb-nr .nr-spec dt { font-weight: 500; }
+  .tkbb-nr .nr-spec dd { font-weight: 300; }
+
+  .tkbb-nr .nr-acc details { border-top: 1px solid var(--nr-line); }
+  .tkbb-nr .nr-acc details:last-child { border-bottom: 1px solid var(--nr-line); }
+  .tkbb-nr .nr-block.nr-faq { padding-bottom: 8px; }
+  .tkbb-nr .nr-acc summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-block: 14px; font-size: 14.5px; cursor: pointer; }
+  .tkbb-nr .nr-acc summary::-webkit-details-marker { display: none; }
+  .tkbb-nr .nr-acc summary svg { width: 18px; height: 18px; flex: none; color: var(--nr-muted); transition: transform .15s; }
+  .tkbb-nr .nr-acc details[open] summary svg { transform: rotate(180deg); }
+  .tkbb-nr .nr-acc .nr-a { padding-bottom: 16px; font-size: 14px; font-weight: 300; }
+  .tkbb-nr .nr-acc .nr-list { padding-bottom: 16px; display: grid; gap: 6px; font-size: 13.5px; font-weight: 300; }
+  .tkbb-nr .nr-acc .nr-list li { position: relative; padding-left: 10px; }
+  .tkbb-nr .nr-acc .nr-list li::before { content: ""; position: absolute; left: 0; top: .62em; width: 3px; height: 3px; border-radius: 50%; background: var(--nr-muted); }
+
+  .tkbb-nr .nr-gosi { padding-bottom: 16px; }
+  .tkbb-nr .nr-gosi table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .tkbb-nr .nr-gosi caption { display: none; }
+  .tkbb-nr .nr-gosi th, .tkbb-nr .nr-gosi td { padding: 9px 2px; border-top: 1px solid var(--nr-line); text-align: left; vertical-align: top; font-weight: 300; line-height: 1.5; }
+  .tkbb-nr .nr-gosi th { width: 38%; padding-right: 10px; color: var(--nr-muted); font-weight: 400; background: transparent; }
+  .tkbb-nr .nr-gosi tr:first-child th, .tkbb-nr .nr-gosi tr:first-child td { border-top: 0; }
+
+  @media (min-width: 768px) {
+    .tkbb-nr .nr-block { padding-block: 40px; }
+    .wing-detail-more-contents { min-height: 1274px; }
+    .tkbb-nr .nr-title { font-size: 27px; }
+    .tkbb-nr .nr-intro h2 { font-size: 26px; }
+  }
+</style>
+
+<div class="nr-block nr-intro">
+  <img src="https://takkobebe-link.vercel.app/img/nuruk/hero.jpg" alt="누룩간장과 누룩소금 두 병">
+  <h2><span>자연재배로 건강하게 키운 현미쌀</span>쌀누룩 소금&amp;간장</h2>
+  <p>성장기 두 아이의 체중과 여드름 때문에 고민하다 만들게 된 먹거리입니다. 자연재배 현미로 쌀누룩을 만들고, 매일 쉽게 드실 수 있도록 소금과 간장으로 담아냈습니다. 가족의 식탁에서 맛있는 건강을 즐겨 보세요.</p>
+  <ul class="nr-made-of">
+    <li><b>넣었습니다</b><span>쌀누룩(국산 자연재배현미), 국산 소금, 국산 1급 진간장</span></li>
+    <li><b>안 넣었습니다</b><span>색소, 보존제, 향미증진제, 기타 화학첨가물</span></li>
+  </ul>
+</div>
+
+<div class="nr-block">
+  <h3 class="nr-title">쌀누룩 소금&amp;간장의 특징</h3>
+  <ul class="nr-dots">
+    <li>쌀누룩은 발효 과정에서 소화효소가 풍부하게 생깁니다.</li>
+    <li>자연재배 현미는 인공비료나 화학물질 없이 키운 현미라 원료가 깨끗합니다.</li>
+    <li>발효로 만든 소금과 간장에는 여러 효소와 유익균이 들어 있습니다.</li>
+  </ul>
+  <figure class="nr-photo">
+    <img src="https://takkobebe-link.vercel.app/img/nuruk/bottle.jpg" alt="누룩소금 병을 가까이에서 찍은 모습" loading="lazy">
+  </figure>
+</div>
+
+<div class="nr-block">
+  <h3 class="nr-title">이렇게 드세요</h3>
+  <ul class="nr-steps">
+    <li><i class="nr-num" aria-hidden="true">1</i><span><b>누룩소금</b> — 고기에 발라 재워 두시면 연육 효과가 있어 고기가 부드러워집니다.</span></li>
+    <li><i class="nr-num" aria-hidden="true">2</i><span><b>누룩간장</b> — 무침이나 조림에 쓰시면 건강한 감칠맛이 살아납니다.</span></li>
+  </ul>
+  <figure class="nr-photo">
+    <img src="https://takkobebe-link.vercel.app/img/nuruk/pour.jpg" alt="누룩을 그릇에 붓는 모습" loading="lazy">
+  </figure>
+</div>
+
+<div class="nr-block">
+  <h3 class="nr-title">구성 고르기</h3>
+  <ul class="nr-opts">
+    <li><b>누룩소금 + 누룩간장<i>이벤트</i></b><span>30,000원</span></li>
+    <li><b>누룩소금<small>300g · 고기 밑간과 무침에</small></b><span>16,500원</span></li>
+    <li><b>누룩간장<small>300g · 조림과 볶음에</small></b><span>18,500원</span></li>
+  </ul>
+  <p class="nr-note">구성은 위쪽 구매 영역에서 고르시면 됩니다.</p>
+</div>
+
+<div class="nr-block">
+  <h3 class="nr-title">용량과 보관</h3>
+  <figure class="nr-photo" style="margin-top:0">
+    <img src="https://takkobebe-link.vercel.app/img/nuruk/size.jpg" alt="누룩간장·누룩소금 병과 500ml 캔 크기 비교" loading="lazy">
+    <figcaption>500ml 캔과 비교한 크기입니다.</figcaption>
+  </figure>
+  <dl class="nr-spec">
+    <div><dt>중량</dt><dd>병당 300g</dd></div>
+    <div><dt>보관</dt><dd>냉장 보관</dd></div>
+    <div><dt>소비기한</dt><dd>제조일로부터 3개월</dd></div>
+  </dl>
+</div>
+
+<div class="nr-block">
+  <h3 class="nr-title">참고사항</h3>
+  <ul class="nr-dots">
+    <li>무방부제 먹거리라 개봉 후에는 빠르게 드시는 것을 권장드립니다.</li>
+    <li>물이나 침 같은 이물질이 들어가지 않도록 주의해 주세요.</li>
+    <li>효소수와 쌀누룩 층이 분리될 수 있으니 흔들어서 드세요.</li>
+    <li>농가 사정에 따라 포장이 바뀔 수 있습니다.</li>
+  </ul>
+</div>
+
+<div class="nr-block">
+  <h3 class="nr-title">만든 곳, 더단</h3>
+  <figure class="nr-photo" style="margin-top:0">
+    <img src="https://takkobebe-link.vercel.app/img/nuruk/brand.jpg" alt="더단 대표와 제품을 만드는 모습" loading="lazy">
+  </figure>
+  <p class="nr-note" style="font-size:14.5px; color:#161616; font-weight:300">더단은 25년 전, 기침과 비염으로 고생하던 두 아들을 위해 배숙을 만들어 주며 시작되었습니다. 병원약에 대한 걱정과 죄책감을 덜기 위해 엄마가 건강한 재료로 직접 배숙을 끓였고, 그 작은 실천이 타코베베와 만나 오늘의 배도라지크림, 레몬청 같은 먹거리로 이어졌습니다. 엄마의 정성과 따뜻한 마음을 담아, 언제나 변함없이 정직하게 만듭니다.</p>
+</div>
+
+<div class="nr-block nr-faq">
+  <h3 class="nr-title">배송 · 교환 및 상품 정보</h3>
+  <div class="nr-acc">
+    <details>
+      <summary>언제 받을 수 있나요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="nr-a">주문일로부터 1~3일 안에 순차적으로 발송됩니다.</p>
+    </details>
+    <details>
+      <summary>보관은 어떻게 하나요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="nr-a">냉장 보관해 주세요. 소비기한은 제조일로부터 3개월이며, 무방부제라 개봉 후에는 빠르게 드시는 것을 권장드립니다.</p>
+    </details>
+    <details>
+      <summary>배송 · 교환 · 환불<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <ul class="nr-list">
+        <li>배송비는 3,500원이며, 7만원 이상 구매하시면 무료입니다. 제주도는 배송비가 따로 붙습니다.</li>
+        <li>주문 양만큼 준비해 보내는 먹거리라 장터 마감 후에는 취소가 어렵습니다.</li>
+        <li>배송 중 파손되면 운송장 · 상태 사진 · 주문자 정보를 1:1 게시판에 올려 주세요.</li>
+        <li>배송지를 잘못 입력해 생긴 오배송은 책임지기 어렵습니다.</li>
+        <li>네이버페이 주문의 반품 · 교환은 네이버톡톡으로 접수해 주세요.</li>
+      </ul>
+    </details>
+    <details>
+      <summary>상품정보 고시<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <div class="nr-gosi">{{$상품정보고시리스트}}</div>
+    </details>
+  </div>
+</div>
+</div>
+
+			{{if(관련상품리스트)}}<div class="detail_related wrap_inner">
+
+				<h3 class="title">함께 본 상품</h3>
+
+				{{$관련상품리스트}}
+
+			</div>
+
+			{{endif(관련상품리스트)}}

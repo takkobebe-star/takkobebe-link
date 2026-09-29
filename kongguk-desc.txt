@@ -1,0 +1,174 @@
+<div class="tkbb-kg">
+<style>
+  /* 상세설명은 '넣었습니다/안 넣었습니다' 카드 아래에서 접고, 나머지는 '상세설명 더보기'로 (후기가 가깝게 보이도록) */
+  .wing-detail-more-contents { min-height: 788px; }
+
+  .tkbb-kg {
+    --kg-surface: #F2F5F6;
+    --kg-ink: #161616;
+    --kg-muted: #6E6E6E;
+    --kg-line: #E3E7E9;
+    --kg-point: #D1D798;
+    --kg-deep: #6F7A2A;
+    --kg-white: #FFFFFF;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 8px 4px 0;
+    color: var(--kg-ink);
+    font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+  }
+  .tkbb-kg * { box-sizing: border-box; }
+  .tkbb-kg * { font-size: inherit; line-height: inherit; }
+  /* PC 스킨이 상세설명 이미지에 max-width:50%를 걸어 두어 덮어씀 */
+  .tkbb-kg img { display: block; width: 100%; max-width: 100% !important; height: auto; }
+  .tkbb-kg h2, .tkbb-kg h3, .tkbb-kg p, .tkbb-kg ul, .tkbb-kg ol, .tkbb-kg dl, .tkbb-kg dd, .tkbb-kg figure, .tkbb-kg table { margin: 0; padding: 0; }
+  .tkbb-kg ul, .tkbb-kg ol { list-style: none; }
+
+  .tkbb-kg .kg-block { padding-block: 32px; border-top: 1px solid var(--kg-line); }
+  /* 맨 앞 자식이 <style>이라 :first-child가 안 걸림 → 첫 블록은 first-of-type으로 */
+  .tkbb-kg > .kg-block:first-of-type { padding-top: 8px; border-top: 0; }
+  .tkbb-kg .kg-title { margin-bottom: 14px; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+  .tkbb-kg .kg-lead { margin-bottom: 16px; font-size: 14px; font-weight: 300; }
+  .tkbb-kg .kg-note { margin-top: 12px; font-size: 12.5px; color: var(--kg-muted); }
+
+  .tkbb-kg .kg-intro img { border-radius: 8px; background: var(--kg-surface); }
+  .tkbb-kg .kg-intro h2 { margin-top: 18px; font-size: 22px; font-weight: 500; line-height: 1.3; letter-spacing: -0.02em; }
+  .tkbb-kg .kg-intro h2 span { display: block; font-weight: 300; }
+  .tkbb-kg .kg-intro p { margin-top: 8px; font-size: 14.5px; font-weight: 300; }
+  .tkbb-kg .kg-made-of { margin-top: 18px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tkbb-kg .kg-made-of li { padding: 12px 14px; border-radius: 8px; background: var(--kg-surface); }
+  .tkbb-kg .kg-made-of b { display: block; font-size: 13.5px; font-weight: 500; }
+  .tkbb-kg .kg-made-of span { display: block; margin-top: 4px; font-size: 13px; font-weight: 300; color: var(--kg-muted); }
+
+  .tkbb-kg .kg-steps { display: grid; gap: 14px; }
+  .tkbb-kg .kg-steps li { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 10px; font-size: 14px; font-weight: 300; }
+  .tkbb-kg .kg-steps b { display: block; margin-bottom: 2px; font-size: 14.5px; font-weight: 500; }
+  .tkbb-kg .kg-num { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--kg-point); color: var(--kg-ink); font-size: 12px; font-weight: 500; font-style: normal; }
+
+  .tkbb-kg .kg-photo { margin-top: 18px; }
+  .tkbb-kg .kg-photo img { border-radius: 8px; background: var(--kg-surface); }
+  .tkbb-kg .kg-photo figcaption { margin-top: 8px; font-size: 12.5px; color: var(--kg-muted); }
+
+  .tkbb-kg .kg-spec { margin-top: 18px; display: grid; gap: 10px; font-size: 13.5px; }
+  .tkbb-kg .kg-spec > div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; }
+  .tkbb-kg .kg-spec dt { font-weight: 500; line-height: 1.35; }
+  .tkbb-kg .kg-spec dt small { display: block; margin-top: 2px; font-size: 12px; font-weight: 400; color: var(--kg-muted); }
+  .tkbb-kg .kg-spec dd { font-weight: 300; line-height: 1.55; }
+
+  .tkbb-kg .kg-acc details { border-top: 1px solid var(--kg-line); }
+  .tkbb-kg .kg-acc details:last-child { border-bottom: 1px solid var(--kg-line); }
+  .tkbb-kg .kg-block.kg-faq { padding-bottom: 8px; }
+  .tkbb-kg .kg-acc summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-block: 14px; font-size: 14.5px; cursor: pointer; }
+  .tkbb-kg .kg-acc summary::-webkit-details-marker { display: none; }
+  .tkbb-kg .kg-acc summary svg { width: 18px; height: 18px; flex: none; color: var(--kg-muted); transition: transform .15s; }
+  .tkbb-kg .kg-acc details[open] summary svg { transform: rotate(180deg); }
+  .tkbb-kg .kg-acc .kg-a { padding-bottom: 16px; font-size: 14px; font-weight: 300; }
+  .tkbb-kg .kg-acc .kg-list { padding-bottom: 16px; display: grid; gap: 6px; font-size: 13.5px; font-weight: 300; }
+  .tkbb-kg .kg-acc .kg-list li { position: relative; padding-left: 10px; }
+  .tkbb-kg .kg-acc .kg-list li::before { content: ""; position: absolute; left: 0; top: .62em; width: 3px; height: 3px; border-radius: 50%; background: var(--kg-muted); }
+
+  .tkbb-kg .kg-gosi { padding-bottom: 16px; }
+  .tkbb-kg .kg-gosi table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .tkbb-kg .kg-gosi caption { display: none; }
+  .tkbb-kg .kg-gosi th, .tkbb-kg .kg-gosi td { padding: 9px 2px; border-top: 1px solid var(--kg-line); text-align: left; vertical-align: top; font-weight: 300; line-height: 1.5; }
+  .tkbb-kg .kg-gosi th { width: 38%; padding-right: 10px; color: var(--kg-muted); font-weight: 400; background: transparent; }
+  .tkbb-kg .kg-gosi tr:first-child th, .tkbb-kg .kg-gosi tr:first-child td { border-top: 0; }
+
+  @media (min-width: 768px) {
+    .tkbb-kg .kg-block { padding-block: 40px; }
+    .wing-detail-more-contents { min-height: 1253px; }
+    .tkbb-kg .kg-title { font-size: 27px; }
+    .tkbb-kg .kg-intro h2 { font-size: 26px; }
+  }
+</style>
+
+<div class="kg-block kg-intro">
+  <img src="https://takkobebe-link.vercel.app/img/kongguk/hero.jpg" alt="콩국물에 소면을 말고 토마토와 오이를 올린 콩국수">
+  <h2><span>맷돌로 갈아 만든</span>국산콩 진한 콩국물</h2>
+  <p>경남 산청의 이장님이 국산 콩을 맷돌에 갈아 만든 진하고 걸쭉한 콩국물입니다. 소면이나 우뭇가사리를 넣어 시원하게 즐겨 보세요.</p>
+  <ul class="kg-made-of">
+    <li><b>넣었습니다</b><span>국산 대두(NON-GMO), 죽염 · 구운소금, 설탕 약간</span></li>
+    <li><b>안 넣었습니다</b><span>보존제, 인공색소, 인공향료</span></li>
+  </ul>
+</div>
+
+<div class="kg-block">
+  <h3 class="kg-title">맷돌로 갈아 만듭니다</h3>
+  <ul class="kg-steps">
+    <li><i class="kg-num" aria-hidden="true">1</i><span><b>국산 콩</b>NON-GMO 국산 대두를 씁니다.</span></li>
+    <li><i class="kg-num" aria-hidden="true">2</i><span><b>맷돌에 천천히</b>맷돌로 천천히 갈아 부드럽고, 콩 알갱이가 뭉개지지 않아 콩 본연의 맛이 살아 있습니다.</span></li>
+    <li><i class="kg-num" aria-hidden="true">3</i><span><b>깨끗한 시설</b>위생적으로 관리하는 시설에서 콩 전용 기계를 갖추고 만듭니다.</span></li>
+  </ul>
+  <figure class="kg-photo">
+    <img src="https://takkobebe-link.vercel.app/img/kongguk/mill.jpg" alt="맷돌에 국산 콩을 가는 모습" loading="lazy">
+  </figure>
+</div>
+
+<div class="kg-block">
+  <h3 class="kg-title">이렇게 드셔 보세요</h3>
+  <ul class="kg-steps">
+    <li><i class="kg-num" aria-hidden="true">1</i><span><b>콩국수</b>삶은 소면에 부어 시원한 콩국수로 드세요.</span></li>
+    <li><i class="kg-num" aria-hidden="true">2</i><span><b>우뭇가사리</b>우뭇가사리를 넣으면 더 시원하게 즐길 수 있습니다.</span></li>
+    <li><i class="kg-num" aria-hidden="true">3</i><span><b>간 맞추기</b>취향에 따라 소금이나 설탕으로 간을 더해 주세요.</span></li>
+  </ul>
+  <figure class="kg-photo">
+    <img src="https://takkobebe-link.vercel.app/img/kongguk/pour.gif" alt="소면과 우뭇가사리를 담은 그릇에 콩국물을 붓는 모습" loading="lazy">
+  </figure>
+</div>
+
+<div class="kg-block">
+  <h3 class="kg-title">크기 · 보관 · 원재료</h3>
+  <figure class="kg-photo" style="margin-top:0">
+    <img src="https://takkobebe-link.vercel.app/img/kongguk/size.jpg" alt="콩국물 1000g 병과 500ml 캔 크기 비교" loading="lazy">
+    <figcaption>1000g 병을 500ml 캔과 비교한 크기입니다. 농가 사정에 따라 병 모양은 바뀔 수 있습니다.</figcaption>
+  </figure>
+  <dl class="kg-spec">
+    <div><dt>용량</dt><dd>1병 1000g</dd></div>
+    <div><dt>구성</dt><dd>콩국물 2병 + 우뭇가사리 1팩 증정</dd></div>
+    <div><dt>보관</dt><dd>냉장 보관 (오래 두실 땐 냉동 보관)</dd></div>
+    <div><dt>원재료명 및 함량</dt><dd>국산콩 34%, 죽염 1%, 구운소금 0.5%, 설탕 0.5%, 정제수 64%</dd></div>
+  </dl>
+  <p class="kg-note">보존제를 넣지 않은 먹거리라 개봉 후에는 되도록 빨리 드셔 주세요.</p>
+</div>
+
+<div class="kg-block kg-faq">
+  <h3 class="kg-title">배송 · 교환 및 상품 정보</h3>
+  <div class="kg-acc">
+    <details>
+      <summary>언제 받을 수 있나요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="kg-a">오늘 주문하시면 1~3일 안에 보내 드립니다.</p>
+    </details>
+    <details>
+      <summary>얼렸다 녹였더니 덩어리가 생겼어요<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="kg-a">얼리면 콩의 단백질과 지방이 굳어 덩어리가 질 수 있습니다. 녹인 뒤 믹서기에 한 번 갈아 주세요.</p>
+    </details>
+    <details>
+      <summary>콩 알레르기가 있어요<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="kg-a">100% 콩으로 만들어, 콩 알레르기가 있으시면 드실 때 주의해 주세요.</p>
+    </details>
+    <details>
+      <summary>배송 · 교환 · 환불<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <ul class="kg-list">
+        <li>배송비는 3,500원이며, 5만 원 이상 주문하시면 무료배송입니다. 제주도는 배송이 어렵습니다.</li>
+        <li>신선식품이라 장터 마감 후에는 취소가 어렵습니다.</li>
+        <li>배송 중 파손되면 운송장 · 상태 사진 · 주문자 정보를 1:1 게시판에 올려 주세요.</li>
+        <li>배송지를 잘못 입력해 생긴 오배송은 책임지기 어렵습니다.</li>
+        <li>네이버페이 주문의 반품 · 교환은 네이버톡톡으로 접수해 주세요.</li>
+      </ul>
+    </details>
+    <details>
+      <summary>상품정보 고시<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <div class="kg-gosi">{{$상품정보고시리스트}}</div>
+    </details>
+  </div>
+</div>
+</div>
+
+{{if(관련상품리스트)}}<div class="detail_related wrap_inner">
+
+				<h3 class="title" style="text-align: left;">함께 본 상품</h3><div style="text-align: left;">{{$관련상품리스트}}</div></div><div style="text-align: left;" align="left">{{endif(관련상품리스트)}}</div>

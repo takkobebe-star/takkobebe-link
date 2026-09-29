@@ -1,0 +1,183 @@
+<div class="tkbb-oil">
+<style>
+  /* 상세설명은 '넣었습니다/안 넣었습니다' 카드 아래에서 접고, 나머지는 '상세설명 더보기'로 (후기가 가깝게 보이도록) */
+  .wing-detail-more-contents { min-height: 721px; }
+
+  .tkbb-oil {
+    --ol-surface: #F2F5F6;
+    --ol-ink: #161616;
+    --ol-muted: #6E6E6E;
+    --ol-line: #E3E7E9;
+    --ol-point: #D1D798;
+    --ol-deep: #6F7A2A;
+    --ol-white: #FFFFFF;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 8px 4px 0;
+    color: var(--ol-ink);
+    font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+  }
+  .tkbb-oil * { box-sizing: border-box; }
+  .tkbb-oil * { font-size: inherit; line-height: inherit; }
+  /* PC 스킨이 상세설명 이미지에 max-width:50%를 걸어 두어 덮어씀 */
+  .tkbb-oil img { display: block; width: 100%; max-width: 100% !important; height: auto; }
+  .tkbb-oil h2, .tkbb-oil h3, .tkbb-oil p, .tkbb-oil ul, .tkbb-oil ol, .tkbb-oil dl, .tkbb-oil dd, .tkbb-oil table { margin: 0; padding: 0; }
+  .tkbb-oil ul, .tkbb-oil ol { list-style: none; }
+
+  .tkbb-oil .ol-block { padding-block: 32px; border-top: 1px solid var(--ol-line); }
+  .tkbb-oil .ol-block:first-child { padding-top: 8px; border-top: 0; }
+  .tkbb-oil .ol-title { margin-bottom: 14px; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+  .tkbb-oil .ol-note { margin-top: 12px; font-size: 12.5px; color: var(--ol-muted); }
+
+  .tkbb-oil .ol-intro img { border-radius: 8px; background: var(--ol-surface); }
+  .tkbb-oil .ol-intro h2 { margin-top: 18px; font-size: 22px; font-weight: 500; line-height: 1.3; letter-spacing: -0.02em; }
+  .tkbb-oil .ol-intro h2 span { display: block; font-weight: 300; }
+  .tkbb-oil .ol-intro p { margin-top: 8px; font-size: 14.5px; font-weight: 300; }
+  .tkbb-oil .ol-made-of { margin-top: 18px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tkbb-oil .ol-made-of li { padding: 12px 14px; border-radius: 8px; background: var(--ol-surface); }
+  .tkbb-oil .ol-made-of b { display: block; font-size: 13.5px; font-weight: 500; }
+  .tkbb-oil .ol-made-of span { display: block; margin-top: 4px; font-size: 13px; font-weight: 300; color: var(--ol-muted); }
+
+  .tkbb-oil .ol-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tkbb-oil .ol-two img { border-radius: 8px; background: var(--ol-surface); aspect-ratio: 1; object-fit: cover; }
+  .tkbb-oil .ol-two b { display: block; margin-top: 8px; text-align: center; font-size: 14px; font-weight: 500; }
+  .tkbb-oil .ol-two b.mine { color: var(--ol-deep); }
+
+  .tkbb-oil .ol-cmp { margin-top: 14px; width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .tkbb-oil .ol-cmp th, .tkbb-oil .ol-cmp td { padding: 10px 8px; text-align: center; border-bottom: 1px solid var(--ol-line); font-weight: 300; }
+  .tkbb-oil .ol-cmp th { font-weight: 500; color: var(--ol-muted); background: var(--ol-surface); }
+  .tkbb-oil .ol-cmp td:first-child, .tkbb-oil .ol-cmp th:first-child { color: var(--ol-muted); font-weight: 400; }
+  .tkbb-oil .ol-cmp td.on { color: var(--ol-deep); font-weight: 500; }
+
+  .tkbb-oil .ol-photo img { border-radius: 8px; background: var(--ol-surface); }
+  .tkbb-oil .ol-photo figcaption { margin-top: 8px; font-size: 12.5px; color: var(--ol-muted); }
+
+  .tkbb-oil .ol-spec { margin-top: 18px; display: grid; gap: 10px; font-size: 13.5px; }
+  .tkbb-oil .ol-spec > div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; }
+  .tkbb-oil .ol-spec dt { font-weight: 500; }
+  .tkbb-oil .ol-spec dd { font-weight: 300; }
+
+  .tkbb-oil .ol-acc details { border-top: 1px solid var(--ol-line); }
+  .tkbb-oil .ol-acc details:last-child { border-bottom: 1px solid var(--ol-line); }
+  .tkbb-oil .ol-block.ol-faq { padding-bottom: 8px; }
+  .tkbb-oil .ol-acc summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-block: 14px; font-size: 14.5px; cursor: pointer; }
+  .tkbb-oil .ol-acc summary::-webkit-details-marker { display: none; }
+  .tkbb-oil .ol-acc summary svg { width: 18px; height: 18px; flex: none; color: var(--ol-muted); transition: transform .15s; }
+  .tkbb-oil .ol-acc details[open] summary svg { transform: rotate(180deg); }
+  .tkbb-oil .ol-acc .ol-a { padding-bottom: 16px; font-size: 14px; font-weight: 300; }
+  .tkbb-oil .ol-dots { padding-bottom: 16px; display: grid; gap: 6px; font-size: 13.5px; font-weight: 300; }
+  .tkbb-oil .ol-dots li { position: relative; padding-left: 10px; }
+  .tkbb-oil .ol-dots li::before { content: ""; position: absolute; left: 0; top: .62em; width: 3px; height: 3px; border-radius: 50%; background: var(--ol-muted); }
+
+  .tkbb-oil .ol-gosi { padding-bottom: 16px; }
+  .tkbb-oil .ol-gosi table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .tkbb-oil .ol-gosi caption { display: none; }
+  .tkbb-oil .ol-gosi th, .tkbb-oil .ol-gosi td { padding: 9px 2px; border-top: 1px solid var(--ol-line); text-align: left; vertical-align: top; font-weight: 300; line-height: 1.5; }
+  .tkbb-oil .ol-gosi th { width: 38%; padding-right: 10px; color: var(--ol-muted); font-weight: 400; background: transparent; }
+  .tkbb-oil .ol-gosi tr:first-child th, .tkbb-oil .ol-gosi tr:first-child td { border-top: 0; }
+
+  @media (min-width: 768px) {
+    .tkbb-oil .ol-block { padding-block: 40px; }
+    .wing-detail-more-contents { min-height: 1043px; }
+    .tkbb-oil .ol-title { font-size: 27px; }
+    .tkbb-oil .ol-intro h2 { font-size: 26px; }
+  }
+</style>
+
+<div class="ol-block ol-intro">
+  <img src="https://takkobebe-link.vercel.app/img/oil/hero.jpg" alt="들깨와 맑은 기름 한 그릇">
+  <h2><span>저온착즙으로 맑게 짠</span>참기름, 생들기름</h2>
+  <p>볶지 않은 생들기름과 저온에서 짜낸 맑은 참기름입니다. 들깨와 참깨는 볶을수록 고소한 향이 진해지지만, 그 과정에서 1급 발암물질인 벤조피렌이 나옵니다. 그래서 산청 지리산 이장님은 들깨는 볶지 않고 바로 압착하고, 참깨는 60도 미만에서 살짝 볶아 저온압착합니다. 미리 만들어 두지 않고, 주문을 받으면 그때 짜서 보내드립니다.</p>
+  <ul class="ol-made-of">
+    <li><b>넣었습니다</b><span>국산 들깨, 국산 참깨</span></li>
+    <li><b>안 넣었습니다</b><span>보존제, 인공색소, 인공향료</span></li>
+  </ul>
+</div>
+
+<div class="ol-block">
+  <h3 class="ol-title">시판 기름과 다른 점</h3>
+  <div class="ol-two">
+    <div><img src="https://takkobebe-link.vercel.app/img/oil/cmp-market.jpg" alt="짙은 갈색의 시판 기름" loading="lazy"><b>시판용</b></div>
+    <div><img src="https://takkobebe-link.vercel.app/img/oil/cmp-takko.jpg" alt="맑은 레몬색의 타코베베 기름" loading="lazy"><b class="mine">타코베베</b></div>
+  </div>
+  <table class="ol-cmp">
+    <thead><tr><th>비교</th><th>시판용</th><th>타코베베</th></tr></thead>
+    <tbody>
+      <tr><td>착즙방식</td><td>고온착즙</td><td class="on">60℃ 미만 저온착즙</td></tr>
+      <tr><td>추출양</td><td>많음</td><td class="on">적음</td></tr>
+      <tr><td>색</td><td>짙은 갈색</td><td class="on">맑은 레몬색</td></tr>
+      <tr><td>향</td><td>고소한 향</td><td class="on">향이 거의 안 남</td></tr>
+    </tbody>
+  </table>
+  <p class="ol-note">저온에서 짜면 나오는 양이 적어 같은 양의 깨로 만들 수 있는 기름이 훨씬 적습니다.</p>
+</div>
+
+<div class="ol-block">
+  <h3 class="ol-title">용량과 보관</h3>
+  <figure class="ol-photo">
+    <img src="https://takkobebe-link.vercel.app/img/oil/size.jpg" alt="참기름과 들기름 병, 500ml 캔과 크기 비교" loading="lazy">
+    <figcaption>500ml 캔과 비교한 크기입니다.</figcaption>
+  </figure>
+  <dl class="ol-spec">
+    <div><dt>용량</dt><dd>320ml · 참기름, 들기름 중에서 선택</dd></div>
+    <div><dt>보관</dt><dd>실온 또는 냉장</dd></div>
+    <div><dt>드시는 분</dt><dd>온 가족이 함께 드실 수 있습니다</dd></div>
+  </dl>
+</div>
+
+<div class="ol-block">
+  <h3 class="ol-title">드시기 전에</h3>
+  <figure class="ol-photo">
+    <img src="https://takkobebe-link.vercel.app/img/oil/pour.jpg" alt="기름을 그릇에 따르는 모습" loading="lazy">
+  </figure>
+  <p class="ol-note">무방부제 식품이라 개봉 후에는 빠르게 드시는 것을 권장드립니다.</p>
+</div>
+
+<div class="ol-block">
+  <h3 class="ol-title">산청에서 짠 기름입니다</h3>
+  <figure class="ol-photo">
+    <img src="https://takkobebe-link.vercel.app/img/oil/farm.jpg" alt="산청 들깨밭에서 수확하는 모습" loading="lazy">
+    <figcaption>타코베베 대표 이청미 가족이 산청군에 직접 방문해 촬영했습니다.</figcaption>
+  </figure>
+  <p class="ol-note">빠른 서비스보다 단단한 먹거리에 집중하는 타코베베는 예약 주문 직거래장터입니다. 나와 내 가족이 먹고 사용할 상품으로, 생산자를 직접 확인하고 엄선된 제품만 소개하겠습니다.</p>
+</div>
+
+<div class="ol-block ol-faq">
+  <h3 class="ol-title">배송 · 교환 및 상품 정보</h3>
+  <div class="ol-acc">
+    <details>
+      <summary>언제 받을 수 있나요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="ol-a">주문을 받은 뒤에 짜서 보내드립니다. 월 · 화 · 수요일에 출고됩니다.</p>
+    </details>
+    <details>
+      <summary>보관은 어떻게 하나요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="ol-a">실온 또는 냉장 보관하시면 됩니다. 무방부제 식품이라 개봉 후에는 빠르게 드시는 것을 권장드립니다.</p>
+    </details>
+    <details>
+      <summary>배송 · 교환 · 환불<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <ul class="ol-dots">
+        <li>배송비는 3,500원이며, 5만원 이상 구매하시면 무료입니다. 제주도는 배송이 어렵습니다.</li>
+        <li>주문을 받은 뒤 짜서 보내는 신선식품이라 장터 마감 후에는 취소가 어렵습니다.</li>
+        <li>배송 중 파손되면 운송장 · 상태 사진 · 주문자 정보를 1:1 게시판에 올려 주세요.</li>
+        <li>배송지를 잘못 입력해 생긴 오배송은 책임지기 어렵습니다.</li>
+        <li>네이버페이 주문의 반품 · 교환은 네이버톡톡으로 접수해 주세요.</li>
+      </ul>
+    </details>
+    <details>
+      <summary>상품정보 고시<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <div class="ol-gosi">{{$상품정보고시리스트}}</div>
+    </details>
+  </div>
+</div>
+</div>
+
+			{{if(관련상품리스트)}}<div class="detail_related wrap_inner">
+
+				<h3 class="title" style="text-align: left;">함께 본 상품</h3><div style="text-align: left;">{{$관련상품리스트}}</div>
+
+			</div><div style="text-align: left;" align="left">{{endif(관련상품리스트)}}</div>

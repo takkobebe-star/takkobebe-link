@@ -1,0 +1,169 @@
+<div class="tkbb-ud">
+<style>
+  /* 상세설명은 '넣었습니다/안 넣었습니다' 카드 아래에서 접고, 나머지는 '상세설명 더보기'로 (후기가 가깝게 보이도록) */
+  .wing-detail-more-contents { min-height: 850px; }
+
+  .tkbb-ud {
+    --ud-surface: #F2F5F6;
+    --ud-ink: #161616;
+    --ud-muted: #6E6E6E;
+    --ud-line: #E3E7E9;
+    --ud-point: #D1D798;
+    --ud-deep: #6F7A2A;
+    --ud-white: #FFFFFF;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 8px 4px 0;
+    color: var(--ud-ink);
+    font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+  }
+  .tkbb-ud * { box-sizing: border-box; }
+  .tkbb-ud * { font-size: inherit; line-height: inherit; }
+  /* PC 스킨이 상세설명 이미지에 max-width:50%를 걸어 두어 덮어씀 */
+  .tkbb-ud img { display: block; width: 100%; max-width: 100% !important; height: auto; }
+  .tkbb-ud h2, .tkbb-ud h3, .tkbb-ud p, .tkbb-ud ul, .tkbb-ud ol, .tkbb-ud dl, .tkbb-ud dd { margin: 0; padding: 0; }
+  .tkbb-ud ul, .tkbb-ud ol { list-style: none; }
+
+  .tkbb-ud .ud-block { padding-block: 32px; border-top: 1px solid var(--ud-line); }
+  .tkbb-ud .ud-block:first-child { padding-top: 8px; border-top: 0; }
+  .tkbb-ud .ud-title { margin-bottom: 14px; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+  .tkbb-ud .ud-note { margin-top: 12px; font-size: 12.5px; color: var(--ud-muted); }
+
+  .tkbb-ud .ud-intro img { border-radius: 8px; background: var(--ud-surface); }
+  .tkbb-ud .ud-intro h2 { margin-top: 18px; font-size: 22px; font-weight: 500; line-height: 1.3; letter-spacing: -0.02em; }
+  .tkbb-ud .ud-intro h2 span { display: block; font-weight: 300; }
+  .tkbb-ud .ud-intro p { margin-top: 8px; font-size: 14.5px; font-weight: 300; }
+  .tkbb-ud .ud-made-of { margin-top: 18px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tkbb-ud .ud-made-of li { padding: 12px 14px; border-radius: 8px; background: var(--ud-surface); }
+  .tkbb-ud .ud-made-of b { display: block; font-size: 13.5px; font-weight: 500; }
+  .tkbb-ud .ud-made-of span { display: block; margin-top: 4px; font-size: 13px; font-weight: 300; color: var(--ud-muted); }
+
+  .tkbb-ud .ud-steps { display: grid; gap: 12px; }
+  .tkbb-ud .ud-steps li { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 10px; font-size: 14.5px; font-weight: 300; }
+  .tkbb-ud .ud-num { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--ud-point); color: var(--ud-ink); font-size: 12px; font-weight: 500; font-style: normal; }
+
+  .tkbb-ud .ud-photo { margin-top: 18px; }
+  .tkbb-ud .ud-photo img { border-radius: 8px; background: var(--ud-surface); }
+  .tkbb-ud .ud-photo figcaption { margin-top: 8px; font-size: 12.5px; color: var(--ud-muted); }
+
+  .tkbb-ud .ud-kit { margin-top: 14px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 14px; font-size: 14px; }
+  .tkbb-ud .ud-kit li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; align-items: center; }
+
+  .tkbb-ud .ud-spec { margin-top: 18px; display: grid; gap: 10px; font-size: 13.5px; }
+  .tkbb-ud .ud-spec > div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; }
+  .tkbb-ud .ud-spec dt { font-weight: 500; }
+  .tkbb-ud .ud-spec dd { font-weight: 300; }
+
+  .tkbb-ud .ud-acc details { border-top: 1px solid var(--ud-line); }
+  .tkbb-ud .ud-acc details:last-child { border-bottom: 1px solid var(--ud-line); }
+  .tkbb-ud .ud-block.ud-faq { padding-bottom: 8px; }
+  .tkbb-ud .ud-acc summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-block: 14px; font-size: 14.5px; cursor: pointer; }
+  .tkbb-ud .ud-acc summary::-webkit-details-marker { display: none; }
+  .tkbb-ud .ud-acc summary svg { width: 18px; height: 18px; flex: none; color: var(--ud-muted); transition: transform .15s; }
+  .tkbb-ud .ud-acc details[open] summary svg { transform: rotate(180deg); }
+  .tkbb-ud .ud-acc .ud-a { padding-bottom: 16px; font-size: 14px; font-weight: 300; }
+  .tkbb-ud .ud-acc .ud-list { padding-bottom: 16px; display: grid; gap: 6px; font-size: 13.5px; font-weight: 300; }
+  .tkbb-ud .ud-acc .ud-list li { position: relative; padding-left: 10px; }
+  .tkbb-ud .ud-acc .ud-list li::before { content: ""; position: absolute; left: 0; top: .62em; width: 3px; height: 3px; border-radius: 50%; background: var(--ud-muted); }
+
+  .tkbb-ud .ud-gosi { padding-bottom: 16px; }
+  .tkbb-ud .ud-gosi table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .tkbb-ud .ud-gosi caption { display: none; }
+  .tkbb-ud .ud-gosi th, .tkbb-ud .ud-gosi td { padding: 9px 2px; border-top: 1px solid var(--ud-line); text-align: left; vertical-align: top; font-weight: 300; line-height: 1.5; }
+  .tkbb-ud .ud-gosi th { width: 38%; padding-right: 10px; color: var(--ud-muted); font-weight: 400; background: transparent; }
+  .tkbb-ud .ud-gosi tr:first-child th, .tkbb-ud .ud-gosi tr:first-child td { border-top: 0; }
+
+  @media (min-width: 768px) {
+    .tkbb-ud .ud-block { padding-block: 40px; }
+    .wing-detail-more-contents { min-height: 1288px; }
+    .tkbb-ud .ud-title { font-size: 27px; }
+    .tkbb-ud .ud-intro h2 { font-size: 26px; }
+  }
+</style>
+
+<div class="ud-block ud-intro">
+  <img src="https://takkobebe-link.vercel.app/img/udon/hero.jpg" alt="볶음김치와 우동면이 담긴 김치우동 한 그릇">
+  <h2><span>생각만 해도 침 고이는</span>볶음김치우동 KIT</h2>
+  <p>인공 김치 파우더나 동결건조 플레이크를 쓰지 않습니다. 직접 담가 볶은 김치와 수제 육수로 만든 볶음김치우동 KIT입니다. 특제 볶음김치와 수제 육수, 퍼지지 않는 우동면, 유부와 어묵 고명까지 모두 담았습니다. 딱 3분이면 칼칼한 한 그릇이 완성됩니다.</p>
+  <ul class="ud-made-of">
+    <li><b>넣었습니다</b><span>국산 배추, 수제 육수</span></li>
+    <li><b>안 넣었습니다</b><span>보존제, 인공색소, 인공향료</span></li>
+  </ul>
+</div>
+
+<div class="ud-block">
+  <h3 class="ud-title">이렇게 만들어 보세요</h3>
+  <ul class="ud-steps">
+    <li><i class="ud-num" aria-hidden="true">1</i><span>냄비에 물 500ml와 양념볶음김치, 어묵, 우동소스를 넣고 1분 끓여 주세요.</span></li>
+    <li><i class="ud-num" aria-hidden="true">2</i><span>육수가 끓기 시작하면 우동면을 넣고 살살 풀어 가며 약 2분 더 끓여 주세요.</span></li>
+  </ul>
+  <figure class="ud-photo">
+    <img src="https://takkobebe-link.vercel.app/img/udon/bowl.jpg" alt="완성된 김치우동 한 그릇" loading="lazy">
+  </figure>
+</div>
+
+<div class="ud-block">
+  <h3 class="ud-title">KIT 구성</h3>
+  <figure class="ud-photo" style="margin-top:0">
+    <img src="https://takkobebe-link.vercel.app/img/udon/kit.jpg" alt="우동면, 어묵과 유부 고명, 수제 육수, 볶음김치 양념" loading="lazy">
+  </figure>
+  <ul class="ud-kit">
+    <li><i class="ud-num" aria-hidden="true">1</i><span>우동면 × 2</span></li>
+    <li><i class="ud-num" aria-hidden="true">2</i><span>어묵 &amp; 유부 고명 × 2</span></li>
+    <li><i class="ud-num" aria-hidden="true">3</i><span>수제 우동 육수 × 2</span></li>
+    <li><i class="ud-num" aria-hidden="true">4</i><span>비법 볶음김치 양념 × 2</span></li>
+  </ul>
+  <p class="ud-note">한 팩에 2인분이 들어 있습니다.</p>
+</div>
+
+<div class="ud-block">
+  <h3 class="ud-title">크기와 보관</h3>
+  <figure class="ud-photo" style="margin-top:0">
+    <img src="https://takkobebe-link.vercel.app/img/udon/size.jpg" alt="김치우동 KIT 포장과 500ml 캔 크기 비교" loading="lazy">
+    <figcaption>500ml 캔과 비교한 크기입니다.</figcaption>
+  </figure>
+  <dl class="ud-spec">
+    <div><dt>중량</dt><dd>980g (2인분)</dd></div>
+    <div><dt>보관</dt><dd>냉장 보관</dd></div>
+    <div><dt>맵기</dt><dd>약간 매콤합니다. 아이에게는 매울 수 있습니다</dd></div>
+  </dl>
+  <p class="ud-note">무방부제 식품이라 개봉 후에는 빠르게 드시는 것을 권장드립니다.</p>
+</div>
+
+<div class="ud-block ud-faq">
+  <h3 class="ud-title">배송 · 교환 및 상품 정보</h3>
+  <div class="ud-acc">
+    <details>
+      <summary>언제 받을 수 있나요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="ud-a">오늘 주문하시면 1~3일 안에 발송됩니다.</p>
+    </details>
+    <details>
+      <summary>아이도 먹을 수 있나요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="ud-a">칼칼한 맛이라 아이에게는 매울 수 있습니다. 양념을 조금만 넣고 물을 더 부어 끓이시면 순하게 드실 수 있습니다.</p>
+    </details>
+    <details>
+      <summary>배송 · 교환 · 환불<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <ul class="ud-list">
+        <li>배송비는 3,500원이며, 7만원 이상 구매하시면 무료입니다. 제주도는 배송비가 따로 붙습니다.</li>
+        <li>주문 양만큼 준비해 보내는 먹거리라 장터 마감 후에는 취소가 어렵습니다.</li>
+        <li>배송 중 파손되면 운송장 · 상태 사진 · 주문자 정보를 1:1 게시판에 올려 주세요.</li>
+        <li>배송지를 잘못 입력해 생긴 오배송은 책임지기 어렵습니다.</li>
+        <li>네이버페이 주문의 반품 · 교환은 네이버톡톡으로 접수해 주세요.</li>
+      </ul>
+    </details>
+    <details>
+      <summary>상품정보 고시<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <div class="ud-gosi">{{$상품정보고시리스트}}</div>
+    </details>
+  </div>
+</div>
+</div>
+
+{{if(관련상품리스트)}}<div class="detail_related wrap_inner">
+
+				<h3 class="title" style="text-align: left;">함께 본 상품</h3><div style="text-align: left;">{{$관련상품리스트}}</div></div><div style="text-align: left;" align="left">{{endif(관련상품리스트)}}</div>

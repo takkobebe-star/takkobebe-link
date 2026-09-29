@@ -1,0 +1,194 @@
+<div class="tkbb-ty">
+<style>
+  /* 상세설명은 '넣었습니다/안 넣었습니다' 카드 아래에서 접고, 나머지는 '상세설명 더보기'로 (후기가 가깝게 보이도록) */
+  .wing-detail-more-contents { min-height: 643px; }
+
+  .tkbb-ty {
+    --ty-surface: #F2F5F6;
+    --ty-ink: #161616;
+    --ty-muted: #6E6E6E;
+    --ty-line: #E3E7E9;
+    --ty-point: #D1D798;
+    --ty-deep: #6F7A2A;
+    --ty-white: #FFFFFF;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 8px 4px 0;
+    color: var(--ty-ink);
+    font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+  }
+  .tkbb-ty * { box-sizing: border-box; }
+  .tkbb-ty * { font-size: inherit; line-height: inherit; }
+  /* PC 스킨이 상세설명 이미지에 max-width:50%를 걸어 두어 덮어씀 */
+  .tkbb-ty img { display: block; width: 100%; max-width: 100% !important; height: auto; }
+  .tkbb-ty h2, .tkbb-ty h3, .tkbb-ty p, .tkbb-ty ul, .tkbb-ty ol, .tkbb-ty dl, .tkbb-ty dd, .tkbb-ty figure, .tkbb-ty table { margin: 0; padding: 0; }
+  .tkbb-ty ul, .tkbb-ty ol { list-style: none; }
+
+  .tkbb-ty .ty-block { padding-block: 32px; border-top: 1px solid var(--ty-line); }
+  /* 맨 앞 자식이 <style>이라 :first-child가 안 걸림 → 첫 블록은 first-of-type으로 */
+  .tkbb-ty > .ty-block:first-of-type { padding-top: 8px; border-top: 0; }
+  .tkbb-ty .ty-title { margin-bottom: 14px; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+  .tkbb-ty .ty-lead { margin-bottom: 16px; font-size: 14px; font-weight: 300; }
+  .tkbb-ty .ty-note { margin-top: 12px; font-size: 12.5px; color: var(--ty-muted); }
+
+  .tkbb-ty .ty-intro img { border-radius: 8px; background: var(--ty-surface); }
+  .tkbb-ty .ty-intro h2 { margin-top: 18px; font-size: 22px; font-weight: 500; line-height: 1.3; letter-spacing: -0.02em; }
+  .tkbb-ty .ty-intro h2 span { display: block; font-weight: 300; }
+  .tkbb-ty .ty-intro p { margin-top: 8px; font-size: 14.5px; font-weight: 300; }
+  .tkbb-ty .ty-made-of { margin-top: 18px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tkbb-ty .ty-made-of li { padding: 12px 14px; border-radius: 8px; background: var(--ty-surface); }
+  .tkbb-ty .ty-made-of b { display: block; font-size: 13.5px; font-weight: 500; }
+  .tkbb-ty .ty-made-of span { display: block; margin-top: 4px; font-size: 13px; font-weight: 300; color: var(--ty-muted); }
+
+  .tkbb-ty .ty-steps { display: grid; gap: 14px; }
+  .tkbb-ty .ty-steps li { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 10px; font-size: 14px; font-weight: 300; }
+  .tkbb-ty .ty-steps b { display: block; margin-bottom: 2px; font-size: 14.5px; font-weight: 500; }
+  .tkbb-ty .ty-num { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--ty-point); color: var(--ty-ink); font-size: 12px; font-weight: 500; font-style: normal; }
+
+  .tkbb-ty .ty-photo { margin-top: 18px; }
+  .tkbb-ty .ty-photo img { border-radius: 8px; background: var(--ty-surface); }
+  .tkbb-ty .ty-photo figcaption { margin-top: 8px; font-size: 12.5px; color: var(--ty-muted); }
+
+  .tkbb-ty .ty-spec { margin-top: 18px; display: grid; gap: 10px; font-size: 13.5px; }
+  .tkbb-ty .ty-spec > div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; }
+  .tkbb-ty .ty-spec dt { font-weight: 500; line-height: 1.35; }
+  .tkbb-ty .ty-spec dt small { display: block; margin-top: 2px; font-size: 12px; font-weight: 400; color: var(--ty-muted); }
+  .tkbb-ty .ty-spec dd { font-weight: 300; line-height: 1.55; }
+
+  .tkbb-ty .ty-acc details { border-top: 1px solid var(--ty-line); }
+  .tkbb-ty .ty-acc details:last-child { border-bottom: 1px solid var(--ty-line); }
+  .tkbb-ty .ty-block.ty-faq { padding-bottom: 8px; }
+  .tkbb-ty .ty-acc summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-block: 14px; font-size: 14.5px; cursor: pointer; }
+  .tkbb-ty .ty-acc summary::-webkit-details-marker { display: none; }
+  .tkbb-ty .ty-acc summary svg { width: 18px; height: 18px; flex: none; color: var(--ty-muted); transition: transform .15s; }
+  .tkbb-ty .ty-acc details[open] summary svg { transform: rotate(180deg); }
+  .tkbb-ty .ty-acc .ty-a { padding-bottom: 16px; font-size: 14px; font-weight: 300; }
+  .tkbb-ty .ty-acc .ty-list { padding-bottom: 16px; display: grid; gap: 6px; font-size: 13.5px; font-weight: 300; }
+  .tkbb-ty .ty-acc .ty-list li { position: relative; padding-left: 10px; }
+  .tkbb-ty .ty-acc .ty-list li::before { content: ""; position: absolute; left: 0; top: .62em; width: 3px; height: 3px; border-radius: 50%; background: var(--ty-muted); }
+
+  .tkbb-ty .ty-gosi { padding-bottom: 16px; }
+  .tkbb-ty .ty-gosi table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .tkbb-ty .ty-gosi caption { display: none; }
+  .tkbb-ty .ty-gosi th, .tkbb-ty .ty-gosi td { padding: 9px 2px; border-top: 1px solid var(--ty-line); text-align: left; vertical-align: top; font-weight: 300; line-height: 1.5; }
+  .tkbb-ty .ty-gosi th { width: 38%; padding-right: 10px; color: var(--ty-muted); font-weight: 400; background: transparent; }
+  .tkbb-ty .ty-gosi tr:first-child th, .tkbb-ty .ty-gosi tr:first-child td { border-top: 0; }
+
+  /* 두 가지 치즈 */
+  .tkbb-ty .ty-duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tkbb-ty .ty-duo li { border: 1px solid var(--ty-line); border-radius: 8px; overflow: hidden; }
+  .tkbb-ty .ty-duo img { aspect-ratio: 16 / 11; object-fit: cover; }
+  .tkbb-ty .ty-duo b { display: block; padding: 12px 12px 0; font-size: 14px; font-weight: 500; }
+  .tkbb-ty .ty-duo b i { display: table; margin-top: 5px; padding: 2px 7px; border-radius: 999px; background: var(--ty-point); font-size: 11px; font-style: normal; font-weight: 500; }
+  .tkbb-ty .ty-duo span { display: block; padding: 8px 12px 14px; font-size: 12.5px; font-weight: 300; color: var(--ty-muted); line-height: 1.5; }
+
+  @media (min-width: 768px) {
+    .tkbb-ty .ty-block { padding-block: 40px; }
+    .wing-detail-more-contents { min-height: 847px; }
+    .tkbb-ty .ty-title { font-size: 27px; }
+    .tkbb-ty .ty-intro h2 { font-size: 26px; }
+  }
+</style>
+
+<div class="ty-block ty-intro">
+  <img src="https://takkobebe-link.vercel.app/img/tsuyu/hero.jpg" alt="쯔유 병과 다시마 · 가쯔오부시 · 멸치 · 무 · 파 재료">
+  <h2><span>자연이 준 재료로 우려낸</span>어디든, 만능 쯔유</h2>
+  <p>다시마와 가쯔오부시, 멸치, 디포리, 말린 무와 파를 푹 우려 만든 쯔유입니다. 물에 풀기만 하면 어묵탕과 우동 국물이 되고, 소바 장국과 불고기 양념까지 이 한 병으로 간을 맞출 수 있습니다.</p>
+  <ul class="ty-made-of">
+    <li><b>넣었습니다</b><span>국산 다시마 · 멸치 · 디포리 · 무 · 파, 가쯔오부시, 토판천일염</span></li>
+    <li><b>안 넣었습니다</b><span>보존제</span></li>
+  </ul>
+</div>
+
+<div class="ty-block">
+  <h3 class="ty-title">이렇게 만듭니다</h3>
+  <p class="ty-lead">재료 손질부터 위생까지 꼼꼼한 농가에서, 스테인리스 솥에 우려냅니다.</p>
+  <ul class="ty-steps">
+    <li><i class="ty-num" aria-hidden="true">1</i><span><b>두툼한 다시마와 가쯔오부시</b>꼭지다시마는 국산, 가쯔오부시는 인도네시아산으로, 두툼한 것만 씁니다.</span></li>
+    <li><i class="ty-num" aria-hidden="true">2</i><span><b>통통한 멸치와 디포리</b>상처 없이 살이 통통하게 찬 것만 고릅니다.</span></li>
+    <li><i class="ty-num" aria-hidden="true">3</i><span><b>직접 말린 무와 파</b>무와 대파는 어르신이 직접 채 썰어 건조기에 말립니다.</span></li>
+    <li><i class="ty-num" aria-hidden="true">4</i><span><b>토판 천일염</b>깨끗한 토판 천일염으로 맛을 깊게 냅니다.</span></li>
+  </ul>
+  <figure class="ty-photo">
+    <img src="https://takkobebe-link.vercel.app/img/tsuyu/kombu.jpg" alt="두툼한 꼭지다시마와 가쯔오부시" loading="lazy">
+  </figure>
+</div>
+
+<div class="ty-block">
+  <h3 class="ty-title">이렇게 활용해 보세요</h3>
+  <p class="ty-lead">물 비율만 기억하면 아이와 함께 여러 요리를 만들 수 있습니다.</p>
+  <ul class="ty-steps">
+    <li><i class="ty-num" aria-hidden="true">1</i><span><b>어묵우동 · 어묵탕</b>쯔유 1 : 물 3</span></li>
+    <li><i class="ty-num" aria-hidden="true">2</i><span><b>자루소바</b>쯔유 1 : 물 2</span></li>
+    <li><i class="ty-num" aria-hidden="true">3</i><span><b>샤브샤브</b>쯔유 1 : 물 5</span></li>
+    <li><i class="ty-num" aria-hidden="true">4</i><span><b>불고기</b>쯔유 하나로 간을 맞춥니다.</span></li>
+    <li><i class="ty-num" aria-hidden="true">5</i><span><b>계란밥</b>밥에 계란프라이를 올리고 쯔유를 아주 조금 뿌려 주세요.</span></li>
+  </ul>
+  <p class="ty-note">입맛에 따라 물 양을 조절해 주세요.</p>
+  <figure class="ty-photo">
+    <img src="https://takkobebe-link.vercel.app/img/tsuyu/kids.jpg" alt="쯔유로 끓인 우동을 먹는 두 아이" loading="lazy">
+  </figure>
+</div>
+
+<div class="ty-block">
+  <h3 class="ty-title">함께 고르면 좋은 면</h3>
+  <ul class="ty-duo">
+    <li>
+      <img src="https://takkobebe-link.vercel.app/img/tsuyu/udon.jpg" alt="우동면" loading="lazy">
+      <b>우동면<i>2개 · 4개</i></b>
+      <span>농가에서 추천한 면으로, 비린 맛이 없고 면발이 탱글하고 쫀득합니다.</span>
+    </li>
+    <li>
+      <img src="https://takkobebe-link.vercel.app/img/tsuyu/soba.jpg" alt="모밀면 묶음" loading="lazy">
+      <b>모밀면<i>2개 · 4개</i></b>
+      <span>향이 좋은 모밀면으로 골랐습니다. 한 묶음이 1인분입니다.</span>
+    </li>
+  </ul>
+  <p class="ty-note">면은 옵션에서 우동면, 모밀면을 2개 또는 4개로 추가하실 수 있습니다.</p>
+</div>
+
+<div class="ty-block">
+  <h3 class="ty-title">구성 · 보관 · 원재료</h3>
+  <dl class="ty-spec" style="margin-top:0">
+    <div><dt>용량</dt><dd>1병 550ml</dd></div>
+    <div><dt>구성</dt><dd>쯔유 1병 또는 2병 (면은 옵션에서 추가)</dd></div>
+    <div><dt>보관</dt><dd>냉장 보관</dd></div>
+    <div><dt>유통기한</dt><dd>제조일로부터 2개월</dd></div>
+    <div><dt>원재료명 및 함량</dt><dd>정제수 30%, 혼합맛간장(국산) 30%, 미림(국산) 15%, 꼭지다시마(국산) 5%, 가쯔오부시(인도네시아산) 5%, 디포리(국산) 4%, 멸치(국산) 3%, 말린대파(국산) 2%, 말린무(국산) 3%, 토판천일염(국산) 3%</dd></div>
+  </dl>
+  <p class="ty-note">보존제를 넣지 않은 먹거리라 되도록 빨리 드셔 주세요.</p>
+</div>
+
+<div class="ty-block ty-faq">
+  <h3 class="ty-title">배송 · 교환 및 상품 정보</h3>
+  <div class="ty-acc">
+    <details>
+      <summary>언제 받을 수 있나요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="ty-a">오늘 주문하시면 1~3일 안에 보내 드립니다.</p>
+    </details>
+    <details>
+      <summary>배송 · 교환 · 환불<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <ul class="ty-list">
+        <li>무료배송입니다. 제주도는 배송비가 따로 붙습니다.</li>
+        <li>신선식품이라 장터 마감 후에는 취소가 어렵습니다.</li>
+        <li>배송 중 파손되면 운송장 · 상태 사진 · 주문자 정보를 1:1 게시판에 올려 주세요.</li>
+        <li>배송지를 잘못 입력해 생긴 오배송은 책임지기 어렵습니다.</li>
+        <li>네이버페이 주문의 반품 · 교환은 네이버톡톡으로 접수해 주세요.</li>
+      </ul>
+    </details>
+    <details>
+      <summary>상품정보 고시<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <div class="ty-gosi">{{$상품정보고시리스트}}</div>
+    </details>
+  </div>
+</div>
+</div>
+
+{{if(관련상품리스트)}}<div class="detail_related wrap_inner">
+
+				<h3 class="title" style="text-align: left;">함께 본 상품</h3><div style="text-align: left;">{{$관련상품리스트}}</div></div><div style="text-align: left;" align="left">{{endif(관련상품리스트)}}</div>

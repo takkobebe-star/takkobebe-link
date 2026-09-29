@@ -1,0 +1,234 @@
+{
+  "headers": [
+    {
+      "source": "/hanwoo-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/ricebread-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/ricebread252-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/tkbb-main.js",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/javascript; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    {
+      "source": "/oil-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/nuruk-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/udon-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/lemon-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/doraji-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/egg-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/cheese-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/egg145-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/lemoncheong-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/img/pencil/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        }
+      ]
+    },
+    {
+      "source": "/img/burrito/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        }
+      ]
+    },
+    {
+      "source": "/kongguk-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/pencil-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/tsuyu-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    }
+  ]
+}

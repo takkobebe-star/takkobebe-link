@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>타코베베 운영 캘린더</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗓️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap">
+<style>
+  :root {
+    --ground: #EAE3DF;
+    --surface: #FBFAF9;
+    --card: #FFFFFF;
+    --ink: #1C1917;
+    --muted: #8A817C;
+    --badge-bg: #F1EDEA;
+    --accent: #F27430;
+    --live: #2E8B57;
+    --danger: #D64545;
+    --tline: #DDD5D0;
+    --grid: #EFE9E5;
+    --shadow: 0 1px 2px rgba(28, 25, 23, 0.04), 0 6px 20px rgba(28, 25, 23, 0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #181512;
+      --surface: #211D1A;
+      --card: #272220;
+      --ink: #EDE8E4;
+      --muted: #9B928C;
+      --badge-bg: #322C29;
+      --accent: #FF9257;
+      --live: #6FBF8F;
+      --danger: #FF7B7B;
+      --tline: #3B3430;
+      --grid: #2E2926;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    font-size: 13.5px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 26px 14px 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  header { padding: 2px 6px; }
+  header .brand { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 0.04em; }
+  header h1 { margin: 2px 0 0; font-size: 24px; font-weight: 900; letter-spacing: -0.02em; }
+  header h1 small { font-size: 14px; font-weight: 500; color: var(--muted); margin-left: 6px; }
+
+  .panel {
+    background: var(--surface);
+    border-radius: 18px;
+    padding: 18px 16px;
+    box-shadow: var(--shadow);
+  }
+  .panel h2 {
+    margin: 0 0 10px;
+    font-size: 14.5px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  /* ── 오늘 할 일 ──────────────────────────── */
+  .task {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: var(--card);
+    border-radius: 12px;
+    padding: 11px 13px;
+    border: 1px solid var(--tline);
+  }
+  .task + .task { margin-top: 8px; }
+  .task .dot { width: 10px; height: 10px; border-radius: 3px; margin-top: 6px; flex-shrink: 0; }
+  .task .body { flex: 1; min-width: 0; }
+  .task .name { font-size: 14px; font-weight: 700; word-break: keep-all; }
+  .task .sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .task .sub b { color: var(--accent); font-weight: 700; }
+  .task .memo { font-size: 11.5px; color: var(--muted); margin-top: 3px; word-break: break-all; }
+  .chip {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 900;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--badge-bg);
+    color: var(--muted);
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .chip.open  { background: var(--accent); color: #fff; }
+  .chip.live  { color: var(--live); }
+  .chip.close { background: var(--danger); color: #fff; }
+  .chip.tent  { border: 1px dashed var(--muted); background: transparent; }
+  .none {
+    font-size: 12.5px;
+    color: var(--muted);
+    padding: 6px 2px;
+  }
+  .none b { color: var(--ink); }
+
+  /* ── 월간 달력 ──────────────────────────── */
+  .cal-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .cal-nav .title { font-size: 15px; font-weight: 900; min-width: 110px; text-align: center; }
+  .cal-nav button {
+    border: 1px solid var(--tline);
+    background: var(--card);
+    color: var(--ink);
+    border-radius: 9px;
+    width: 30px; height: 30px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .cal-nav button.today-btn { width: auto; padding: 0 10px; font-size: 11.5px; font-weight: 700; }
+
+  .dow {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    padding-bottom: 4px;
+  }
+  .dow span:first-child { color: var(--danger); }
+
+  .week { position: relative; border-top: 1px solid var(--grid); }
+  .week .cells { display: grid; grid-template-columns: repeat(7, 1fr); height: 100%; }
+  .cell { border-left: 1px solid var(--grid); padding: 3px 0 0; text-align: center; min-width: 0; }
+  .cell:first-child { border-left: none; }
+  .cell .num {
+    display: inline-grid;
+    place-items: center;
+    width: 21px; height: 21px;
+    border-radius: 50%;
+    font-size: 11.5px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+  .cell.dim .num { color: var(--muted); opacity: 0.45; }
+  .cell.sun .num { color: var(--danger); }
+  .cell.today .num { background: var(--ink); color: var(--ground); font-weight: 900; }
+  .cell .prep { display: block; font-size: 11.5px; line-height: 1; margin-top: 1px; }
+
+  .bar {
+    position: absolute;
+    height: 16px;
+    border-radius: 4px;
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 16px;
+    padding: 0 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+  }
+  .bar.head { border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
+  .bar.tail { border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
+  .bar.tent {
+    background-image: repeating-linear-gradient(135deg, transparent 0 4px, rgba(255,255,255,0.35) 4px 8px);
+    opacity: 0.75;
+  }
+  .bar.etc { background: var(--muted) !important; opacity: 0.6; }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .legend i { font-style: normal; }
+
+  /* ── 다가오는 일정 ───────────────────────── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--tline);
+    border-radius: 12px;
+    padding: 12px 13px;
+    display: flex;
+    gap: 10px;
+  }
+  .card + .card { margin-top: 8px; }
+  .card.flash { outline: 2px solid var(--accent); }
+  .card .dot { width: 10px; height: 10px; border-radius: 3px; margin-top: 6px; flex-shrink: 0; }
+  .card .body { flex: 1; min-width: 0; }
+  .card .top { display: flex; align-items: flex-start; gap: 8px; }
+  .card .name { flex: 1; font-size: 14px; font-weight: 700; word-break: keep-all; }
+  .card .line { font-size: 12px; color: var(--muted); margin-top: 3px; font-variant-numeric: tabular-nums; }
+  .card .line.prep-line b { color: var(--accent); font-weight: 700; }
+  .card .line.prep-line .hot {
+    background: var(--accent); color: #fff;
+    font-size: 10.5px; font-weight: 900;
+    padding: 1px 7px; border-radius: 999px; margin-left: 5px;
+  }
+  .card .memo { font-size: 11.5px; color: var(--muted); margin-top: 4px; word-break: break-all; }
+
+  .error {
+    text-align: center;
+    color: var(--muted);
+    padding: 18px 0;
+  }
+  .error button {
+    margin-top: 8px;
+    border: 1px solid var(--tline);
+    background: var(--card);
+    color: var(--ink);
+    border-radius: 9px;
+    padding: 6px 14px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  footer {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">takkobebe 사장님 전용</div>
+    <h1 id="todayTitle"></h1>
+  </header>
+
+  <section class="panel" id="prepPanel">
+    <h2>✍️ 오늘 콘텐츠 만들기 <span style="font-weight:500;font-size:11.5px;color:var(--muted)">내일 오픈 상품</span></h2>
+    <div id="prepList"><p class="none">캘린더 불러오는 중…</p></div>
+  </section>
+
+  <section class="panel" id="livePanel">
+    <h2>🛒 오늘 판매</h2>
+    <div id="liveList"></div>
+  </section>
+
+  <section class="panel">
+    <div class="cal-nav">
+      <button id="prevBtn" aria-label="이전 달">◀</button>
+      <span class="title" id="calTitle"></span>
+      <button id="nextBtn" aria-label="다음 달">▶</button>
+      <button class="today-btn" id="todayBtn">오늘</button>
+    </div>
+    <div class="dow"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+    <div id="calGrid"></div>
+    <div class="legend">
+      <span><i>✍️</i> 콘텐츠 준비일 (오픈 전날)</span>
+      <span><i style="display:inline-block;width:14px;height:8px;border-radius:3px;background:var(--muted);opacity:.6;vertical-align:middle"></i> 내부 일정</span>
+      <span><i style="display:inline-block;width:14px;height:8px;border-radius:3px;background:repeating-linear-gradient(135deg,#bbb 0 3px,#eee 3px 6px);vertical-align:middle"></i> 미정</span>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>📋 다가오는 일정</h2>
+    <div id="upcoming"></div>
+  </section>
+
+  <footer>카카오워크 장터캘린더와 자동 동기화 · 수정 후 5분 안에 반영</footer>
+</div>
+
+<script>
+  const OPEN_HOUR = 10;          // 공구는 항상 오전 10시 오픈
+  const DAY = 86400000;
+  const DOW = ["일", "월", "화", "수", "목", "금", "토"];
+  const PALETTE = ["#F27430", "#2E8B57", "#3B7DD8", "#8E5BC0", "#D65A88", "#2A9D8F", "#C98A2D"];
+
+  let events = [];               // /api/mycal 응답 (+ color, lane 부여)
+  let viewY, viewM;              // 달력에 표시 중인 연·월
+
+  const toDate = (s) => {
+    const [d, t] = s.split(" ");
+    const [y, m, dd] = d.split("-").map(Number);
+    const [h, mi] = (t || "0:0").split(":").map(Number);
+    return new Date(y, m - 1, dd, h, mi);
+  };
+  const midnight = (dt) => new Date(dt.getFullYear(), dt.getMonth(), dt.getDate());
+  const dayStart = (ev) => midnight(toDate(ev.start));
+  const dayEnd = (ev) => midnight(toDate(ev.end));
+  const fmtMD = (dt) => (dt.getMonth() + 1) + "." + dt.getDate() + "(" + DOW[dt.getDay()] + ")";
+  const openTime = (ev) =>
+    ev.start.includes(":") ? toDate(ev.start) : new Date(dayStart(ev).getTime() + OPEN_HOUR * 3600000);
+  const openHourTxt = (ev) => {
+    const t = openTime(ev);
+    return t.getMinutes() ? t.getHours() + "시 " + t.getMinutes() + "분" : t.getHours() + "시";
+  };
+
+  // ── 오늘 할 일 ─────────────────────────────
+  function renderToday(now) {
+    const today = midnight(now);
+    const tomorrow = new Date(today.getTime() + DAY);
+    document.getElementById("todayTitle").innerHTML =
+      (today.getMonth() + 1) + "월 " + today.getDate() + "일 <small>" + DOW[today.getDay()] + "요일</small>";
+
+    // ✍️ 콘텐츠 준비: 내일 오픈하는 상품
+    const prep = events.filter((ev) => ev.product && dayStart(ev).getTime() === tomorrow.getTime());
+    const prepBox = document.getElementById("prepList");
+    prepBox.innerHTML = "";
+    if (prep.length) {
+      prep.forEach((ev) => {
+        const t = el("div", "task");
+        t.innerHTML = '<span class="dot"></span><div class="body"><div class="name"></div><div class="sub"></div></div><span class="chip open"></span>';
+        t.querySelector(".dot").style.background = ev.color;
+        t.querySelector(".name").textContent = ev.title;
+        t.querySelector(".sub").innerHTML = "내일 <b>" + fmtMD(dayStart(ev)) + " " + openHourTxt(ev) + " 오픈</b> — 피드·릴스 오늘 준비!";
+        t.querySelector(".chip").textContent = ev.tentative ? "미정 주의" : "내일 오픈";
+        if (ev.tentative) t.querySelector(".chip").className = "chip tent";
+        if (ev.memo) t.querySelector(".body").appendChild(memoEl(ev.memo));
+        prepBox.appendChild(t);
+      });
+    } else {
+      // 다음 콘텐츠 준비일 안내
+      const next = events
+        .filter((ev) => ev.product && !ev.tentative && dayStart(ev) > tomorrow)
+        .sort((a, b) => dayStart(a) - dayStart(b))[0];
+      const p = el("p", "none");
+      p.innerHTML = next
+        ? "내일 오픈하는 공구가 없어요 😌<br>다음 콘텐츠 준비일은 <b>" +
+          fmtMD(new Date(dayStart(next).getTime() - DAY)) + "</b> — <b>" + next.title + "</b> (" + fmtMD(dayStart(next)) + " 오픈)"
+        : "내일 오픈하는 공구가 없어요 😌";
+      prepBox.appendChild(p);
+    }
+
+    // 🛒 오늘 판매
+    const live = events.filter((ev) => ev.product && dayStart(ev) <= today && today <= dayEnd(ev));
+    const liveBox = document.getElementById("liveList");
+    liveBox.innerHTML = "";
+    if (live.length) {
+      live.forEach((ev) => {
+        const s = dayStart(ev), e = dayEnd(ev);
+        const dayN = Math.round((today - s) / DAY) + 1;
+        const total = Math.round((e - s) / DAY) + 1;
+        let chipTxt, chipCls;
+        if (ev.tentative) { chipTxt = "미정"; chipCls = "chip tent"; }
+        else if (s.getTime() === today.getTime() && now < openTime(ev)) { chipTxt = "오늘 " + openHourTxt(ev) + " 오픈"; chipCls = "chip open"; }
+        else if (e.getTime() === today.getTime()) { chipTxt = "오늘 마감!"; chipCls = "chip close"; }
+        else { chipTxt = "진행중 " + dayN + "/" + total + "일차"; chipCls = "chip live"; }
+        const t = el("div", "task");
+        t.innerHTML = '<span class="dot"></span><div class="body"><div class="name"></div><div class="sub"></div></div><span></span>';
+        t.querySelector(".dot").style.background = ev.color;
+        t.querySelector(".name").textContent = ev.title;
+        t.querySelector(".sub").textContent = fmtMD(s) + " " + openHourTxt(ev) + " ~ " + fmtMD(e) + " · " + total + "일간";
+        t.lastElementChild.className = chipCls;
+        t.lastElementChild.textContent = chipTxt;
+        if (ev.memo) t.querySelector(".body").appendChild(memoEl(ev.memo));
+        liveBox.appendChild(t);
+      });
+    } else {
+      liveBox.innerHTML = '<p class="none">오늘 판매중인 공구가 없어요.</p>';
+    }
+  }
+
+  // ── 월간 달력 ─────────────────────────────
+  function assignLanes() {
+    const sorted = [...events].sort((a, b) => dayStart(a) - dayStart(b) || dayEnd(b) - dayEnd(a));
+    const laneEnd = [];
+    sorted.forEach((ev) => {
+      let lane = laneEnd.findIndex((end) => end < dayStart(ev).getTime());
+      if (lane < 0) { lane = laneEnd.length; laneEnd.push(0); }
+      laneEnd[lane] = dayEnd(ev).getTime();
+      ev.lane = lane;
+    });
+  }
+
+  function renderMonth(now) {
+    const today = midnight(now);
+    document.getElementById("calTitle").textContent = viewY + "년 " + (viewM + 1) + "월";
+    const grid = document.getElementById("calGrid");
+    grid.innerHTML = "";
+
+    const first = new Date(viewY, viewM, 1);
+    const last = new Date(viewY, viewM + 1, 0);
+    const gridStart = new Date(first.getTime() - first.getDay() * DAY);
+
+    const DATE_H = 28, LANE_H = 19;
+
+    // 콘텐츠 준비일(오픈 전날) 목록
+    const prepDays = new Set(
+      events.filter((ev) => ev.product && !ev.tentative)
+        .map((ev) => dayStart(ev).getTime() - DAY)
+    );
+
+    for (let ws = new Date(gridStart); ws <= last; ws = new Date(ws.getTime() + 7 * DAY)) {
+      const we = new Date(ws.getTime() + 6 * DAY);
+      // 이 주에 실제로 걸치는 일정의 줄 수만큼만 높이를 잡는다
+      const weekLanes = events.reduce(
+        (m, ev) => (dayEnd(ev) >= ws && dayStart(ev) <= we ? Math.max(m, ev.lane + 1) : m), 1);
+      const week = el("div", "week");
+      week.style.height = DATE_H + weekLanes * LANE_H + 4 + "px";
+      const cells = el("div", "cells");
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(ws.getTime() + i * DAY);
+        const cell = el("div", "cell");
+        if (d.getMonth() !== viewM) cell.classList.add("dim");
+        if (i === 0) cell.classList.add("sun");
+        if (d.getTime() === today.getTime()) cell.classList.add("today");
+        cell.innerHTML = '<span class="num">' + d.getDate() + "</span>";
+        if (prepDays.has(d.getTime())) cell.innerHTML += '<span class="prep">✍️</span>';
+        cells.appendChild(cell);
+      }
+      week.appendChild(cells);
+
+      events.forEach((ev, idx) => {
+        const s = dayStart(ev), e = dayEnd(ev);
+        if (e < ws || s > we) return;
+        const from = s > ws ? s : ws;
+        const to = e < we ? e : we;
+        const col = from.getDay();
+        const span = Math.round((to - from) / DAY) + 1;
+        const bar = el("div", "bar" + (s >= ws ? " head" : "") + (e <= we ? " tail" : "") +
+          (ev.tentative ? " tent" : "") + (ev.product ? "" : " etc"));
+        bar.style.left = "calc(" + col + " / 7 * 100% + 2px)";
+        bar.style.width = "calc(" + span + " / 7 * 100% - 4px)";
+        bar.style.top = DATE_H + ev.lane * LANE_H + "px";
+        bar.style.background = ev.product ? ev.color : "";
+        bar.textContent = ev.title;
+        bar.title = ev.title;
+        bar.onclick = () => flashCard(idx);
+        week.appendChild(bar);
+      });
+      grid.appendChild(week);
+    }
+  }
+
+  // ── 다가오는 일정 리스트 ────────────────────
+  function renderUpcoming(now) {
+    const today = midnight(now);
+    const box = document.getElementById("upcoming");
+    box.innerHTML = "";
+    const list = events.filter((ev) => dayEnd(ev) >= today);
+    if (!list.length) {
+      box.innerHTML = '<p class="none">등록된 일정이 없어요.</p>';
+      return;
+    }
+    list.forEach((ev) => {
+      const s = dayStart(ev), e = dayEnd(ev);
+      const total = Math.round((e - s) / DAY) + 1;
+      const d = Math.round((s - today) / DAY);
+      let chipTxt, chipCls = "chip";
+      if (ev.tentative) { chipTxt = "미정"; chipCls = "chip tent"; }
+      else if (d === 0 && now < openTime(ev)) { chipTxt = "오늘 오픈"; chipCls = "chip open"; }
+      else if (d <= 0 && e.getTime() === today.getTime()) { chipTxt = "오늘 마감!"; chipCls = "chip close"; }
+      else if (d <= 0) { chipTxt = "진행중"; chipCls = "chip live"; }
+      else { chipTxt = "D-" + d; }
+
+      const c = el("div", "card");
+      c.id = "ev-" + events.indexOf(ev);
+      c.innerHTML = '<span class="dot"></span><div class="body"><div class="top"><div class="name"></div><span></span></div><div class="line sale"></div></div>';
+      c.querySelector(".dot").style.background = ev.product ? ev.color : "var(--muted)";
+      c.querySelector(".name").textContent = ev.title;
+      const chip = c.querySelector(".top span");
+      chip.className = chipCls;
+      chip.textContent = chipTxt;
+
+      if (ev.product) {
+        c.querySelector(".sale").textContent = "🛒 판매 " + fmtMD(s) + " " + openHourTxt(ev) + " ~ " + fmtMD(e) + " · " + total + "일간";
+        if (!ev.tentative && d > 0) {
+          const prepD = new Date(s.getTime() - DAY);
+          const line = el("div", "line prep-line");
+          line.innerHTML = "✍️ 콘텐츠 준비 <b>" + fmtMD(prepD) + "</b>";
+          if (prepD.getTime() === today.getTime()) line.innerHTML += '<span class="hot">오늘!</span>';
+          else if (prepD.getTime() === today.getTime() + DAY) line.innerHTML += '<span class="hot">내일</span>';
+          c.querySelector(".body").appendChild(line);
+        }
+      } else {
+        c.querySelector(".sale").textContent = "📌 " + fmtMD(s) + (s.getTime() === e.getTime() ? "" : " ~ " + fmtMD(e)) + " · 내부 일정";
+      }
+      if (ev.memo) c.querySelector(".body").appendChild(memoEl(ev.memo));
+      box.appendChild(c);
+    });
+  }
+
+  // ── 공통 ─────────────────────────────────
+  function el(tag, cls) { const n = document.createElement(tag); n.className = cls; return n; }
+  function memoEl(memo) {
+    const m = el("div", "memo");
+    m.textContent = "📝 " + memo;
+    return m;
+  }
+  function flashCard(idx) {
+    const c = document.getElementById("ev-" + idx);
+    if (!c) return;
+    c.scrollIntoView({ behavior: "smooth", block: "center" });
+    c.classList.add("flash");
+    setTimeout(() => c.classList.remove("flash"), 1600);
+  }
+
+  function renderAll() {
+    const now = new Date();
+    assignLanes();
+    renderToday(now);
+    renderMonth(now);
+    renderUpcoming(now);
+  }
+
+  function load() {
+    fetch("/api/mycal")
+      .then((r) => { if (!r.ok) throw 0; return r.json(); })
+      .then((data) => {
+        if (!Array.isArray(data.events)) throw 0;
+        events = data.events;
+        // 상품마다 고정 색상 부여 (시작일 순서 기준이라 항상 같은 색 유지)
+        let ci = 0;
+        events.forEach((ev) => { ev.color = ev.product ? PALETTE[ci++ % PALETTE.length] : null; });
+        renderAll();
+      })
+      .catch(() => {
+        document.getElementById("prepList").innerHTML =
+          '<div class="error">일정을 불러오지 못했어요.<br><button onclick="load()">다시 시도</button></div>';
+      });
+  }
+
+  const now0 = new Date();
+  viewY = now0.getFullYear();
+  viewM = now0.getMonth();
+  document.getElementById("prevBtn").onclick = () => { viewM--; if (viewM < 0) { viewM = 11; viewY--; } renderMonth(new Date()); };
+  document.getElementById("nextBtn").onclick = () => { viewM++; if (viewM > 11) { viewM = 0; viewY++; } renderMonth(new Date()); };
+  document.getElementById("todayBtn").onclick = () => { const n = new Date(); viewY = n.getFullYear(); viewM = n.getMonth(); renderMonth(n); };
+
+  load();
+  // 10분마다 자동 새로고침 (캘린더 수정 반영 + 날짜 넘어감 대응)
+  setInterval(load, 10 * 60 * 1000);
+</script>
+</body>
+</html>
