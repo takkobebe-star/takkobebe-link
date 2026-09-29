@@ -1470,7 +1470,7 @@
 		+ '.tkbb-mp .cs p{margin:6px 0 0;font-size:13px;color:#6A6A66;line-height:1.5;}'
 		+ '.tkbb-mp .cs .bt{display:flex;gap:8px;}'
 		+ '.tkbb-mp .cs .bt a{flex:1;height:48px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid #161616;border-radius:4px;font-size:14px;font-weight:700;}'
-		+ '.tkbb-mp .cs .bt a + a{background:#161616;color:#fff;}'
+		+ '.tkbb-mp .cs .bt a{background:#161616;color:#fff;}'
 		+ '.tkbb-mp .cs .lk{display:flex;justify-content:center;gap:20px;font-size:13px;color:#6A6A66;margin-top:8px;}'
 		+ '.tkbb-mp .cs .lk i{font-style:normal;color:#DAD5C8;}';
 
@@ -1550,10 +1550,10 @@
 		h += '<div class="sc">'
 			+ sect('나의 쇼핑정보', ['/mypage/order_list.php', '/mypage/order_list.php?sbscr=Y', '/mypage/wish_list.php', '/shop/click_prd.php'])
 			+ sect('나의 계정정보', ['/member/edit_step1.php', '/mypage/milage.php', '/mypage/emoney.php', '/mypage/coupon_down_list.php'])
-			+ sect('고객지원', ['/mypage/counsel_list.php', '/mypage/qna_list.php', '/mypage/review_list.php', '/mypage/notify_restock.php'])
+			+ sect('고객지원', ['/mypage/qna_list.php', '/mypage/review_list.php', '/mypage/notify_restock.php'])
 			+ '</div>';
 		h += '<div class="cs"><div><b>고객센터</b><p>전화 041-572-3307<br>이메일 market_takkobebe@takkobebe.com</p></div>'
-			+ '<div class="bt"><a href="/mypage/counsel_list.php">1:1 문의하기</a><a href="/shop/product_qna_list.php">상품 문의</a></div>'
+			+ '<div class="bt"><a href="https://m.takkobebe.com/shop/product_qna_list.php">상품 문의</a></div>'
 			+ '<div class="lk"><a href="' + esc(logoutHref) + '">로그아웃</a><i>|</i><a href="/mypage/withdraw_step1.php">회원 탈퇴</a></div></div>';
 
 		var box = document.createElement('div');
