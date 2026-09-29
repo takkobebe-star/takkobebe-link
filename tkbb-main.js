@@ -1411,3 +1411,162 @@
 	if (document.body) start();
 	else document.addEventListener('DOMContentLoaded', start);
 })();
+
+/* ===== 마이페이지 (29CM 스타일, 타코베베 컬러) — 2026-09-29 =====
+   /mypage/mypage.php 의 원래 내용(#mypage)을 읽어서 새 모양으로 다시 그린다.
+   원래 화면은 지우지 않고 숨기기만 한다. 주소 끝에 ?tkbb_old=1 을 붙이면 원래 화면이 보인다.
+   되돌리려면 이 블록(시작~끝)만 지우면 된다. */
+(function(){
+	if (window.__TKBB_MYPAGE) return; window.__TKBB_MYPAGE = 1;
+	if (window.browser_type === 'pc') return;
+	if (location.pathname !== '/mypage/mypage.php') return;
+	if (/[?&]tkbb_old=1/.test(location.search)) return;
+
+	var CSS = ''
+		+ '#cnt.tkbb-mp-on > h2.subtitle,#cnt.tkbb-mp-on > select.top_select_menu{display:none !important;}'
+		+ '#mypage.tkbb-mp-on > :not(.tkbb-mp){display:none !important;}'
+		+ '.tkbb-mp{font-family:inherit;color:#161616;letter-spacing:-.02em;background:#fff;padding-bottom:8px;}'
+		+ '.tkbb-mp a{color:inherit;text-decoration:none;}'
+		+ '.tkbb-mp .nt{display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 16px;background:#161616;color:#fff;font-size:13px;}'
+		+ '.tkbb-mp .nt a{display:flex;align-items:center;gap:8px;flex:1;min-width:0;}'
+		+ '.tkbb-mp .nt em{font-style:normal;background:#D1D798;color:#161616;font-size:11px;font-weight:700;padding:3px 7px;border-radius:2px;flex:0 0 auto;}'
+		+ '.tkbb-mp .nt span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}'
+		+ '.tkbb-mp .nt button{flex:0 0 44px;width:44px;height:44px;margin-right:-14px;border:0;background:none;padding:0;display:flex;align-items:center;justify-content:center;}'
+		+ '.tkbb-mp .hi{padding:28px 20px 22px;}'
+		+ '.tkbb-mp .hi h2{margin:0;font-size:26px;font-weight:900;letter-spacing:-.04em;line-height:1.3;}'
+		+ '.tkbb-mp .hi h2 small{font-size:26px;font-weight:500;}'
+		+ '.tkbb-mp .hi p{margin:4px 0 0;font-size:14px;color:#6A6A66;}'
+		+ '.tkbb-mp .gr{display:flex;align-items:center;justify-content:space-between;height:52px;box-sizing:border-box;margin-top:16px;padding:0 16px;background:#F7F5EE;border-radius:4px;}'
+		+ '.tkbb-mp .gr div{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;}'
+		+ '.tkbb-mp .gr i{width:22px;height:22px;border-radius:50%;background:#D1D798;display:inline-block;}'
+		+ '.tkbb-mp .gr small{font-size:13px;font-weight:400;color:#6A6A66;}'
+		+ '.tkbb-mp .sm{display:flex;margin:0 20px;height:84px;box-sizing:border-box;border-top:1px solid #DAD5C8;border-bottom:1px solid #DAD5C8;}'
+		+ '.tkbb-mp .sm a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;}'
+		+ '.tkbb-mp .sm a + a{border-left:1px solid #EFEDE6;}'
+		+ '.tkbb-mp .sm span{font-size:13px;color:#6A6A66;}'
+		+ '.tkbb-mp .sm b{font-size:18px;font-weight:700;}'
+		+ '.tkbb-mp .sm b small{font-size:13px;font-weight:500;}'
+		+ '.tkbb-mp .em{margin:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #EFEDE6;font-size:14px;}'
+		+ '.tkbb-mp .em span{color:#6A6A66;}'
+		+ '.tkbb-mp .em b{display:flex;align-items:center;gap:6px;font-weight:700;}'
+		+ '.tkbb-mp .os{padding:28px 20px 8px;}'
+		+ '.tkbb-mp .hd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;}'
+		+ '.tkbb-mp .hd h3{margin:0;font-size:17px;font-weight:900;letter-spacing:-.03em;}'
+		+ '.tkbb-mp .hd a{font-size:13px;color:#6A6A66;}'
+		+ '.tkbb-mp .os ul{display:flex;margin:0;padding:18px 4px;list-style:none;background:#F7F5EE;border-radius:4px;}'
+		+ '.tkbb-mp .os li{flex:1;text-align:center;}'
+		+ '.tkbb-mp .os li b{display:block;font-size:20px;font-weight:700;}'
+		+ '.tkbb-mp .os li span{display:block;font-size:12px;color:#6A6A66;margin-top:4px;}'
+		+ '.tkbb-mp .os li.on b,.tkbb-mp .os li.on span{color:#52728A;}'
+		+ '.tkbb-mp .os p{margin:8px 2px 0;font-size:11.5px;color:#6A6A66;}'
+		+ '.tkbb-mp .bn{display:flex;align-items:center;justify-content:space-between;margin:24px 20px 8px;height:88px;box-sizing:border-box;padding:0 20px;background:#D1D798;border-radius:4px;}'
+		+ '.tkbb-mp .bn small{display:block;font-size:12px;font-weight:700;color:#3E4220;letter-spacing:.03em;}'
+		+ '.tkbb-mp .bn b{display:block;font-size:17px;font-weight:900;letter-spacing:-.03em;margin-top:4px;}'
+		+ '.tkbb-mp .sc{padding:28px 20px 0;display:flex;flex-direction:column;gap:32px;}'
+		+ '.tkbb-mp .sc h3{margin:0;padding-bottom:12px;border-bottom:2px solid #161616;font-size:17px;font-weight:900;letter-spacing:-.03em;}'
+		+ '.tkbb-mp .sc a{display:flex;align-items:center;justify-content:space-between;min-height:52px;border-bottom:1px solid #EFEDE6;font-size:15px;}'
+		+ '.tkbb-mp .cs{margin-top:36px;padding:28px 20px 40px;background:#F7F5EE;display:flex;flex-direction:column;gap:16px;}'
+		+ '.tkbb-mp .cs b{font-size:15px;font-weight:700;}'
+		+ '.tkbb-mp .cs p{margin:6px 0 0;font-size:13px;color:#6A6A66;line-height:1.5;}'
+		+ '.tkbb-mp .cs .bt{display:flex;gap:8px;}'
+		+ '.tkbb-mp .cs .bt a{flex:1;height:48px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid #161616;border-radius:4px;font-size:14px;font-weight:700;}'
+		+ '.tkbb-mp .cs .bt a + a{background:#161616;color:#fff;}'
+		+ '.tkbb-mp .cs .lk{display:flex;justify-content:center;gap:20px;font-size:13px;color:#6A6A66;margin-top:8px;}'
+		+ '.tkbb-mp .cs .lk i{font-style:normal;color:#DAD5C8;}';
+
+	var ARW = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9A9A94" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';
+	var ARW_D = ARW.replace('#9A9A94', '#161616');
+
+	function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+	function num(s){ var n = String(s || '').replace(/[^\d]/g, ''); return n ? Number(n).toLocaleString('ko-KR') : '0'; }
+
+	function build(){
+		var root = document.getElementById('mypage');
+		var cnt = document.getElementById('cnt');
+		if (!root || !cnt || root.querySelector('.tkbb-mp')) return;
+
+		// 1) 원래 화면에서 값 읽기
+		var info = {};
+		var lis = root.querySelectorAll('.my_info li');
+		for (var i = 0; i < lis.length; i++) {
+			var sp = lis[i].querySelector('span');
+			var a = lis[i].querySelector('a');
+			if (!sp || !a) continue;
+			var key = (a.textContent || '').replace((sp.textContent || ''), '').replace(/\s+/g, '');
+			info[key] = (sp.textContent || '').trim();
+		}
+		if (!info['회원등급']) return; // 예상과 다르면 원래 화면 그대로 둔다
+
+		// 최근 3개월 주문 상태 세기
+		var cnt5 = { '입금대기': 0, '결제완료': 0, '배송준비': 0, '배송중': 0, '배송완료': 0 };
+		var sts = root.querySelectorAll('.ord_latest .p_color');
+		for (var j = 0; j < sts.length; j++) {
+			var t = (sts[j].textContent || '').replace(/\s+/g, '');
+			if (t.indexOf('입금대기') >= 0) cnt5['입금대기']++;
+			else if (t.indexOf('결제완료') >= 0) cnt5['결제완료']++;
+			else if (t.indexOf('배송준비') >= 0 || t.indexOf('상품준비') >= 0) cnt5['배송준비']++;
+			else if (t.indexOf('배송중') >= 0) cnt5['배송중']++;
+			else if (t.indexOf('배송완료') >= 0) cnt5['배송완료']++;
+		}
+
+		// 메뉴는 원래 드롭다운(select)에 있는 것만 쓴다 (숨김 처리된 항목 .dn 은 뺀다)
+		var menu = {};
+		var opts = cnt.querySelectorAll('select.top_select_menu option');
+		for (var k = 0; k < opts.length; k++) {
+			var v = opts[k].getAttribute('value');
+			if (!v || /(^|\s)dn(\s|$)/.test(opts[k].className)) continue;
+			menu[v.split('?')[0] + (v.indexOf('sbscr=Y') > -1 ? '?sbscr=Y' : '')] = opts[k].textContent.replace(/\s+/g, ' ').trim();
+		}
+		function item(path, fallback){ return menu[path] ? '<a href="' + path + '"><span>' + esc(menu[path]) + '</span>' + ARW + '</a>' : ''; }
+		function sect(title, paths){
+			var h = ''; for (var p = 0; p < paths.length; p++) h += item(paths[p]);
+			return h ? '<div><h3>' + title + '</h3>' + h + '</div>' : '';
+		}
+
+		var logout = document.querySelector('header a[href*="logout"]');
+		var logoutHref = logout ? logout.getAttribute('href') : '/member/logout.php';
+
+		var h = '';
+		h += '<div class="nt"><a href="/#tkbb-live"><em>공지</em><span>이번 주 공동구매 일정을 확인해보세요</span></a>'
+			+ '<button type="button" aria-label="공지 닫기"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>';
+		h += '<div class="hi"><h2>회원<small>님</small></h2><p>오늘도 타코베베와 함께해요</p>'
+			+ '<a class="gr" href="/member/edit_step1.php"><div><i></i>' + esc(info['회원등급']) + ' <small>내 정보 보기</small></div>' + ARW_D + '</a></div>';
+		h += '<div class="sm">'
+			+ '<a href="/mypage/coupon_down_list.php"><span>쿠폰</span><b>' + num(info['쿠폰']) + '<small>장</small></b></a>'
+			+ '<a href="/mypage/wish_list.php"><span>관심상품</span><b>' + num(info['관심상품']) + '<small>개</small></b></a>'
+			+ '<a href="/mypage/milage.php"><span>적립금</span><b>' + num(info['적립금']) + '<small>원</small></b></a></div>';
+		if (info['예치금'] != null) h += '<a class="em" href="/mypage/emoney.php"><span>예치금</span><b>' + num(info['예치금']) + '원' + ARW_D + '</b></a>';
+		h += '<div class="os"><div class="hd"><h3>주문·배송 현황</h3><a href="/mypage/order_list.php">전체보기</a></div><ul>';
+		var names = ['입금대기', '결제완료', '배송준비', '배송중', '배송완료'];
+		for (var n = 0; n < names.length; n++) h += '<li' + (names[n] === '배송중' ? ' class="on"' : '') + '><b>' + cnt5[names[n]] + '</b><span>' + names[n] + '</span></li>';
+		h += '</ul><p>최근 3개월 기준</p></div>';
+		h += '<a class="bn" href="/#tkbb-live"><div><small>GROUP BUY</small><b>이번 주 공동구매 일정 보기</b></div>'
+			+ '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>';
+		h += '<div class="sc">'
+			+ sect('나의 쇼핑정보', ['/mypage/order_list.php', '/mypage/order_list.php?sbscr=Y', '/mypage/wish_list.php', '/shop/click_prd.php'])
+			+ sect('나의 계정정보', ['/member/edit_step1.php', '/mypage/milage.php', '/mypage/emoney.php', '/mypage/coupon_down_list.php'])
+			+ sect('고객지원', ['/mypage/counsel_list.php', '/mypage/qna_list.php', '/mypage/review_list.php', '/mypage/notify_restock.php'])
+			+ '</div>';
+		h += '<div class="cs"><div><b>고객센터</b><p>전화 041-572-3307<br>이메일 market_takkobebe@takkobebe.com</p></div>'
+			+ '<div class="bt"><a href="/mypage/counsel_list.php">1:1 문의하기</a><a href="/shop/product_qna_list.php">상품 문의</a></div>'
+			+ '<div class="lk"><a href="' + esc(logoutHref) + '">로그아웃</a><i>|</i><a href="/mypage/withdraw_step1.php">회원 탈퇴</a></div></div>';
+
+		var box = document.createElement('div');
+		box.className = 'tkbb-mp';
+		box.innerHTML = h;
+		var x = box.querySelector('.nt button');
+		if (x) x.addEventListener('click', function(){ var nt = box.querySelector('.nt'); if (nt) nt.style.display = 'none'; });
+
+		var st = document.createElement('style');
+		st.appendChild(document.createTextNode(CSS));
+		(document.head || document.documentElement).appendChild(st);
+		root.insertBefore(box, root.firstChild);
+		root.classList.add('tkbb-mp-on');
+		cnt.classList.add('tkbb-mp-on');
+	}
+
+	function start(){ try { build(); } catch (e) { /* 실패하면 원래 화면이 그대로 보인다 */ } }
+	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+	else start();
+})();
+/* ===== 마이페이지 끝 ===== */
