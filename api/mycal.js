@@ -85,8 +85,8 @@ module.exports = async (req, res) => {
       .filter((ev) => ev.title && ev.end.slice(0, 10) >= cutoff)
       .sort((a, b) => (a.start < b.start ? -1 : 1));
 
-    // CDN에 5분 캐시 → 캘린더 수정 후 최대 5분 안에 반영
-    res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate=3600");
+    // CDN에 1분 캐시 → 캘린더 수정 후 1~2분 안에 반영 (2026-09-29 5분 → 1분)
+    res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
     res.status(200).json({ events });
   } catch (e) {
     res.status(502).json({ error: String(e && e.message || e) });
