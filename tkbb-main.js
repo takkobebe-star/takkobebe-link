@@ -1478,7 +1478,7 @@
 	var ARW_D = ARW.replace('#9A9A94', '#161616');
 
 	function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
-	function num(s){ var n = String(s || '').replace(/[^\d]/g, ''); return n ? Number(n).toLocaleString('ko-KR') : '0'; }
+	function num(s){ if (s == null) return '-'; var n = String(s).replace(/[^\d]/g, ''); return n ? Number(n).toLocaleString('ko-KR') : '0'; }
 
 	function build(){
 		var root = document.getElementById('mypage');
@@ -1495,7 +1495,8 @@
 			var key = (a.textContent || '').replace((sp.textContent || ''), '').replace(/\s+/g, '');
 			info[key] = (sp.textContent || '').trim();
 		}
-		if (!info['회원등급']) return; // 예상과 다르면 원래 화면 그대로 둔다
+		if (!root.querySelector('.my_info li')) return; // 예상과 다르면 원래 화면 그대로 둔다
+		var grade = (info['회원등급'] || '').trim() || '회원';
 
 		// 최근 3개월 주문 상태 세기
 		var cnt5 = { '입금대기': 0, '결제완료': 0, '배송준비': 0, '배송중': 0, '배송완료': 0 };
@@ -1534,7 +1535,7 @@
 		h += '<div class="nt"><a href="/#tkbb-live"><em>공지</em><span>이번 주 공동구매 일정을 확인해보세요</span></a>'
 			+ '<button type="button" aria-label="공지 닫기"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>';
 		h += '<div class="hi"><h2>' + esc(memName) + '<small>님</small></h2><p>오늘도 타코베베와 함께해요</p>'
-			+ '<a class="gr" href="/member/edit_step1.php"><div><i></i>' + esc(info['회원등급']) + ' <small>내 정보 보기</small></div>' + ARW_D + '</a></div>';
+			+ '<a class="gr" href="/member/edit_step1.php"><div><i></i>' + esc(grade) + ' <small>내 정보 보기</small></div>' + ARW_D + '</a></div>';
 		h += '<div class="sm">'
 			+ '<a href="/mypage/coupon_down_list.php"><span>쿠폰</span><b>' + num(info['쿠폰']) + '<small>장</small></b></a>'
 			+ '<a href="/mypage/wish_list.php"><span>관심상품</span><b>' + num(info['관심상품']) + '<small>개</small></b></a>'
