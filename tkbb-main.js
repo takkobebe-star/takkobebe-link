@@ -1342,3 +1342,69 @@
 	if (document.body) start();
 	else document.addEventListener('DOMContentLoaded', start);
 })();
+
+/* ===== 카테고리 바(NOW · 먹거리 · 화장품 …) — 모든 카테고리 화면에 고정 노출 (2026-09-29) =====
+   메인 맨 위 카테고리 바는 메인 페이지 HTML(#main .tkbb-cats)에만 있어서 카테고리로 넘어가면 사라졌다.
+   모바일 카테고리 화면(big_section.php)에도 같은 바를 로고 바로 아래에 넣고, 지금 보고 있는 카테고리를 진하게 표시한다.
+   메인·카테고리 모두 화면을 내려도 바가 맨 위에 붙어 따라온다(sticky).
+   카테고리를 더하거나 순서를 바꾸면 아래 CATS 와 메인 페이지 HTML 의 .tkbb-cats 를 같이 고친다.
+   되돌리려면 이 블록만 지우면 된다. */
+(function(){
+	if (window.__TKBB_CATBAR) return; window.__TKBB_CATBAR = 1;
+	if (window.browser_type === 'pc') return;   // PC 스킨은 따로 메뉴가 있다
+
+	var CATS = [
+		['1005', '먹거리'],
+		['1002', '화장품'],
+		['1001', '키즈 학용품'],
+		['1121', '패션'],
+		['1067', '영양제'],
+		['1006', '생활']
+	];
+	var CSS = ''
+		// 메인·카테고리 공통: 화면을 내려도 로고 줄 바로 아래에 붙어 따라오게.
+		// 스킨이 스크롤하면 로고 줄(header .gnb_wrap, 높이 50px, z-index 10)을 맨 위에 고정하므로 top 을 50px 로 둔다.
+		// 흰 바탕을 깔아야 아래 상품이 비쳐 보이지 않는다
+		+ '#main .tkbb-cats,.tkbb-cats.tkbb-cats-sub{position:-webkit-sticky;position:sticky;top:50px;z-index:9;background:#fff;}'
+		// 카테고리 화면용 모양 — 메인 스킨의 #main .tkbb-cats 규칙과 같게 맞춘다
+		+ '.tkbb-cats.tkbb-cats-sub{display:flex;align-items:baseline;justify-content:space-between;gap:9px;padding:10px 16px 4px;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;border-bottom:1px solid #EFEDE6;}'
+		+ '.tkbb-cats.tkbb-cats-sub::-webkit-scrollbar{display:none;}'
+		+ '.tkbb-cats.tkbb-cats-sub a{flex:0 0 auto;padding:4px 0;font-size:15px;font-weight:300;letter-spacing:-.03em;line-height:1.3;color:#5F5F5F;text-decoration:none;}'
+		+ '.tkbb-cats.tkbb-cats-sub a:first-child{color:#161616;font-size:17.5px;font-weight:700;}'
+		+ '.tkbb-cats.tkbb-cats-sub a.on{color:#161616;font-weight:600;box-shadow:inset 0 -2px 0 #161616;}'
+		// NOW·퀵메뉴로 섹션에 건너뛸 때 제목이 로고 줄(50px)+카테고리 바(약 46px) 뒤에 가려지지 않게 (예전 62px)
+		+ '#tkbb-live,.tkbb-sec,.tkbb-req,.tkbb-cal{scroll-margin-top:104px;}';
+
+	function addCss(){
+		var st = document.createElement('style');
+		st.type = 'text/css';
+		st.appendChild(document.createTextNode(CSS));
+		(document.head || document.documentElement).appendChild(st);
+	}
+
+	function start(){
+		addCss();
+		// 메인은 페이지 HTML 에 이미 바가 있다 — 위 CSS 로 고정만 한다
+		if (document.querySelector('.tkbb-cats')) return;
+		if (location.pathname.indexOf('/shop/big_section.php') < 0) return;
+
+		var cur = (location.search.match(/[?&]cno1=(\d+)/) || [])[1] || '';
+		var h = '<a href="/#tkbb-live">NOW</a>';
+		for (var i = 0; i < CATS.length; i++) {
+			h += '<a href="/shop/big_section.php?cno1=' + CATS[i][0] + '"' + (CATS[i][0] === cur ? ' class="on" aria-current="page"' : '') + '>' + CATS[i][1] + '</a>';
+		}
+		var bar = document.createElement('div');
+		bar.className = 'tkbb-cats tkbb-cats-sub';
+		bar.innerHTML = h;
+
+		var header = document.querySelector('header');
+		if (header && header.parentNode) header.parentNode.insertBefore(bar, header.nextSibling);
+		else document.body.insertBefore(bar, document.body.firstChild);
+
+		// 지금 카테고리가 오른쪽 끝에 있으면 바를 밀어서 보이게 한다
+		var on = bar.querySelector('a.on');
+		if (on && on.offsetLeft + on.offsetWidth > bar.clientWidth) bar.scrollLeft = on.offsetLeft - 16;
+	}
+	if (document.body) start();
+	else document.addEventListener('DOMContentLoaded', start);
+})();
