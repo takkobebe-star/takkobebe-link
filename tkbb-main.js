@@ -1373,7 +1373,10 @@
 		+ '.tkbb-cats.tkbb-cats-sub a:first-child{color:#161616;font-size:17.5px;font-weight:700;}'
 		+ '.tkbb-cats.tkbb-cats-sub a.on{color:#161616;font-weight:600;box-shadow:inset 0 -2px 0 #161616;}'
 		// NOW·퀵메뉴로 섹션에 건너뛸 때 제목이 로고 줄(50px)+카테고리 바(약 46px) 뒤에 가려지지 않게 (예전 62px)
-		+ '#tkbb-live,.tkbb-sec,.tkbb-req,.tkbb-cal{scroll-margin-top:104px;}';
+		+ '#tkbb-live,.tkbb-sec,.tkbb-req,.tkbb-cal{scroll-margin-top:104px;}'
+		// 카테고리 화면에서는 바가 지금 카테고리를 보여 주므로 그 아래 카테고리 제목(h2.subtitle '먹거리' 등)은 숨긴다 (2026-09-29 사용자 요청).
+		// 바가 들어간 카테고리 화면에서만 숨긴다 — 마이페이지·게시판 등 다른 화면의 제목은 그대로
+		+ '.tkbb-cats-sub ~ #cnt > h2.subtitle{display:none;}';
 
 	function addCss(){
 		var st = document.createElement('style');
