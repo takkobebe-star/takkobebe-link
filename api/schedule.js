@@ -30,14 +30,15 @@ function fmtIcsDate(v, isEnd) {
 // ── 캘린더 일정 '설명(메모)'란에 적은 가격·배송 문구를 읽는다 (2026-09-29) ──
 // 외부 쇼핑몰(설성몰 등)로 연결되는 공구는 쇼핑몰이 가격을 읽어 올 수 없어서 배너 아래가 비었다.
 // 설명란에 아래처럼 한 줄씩 적으면 그대로 배너에 나온다. 순서는 상관없고, 적은 것만 바뀐다.
-//   가격: 52,200원~
+//   가격: 52,200원~   (콜론은 있어도 없어도 된다)
 //   정가: 98,100원
 //   배송: 5만 원 이상 무료배송 · 당일·새벽배송
+// 할인율은 가격과 정가로 자동 계산하므로 '할인율' 줄은 읽지 않는다.
 // (구글 캘린더 설명란은 줄바꿈·링크가 HTML 로 저장되므로 태그를 걷어 낸 뒤 읽는다)
 const DESC_FIELDS = [
-  ["sell", /^(?:가격|판매가|특가)$/, 30],
-  ["cons", /^(?:정가|원가|소비자가)$/, 30],
-  ["ship", /^배송$/, 40],
+  ["sell", "가격|판매가|특가", 30],
+  ["cons", "정가|원가|소비자가", 30],
+  ["ship", "배송", 40],
 ];
 function descText(s) {
   return String(s || "")
@@ -50,10 +51,12 @@ function descText(s) {
 function parseDescFields(desc) {
   const out = {};
   for (const line of descText(desc).split("\n")) {
-    const m = line.match(/^\s*([가-힣]{2,4})\s*[:：]\s*(.+?)\s*$/);
-    if (!m) continue;
-    for (const [key, re, max] of DESC_FIELDS) {
-      if (re.test(m[1]) && !out[key]) out[key] = m[2].slice(0, max);
+    for (const [key, names, max] of DESC_FIELDS) {
+      if (out[key]) continue;
+      // "가격: 18,100원~" · "가격 : 18,100원~" · "가격 18,100원~" 모두 읽는다.
+      // 이름 바로 뒤가 콜론이나 띄어쓰기여야 하므로 "배송비 4,000원" 같은 다른 낱말은 걸리지 않는다.
+      const m = line.match(new RegExp("^\\s*(?:" + names + ")(?:\\s*[:：]\\s*|\\s+)(.+?)\\s*$"));
+      if (m) out[key] = m[1].slice(0, max);
     }
   }
   return out;
