@@ -23,7 +23,7 @@
 
 `api/schedule.js`, `api/mycal.js` 는 Vercel 환경변수 `GOOGLE_ICS_URL` (구글 캘린더 takkobebe.official@gmail.com "장터캘린더(노출O)")에 넣어 둔
 캘린더 iCal 주소를 읽습니다. 주소는 비밀 주소라 코드에 넣지 않고 환경변수에만 둡니다.
-캘린더 수정 후 최대 10분 안에 쇼핑몰에 반영됩니다. `GOOGLE_ICS_URL` 이 비어 있으면 예전 카카오워크 주소(`KAKAOWORK_ICS_URL`)를 읽습니다.
+캘린더 수정 후 1~2분 안에 쇼핑몰에 반영됩니다. `GOOGLE_ICS_URL` 이 비어 있으면 예전 카카오워크 주소(`KAKAOWORK_ICS_URL`)를 읽습니다.
 일정 설명(메모)란에 상품 링크를 넣으면 그 링크로 연결되고, 없으면 쇼핑몰 검색으로 상품을 찾습니다.
 
 ## 주의

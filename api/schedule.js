@@ -282,8 +282,10 @@ module.exports = async (req, res) => {
     // 상품 정보를 미리 담아 보낸다 (손님 브라우저가 상품 페이지를 따로 안 받아도 되게)
     try { await enrich(events.slice(0, 8)); } catch (e) {}
 
-    // CDN에 10분 캐시 → 캘린더 수정 후 최대 10분 안에 반영
-    res.setHeader("Cache-Control", "s-maxage=600, stale-while-revalidate=3600");
+    // CDN에 1분 캐시 → 캘린더 수정 후 1~2분 안에 반영 (2026-09-29 10분 → 1분)
+    // 1분이 지나면 다음 손님 한 명은 이전 결과를 받고 그동안 새로 만든다. 방문이 뜸할 때도 5분 넘게 묵은 결과는 주지 않는다.
+    // 너무 줄이면 매번 쇼핑몰 상품 페이지를 10여 개씩 읽어 배너가 느려지고 쇼핑몰에도 부담이 간다.
+    res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
     res.status(200).json({ events });
   } catch (e) {
     res.status(502).json({ error: String(e && e.message || e) });
