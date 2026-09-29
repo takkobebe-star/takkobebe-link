@@ -1429,11 +1429,12 @@
 		+ '.tkbb-mp a{color:inherit;text-decoration:none;}'
 		+ '.tkbb-mp .nt{display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 16px;background:#161616;color:#fff;font-size:13px;}'
 		+ '.tkbb-mp .nt a{display:flex;align-items:center;gap:8px;flex:1;min-width:0;}'
+		+ '.tkbb-mp .nt,.tkbb-mp .nt a,.tkbb-mp .nt span{color:#fff !important;}'
 		+ '.tkbb-mp .nt em{font-style:normal;background:#D1D798;color:#161616;font-size:11px;font-weight:700;padding:3px 7px;border-radius:2px;flex:0 0 auto;}'
 		+ '.tkbb-mp .nt span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}'
 		+ '.tkbb-mp .nt button{flex:0 0 44px;width:44px;height:44px;margin-right:-14px;border:0;background:none;padding:0;display:flex;align-items:center;justify-content:center;}'
 		+ '.tkbb-mp .hi{padding:28px 20px 22px;}'
-		+ '.tkbb-mp .hi h2{margin:0;font-size:26px;font-weight:900;letter-spacing:-.04em;line-height:1.3;}'
+		+ '.tkbb-mp .hi h2{margin:0;font-size:26px;font-weight:700;letter-spacing:-.04em;line-height:1.3;}'
 		+ '.tkbb-mp .hi h2 small{font-size:26px;font-weight:500;}'
 		+ '.tkbb-mp .hi p{margin:4px 0 0;font-size:14px;color:#6A6A66;}'
 		+ '.tkbb-mp .gr{display:flex;align-items:center;justify-content:space-between;height:52px;box-sizing:border-box;margin-top:16px;padding:0 16px;background:#F7F5EE;border-radius:4px;}'
@@ -1451,7 +1452,7 @@
 		+ '.tkbb-mp .em b{display:flex;align-items:center;gap:6px;font-weight:700;}'
 		+ '.tkbb-mp .os{padding:28px 20px 8px;}'
 		+ '.tkbb-mp .hd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;}'
-		+ '.tkbb-mp .hd h3{margin:0;font-size:17px;font-weight:900;letter-spacing:-.03em;}'
+		+ '.tkbb-mp .hd h3{margin:0;font-size:17px;font-weight:700;letter-spacing:-.03em;}'
 		+ '.tkbb-mp .hd a{font-size:13px;color:#6A6A66;}'
 		+ '.tkbb-mp .os ul{display:flex;margin:0;padding:18px 4px;list-style:none;background:#F7F5EE;border-radius:4px;}'
 		+ '.tkbb-mp .os li{flex:1;text-align:center;}'
@@ -1461,9 +1462,9 @@
 		+ '.tkbb-mp .os p{margin:8px 2px 0;font-size:11.5px;color:#6A6A66;}'
 		+ '.tkbb-mp .bn{display:flex;align-items:center;justify-content:space-between;margin:24px 20px 8px;height:88px;box-sizing:border-box;padding:0 20px;background:#D1D798;border-radius:4px;}'
 		+ '.tkbb-mp .bn small{display:block;font-size:12px;font-weight:700;color:#3E4220;letter-spacing:.03em;}'
-		+ '.tkbb-mp .bn b{display:block;font-size:17px;font-weight:900;letter-spacing:-.03em;margin-top:4px;}'
+		+ '.tkbb-mp .bn b{display:block;font-size:17px;font-weight:700;letter-spacing:-.03em;margin-top:4px;}'
 		+ '.tkbb-mp .sc{padding:28px 20px 0;display:flex;flex-direction:column;gap:32px;}'
-		+ '.tkbb-mp .sc h3{margin:0;padding-bottom:12px;border-bottom:2px solid #161616;font-size:17px;font-weight:900;letter-spacing:-.03em;}'
+		+ '.tkbb-mp .sc h3{margin:0;padding-bottom:12px;border-bottom:2px solid #161616;font-size:17px;font-weight:700;letter-spacing:-.03em;}'
 		+ '.tkbb-mp .sc a{display:flex;align-items:center;justify-content:space-between;min-height:52px;border-bottom:1px solid #EFEDE6;font-size:15px;}'
 		+ '.tkbb-mp .cs{margin-top:36px;padding:28px 20px 40px;background:#F7F5EE;display:flex;flex-direction:column;gap:16px;}'
 		+ '.tkbb-mp .cs b{font-size:15px;font-weight:700;}'
@@ -1518,7 +1519,8 @@
 			if (!v || /(^|\s)dn(\s|$)/.test(opts[k].className)) continue;
 			menu[v.split('?')[0] + (v.indexOf('sbscr=Y') > -1 ? '?sbscr=Y' : '')] = opts[k].textContent.replace(/\s+/g, ' ').trim();
 		}
-		function item(path, fallback){ return menu[path] ? '<a href="' + path + '"><span>' + esc(menu[path]) + '</span>' + ARW + '</a>' : ''; }
+		var LINK = { '/mypage/qna_list.php': 'https://m.takkobebe.com/shop/product_qna_list.php' };
+		function item(path, fallback){ return menu[path] ? '<a href="' + (LINK[path] || path) + '"><span>' + esc(menu[path]) + '</span>' + ARW + '</a>' : ''; }
 		function sect(title, paths){
 			var h = ''; for (var p = 0; p < paths.length; p++) h += item(paths[p]);
 			return h ? '<div><h3>' + title + '</h3>' + h + '</div>' : '';
@@ -1552,7 +1554,7 @@
 			+ sect('나의 계정정보', ['/member/edit_step1.php', '/mypage/milage.php', '/mypage/emoney.php', '/mypage/coupon_down_list.php'])
 			+ sect('고객지원', ['/mypage/qna_list.php', '/mypage/review_list.php', '/mypage/notify_restock.php'])
 			+ '</div>';
-		h += '<div class="cs"><div><b>고객센터</b><p>전화 041-572-3307<br>이메일 market_takkobebe@takkobebe.com</p></div>'
+		h += '<div class="cs"><div><b>고객센터</b><p>전화 041-572-3307<br>운영시간 11:00 - 15:30 · 점심시간 12:30 - 13:30<br>공휴일·주말 휴무<br>이메일 market_takkobebe@takkobebe.com</p></div>'
 			+ '<div class="bt"><a href="https://m.takkobebe.com/shop/product_qna_list.php">상품 문의</a></div>'
 			+ '<div class="lk"><a href="' + esc(logoutHref) + '">로그아웃</a><i>|</i><a href="/mypage/withdraw_step1.php">회원 탈퇴</a></div></div>';
 
