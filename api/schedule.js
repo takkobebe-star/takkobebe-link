@@ -27,6 +27,38 @@ function fmtIcsDate(v, isEnd) {
   return `${m[1]}-${m[2]}-${m[3]} ${m[4]}:${m[5]}`;
 }
 
+// ── 캘린더 일정 '설명(메모)'란에 적은 가격·배송 문구를 읽는다 (2026-09-29) ──
+// 외부 쇼핑몰(설성몰 등)로 연결되는 공구는 쇼핑몰이 가격을 읽어 올 수 없어서 배너 아래가 비었다.
+// 설명란에 아래처럼 한 줄씩 적으면 그대로 배너에 나온다. 순서는 상관없고, 적은 것만 바뀐다.
+//   가격: 52,200원~
+//   정가: 98,100원
+//   배송: 5만 원 이상 무료배송 · 당일·새벽배송
+// (구글 캘린더 설명란은 줄바꿈·링크가 HTML 로 저장되므로 태그를 걷어 낸 뒤 읽는다)
+const DESC_FIELDS = [
+  ["sell", /^(?:가격|판매가|특가)$/, 30],
+  ["cons", /^(?:정가|원가|소비자가)$/, 30],
+  ["ship", /^배송$/, 40],
+];
+function descText(s) {
+  return String(s || "")
+    .replace(/<\s*br\s*\/?>/gi, "\n")
+    .replace(/<\/(?:p|div|li|h\d)>/gi, "\n")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/g, " ").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, "&");
+}
+function parseDescFields(desc) {
+  const out = {};
+  for (const line of descText(desc).split("\n")) {
+    const m = line.match(/^\s*([가-힣]{2,4})\s*[:：]\s*(.+?)\s*$/);
+    if (!m) continue;
+    for (const [key, re, max] of DESC_FIELDS) {
+      if (re.test(m[1]) && !out[key]) out[key] = m[2].slice(0, max);
+    }
+  }
+  return out;
+}
+
 function parseIcs(text) {
   // 접힌 줄(다음 줄이 공백으로 시작) 펼치기
   const lines = text.replace(/\r\n/g, "\n").replace(/\n[ \t]/g, "").split("\n");
@@ -43,6 +75,7 @@ function parseIcs(text) {
     if (key === "SUMMARY") cur.summary = unescapeIcs(val);
     if (key === "DTSTART") cur.start = fmtIcsDate(val, false);
     if (key === "DTEND") cur.end = fmtIcsDate(val, true);
+    if (key === "DESCRIPTION") cur.desc = unescapeIcs(val);
     // 일정 메모나 URL 필드에 상품 링크가 있으면 구매 링크로 사용
     if (key === "DESCRIPTION" || key === "URL") {
       // 카카오워크 메모는 &를 &amp; 로 적어 보낸다
@@ -246,7 +279,7 @@ module.exports = async (req, res) => {
     const events = parseIcs(text)
       .filter((ev) => ev.summary && ev.start && ev.end)
       .filter((ev) => !SKIP.test(ev.summary))
-      .map((ev) => ({ title: cleanTitle(ev.summary), start: ev.start, end: ev.end, url: ev.url || null }))
+      .map((ev) => ({ title: cleanTitle(ev.summary), start: ev.start, end: ev.end, url: ev.url || null, memo: parseDescFields(ev.desc) }))
       .filter((ev) => ev.title && ev.end.slice(0, 10) >= cutoff)
       // 시작일 빠른 순 → 같은 날이면 제목 앞 번호("1.", "2." …) 순, 번호 없는 일정은 번호 있는 일정 뒤
       // → 그것도 같으면 캘린더 파일에 적힌 순서 유지
@@ -281,6 +314,12 @@ module.exports = async (req, res) => {
 
     // 상품 정보를 미리 담아 보낸다 (손님 브라우저가 상품 페이지를 따로 안 받아도 되게)
     try { await enrich(events.slice(0, 8)); } catch (e) {}
+
+    // 캘린더 설명란에 직접 적은 가격·배송 문구가 있으면 그 값을 쓴다 (상품 페이지에서 읽은 값보다 우선)
+    for (const ev of events) {
+      Object.assign(ev, ev.memo);
+      delete ev.memo;
+    }
 
     // CDN에 1분 캐시 → 캘린더 수정 후 1~2분 안에 반영 (2026-09-29 10분 → 1분)
     // 1분이 지나면 다음 손님 한 명은 이전 결과를 받고 그동안 새로 만든다. 방문이 뜸할 때도 5분 넘게 묵은 결과는 주지 않는다.
