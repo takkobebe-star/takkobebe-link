@@ -1,5 +1,5 @@
 // 카카오워크 장터캘린더(iCal)를 읽어 공개 가능한 공구 일정만 JSON으로 돌려준다.
-// 캘린더 주소는 Vercel 환경변수 KAKAOWORK_ICS_URL에만 보관한다 (클라이언트 노출 금지).
+// 캘린더 주소는 Vercel 환경변수 GOOGLE_ICS_URL(예전: KAKAOWORK_ICS_URL)에만 보관한다 (클라이언트 노출 금지).
 
 // 제목에 이 단어가 들어간 일정은 아예 노출하지 않는다 (내부/미확정 일정)
 const SKIP = /미정|휴가|연차|정산완료|명절판매/;
@@ -231,9 +231,10 @@ module.exports = async (req, res) => {
   setCors(req, res);
   if (req.method === "OPTIONS") { res.status(204).end(); return; }
 
-  const url = process.env.KAKAOWORK_ICS_URL;
+  // 2026-09-29 카카오워크 → 구글 캘린더(takkobebe.official) 전환. 구글 주소가 없으면 예전 카카오워크 주소를 읽는다.
+  const url = process.env.GOOGLE_ICS_URL || process.env.KAKAOWORK_ICS_URL;
   if (!url) {
-    res.status(500).json({ error: "KAKAOWORK_ICS_URL not configured" });
+    res.status(500).json({ error: "GOOGLE_ICS_URL not configured" });
     return;
   }
   try {

@@ -1,6 +1,6 @@
 // 사장님 전용: 카카오워크 장터캘린더의 "모든" 일정을 JSON으로 돌려준다.
 // 공개용 /api/schedule과 달리 미정 일정, 내부 메모(제목 둘째 줄·설명)까지 그대로 내려준다.
-// /calendar.html 운영 캘린더에서 사용. 캘린더 주소는 KAKAOWORK_ICS_URL 환경변수에만 보관.
+// /calendar.html 운영 캘린더에서 사용. 캘린더 주소는 GOOGLE_ICS_URL(예전: KAKAOWORK_ICS_URL) 환경변수에만 보관.
 
 const TENTATIVE = /미정/;
 // 상품 공구가 아닌 내부 일정 (휴가, 출근, 정산 등) — 캘린더에는 회색으로 표시, 콘텐츠 준비 대상 아님
@@ -48,9 +48,10 @@ function parseIcs(text) {
 }
 
 module.exports = async (req, res) => {
-  const url = process.env.KAKAOWORK_ICS_URL;
+  // 2026-09-29 카카오워크 → 구글 캘린더(takkobebe.official) 전환. 구글 주소가 없으면 예전 카카오워크 주소를 읽는다.
+  const url = process.env.GOOGLE_ICS_URL || process.env.KAKAOWORK_ICS_URL;
   if (!url) {
-    res.status(500).json({ error: "KAKAOWORK_ICS_URL not configured" });
+    res.status(500).json({ error: "GOOGLE_ICS_URL not configured" });
     return;
   }
   try {
