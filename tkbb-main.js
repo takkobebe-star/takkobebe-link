@@ -1937,7 +1937,7 @@
 		+ '#cnt.tkbb-my #order table.tbl_order.total{margin-top:10px;border-top:1px solid #EFEDE6;}'
 		+ '#cnt.tkbb-my #order table.tbl_order.total th{padding-top:16px;font-size:16px;font-weight:600;color:#161616;}'
 		+ '#cnt.tkbb-my #order table.tbl_order.total td{padding-top:16px;font-size:20px;font-weight:700;}'
-		+ '#cnt.tkbb-my #order .reconfirm{background:#fff;border-radius:16px;padding:18px;margin:0;border:0;}'
+		+ '#cnt.tkbb-my #order .reconfirm{background:#fff !important;border-radius:16px;padding:18px !important;margin:0;border:0;}'
 		+ '#cnt.tkbb-my #order .reconfirm label{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:#161616;line-height:1.5;}'
 		+ '#cnt.tkbb-my #order .reconfirm label{background:none !important;padding:0 !important;border:0 !important;}'
 		+ '#cnt.tkbb-my #order .reconfirm label:before,#cnt.tkbb-my #order .reconfirm label:after{display:none !important;}'
