@@ -1672,6 +1672,7 @@
 		'/mypage/coupon_down_list.php': couponList,
 		'/mypage/counsel_list.php': counselList, '/mypage/qna_list.php': qnaList, '/mypage/review_list.php': reviewList,
 		'/mypage/notify_restock.php': function(c){ return simpleCard(c, 'restock', '재입고 알림'); },
+		'/shop/product_qna_list.php': qnaBoard, '/shop/product_qna.php': qnaBoard, '/shop/order_finish.php': orderFinish,
 		'/member/edit_step1.php': editInfo, '/member/edit_step2.php': editInfo, '/mypage/withdraw_step1.php': withdraw };
 	if (!PAGES[P]) return;
 
@@ -1726,9 +1727,9 @@
 		+ '.tkbb-my .tk-cd p.empty{margin:14px 0 0;padding:0;font-size:13px;color:#9A9A94;text-align:left;border:0;}'
 		// 주문내역: 기간 버튼
 		+ '.tkbb-my .tk-per{background:#fff;padding:4px 16px 16px;}'
-		+ '.tkbb-my .tk-per .date{display:flex;gap:6px;overflow-x:auto;margin:0;padding:0;}'
-		+ '.tkbb-my .tk-per .date .box_btn{flex:0 0 auto;width:auto;margin:0;padding:0;border:0;background:none;}'
-		+ '.tkbb-my .tk-per .date input{height:36px;padding:0 14px;border-radius:999px;border:1px solid #DAD5C8;background:#fff;color:#161616;font-size:14px;font-family:inherit;}'
+		+ '.tkbb-my .tk-per .date{display:flex;gap:6px;margin:0;padding:0;}'
+		+ '#cnt.tkbb-my .tk-per .date .box_btn{flex:1 1 0;min-width:0;width:auto;margin:0;padding:0;border:0;background:none;float:none;}'
+		+ '#cnt.tkbb-my .tk-per .date input{width:100%;height:36px;padding:0;border-radius:999px;border:1px solid #DAD5C8;background:#fff;color:#161616;font-size:13px;font-family:inherit;}'
 		+ '.tkbb-my .tk-per .date .on input{background:#161616;border-color:#161616;color:#fff;}'
 		+ '.tkbb-my .tk-per .date_input{display:flex;align-items:center;gap:6px;margin:12px 0 0;font-size:14px;color:#6A6A66;}'
 		+ '.tkbb-my .tk-per .date_input input{flex:1;min-width:0;height:40px;border:1px solid #DAD5C8;border-radius:8px;padding:0 10px;font-size:14px;background:#fff;}'
@@ -1738,6 +1739,12 @@
 		+ '#cnt.tkbb-my .tk-per .date .box_btn input{background:#fff !important;border:1px solid #DAD5C8 !important;color:#161616 !important;}'
 		+ '#cnt.tkbb-my .tk-per .date .box_btn.on input{background:#161616 !important;border-color:#161616 !important;color:#fff !important;}'
 		+ '.tkbb-my .tk-empty{padding:40px 20px;text-align:center;font-size:15px;color:#6A6A66;}'
+		+ '.tkbb-my .tk-bt a.rv{flex-direction:column;gap:2px;height:56px;}'
+		+ '.tkbb-my .tk-bt a.rv small{font-size:12px;font-weight:700;color:#7C8340;}'
+		+ '.tkbb-my .tk-pr .op{font-size:13px;color:#6A6A66;margin-top:4px;line-height:1.4;}'
+		+ '.tkbb-my .tk-cd table.tbl_order tr.tk-stack th,.tkbb-my .tk-cd table.tbl_order tr.tk-stack td{display:block;text-align:left;padding:6px 0 0;}'
+		+ '.tkbb-my .tk-cd table.tbl_order tr.tk-stack td{white-space:nowrap;font-size:14px;padding:2px 0 6px;}'
+		+ '.tkbb-my .tk-cd table.tbl_order tr.tk-stack td strong{display:block;font-size:13px;font-weight:400;color:#7C8340;white-space:normal;}'
 		// 요약 카드·내역
 		+ '.tkbb-my .tk-lb{font-size:14px;color:#6A6A66;}'
 		+ '.tkbb-my .tk-big{font-size:30px;font-weight:700;margin-top:6px;letter-spacing:-.02em;color:#161616;}'
@@ -1837,7 +1844,37 @@
 		+ '#cnt.tkbb-my #draw_input .btn .box_btn input,#cnt.tkbb-my #draw_input .btn .box_btn a{display:flex;align-items:center;justify-content:center;width:100%;height:52px;border-radius:10px;font-size:15px;font-family:inherit;}'
 		+ '#cnt.tkbb-my #draw_input .btn .box_btn input{border:1px solid #DAD5C8 !important;background:#fff !important;color:#6A6A66 !important;}'
 		+ '#cnt.tkbb-my #draw_input .btn .box_btn a{border:0;background:#161616 !important;color:#fff !important;font-weight:600;}'
-		+ '#cnt.tkbb-my #counsel > .box_btn{display:none;}';
+		+ '#cnt.tkbb-my #counsel > .box_btn{display:none;}'
+		// Q&A 게시판
+		+ '.tkbb-my .tk-qa .prdname{display:none !important;}'
+		+ '.tkbb-my .tk-qa ul.list_qnarev .title{margin-top:0 !important;}'
+		+ '.tkbb-my .tk-qa ul.list_qnarev .stat{display:inline-block;margin-right:8px;}'
+		+ '.tkbb-my .tk-qa ul.list_qnarev .content .question,.tkbb-my .tk-qa ul.list_qnarev .content .answer{margin:0;padding:0;}'
+		+ '.tkbb-my .tk-qa ul.list_qnarev .content .answer:not(:empty){margin-top:12px;padding:14px;border-radius:10px;background:#F7F5EE;}'
+		+ '.tkbb-my .tk-qa ul.list_qnarev .content .btn{margin:10px 0 0;}'
+		+ '.tkbb-my .tk-srch form{display:flex;gap:8px;margin:0;}'
+		+ '.tkbb-my .tk-srch select{flex:0 0 92px;height:44px;border:1px solid #DAD5C8;border-radius:8px;background:#fff;padding:0 8px;font-size:14px;}'
+		+ '.tkbb-my .tk-srch input.form_input{flex:1;min-width:0;height:44px;border:1px solid #DAD5C8;border-radius:8px;padding:0 12px;font-size:14px;margin:0;}'
+		+ '#cnt.tkbb-my .tk-srch .btn_search{flex:0 0 auto;width:auto;height:44px;padding:0 16px;border:0;border-radius:8px;background:#161616;color:#fff;font-size:14px;text-indent:0;font-family:inherit;}'
+		+ '.tkbb-my .tk-qw fieldset{border:0;margin:0;padding:0;}'
+		+ '.tkbb-my .tk-qw fieldset > div{margin:0 0 14px;}'
+		+ '.tkbb-my .tk-qw label{display:block;font-size:13px;color:#6A6A66;margin:0 0 6px;}'
+		+ '.tkbb-my .tk-qw select,.tkbb-my .tk-qw .form_input{width:100%;box-sizing:border-box;min-height:46px;border:1px solid #DAD5C8;border-radius:8px;background:#fff;padding:0 12px;font-size:15px;}'
+		+ '.tkbb-my .tk-qw textarea.form_input{height:180px;padding:12px;line-height:1.6;}'
+		+ '#cnt.tkbb-my .tk-qw .btn .box_btn{display:block;margin:0;padding:0;border:0;background:none;}'
+		+ '#cnt.tkbb-my .tk-qw .btn input[type=submit]{width:100%;height:52px;border:0 !important;border-radius:10px;background:#161616 !important;color:#fff !important;font-size:15px;font-weight:600;font-family:inherit;}'
+		+ '#cnt.tkbb-my .tk-qa .more_btn,#cnt.tkbb-my .tk-qa .btn_col .box_btn.white{display:block;margin:0;padding:0;border:0;background:none;}'
+		+ '#cnt.tkbb-my .tk-qa .more_btn a,#cnt.tkbb-my .tk-qa .btn_col .box_btn.white a{display:flex;align-items:center;justify-content:center;height:48px;border-radius:10px;border:1px solid #DAD5C8;background:#fff;color:#161616;font-size:14px;}'
+		+ '#cnt.tkbb-my .tk-qa > .btn_col .box_btn:not(.white){display:none;}'
+		// 주문완료
+		+ '.tkbb-my .tk-done{text-align:center;padding:30px 18px 26px;}'
+		+ '.tkbb-my .tk-done .ic{width:56px;height:56px;margin:0 auto;border-radius:50%;background:#D1D798;display:flex;align-items:center;justify-content:center;}'
+		+ '.tkbb-my .tk-done h3{margin:16px 0 0;padding:0;font-size:21px;font-weight:700;color:#161616;}'
+		+ '.tkbb-my .tk-done p{margin:8px 0 0;font-size:14px;color:#6A6A66;line-height:1.5;}'
+		+ '.tkbb-my .tk-done .tk-ono{justify-content:center;}'
+		+ '.tkbb-my .tk-2bt{display:flex;gap:8px;}'
+		+ '.tkbb-my .tk-2bt a{flex:1;display:flex;align-items:center;justify-content:center;height:52px;border-radius:10px;font-size:15px;font-weight:600;border:1px solid #DAD5C8;background:#fff;color:#161616;}'
+		+ '.tkbb-my .tk-2bt a.k{background:#161616;border-color:#161616;color:#fff;}';
 
 	var ARW = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';
 	var CART = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>';
@@ -1847,6 +1884,11 @@
 	function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 	function txt(el){ return el ? (el.textContent || '').replace(/\s+/g, ' ').trim() : ''; }
 	function el(tag, cls, html){ var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+	// 표에서 긴 값(입금계좌)은 제목 아래 한 줄로
+	function stackLong(root){
+		var ths = root.querySelectorAll('table.tbl_order th');
+		for (var i = 0; i < ths.length; i++) if (/입금계좌|가상계좌/.test(txt(ths[i]))) ths[i].parentNode.className += ' tk-stack';
+	}
 	function hide(e){ e.style.display = 'none'; e.setAttribute('data-tk-hid', '1'); }
 	function dot(d){ return String(d || '').replace(/[\/-]/g, '.'); }
 	function stCls(t){ return /취소|환불|반품/.test(t) ? ' gray' : (/배송중|배송완료/.test(t) ? ' blue' : ''); }
@@ -1896,35 +1938,30 @@
 	}
 
 	/* ---------- 주문내역 ---------- */
+	var REVIEW_LABEL = '후기 작성<small>최대 700원 적립</small>';
+	function orderCard(li){
+		var a = li.querySelector('.no a'), ps = li.querySelectorAll('.info p');
+		var ono = txt(a), date = txt(li.querySelector('.no span')), href = a ? a.getAttribute('href') : '#';
+		var name = txt(ps[0]), pay = txt(li.querySelector('.info strong')), stEl = li.querySelector('.p_color'), st = txt(stEl);
+		var track = stEl ? stEl.querySelector('a[href*="delivery"]') : null;
+		var cd = el('div', 'tk-cd');
+		cd.innerHTML = '<a class="tk-top" href="' + esc(href) + '"><div><div class="tk-date">' + esc(dot(date)) + '</div><div class="tk-ono">주문번호 ' + esc(ono) + '</div></div>' + ARW + '</a>'
+			+ '<div class="tk-hr"></div><div class="tk-st' + stCls(st) + '">' + esc(stName(st)) + '</div>'
+			+ '<div class="tk-pr"><div class="th">' + BOX + '</div><div class="tx"><div class="nm">' + esc(name) + '</div><div class="pc"><b>' + esc(pay) + '</b></div></div>'
+			+ '<a class="tk-cart" hidden aria-label="상품 보기">' + CART + '</a></div>'
+			+ (track || /배송완료/.test(st) ? '<div class="tk-bt">' + (track ? '<a href="' + esc(track.getAttribute('href')) + '" target="_blank" rel="noopener">배송 조회</a>' : '') + (/배송완료/.test(st) ? '<a class="rv" href="' + esc(href) + '">' + REVIEW_LABEL + '</a>' : '') + '</div>' : '');
+		cd.setAttribute('data-name', name);
+		return cd;
+	}
+
+	/* ---------- 주문내역 ---------- */
 	function orderList(cnt){
 		var box = document.getElementById('order_list');
 		if (!box) return false;
-		var lis = box.querySelectorAll('ul.list > li');
+		var sbscr = /sbscr=Y/.test(location.search);
 		var wrap = el('div', 'tk-wr');
-		var cards = [];
-		for (var i = 0; i < lis.length; i++) {
-			var li = lis[i], a = li.querySelector('.no a'), ps = li.querySelectorAll('.info p');
-			var ono = txt(a), date = txt(li.querySelector('.no span')), href = a ? a.getAttribute('href') : '#';
-			var name = txt(ps[0]), pay = txt(li.querySelector('.info strong')), stEl = li.querySelector('.p_color'), st = txt(stEl);
-			var track = stEl ? stEl.querySelector('a[href*="delivery"]') : null;
-			var cd = el('div', 'tk-cd');
-			cd.innerHTML = '<a class="tk-top" href="' + esc(href) + '"><div><div class="tk-date">' + esc(dot(date)) + '</div><div class="tk-ono">주문번호 ' + esc(ono) + '</div></div>' + ARW + '</a>'
-				+ '<div class="tk-hr"></div><div class="tk-st' + stCls(st) + '">' + esc(stName(st)) + '</div>'
-				+ '<div class="tk-pr"><div class="th">' + BOX + '</div><div class="tx"><div class="nm">' + esc(name) + '</div><div class="pc"><b>' + esc(pay) + '</b></div></div>'
-				+ '<a class="tk-cart" hidden aria-label="상품 보기">' + CART + '</a></div>'
-				+ (track || /배송완료/.test(st) ? '<div class="tk-bt">' + (track ? '<a href="' + esc(track.getAttribute('href')) + '" target="_blank" rel="noopener">배송 조회</a>' : '') + (/배송완료/.test(st) ? '<a href="' + esc(href) + '">후기 작성</a>' : '') + '</div>' : '');
-			cd.setAttribute('data-name', name);
-			wrap.appendChild(cd); cards.push(cd);
-		}
-		if (!lis.length) wrap.appendChild(el('div', 'tk-cd tk-empty', '주문 내역이 없어요.'));
-
-		// 한 번에 10개씩 보여주고, 사진은 화면에 보일 때 불러온다
-		var shown = 0, more = el('a', 'tk-more', '더보기'); more.href = 'javascript:void(0)';
-		function showMore(){
-			for (var k = shown; k < Math.min(shown + 10, cards.length); k++) { cards[k].style.display = ''; watch(cards[k]); }
-			shown = Math.min(shown + 10, cards.length);
-			more.style.display = shown < cards.length ? '' : 'none';
-		}
+		var more = el('a', 'tk-more', '더보기'); more.href = 'javascript:void(0)';
+		var cards = [], shown = 0;
 		// 사진 검색은 3개씩 차례로 (보이는 10개만)
 		var queue = [], running = 0;
 		function pump(){
@@ -1933,16 +1970,39 @@
 				fillThumb(c, c.getAttribute('data-name'), function(){ running--; pump(); });
 			}
 		}
-		function watch(c){ queue.push(c); pump(); }
-		for (var j = 0; j < cards.length; j++) cards[j].style.display = 'none';
+		function showMore(){
+			for (var k = shown; k < Math.min(shown + 10, cards.length); k++) { cards[k].style.display = ''; queue.push(cards[k]); }
+			pump();
+			shown = Math.min(shown + 10, cards.length);
+			more.style.display = shown < cards.length ? '' : 'none';
+		}
 		more.addEventListener('click', showMore);
-		wrap.appendChild(more);
-		showMore();
+		function render(lis, emptyMsg){
+			wrap.innerHTML = ''; cards = []; shown = 0;
+			for (var i = 0; i < lis.length; i++) { var cd = orderCard(lis[i]); cd.style.display = 'none'; wrap.appendChild(cd); cards.push(cd); }
+			if (!lis.length) wrap.appendChild(el('div', 'tk-cd tk-empty', emptyMsg || '주문 내역이 없어요.'));
+			wrap.appendChild(more);
+			showMore();
+		}
+		var lis = box.querySelectorAll('ul.list > li');
+		if (sbscr && !lis.length && window.fetch) {
+			// 위사 정기배송 목록은 '정기배송 신청' 주문만 보여준다. 일반 주문으로 산 [정기배송] 상품도 여기서 보이게 한다.
+			render([], '정기배송 주문을 불러오는 중이에요…');
+			fetch('/mypage/order_list.php', { credentials: 'include' }).then(function(r){ return r.text(); }).then(function(html){
+				var d = new DOMParser().parseFromString(html, 'text/html');
+				var all = d.querySelectorAll('#order_list ul.list > li'), pick = [];
+				for (var i = 0; i < all.length; i++) if (/정기배송/.test(txt(all[i].querySelector('.info p')))) pick.push(all[i]);
+				render(pick, '정기배송 주문이 없어요.');
+			}).catch(function(){ render([], '정기배송 주문이 없어요.'); });
+		} else {
+			render(lis);
+		}
 
 		// 기간 버튼·날짜 조회는 원래 요소를 옮겨 쓴다 (위사 기능 그대로)
 		var per = el('div', 'tk-per');
 		var search = box.querySelector('.search');
 		if (search) { while (search.firstChild) per.appendChild(search.firstChild); }
+		if (!per.children.length) per.style.display = 'none';
 
 		hide(box);
 		var title = /sbscr=Y/.test(location.search) ? '정기배송 주문내역' : '주문내역';
@@ -1959,7 +2019,7 @@
 		var date = msg ? (msg.innerHTML.split(/<br\s*\/?>/i)[1] || '').replace(/<[^>]+>/g, '').trim() : '';
 		var lis = od.querySelectorAll('ul.list_cart > li');
 		var st = '';
-		if (lis.length) { var sEl = lis[0].querySelector('.stat'); st = sEl ? (sEl.childNodes[0] && sEl.childNodes[0].nodeType === 3 ? sEl.childNodes[0].nodeValue : txt(sEl)).replace(/\s+/g, ' ').trim() : ''; }
+		if (lis.length) { var sEl = lis[0].querySelector('.stat'); if (sEl) { var sc = sEl.cloneNode(true); var bb = sc.querySelectorAll('.box_btn'); for (var q = 0; q < bb.length; q++) bb[q].parentNode.removeChild(bb[q]); st = txt(sc); } }
 
 		var wrap = el('div', 'tk-wr');
 		// 1) 주문 카드
@@ -1972,7 +2032,7 @@
 			var li = lis[i], img = li.querySelector('.img img'), a = li.querySelector('.info a'), ps = li.querySelectorAll('.info p');
 			var pc = txt(ps[1]); var m = pc.match(/^(.*?)\s*\|\s*(.*)$/);
 			var row = el('div', 'tk-pr', '<div class="th">' + (img ? '<img src="' + esc(img.getAttribute('src')) + '" alt="">' : BOX) + '</div>'
-				+ '<div class="tx"><div class="nm">' + esc(txt(a) || txt(ps[0])) + '</div><div class="pc"><b>' + esc(m ? m[1] : pc) + '</b>' + (m ? '<i></i>' + esc(m[2].replace(/\s+/g, '')) : '') + '</div></div>'
+				+ '<div class="tx"><div class="nm">' + esc(txt(a) || txt(ps[0])) + '</div>' + (txt(ps[2]) ? '<div class="op">' + esc(txt(ps[2]).replace(/^\((.*)\)$/, '$1')) + '</div>' : '') + '<div class="pc"><b>' + esc(m ? m[1] : pc) + '</b>' + (m ? '<i></i>' + esc(m[2].replace(/\s+/g, '')) : '') + '</div></div>'
 				+ (a ? '<a class="tk-cart" href="' + esc(a.getAttribute('href')) + '" aria-label="상품 보기">' + CART + '</a>' : ''));
 			top.appendChild(row);
 			track = track || li.querySelector('a[href*="delivery"]');
@@ -1981,7 +2041,7 @@
 		if (track || review) {
 			var bt = el('div', 'tk-bt');
 			if (track) bt.appendChild(el('a', '', '배송 조회')).setAttribute('href', track.getAttribute('href'));
-			if (review) { review.textContent = '후기 작성'; bt.appendChild(review); }
+			if (review) { review.innerHTML = REVIEW_LABEL; review.className += ' rv'; bt.appendChild(review); }
 			if (track) bt.firstChild.setAttribute('target', '_blank');
 			top.appendChild(bt);
 		}
@@ -2007,6 +2067,7 @@
 		for (var k = 0; k < ORDER.length; k++) if (secs[ORDER[k]]) { wrap.appendChild(secs[ORDER[k]]); delete secs[ORDER[k]]; }
 		for (var rest in secs) wrap.appendChild(secs[rest]);
 		wrap.appendChild(el('a', 'tk-black', '주문 목록으로')).setAttribute('href', '/mypage/order_list.php');
+		stackLong(wrap);
 
 		hide(od);
 		cnt.insertBefore(wrap, od);
@@ -2256,6 +2317,103 @@
 		return true;
 	}
 
+	/* ---------- Q&A 게시판 (목록·글 보기) ---------- */
+	function qnaBoard(cnt){
+		var box = document.getElementById('qnarev_list_all') || document.getElementById('qna_list');
+		if (!box) return false;
+		box.classList.add('tk-qa');
+		var wrap = el('div', 'tk-wr tk-qa');
+		box.parentNode.insertBefore(wrap, box);
+		// 검색
+		var sr = box.querySelector('.board_search');
+		if (sr) { var sc = el('div', 'tk-cd tk-srch'); sc.appendChild(sr); wrap.appendChild(sc); }
+		// 글쓰기 버튼 (위사 writeQna 그대로)
+		var wb = box.querySelector('a[href*="writeQna"]');
+		if (wb) { var b = el('a', 'tk-black', '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>&nbsp;문의하기'); b.href = wb.getAttribute('href'); wrap.appendChild(b); }
+		// 글쓰기 폼
+		var qw = box.querySelector('.qnarev_write');
+		if (qw) { var qc = el('div', 'tk-cd tk-qw'); qc.appendChild(qw); wrap.appendChild(qc); qc.style.display = 'none';
+			var qd = qw.querySelector('#qnaWriteDiv');
+			if (qd && window.MutationObserver) new MutationObserver(function(){ qc.style.display = qd.style.display === 'none' ? 'none' : ''; }).observe(qd, { attributes: true, attributeFilter: ['style'] });
+		}
+		var ul = box.querySelector('ul.list_qnarev');
+		if (ul) {
+			wrap.appendChild(ul);
+			var badge = function(){
+				var ims = ul.querySelectorAll('.stat img');
+				for (var i = 0; i < ims.length; i++) {
+					var done = !/없음|before/.test((ims[i].getAttribute('alt') || '') + ims[i].getAttribute('src'));
+					ims[i].parentNode.replaceChild(el('span', 'tk-badge' + (done ? ' done' : ''), done ? '답변완료' : '답변대기'), ims[i]);
+				}
+			};
+			badge();
+			if (window.MutationObserver) new MutationObserver(badge).observe(ul, { childList: true, subtree: true });
+		}
+		var rest = box.querySelectorAll('.more_btn, .btn_col');
+		for (var r = 0; r < rest.length; r++) wrap.appendChild(rest[r]);
+		hide(box);
+		cnt.insertBefore(header('Q&A'), wrap);
+		return true;
+	}
+
+	/* ---------- 주문완료 ---------- */
+	function orderFinish(cnt){
+		var of = document.getElementById('orderfin');
+		if (!of) return false;
+		var sub = cnt.querySelector('h2.subtitle'); if (sub) sub.style.display = 'none';
+		var msg = of.querySelector('p.msg');
+		var ono = txt(msg && msg.querySelector('strong'));
+		var wrap = el('div', 'tk-wr');
+		var top = el('div', 'tk-cd tk-done', '<div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div>'
+			+ '<h3>주문이 완료되었어요</h3><div class="tk-ono">주문번호 ' + esc(ono) + '</div>');
+		top.querySelector('.tk-ono').appendChild(copyBtn(ono));
+		var pay = txt(of.querySelector('.box_payment .payment'));
+		if (/무통장/.test(pay)) top.appendChild(el('p', '', '아래 계좌로 입금해 주시면 주문이 확인돼요.'));
+		wrap.appendChild(top);
+		// 주문 상품
+		var lis = of.querySelectorAll('ul.list_cart > li');
+		if (lis.length) {
+			var pc = el('div', 'tk-cd', '<h3 class="tk-t">주문 상품</h3>');
+			for (var i = 0; i < lis.length; i++) {
+				var li = lis[i], img = li.querySelector('.img img'), a = li.querySelector('.info a'), ps = li.querySelectorAll('.info p'), opt = li.querySelector('.info > div');
+				var pr = txt(ps[1]); var m = pr.match(/^(.*?)\s*\|\s*(.*)$/);
+				pc.appendChild(el('div', 'tk-pr', '<div class="th">' + (img ? '<img src="' + esc(img.getAttribute('src')) + '" alt="">' : BOX) + '</div>'
+					+ '<div class="tx"><div class="nm">' + esc(txt(a) || txt(ps[0])) + '</div>' + (txt(opt) ? '<div class="op">' + esc(txt(opt)) + '</div>' : '')
+					+ '<div class="pc"><b>' + esc(txt(li.querySelector('.total strong')) || (m ? m[1] : pr)) + '</b>' + (m ? '<i></i>' + esc(m[2].replace(/\s+/g, '')) : '') + '</div></div>'));
+			}
+			wrap.appendChild(pc);
+		}
+		// 결제 정보 (위사 표를 카드로). 적립금·예치금 사용은 주문 상세에서 가져와 채운다
+		var pb = of.querySelector('.box_payment');
+		if (pb) {
+			var pcd = el('div', 'tk-cd', '<h3 class="tk-t">결제 정보</h3>');
+			var tbs = pb.querySelectorAll('table.tbl_order');
+			for (var t = 0; t < tbs.length; t++) { if (t) pcd.appendChild(el('div', 'tk-hr')); pcd.appendChild(tbs[t]); }
+			wrap.appendChild(pcd);
+			if (ono && window.fetch) fetch('/mypage/order_detail.php?ono=' + encodeURIComponent(ono), { credentials: 'include' }).then(function(r){ return r.text(); }).then(function(html){
+				var d = new DOMParser().parseFromString(html, 'text/html'), rows = d.querySelectorAll('#order_detail table.tbl_order tr');
+				var first = tbs[0] && tbs[0].querySelector('tr.total_prc');
+				for (var k = 0; k < rows.length; k++) if (/적립금|예치금|쿠폰|할인/.test(txt(rows[k].querySelector('th'))) && first) first.parentNode.insertBefore(document.importNode(rows[k], true), first);
+			}).catch(function(){});
+		}
+		// 배송지
+		var ad = of.querySelector('.box_addr .def_info');
+		if (ad) { var ac = el('div', 'tk-cd', '<h3 class="tk-t">배송지</h3>'); ac.appendChild(ad); wrap.appendChild(ac); }
+		// 안내
+		var em = of.querySelector('p.email');
+		if (em) { var ec = el('div', 'tk-cd'); em.style.cssText = 'margin:0;font-size:14px;color:#6A6A66;line-height:1.6;'; ec.appendChild(em); wrap.appendChild(ec); }
+		// 버튼
+		var bt = el('div', 'tk-2bt', '<a href="/">쇼핑 계속하기</a><a class="k" href="' + (ono ? '/mypage/order_detail.php?ono=' + encodeURIComponent(ono) : '/mypage/order_list.php') + '">주문 상세 보기</a>');
+		wrap.appendChild(bt);
+		// 사은품 선택 등 남은 폼은 그대로 뒤에 둔다
+		var forms = of.querySelectorAll('form'); for (var f = 0; f < forms.length; f++) wrap.appendChild(forms[f]);
+		stackLong(wrap);
+		hide(of);
+		cnt.insertBefore(wrap, of);
+		cnt.insertBefore(header('주문 완료'), wrap);
+		return true;
+	}
+
 	function start(){
 		var cnt = document.getElementById('cnt');
 		if (!cnt || cnt.classList.contains('tkbb-my')) return;
@@ -2274,3 +2432,38 @@
 	else start();
 })();
 /* ===== 마이페이지 하위 메뉴 끝 ===== */
+
+/* ===== 상품후기 작성 팝업 (마켓컬리식 카드, 타코베베 컬러) — 2026-09-30 =====
+   위사가 body 끝에 붙이는 #revWriteAjaxDiv 레이어의 모양만 바꾼다. 기능은 그대로.
+   되돌리려면 이 블록만 지우면 된다. */
+(function(){
+	if (window.__TKBB_REVW) return; window.__TKBB_REVW = 1;
+	if (window.browser_type === 'pc') return;
+	var R = '#revWriteAjaxDiv ';
+	var CSS = ''
+		+ R + '.qnarev_write_popup{background:#F4F2EC !important;border-radius:20px 20px 0 0;padding:22px 16px 20px !important;font-family:inherit;letter-spacing:-.02em;color:#161616;box-sizing:border-box;max-height:88vh;overflow-y:auto;}'
+		+ R + 'fieldset{border:0;margin:0;padding:0;}'
+		+ R + 'legend{display:block;width:100%;margin:0 0 14px;padding:0;font-size:19px;font-weight:700;color:#161616;}'
+		+ R + 'fieldset > div{background:#fff;border-radius:14px;padding:16px;margin:0 0 10px;border:0;}'
+		+ R + 'fieldset > div > label{display:block;float:none;width:auto;margin:0 0 6px;padding:0;font-size:13px;color:#6A6A66;}'
+		+ R + '.grade{text-align:center;}'
+		+ R + '.grade .msg{margin:0 0 10px;font-size:15px;font-weight:600;color:#161616;}'
+		+ R + 'select,' + R + '.form_input{width:100%;box-sizing:border-box;min-height:46px;border:1px solid #DAD5C8 !important;border-radius:8px;background:#fff;padding:0 12px;font-size:15px;}'
+		+ R + 'textarea.form_input{height:160px;padding:12px;line-height:1.6;}'
+		+ R + '.msg_milage{background:#D1D798 !important;display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;font-size:14px;color:#3E4220;}'
+		+ R + '.msg_milage strong{font-size:16px;font-weight:700;color:#161616;}'
+		+ R + '.msg_milage img{height:20px;width:auto;}'
+		+ R + '.btn_col{display:flex;gap:8px;margin:14px 0 0;padding:0;}'
+		+ R + '.btn_col .box_btn{flex:1;display:block;width:auto;margin:0;padding:0;border:0;background:none;float:none;}'
+		+ R + '.btn_col .box_btn input,' + R + '.btn_col .box_btn a{display:flex;align-items:center;justify-content:center;width:100%;height:52px;border-radius:10px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;}'
+		+ R + '.btn_col .box_btn input{order:2;border:0 !important;background:#161616 !important;color:#fff !important;}'
+		+ R + '.btn_col .box_btn.white a{border:1px solid #DAD5C8 !important;background:#fff !important;color:#161616 !important;}'
+		+ R + '.btn_col .box_btn.white{order:-1;}';
+	function add(){
+		var st = document.createElement('style');
+		st.appendChild(document.createTextNode(CSS));
+		(document.head || document.documentElement).appendChild(st);
+	}
+	if (document.head) add(); else document.addEventListener('DOMContentLoaded', add);
+})();
+/* ===== 상품후기 작성 팝업 끝 ===== */
