@@ -1669,7 +1669,10 @@
 		'/mypage/wish_list.php': wishList, '/shop/click_prd.php': recentList,
 		'/mypage/milage.php': function(c){ return pointPage(c, 'milage', '적립금', '사용 가능 적립금'); },
 		'/mypage/emoney.php': function(c){ return pointPage(c, 'emoney', '예치금', '보유 예치금'); },
-		'/mypage/coupon_down_list.php': couponList };
+		'/mypage/coupon_down_list.php': couponList,
+		'/mypage/counsel_list.php': counselList, '/mypage/qna_list.php': qnaList, '/mypage/review_list.php': reviewList,
+		'/mypage/notify_restock.php': function(c){ return simpleCard(c, 'restock', '재입고 알림'); },
+		'/member/edit_step1.php': editInfo, '/mypage/withdraw_step1.php': withdraw };
 	if (!PAGES[P]) return;
 
 	var CSS = ''
@@ -1769,7 +1772,70 @@
 		+ '.tkbb-my .tk-cd #wish_list,.tkbb-my .tk-cd #wish_list form{padding:0;margin:0;}'
 		+ '.tkbb-my .tk-cd #wish_list p.empty{padding:36px 0;margin:0;border:0;text-align:center;font-size:15px;color:#6A6A66;}'
 		+ '.tkbb-my .tk-cd .paging{display:none;}'
-		+ '.tkbb-my .tk-pg .paging{display:flex;justify-content:center;gap:4px;margin:0;padding:0;}';
+		+ '.tkbb-my .tk-pg .paging{display:flex;justify-content:center;gap:4px;margin:0;padding:0;}'
+		+ '.tkbb-my .tk-cd p.empty{padding:28px 0;margin:0;border:0;text-align:center;font-size:15px;color:#6A6A66;background:none;}'
+		+ '.tkbb-my .tk-cd .wrap_inner{padding:0;margin:0;}'
+		+ '.tkbb-my .tk-badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 8px;border-radius:999px;background:#EFEDE6;color:#6A6A66;}'
+		+ '.tkbb-my .tk-badge.done{background:#D1D798;color:#3E4220;}'
+		// 상품문의·후기: 위사 목록 한 줄을 카드로
+		+ '.tkbb-my .tk-wr ul.list_qnarev{margin:0;padding:0;list-style:none;border:0;display:flex;flex-direction:column;gap:12px;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev > li{position:relative;background:#fff;border-radius:16px;padding:20px 18px;border:0;margin:0;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .subject{padding:0;margin:0;cursor:pointer;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .subject p{margin:0;padding:0;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .title{font-size:15px;color:#161616;line-height:1.5;margin-top:10px !important;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .title img{display:none;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .stat{font-size:13px;color:#9A9A94;margin-top:6px !important;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .content{margin:14px 0 0;padding:0;font-size:14px;line-height:1.6;color:#3E3E3A;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .content:empty{display:none;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .prdimg{float:none;position:absolute;left:18px;top:20px;width:48px;height:48px;border-radius:8px;overflow:hidden;background:#EEEADF;margin:0;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .prdimg img{width:100%;height:100%;object-fit:cover;display:block;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .subject.prd{padding-left:0;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .prdname{min-height:48px;padding:0 0 16px 60px !important;border-bottom:1px solid #EFEDE6;margin-bottom:14px !important;font-size:14px;color:#6A6A66;display:flex;align-items:center;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .prdname a{color:#6A6A66;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .gradebox{display:none;}'
+		+ '.tkbb-my .tk-stars{display:inline-flex;gap:2px;vertical-align:middle;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .grade{display:none;}'
+		+ '.tkbb-my .tk-banner{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-radius:12px;background:#D1D798;color:#161616;}'
+		+ '.tkbb-my .tk-banner b{display:block;font-size:15px;font-weight:700;}'
+		+ '.tkbb-my .tk-banner small{display:block;font-size:12px;color:#3E4220;margin-top:3px;}'
+		// 정보수정·탈퇴 폼
+		+ '.tkbb-my #join_input,.tkbb-my #draw_input{padding:0;margin:0;}'
+		+ '.tkbb-my #join_input fieldset{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;}'
+		+ '.tkbb-my #join_input legend{display:none;}'
+		+ '.tkbb-my #join_input .box{background:#fff;border-radius:16px;padding:20px 18px;margin:0;border:0;}'
+		+ '.tkbb-my #join_input .box > div{margin:0 0 16px;padding:0;border:0;}'
+		+ '.tkbb-my #join_input .box > div:last-child{margin-bottom:0;}'
+		+ '.tkbb-my #join_input .box > div > label,.tkbb-my #join_input .box > div > label:first-child{display:block;float:none;width:auto;margin:0 0 6px;padding:0;font-size:13px;color:#6A6A66;}'
+		+ '.tkbb-my #join_input .input_area{float:none;width:auto;margin:0;padding:0;}'
+		+ '.tkbb-my #join_input .form_input,.tkbb-my #draw_input .form_input{width:100%;box-sizing:border-box;height:48px;padding:0 14px;border:1px solid #DAD5C8;border-radius:8px;background:#fff;font-size:15px;margin:0 0 8px;}'
+		+ '.tkbb-my #join_input .form_input.readonly{background:#F7F5EE;border-color:#EFEDE6;color:#6A6A66;}'
+		+ '.tkbb-my #join_input .box_btn.gray2{display:block;margin:0 0 8px;padding:0;border:0;background:none;}'
+		+ '.tkbb-my #join_input .box_btn.gray2 a{display:flex;align-items:center;justify-content:center;height:44px;border:1px solid #161616;border-radius:8px;background:#fff;color:#161616;font-size:14px;font-weight:600;}'
+		+ '.tkbb-my #join_input .msg p{margin:0;font-size:12px;color:#6A6A66;}'
+		+ '.tkbb-my #join_input .check_chg,.tkbb-my #join_input .radio_chg{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:15px;}'
+		+ '.tkbb-my #join_input .check_chg label,.tkbb-my #join_input .radio_chg label{font-size:15px;color:#161616;margin:0;}'
+		+ '.tkbb-my #join_input ul.integrate{margin:0;padding:0;list-style:none;}'
+		+ '.tkbb-my #join_input ul.integrate li{display:flex;align-items:center;gap:10px;min-height:52px;border-bottom:1px solid #EFEDE6;padding:0;margin:0;float:none;width:auto;}'
+		+ '.tkbb-my #join_input ul.integrate li:last-child{border-bottom:0;}'
+		+ '.tkbb-my #join_input ul.integrate .name{flex:1;margin:0;font-size:15px;color:#161616;background:none;padding:0;}'
+		+ '.tkbb-my #join_input ul.integrate .state{order:2;margin:0;font-size:12px;color:#9A9A94;}'
+		+ '.tkbb-my #join_input ul.integrate .box_btn{order:3;margin:0;padding:0;border:0;background:none;}'
+		+ '.tkbb-my #join_input ul.integrate .box_btn a{display:flex;align-items:center;height:32px;padding:0 12px;border:1px solid #DAD5C8;border-radius:6px;background:#fff;color:#161616;font-size:13px;}'
+		+ '.tkbb-my .tk-h{margin:0 0 16px;padding:0;font-size:17px;font-weight:700;color:#161616;}'
+		+ '.tkbb-my #join_input .btn,.tkbb-my #draw_input .btn{margin:12px 0 0;padding:0;}'
+		+ '#cnt.tkbb-my #join_input .btn .box_btn,#cnt.tkbb-my #draw_input .btn .box_btn{display:block;margin:0;padding:0;border:0;background:none;}'
+		+ '#cnt.tkbb-my #join_input .btn input[type=submit]{width:100%;height:52px;border:0 !important;border-radius:10px;background:#161616 !important;color:#fff !important;font-size:15px;font-weight:600;font-family:inherit;}'
+		+ '.tkbb-my .tk-link{display:block;text-align:center;padding:14px;font-size:13px;color:#9A9A94 !important;text-decoration:underline !important;}'
+		+ '.tkbb-my #draw_input form{text-align:left !important;}'
+		+ '.tkbb-my #draw_input .box{background:#fff;border-radius:16px;padding:22px 18px;margin:0;border:0;}'
+		+ '.tkbb-my #draw_input .msg{margin:0 0 18px;padding:0;font-size:14px;line-height:1.6;color:#3E3E3A;text-align:left;border:0;background:none;}'
+		+ '.tkbb-my #draw_input textarea.form_input{height:96px;padding:12px 14px;resize:none;}'
+		+ '#cnt.tkbb-my #draw_input .btn{display:flex;gap:8px;}'
+		+ '#cnt.tkbb-my #draw_input .btn .box_btn{flex:1;width:auto;}'
+		+ '#cnt.tkbb-my #draw_input .btn .box_btn input,#cnt.tkbb-my #draw_input .btn .box_btn a{display:flex;align-items:center;justify-content:center;width:100%;height:52px;border-radius:10px;font-size:15px;font-family:inherit;}'
+		+ '#cnt.tkbb-my #draw_input .btn .box_btn input{border:1px solid #DAD5C8 !important;background:#fff !important;color:#6A6A66 !important;}'
+		+ '#cnt.tkbb-my #draw_input .btn .box_btn a{border:0;background:#161616 !important;color:#fff !important;font-weight:600;}'
+		+ '#cnt.tkbb-my #counsel > .box_btn{display:none;}';
 
 	var ARW = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';
 	var CART = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>';
@@ -2077,6 +2143,114 @@
 		show('on');
 		hide(box);
 		cnt.insertBefore(wrap, box); cnt.insertBefore(tabs, wrap); cnt.insertBefore(header('쿠폰'), tabs);
+		return true;
+	}
+
+	/* ---------- 위사 상자를 카드 안에 그대로 넣는 단순 페이지 ---------- */
+	function simpleCard(cnt, id, title){
+		var box = document.getElementById(id);
+		if (!box) return false;
+		var wrap = el('div', 'tk-wr'), cd = el('div', 'tk-cd');
+		box.parentNode.insertBefore(wrap, box);
+		cd.appendChild(box); wrap.appendChild(cd);
+		cnt.insertBefore(header(title), wrap);
+		return wrap;
+	}
+
+	/* ---------- 1:1 문의 ---------- */
+	function counselList(cnt){
+		var box = document.getElementById('counsel');
+		var w = simpleCard(cnt, 'counsel', '1:1 문의');
+		if (!w) return false;
+		var wbtn = box.querySelector('.box_btn a');
+		var b = el('a', 'tk-black', '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>&nbsp;문의하기');
+		b.href = wbtn ? wbtn.getAttribute('href') : '/mypage/counsel_step1.php';
+		w.insertBefore(b, w.firstChild);
+		return true;
+	}
+
+	/* ---------- 나의 상품문의 ---------- */
+	function qnaList(cnt){
+		var box = document.getElementById('mypage_qna_list');
+		if (!box) return false;
+		var wrap = el('div', 'tk-wr');
+		box.parentNode.insertBefore(wrap, box);
+		wrap.appendChild(box);
+		var lis = box.querySelectorAll('ul.list_qnarev > li');
+		for (var i = 0; i < lis.length; i++) {
+			var stImg = lis[i].querySelector('.stat img');
+			if (stImg) {
+				var done = !/없음|before/.test((stImg.getAttribute('alt') || '') + stImg.getAttribute('src'));
+				var bd = el('span', 'tk-badge' + (done ? ' done' : ''), done ? '답변완료' : '답변대기');
+				stImg.parentNode.replaceChild(bd, stImg);
+			}
+		}
+		if (!lis.length) { var e = box.querySelector('p.empty'); var cd = el('div', 'tk-cd'); box.parentNode.insertBefore(cd, box); cd.appendChild(box); }
+		wrap.appendChild(el('a', 'tk-black', '상품 문의 게시판 가기')).setAttribute('href', 'https://m.takkobebe.com/shop/product_qna_list.php');
+		cnt.insertBefore(header('나의 상품문의'), wrap);
+		return true;
+	}
+
+	/* ---------- 나의 상품후기 ---------- */
+	function reviewList(cnt){
+		var box = document.getElementById('mypage_review_list');
+		if (!box) return false;
+		var wrap = el('div', 'tk-wr');
+		box.parentNode.insertBefore(wrap, box);
+		var bn = el('a', 'tk-banner', '<div><b>후기 쓰고 적립금 받으세요</b><small>배송완료된 주문에서 후기를 쓸 수 있어요</small></div>' + ARW);
+		bn.href = '/mypage/order_list.php';
+		wrap.appendChild(bn);
+		wrap.appendChild(box);
+		var STAR = function(on){ return '<svg width="16" height="16" viewBox="0 0 24 24" fill="' + (on ? '#7C8340' : '#DAD5C8') + '"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9L12 3z"/></svg>'; };
+		var gs = box.querySelectorAll('.grade');
+		for (var i = 0; i < gs.length; i++) {
+			var n = parseInt(txt(gs[i]), 10) || 0, h = '';
+			for (var k = 1; k <= 5; k++) h += STAR(k <= n);
+			var st = el('span', 'tk-stars', h); st.setAttribute('aria-label', '별점 ' + n + '점');
+			gs[i].parentNode.insertBefore(st, gs[i]);
+		}
+		if (!box.querySelector('ul.list_qnarev > li')) { var cd = el('div', 'tk-cd'); box.parentNode.insertBefore(cd, box); cd.appendChild(box); }
+		cnt.insertBefore(header('나의 상품후기'), wrap);
+		return true;
+	}
+
+	/* ---------- 나의 정보수정: 위사 폼 그대로, 칸 묶음마다 카드 + 제목 ---------- */
+	function editInfo(cnt){
+		var box = document.getElementById('join_input');
+		if (!box) return false;
+		var sub = cnt.querySelector('h2.subtitle'); if (sub) sub.style.display = 'none';
+		var boxes = box.querySelectorAll('fieldset > .box');
+		for (var i = 0; i < boxes.length; i++) {
+			var t = boxes[i].querySelector('.sns') ? 'SNS 계정 연결' : boxes[i].querySelector('#join_sms') ? '혜택 · 알림 수신' : boxes[i].querySelector('#join_cell') ? '연락처 · 주소' : boxes[i].querySelector('#join_pw') ? '로그인 정보' : '';
+			if (t) boxes[i].insertBefore(el('h3', 'tk-h', t), boxes[i].firstChild);
+		}
+		var sb = box.querySelector('.btn input[type=submit]'); if (sb) sb.value = '저장하기';
+		var wrap = el('div', 'tk-wr');
+		box.parentNode.insertBefore(wrap, box);
+		wrap.appendChild(box);
+		wrap.appendChild(el('a', 'tk-link', '회원 탈퇴')).setAttribute('href', '/mypage/withdraw_step1.php');
+		cnt.insertBefore(header('나의 정보수정'), wrap);
+		return true;
+	}
+
+	/* ---------- 회원 탈퇴 ---------- */
+	function withdraw(cnt){
+		var box = document.getElementById('draw_input');
+		if (!box) return false;
+		var inner = box.querySelector('.box');
+		if (inner) inner.insertBefore(el('h3', 'tk-h', '탈퇴하기 전에 꼭 확인해 주세요'), inner.firstChild);
+		var pw = box.querySelector('input[name=pwd]'); if (pw) pw.setAttribute('aria-label', '비밀번호');
+		var ta = box.querySelector('textarea'); if (ta) { ta.setAttribute('placeholder', '탈퇴 사유 (선택) · 더 나은 타코베베가 될 수 있도록 알려주세요'); ta.setAttribute('aria-label', '탈퇴 사유'); }
+		var btn = box.querySelector('.btn');
+		if (btn) {
+			var sb = btn.querySelector('input[type=submit]'), cancel = btn.querySelector('a');
+			if (sb) sb.value = '탈퇴하기';
+			if (cancel) { cancel.textContent = '계속 이용하기'; cancel.setAttribute('href', '/mypage/mypage.php'); btn.insertBefore(cancel.parentNode, btn.firstChild); }
+		}
+		var wrap = el('div', 'tk-wr');
+		box.parentNode.insertBefore(wrap, box);
+		wrap.appendChild(box);
+		cnt.insertBefore(header('회원 탈퇴'), wrap);
 		return true;
 	}
 
