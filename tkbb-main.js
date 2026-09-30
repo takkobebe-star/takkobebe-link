@@ -1795,6 +1795,15 @@
 		+ '.tkbb-my .tk-wr ul.list_qnarev .stat{font-size:13px;color:#9A9A94;margin-top:6px !important;}'
 		+ '.tkbb-my .tk-wr ul.list_qnarev .content{margin:14px 0 0;padding:0;font-size:14px;line-height:1.6;color:#3E3E3A;}'
 		+ '.tkbb-my .tk-wr ul.list_qnarev .content:empty{display:none;}'
+		+ '#cnt.tkbb-my .tk-wr ul.list_qnarev > li > .content,#cnt.tkbb-my .tk-wr ul.list_counsel > li .content{margin:16px 0 0;padding:16px 0 0;border:0;border-top:1px solid #EFEDE6;background:none;}'
+		+ '#cnt.tkbb-my .tk-wr .content .question{position:relative;min-height:28px;margin:0;padding:2px 0 0 38px;border:0;font-size:14px;line-height:1.7;color:#3E3E3A;background:none;}'
+		+ '#cnt.tkbb-my .tk-wr .content .answer{position:relative;min-height:28px;margin:14px 0 0;padding:14px 14px 14px 52px;border-radius:12px;background:#F7F5EE;font-size:14px;line-height:1.7;color:#3E3E3A;}'
+		+ '#cnt.tkbb-my .tk-wr .content .question:before,#cnt.tkbb-my .tk-wr .content .answer:before{width:26px;height:26px;line-height:26px;font-size:13px;font-weight:700;text-align:center;border-radius:50%;}'
+		+ '#cnt.tkbb-my .tk-wr .content .question:before{left:0;top:0;background:#161616;color:#fff;}'
+		+ '#cnt.tkbb-my .tk-wr .content .answer:before{left:14px;top:14px;background:#D1D798;color:#3E4220;}'
+		+ '#cnt.tkbb-my .tk-wr .content .btn{margin:12px 0 0;padding:0;text-align:right;}'
+		+ '#cnt.tkbb-my .tk-wr .content .btn .box_btn{display:inline-block;margin:0 0 0 6px;padding:0;border:0;background:none;width:auto;}'
+		+ '#cnt.tkbb-my .tk-wr .content .btn .box_btn a{display:inline-flex;align-items:center;height:34px;padding:0 14px;border:1px solid #DAD5C8;border-radius:999px;background:#fff;color:#6A6A66;font-size:13px;}'
 		+ '.tkbb-my .tk-wr ul.list_qnarev .prdimg{float:none;position:absolute;left:18px;top:20px;width:48px;height:48px;border-radius:8px;overflow:hidden;background:#EEEADF;margin:0;}'
 		+ '.tkbb-my .tk-wr ul.list_qnarev .prdimg img{width:100%;height:100%;object-fit:cover;display:block;}'
 		+ '.tkbb-my .tk-wr ul.list_qnarev .subject.prd{padding-left:0;}'
@@ -1853,14 +1862,16 @@
 		+ '.tkbb-my .tk-qa ul.list_qnarev .content .answer:not(:empty){margin-top:12px;padding:14px;border-radius:10px;background:#F7F5EE;}'
 		+ '.tkbb-my .tk-qa ul.list_qnarev .content .btn{margin:10px 0 0;}'
 		+ '.tkbb-my .tk-srch form{display:flex;gap:8px;margin:0;}'
-		+ '.tkbb-my .tk-srch select{flex:0 0 92px;height:44px;border:1px solid #DAD5C8;border-radius:8px;background:#fff;padding:0 8px;font-size:14px;}'
-		+ '.tkbb-my .tk-srch input.form_input{flex:1;min-width:0;height:44px;border:1px solid #DAD5C8;border-radius:8px;padding:0 12px;font-size:14px;margin:0;}'
+		+ '.tkbb-my .tk-srch .tk-sbox{flex:1;min-width:0;display:flex;align-items:center;height:44px;border:1px solid #DAD5C8;border-radius:8px;background:#fff;overflow:hidden;}'
+		+ '#cnt.tkbb-my .tk-srch .tk-sbox select{flex:0 0 auto;width:auto;height:100%;border:0 !important;border-right:1px solid #EFEDE6 !important;border-radius:0;background:#fff;padding:0 6px 0 12px;font-size:14px;color:#161616;margin:0;}'
+		+ '#cnt.tkbb-my .tk-srch .tk-sbox input.form_input{flex:1;min-width:0;width:auto;height:100%;border:0 !important;border-radius:0;padding:0 12px;font-size:14px;margin:0;background:#fff;}'
 		+ '#cnt.tkbb-my .tk-srch .btn_search{flex:0 0 auto;width:auto;height:44px;padding:0 16px;border:0;border-radius:8px;background:#161616;color:#fff;font-size:14px;text-indent:0;font-family:inherit;}'
 		+ '.tkbb-my .tk-qw fieldset{border:0;margin:0;padding:0;}'
 		+ '.tkbb-my .tk-qw fieldset > div{margin:0 0 14px;}'
 		+ '.tkbb-my .tk-qw label{display:block;font-size:13px;color:#6A6A66;margin:0 0 6px;}'
 		+ '.tkbb-my .tk-qw select,.tkbb-my .tk-qw .form_input{width:100%;box-sizing:border-box;min-height:46px;border:1px solid #DAD5C8;border-radius:8px;background:#fff;padding:0 12px;font-size:15px;}'
 		+ '.tkbb-my .tk-qw textarea.form_input{height:180px;padding:12px;line-height:1.6;}'
+		+ '#cnt.tkbb-my .tk-qw input[type=file].form_input{height:auto;min-height:0;padding:9px 12px;line-height:28px;font-size:14px;}'
 		+ '#cnt.tkbb-my .tk-qw .btn .box_btn{display:block;margin:0;padding:0;border:0;background:none;}'
 		+ '#cnt.tkbb-my .tk-qw .btn input[type=submit]{width:100%;height:52px;border:0 !important;border-radius:10px;background:#161616 !important;color:#fff !important;font-size:15px;font-weight:600;font-family:inherit;}'
 		+ '#cnt.tkbb-my .tk-qa .more_btn,#cnt.tkbb-my .tk-qa .btn_col .box_btn.white{display:block;margin:0;padding:0;border:0;background:none;}'
@@ -2404,7 +2415,11 @@
 		box.parentNode.insertBefore(wrap, box);
 		// 검색
 		var sr = box.querySelector('.board_search');
-		if (sr) { var sc = el('div', 'tk-cd tk-srch'); sc.appendChild(sr); wrap.appendChild(sc); }
+		if (sr) {
+			var sc = el('div', 'tk-cd tk-srch'); sc.appendChild(sr); wrap.appendChild(sc);
+			var sf = sr.querySelector('form'), ss = sr.querySelector('select'), si = sr.querySelector('input.form_input');
+			if (sf && ss && si) { var sb = el('div', 'tk-sbox'); sf.insertBefore(sb, ss); sb.appendChild(ss); sb.appendChild(si); ss.setAttribute('aria-label', '검색 조건'); si.setAttribute('aria-label', '검색어'); si.setAttribute('placeholder', '검색어를 입력하세요'); }
+		}
 		// 글쓰기 버튼 (위사 writeQna 그대로)
 		var wb = box.querySelector('a[href*="writeQna"]');
 		if (wb) { var b = el('a', 'tk-black', '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>&nbsp;문의하기'); b.href = wb.getAttribute('href'); wrap.appendChild(b); }
@@ -2554,6 +2569,7 @@
 		+ R + '.grade .msg{margin:0 0 10px;font-size:15px;font-weight:600;color:#161616;}'
 		+ R + 'select,' + R + '.form_input{width:100%;box-sizing:border-box;min-height:46px;border:1px solid #DAD5C8 !important;border-radius:8px;background:#fff;padding:0 12px;font-size:15px;}'
 		+ R + 'textarea.form_input{height:160px;padding:12px;line-height:1.6;}'
+		+ R + 'input[type=file].form_input{height:auto;min-height:0;padding:9px 12px;line-height:28px;font-size:14px;}'
 		+ R + '.msg_milage{background:#D1D798 !important;display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;font-size:14px;color:#3E4220;}'
 		+ R + '.msg_milage strong{font-size:16px;font-weight:700;color:#161616;}'
 		+ R + '.msg_milage img{height:20px;width:auto;}'
