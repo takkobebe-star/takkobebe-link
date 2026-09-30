@@ -2264,10 +2264,8 @@
 			cnt.classList.add('tkbb-my');
 			if (!PAGES[P](cnt)) { cnt.classList.remove('tkbb-my'); st.parentNode.removeChild(st); }
 		} catch (e) {
-			// 실패하면 원래 화면으로
-			cnt.classList.remove('tkbb-my');
-			var hid = cnt.querySelectorAll('[data-tk-hid]'); for (var i = 0; i < hid.length; i++) hid[i].style.display = '';
-			var added = cnt.querySelectorAll('.tk-hd,.tk-wr,.tk-per,.tk-tabs'); for (var j = 0; j < added.length; j++) added[j].parentNode.removeChild(added[j]);
+			// 실패하면 원래 화면으로 다시 연다 (옮긴 요소까지 확실히 되돌리기 위해)
+			location.replace(location.href + (location.search ? '&' : '?') + 'tkbb_old=1');
 		}
 	}
 	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
