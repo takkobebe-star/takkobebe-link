@@ -2442,8 +2442,9 @@
 	var R = '#revWriteAjaxDiv ';
 	var CSS = ''
 		+ R + '.qnarev_write_popup{background:#F4F2EC !important;border-radius:20px 20px 0 0;padding:22px 16px 20px !important;font-family:inherit;letter-spacing:-.02em;color:#161616;box-sizing:border-box;max-height:88vh;overflow-y:auto;}'
+		+ R + '.qnarev_write{background:none !important;padding:0 !important;border:0 !important;}'
 		+ R + 'fieldset{border:0;margin:0;padding:0;}'
-		+ R + 'legend{display:block;width:100%;margin:0 0 14px;padding:0;font-size:19px;font-weight:700;color:#161616;}'
+		+ R + 'legend{display:block;width:100%;margin:0 0 14px;padding:0;font-size:19px;font-weight:700;color:#161616;border:0 !important;}'
 		+ R + 'fieldset > div{background:#fff;border-radius:14px;padding:16px;margin:0 0 10px;border:0;}'
 		+ R + 'fieldset > div > label{display:block;float:none;width:auto;margin:0 0 6px;padding:0;font-size:13px;color:#6A6A66;}'
 		+ R + '.grade{text-align:center;}'
