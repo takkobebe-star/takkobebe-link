@@ -1775,6 +1775,7 @@
 		+ '.tkbb-my .tk-pg .paging{display:flex;justify-content:center;gap:4px;margin:0;padding:0;}'
 		+ '.tkbb-my .tk-cd p.empty{padding:28px 0;margin:0;border:0;text-align:center;font-size:15px;color:#6A6A66;background:none;}'
 		+ '.tkbb-my .tk-cd .wrap_inner{padding:0;margin:0;}'
+		+ '#cnt.tkbb-my .tk-wr > .wrap_inner,#cnt.tkbb-my .tk-wr > #join_input,#cnt.tkbb-my .tk-wr > #draw_input{padding:0 !important;margin:0 !important;}'
 		+ '.tkbb-my .tk-badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 8px;border-radius:999px;background:#EFEDE6;color:#6A6A66;}'
 		+ '.tkbb-my .tk-badge.done{background:#D1D798;color:#3E4220;}'
 		// 상품문의·후기: 위사 목록 한 줄을 카드로
