@@ -1665,7 +1665,11 @@
 	if (window.browser_type === 'pc') return;
 	if (/[?&]tkbb_old=1/.test(location.search)) return;
 	var P = location.pathname;
-	var PAGES = { '/mypage/order_list.php': orderList, '/mypage/order_detail.php': orderDetail };
+	var PAGES = { '/mypage/order_list.php': orderList, '/mypage/order_detail.php': orderDetail,
+		'/mypage/wish_list.php': wishList, '/shop/click_prd.php': recentList,
+		'/mypage/milage.php': function(c){ return pointPage(c, 'milage', '적립금', '사용 가능 적립금'); },
+		'/mypage/emoney.php': function(c){ return pointPage(c, 'emoney', '예치금', '보유 예치금'); },
+		'/mypage/coupon_down_list.php': couponList };
 	if (!PAGES[P]) return;
 
 	var CSS = ''
@@ -1730,7 +1734,42 @@
 		+ '.tkbb-my .tk-per .date{scrollbar-width:none;}.tkbb-my .tk-per .date::-webkit-scrollbar{display:none;}'
 		+ '#cnt.tkbb-my .tk-per .date .box_btn input{background:#fff !important;border:1px solid #DAD5C8 !important;color:#161616 !important;}'
 		+ '#cnt.tkbb-my .tk-per .date .box_btn.on input{background:#161616 !important;border-color:#161616 !important;color:#fff !important;}'
-		+ '.tkbb-my .tk-empty{padding:40px 20px;text-align:center;font-size:15px;color:#6A6A66;}';
+		+ '.tkbb-my .tk-empty{padding:40px 20px;text-align:center;font-size:15px;color:#6A6A66;}'
+		// 요약 카드·내역
+		+ '.tkbb-my .tk-lb{font-size:14px;color:#6A6A66;}'
+		+ '.tkbb-my .tk-big{font-size:30px;font-weight:700;margin-top:6px;letter-spacing:-.02em;color:#161616;}'
+		+ '.tkbb-my .tk-big small{font-size:20px;font-weight:500;}'
+		+ '.tkbb-my .tk-note{margin-top:14px;padding:12px 14px;border-radius:8px;background:#F7F5EE;font-size:13px;color:#6A6A66;line-height:1.5;}'
+		+ '.tkbb-my .tk-chips{display:flex;gap:8px;margin:0 0 6px;}'
+		+ '.tkbb-my .tk-chips button{height:34px;padding:0 14px;border-radius:999px;border:1px solid #DAD5C8;background:#fff;color:#161616;font-size:13px;font-family:inherit;}'
+		+ '.tkbb-my .tk-chips button.on{background:#161616;border-color:#161616;color:#fff;}'
+		+ '.tkbb-my .tk-row{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid #EFEDE6;}'
+		+ '.tkbb-my .tk-row:last-child{border-bottom:0;padding-bottom:0;}'
+		+ '.tkbb-my .tk-row .d{font-size:13px;color:#9A9A94;}'
+		+ '.tkbb-my .tk-row .r{font-size:15px;margin-top:4px;color:#161616;line-height:1.4;word-break:keep-all;}'
+		+ '.tkbb-my .tk-row .s{font-size:12px;color:#9A9A94;margin-top:4px;}'
+		+ '.tkbb-my .tk-row .a{flex:0 0 auto;text-align:right;}'
+		+ '.tkbb-my .tk-row .a b{display:block;font-size:16px;font-weight:700;color:#161616;}'
+		+ '.tkbb-my .tk-row .a b.plus{color:#7C8340;}'
+		+ '.tkbb-my .tk-row .a span{font-size:12px;color:#9A9A94;}'
+		// 탭
+		+ '.tkbb-my .tk-tabs{display:flex;background:#fff;padding:0 16px;border-bottom:1px solid #EFEDE6;}'
+		+ '.tkbb-my .tk-tabs button{flex:1;height:48px;border:0;border-bottom:2px solid transparent;background:none;font-size:15px;color:#6A6A66;font-family:inherit;}'
+		+ '.tkbb-my .tk-tabs button.on{border-bottom-color:#161616;color:#161616;font-weight:600;}'
+		+ '.tkbb-my .tk-tabs button em{font-style:normal;color:#7C8340;margin-left:4px;}'
+		// 쿠폰
+		+ '.tkbb-my .tk-cp{background:#fff;border-radius:16px;display:flex;overflow:hidden;}'
+		+ '.tkbb-my .tk-cp .l{flex:1;min-width:0;padding:20px 18px;}'
+		+ '.tkbb-my .tk-cp .v{font-size:24px;font-weight:700;color:#7C8340;}'
+		+ '.tkbb-my .tk-cp .n{font-size:15px;margin-top:6px;line-height:1.4;color:#161616;}'
+		+ '.tkbb-my .tk-cp .c{font-size:13px;color:#6A6A66;margin-top:10px;line-height:1.6;}'
+		+ '.tkbb-my .tk-cp .r{width:64px;flex:0 0 64px;border-left:1px dashed #DAD5C8;background:#F7F5EE;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#7C8340;writing-mode:vertical-rl;}'
+		+ '.tkbb-my .tk-cp.off .v,.tkbb-my .tk-cp.off .n,.tkbb-my .tk-cp.off .c,.tkbb-my .tk-cp.off .r{color:#B5B2A8;}'
+		// 관심상품 (위사 원래 목록을 카드 안에서 정리)
+		+ '.tkbb-my .tk-cd #wish_list,.tkbb-my .tk-cd #wish_list form{padding:0;margin:0;}'
+		+ '.tkbb-my .tk-cd #wish_list p.empty{padding:36px 0;margin:0;border:0;text-align:center;font-size:15px;color:#6A6A66;}'
+		+ '.tkbb-my .tk-cd .paging{display:none;}'
+		+ '.tkbb-my .tk-pg .paging{display:flex;justify-content:center;gap:4px;margin:0;padding:0;}';
 
 	var ARW = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';
 	var CART = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>';
@@ -1740,6 +1779,7 @@
 	function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 	function txt(el){ return el ? (el.textContent || '').replace(/\s+/g, ' ').trim() : ''; }
 	function el(tag, cls, html){ var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+	function hide(e){ e.style.display = 'none'; e.setAttribute('data-tk-hid', '1'); }
 	function dot(d){ return String(d || '').replace(/\//g, '.'); }
 	function stCls(t){ return /취소|환불|반품/.test(t) ? ' gray' : (/배송중|배송완료/.test(t) ? ' blue' : ''); }
 	function stName(t){ return /^미입금$/.test(t) ? '입금대기' : t; }
@@ -1836,7 +1876,7 @@
 		var search = box.querySelector('.search');
 		if (search) { while (search.firstChild) per.appendChild(search.firstChild); }
 
-		box.style.display = 'none';
+		hide(box);
 		var title = /sbscr=Y/.test(location.search) ? '정기배송 주문내역' : '주문내역';
 		cnt.insertBefore(wrap, box); cnt.insertBefore(per, wrap); cnt.insertBefore(header(title), per);
 		return true;
@@ -1900,9 +1940,143 @@
 		for (var rest in secs) wrap.appendChild(secs[rest]);
 		wrap.appendChild(el('a', 'tk-black', '주문 목록으로')).setAttribute('href', '/mypage/order_list.php');
 
-		od.style.display = 'none';
+		hide(od);
 		cnt.insertBefore(wrap, od);
 		cnt.insertBefore(header('주문 상세'), wrap);
+		return true;
+	}
+
+	/* ---------- 관심상품: 위사 목록(폼·버튼 포함)을 카드 안으로 옮긴다 ---------- */
+	function wishList(cnt){
+		var box = document.getElementById('wish_list');
+		if (!box) return false;
+		var wrap = el('div', 'tk-wr'), cd = el('div', 'tk-cd');
+		box.parentNode.insertBefore(wrap, box);
+		cd.appendChild(box); wrap.appendChild(cd);
+		cnt.insertBefore(header('관심상품'), wrap);
+		return true;
+	}
+
+	/* ---------- 최근 본 상품 ---------- */
+	function recentList(cnt){
+		var box = document.getElementById('click_prd');
+		if (!box) return false;
+		var lis = box.querySelectorAll('ul.prd_basic > li');
+		var wrap = el('div', 'tk-wr'), cd = el('div', 'tk-cd');
+		cd.innerHTML = '<h3 class="tk-t">최근 본 상품 <span style="color:#7C8340">' + lis.length + '</span></h3>';
+		for (var i = 0; i < lis.length; i++) {
+			var b = lis[i], a = b.querySelector('.name a') || b.querySelector('a[href*="pno="]'), img = b.querySelector('.prdimg img');
+			var so = b.querySelector('.soldout'), sell = txt(b.querySelector('.sell strong')) || txt(b.querySelector('.discount strong')), cons = txt(b.querySelector('.consumer'));
+			var href = a ? a.getAttribute('href').replace(/&rURL=[^&]*/, '') : '#';
+			var n = parseInt(sell.replace(/[^\d]/g, ''), 10), c = parseInt(cons.replace(/[^\d]/g, ''), 10);
+			var rate = (n && c && c > n) ? Math.round((1 - n / c) * 100) : 0;
+			var row = el('div', 'tk-pr');
+			row.style.cssText = 'margin:0;padding:14px 0;border-bottom:1px solid #EFEDE6;';
+			row.innerHTML = '<a class="th" href="' + esc(href) + '" style="position:relative">' + (img ? '<img src="' + esc(img.getAttribute('src')) + '" alt="">' : BOX)
+				+ (so && getComputedStyle(so).display !== 'none' ? '<span style="position:absolute;inset:0;background:rgba(22,22,22,.48);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;text-align:center">' + esc(txt(so)) + '</span>' : '') + '</a>'
+				+ '<a class="tx" href="' + esc(href) + '"><div class="nm">' + esc(txt(a)) + '</div><div class="pc">' + (rate ? '<span style="color:#52728A;font-weight:700">' + rate + '%</span>' : '') + '<b>' + esc(sell) + '</b></div></a>'
+				+ '<a class="tk-cart" href="' + esc(href) + '" aria-label="상품 보기">' + CART + '</a>';
+			cd.appendChild(row);
+		}
+		if (cd.lastChild && cd.lastChild.style) cd.lastChild.style.borderBottom = '0';
+		if (!lis.length) cd.appendChild(el('div', 'tk-empty', '최근 본 상품이 없어요.'));
+		wrap.appendChild(cd);
+		hide(box);
+		cnt.insertBefore(wrap, box); cnt.insertBefore(header('최근 본 상품'), wrap);
+		return true;
+	}
+
+	/* ---------- 적립금 · 예치금 ---------- */
+	function pointPage(cnt, id, title, label){
+		var box = document.getElementById(id);
+		if (!box) return false;
+		var have = txt(box.querySelector('.box_mp .have span'));
+		var lis = box.querySelectorAll('ul.list_common > li');
+		var wrap = el('div', 'tk-wr');
+		var sum = el('div', 'tk-cd', '<div class="tk-lb">' + esc(label) + '</div><div class="tk-big">' + esc(have || '0') + '<small>원</small></div>'
+			+ (id === 'emoney' ? '<div class="tk-note">예치금은 결제할 때 현금처럼 사용할 수 있어요.</div>' : ''));
+		wrap.appendChild(sum);
+		var cd = el('div', 'tk-cd', '<h3 class="tk-t">' + (id === 'emoney' ? '입금 · 사용 내역' : '적립 · 사용 내역') + '</h3>');
+		var chips = el('div', 'tk-chips', '<button type="button" class="on" data-f="all">전체</button><button type="button" data-f="plus">' + (id === 'emoney' ? '입금' : '적립') + '</button><button type="button" data-f="minus">사용</button>');
+		cd.appendChild(chips);
+		var list = el('div', ''); cd.appendChild(list);
+		var rows = [];
+		for (var i = 0; i < lis.length; i++) {
+			var li = lis[i], ps = li.querySelectorAll('.right_area p'), st = li.querySelectorAll('.right_area p strong');
+			var plus = parseInt(txt(st[0]).replace(/[^\d]/g, ''), 10) || 0, minus = parseInt(txt(st[1]).replace(/[^\d]/g, ''), 10) || 0;
+			var reason = txt(ps[0]), subtotal = txt(ps[2]).replace(/^소계\s*/, ''), exp = ps[3] ? txt(ps[3]).replace(/^만료일\s*/, '') : '';
+			var mm = reason.match(/^상품 구매 \((\S+)\s*\|\s*(.*)\)$/);
+			var r = el('div', 'tk-row');
+			r.setAttribute('data-k', plus > 0 ? 'plus' : 'minus');
+			r.innerHTML = '<div style="min-width:0"><div class="d">' + esc(dot(txt(li.querySelector('.left_area')))) + '</div>'
+				+ '<div class="r">' + esc(mm ? '상품 구매 사용' : reason.replace(/^기타 \((.*)\)$/, '$1')) + '</div>'
+				+ (mm ? '<div class="s">' + esc(mm[2]) + '</div>' : '') + (plus > 0 && exp ? '<div class="s">만료일 ' + esc(dot(exp)) + '</div>' : '') + '</div>'
+				+ '<div class="a">' + (plus > 0 ? '<b class="plus">+' + plus.toLocaleString('ko-KR') + '원</b>' : '<b>−' + minus.toLocaleString('ko-KR') + '원</b>')
+				+ (id === 'emoney' && subtotal ? '<span>소계 ' + esc(subtotal) + '</span>' : '') + '</div>';
+			list.appendChild(r); rows.push(r);
+		}
+		if (!lis.length) list.appendChild(el('div', 'tk-empty', '내역이 없어요.'));
+		wrap.appendChild(cd);
+		var more = el('a', 'tk-more', '더보기'); more.href = 'javascript:void(0)'; wrap.appendChild(more);
+		var f = 'all', limit = 10;
+		function render(){
+			var n = 0, total = 0;
+			for (var k = 0; k < rows.length; k++) {
+				var ok = f === 'all' || rows[k].getAttribute('data-k') === f;
+				if (ok) total++;
+				rows[k].style.display = ok && n < limit ? '' : 'none';
+				if (ok && n < limit) n++;
+			}
+			more.style.display = total > limit ? '' : 'none';
+		}
+		chips.addEventListener('click', function(e){
+			var b = e.target.closest ? e.target.closest('button') : null; if (!b) return;
+			f = b.getAttribute('data-f'); limit = 10;
+			var bs = chips.querySelectorAll('button'); for (var k = 0; k < bs.length; k++) bs[k].className = bs[k] === b ? 'on' : '';
+			render();
+		});
+		more.addEventListener('click', function(){ limit += 10; render(); });
+		render();
+		var pg = box.querySelector('ul.paging'); if (pg && pg.querySelectorAll('li a').length) { var pw = el('div', 'tk-pg'); pw.appendChild(pg); wrap.appendChild(pw); }
+		hide(box);
+		cnt.insertBefore(wrap, box); cnt.insertBefore(header(title), wrap);
+		return true;
+	}
+
+	/* ---------- 쿠폰 ---------- */
+	function couponList(cnt){
+		var box = document.getElementById('coupon');
+		if (!box) return false;
+		var lis = box.querySelectorAll('ul.list_common > li');
+		var today = new Date(); today.setHours(0, 0, 0, 0);
+		var on = [], off = [];
+		for (var i = 0; i < lis.length; i++) {
+			var li = lis[i], ps = li.querySelectorAll('.right_area p');
+			var val = txt(li.querySelector('.left_area')).replace(/\s+/g, '').replace(/원$/, '원');
+			var name = txt(ps[0]), end = txt(ps[1]), lim = txt(ps[2]).replace(/^제한금액\s*:\s*/, ''), max = txt(ps[3]).replace(/^최대할인\s*:\s*/, ''), used = txt(ps[5]).replace(/^사용날짜\s*:\s*/, '');
+			var ed = new Date(end.replace(/-/g, '/')); var isUsed = used && used !== '미사용';
+			var expired = !isNaN(ed) && ed < today;
+			var left = !isNaN(ed) ? Math.round((ed - today) / 864e5) : null;
+			var ok = !isUsed && !expired;
+			var c = el('div', 'tk-cp' + (ok ? '' : ' off'));
+			c.innerHTML = '<div class="l"><div class="v">' + esc(val) + '</div><div class="n">' + esc(name) + '</div>'
+				+ '<div class="c">' + esc(lim.replace(/\s+/g, '')) + ' 이상 구매 시' + (max ? ' · 최대 ' + esc(max.replace(/\s+/g, '')) : '') + '<br>' + esc(dot(end)) + (ok ? '까지' : (isUsed ? ' · 사용 완료' : ' 만료')) + '</div></div>'
+				+ '<div class="r">' + (ok ? (left === 0 ? '오늘까지' : 'D-' + left) : (isUsed ? '사용' : '만료')) + '</div>';
+			(ok ? on : off).push(c);
+		}
+		var tabs = el('div', 'tk-tabs', '<button type="button" class="on" data-t="on">사용 가능<em>' + on.length + '</em></button><button type="button" data-t="off">사용 · 만료</button>');
+		var wrap = el('div', 'tk-wr');
+		function show(t){
+			wrap.innerHTML = '';
+			var arr = t === 'on' ? on : off;
+			for (var k = 0; k < arr.length; k++) wrap.appendChild(arr[k]);
+			if (!arr.length) wrap.appendChild(el('div', 'tk-cd tk-empty', t === 'on' ? '사용할 수 있는 쿠폰이 없어요.' : '사용하거나 만료된 쿠폰이 없어요.'));
+			var bs = tabs.querySelectorAll('button'); for (var k2 = 0; k2 < bs.length; k2++) bs[k2].className = bs[k2].getAttribute('data-t') === t ? 'on' : '';
+		}
+		tabs.addEventListener('click', function(e){ var b = e.target.closest ? e.target.closest('button') : null; if (b) show(b.getAttribute('data-t')); });
+		show('on');
+		hide(box);
+		cnt.insertBefore(wrap, box); cnt.insertBefore(tabs, wrap); cnt.insertBefore(header('쿠폰'), tabs);
 		return true;
 	}
 
@@ -1918,8 +2092,8 @@
 		} catch (e) {
 			// 실패하면 원래 화면으로
 			cnt.classList.remove('tkbb-my');
-			var hid = cnt.querySelectorAll('#order_list,#order_detail'); for (var i = 0; i < hid.length; i++) hid[i].style.display = '';
-			var added = cnt.querySelectorAll('.tk-hd,.tk-wr,.tk-per'); for (var j = 0; j < added.length; j++) added[j].parentNode.removeChild(added[j]);
+			var hid = cnt.querySelectorAll('[data-tk-hid]'); for (var i = 0; i < hid.length; i++) hid[i].style.display = '';
+			var added = cnt.querySelectorAll('.tk-hd,.tk-wr,.tk-per,.tk-tabs'); for (var j = 0; j < added.length; j++) added[j].parentNode.removeChild(added[j]);
 		}
 	}
 	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
