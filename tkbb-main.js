@@ -183,12 +183,13 @@
 		// <header> 는 비어 있고 실제 헤더는 고정 요소라 그 뒤에 넣으면 겹친다.
 		var host = tkbbHost();
 		if (!host) return;
-		var list = live.concat(soon).slice(0,6);
+		// C안(2026-09-30): 진행 중 공구는 아래 '지금 진행 중'이 맡는다 → 여기는 오픈 예정만 보여준다 (같은 상품이 두 번 나오지 않게)
+		var list = soon.slice(0,6);
 		if (!list.length) return;
-		var h = '<div class="tkbb-chips">';
+		var BELL = '<svg class="bl" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#52728A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>';
+		var h = '<div class="tkbb-chips soon">';
 		for (var i=0;i<list.length;i++){
-			// 앞쪽 live.length 개가 진행 중 (캘린더 날짜 기준)
-			var e = list[i], isLive = i < live.length;
+			var e = list[i], isLive = false;
 			var s = md(e.start), en = md(e.end);
 			// 이미 파는 상품(상시판매)에 잡힌 공구는 '오픈'이 아니라 '공구' — 상세페이지 '공구 예정' 안내와 같은 기준
 			var when = ymd(e.start) === today ? '오늘 오전 '+OPEN_HOUR+'시 ' : (s.m+'월 '+s.d+'일 ');
@@ -197,15 +198,25 @@
 			var end = e.url ? 'a' : 'div';
 			h += '<'+tag+' class="tkbb-chip'+(isLive?' live':'')+'">'
 			   +   '<div class="th">' + (e.img ? '<img src="' + e.img + '">' : '') + '</div>'
-			   +   '<div><div class="t1">'+esc(e.title)+'</div><div class="t2">'+sub+'</div></div>'
+			   +   '<div><div class="t1">'+esc(e.title)+'</div><div class="t2">'+sub+'</div></div>' + (i === 0 ? BELL : '')
 			   + '</'+end+'>';
 		}
 		h += '</div>';
 		var wrap = document.createElement('div');
 		wrap.innerHTML = h;
+		if (!document.getElementById('tkbb-chips-css')) {
+			var cs = document.createElement('style'); cs.id = 'tkbb-chips-css';
+			cs.appendChild(document.createTextNode('.tkbb-chips-lb{padding:10px 16px 0;font-size:12px;font-weight:700;color:#52728A;letter-spacing:-.02em;}'
+				+ '.tkbb-chips.soon{padding-top:8px;}'
+				+ '.tkbb-chips.soon .tkbb-chip .t2{color:#52728A;font-weight:400;}'
+				+ '.tkbb-chips.soon .tkbb-chip .bl{flex:0 0 auto;margin-left:2px;}'));
+			(document.head || document.documentElement).appendChild(cs);
+		}
 		// 상단 배너는 헤더까지 꽉 차는 구조라 그 위에 넣으면 헤더에 가린다 → 배너 바로 아래에 넣는다
 		var banner = host.querySelector('.swiper-container');
 		var ref = banner ? banner.nextElementSibling : host.firstElementChild;
+		var lb = document.createElement('div'); lb.className = 'tkbb-chips-lb'; lb.textContent = '곧 오픈해요';
+		host.insertBefore(lb, ref);
 		host.insertBefore(wrap.firstChild, ref);
 	}
 
