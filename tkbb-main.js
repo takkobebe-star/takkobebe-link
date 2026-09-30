@@ -1504,8 +1504,8 @@
 		var sts = root.querySelectorAll('.ord_latest .p_color');
 		for (var j = 0; j < sts.length; j++) {
 			var t = (sts[j].textContent || '').replace(/\s+/g, '');
-			if (t.indexOf('입금대기') >= 0) cnt5['입금대기']++;
-			else if (t.indexOf('결제완료') >= 0) cnt5['결제완료']++;
+			if (t.indexOf('입금대기') >= 0 || t.indexOf('미입금') >= 0) cnt5['입금대기']++;   // 위사는 무통장 미입금 주문을 '미입금' 으로 표시한다
+			else if (t.indexOf('결제완료') >= 0 || t.indexOf('입금완료') >= 0 || t.indexOf('입금확인') >= 0) cnt5['결제완료']++;
 			else if (t.indexOf('배송준비') >= 0 || t.indexOf('상품준비') >= 0) cnt5['배송준비']++;
 			else if (t.indexOf('배송중') >= 0) cnt5['배송중']++;
 			else if (t.indexOf('배송완료') >= 0) cnt5['배송완료']++;
