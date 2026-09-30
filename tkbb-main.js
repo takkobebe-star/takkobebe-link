@@ -1726,7 +1726,10 @@
 		+ '.tkbb-my .tk-per .date_input{display:flex;align-items:center;gap:6px;margin:12px 0 0;font-size:14px;color:#6A6A66;}'
 		+ '.tkbb-my .tk-per .date_input input{flex:1;min-width:0;height:40px;border:1px solid #DAD5C8;border-radius:8px;padding:0 10px;font-size:14px;background:#fff;}'
 		+ '.tkbb-my .tk-per > .box_btn{display:block;margin:8px 0 0;padding:0;border:0;background:none;}'
-		+ '.tkbb-my .tk-per > .box_btn input{width:100%;height:42px;border:0;border-radius:8px;background:#EFEDE6;color:#161616;font-size:14px;font-weight:600;font-family:inherit;}'
+		+ '#cnt.tkbb-my .tk-per > .box_btn input{width:100%;height:42px;border:0 !important;border-radius:8px;background:#161616 !important;color:#fff !important;font-size:14px;font-weight:600;font-family:inherit;}'
+		+ '.tkbb-my .tk-per .date{scrollbar-width:none;}.tkbb-my .tk-per .date::-webkit-scrollbar{display:none;}'
+		+ '#cnt.tkbb-my .tk-per .date .box_btn input{background:#fff !important;border:1px solid #DAD5C8 !important;color:#161616 !important;}'
+		+ '#cnt.tkbb-my .tk-per .date .box_btn.on input{background:#161616 !important;border-color:#161616 !important;color:#fff !important;}'
 		+ '.tkbb-my .tk-empty{padding:40px 20px;text-align:center;font-size:15px;color:#6A6A66;}';
 
 	var ARW = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';
