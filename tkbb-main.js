@@ -1753,7 +1753,8 @@
 		+ '.tkbb-my .tk-bt a.rv{flex-direction:column;gap:2px;}'
 		+ '.tkbb-my .tk-bt a.rv small{font-size:12px;font-weight:700;color:#7C8340;}'
 		+ '.tkbb-my .tk-pr .op{font-size:13px;color:#6A6A66;margin-top:4px;line-height:1.4;}'
-		+ '.tkbb-my .tk-cd table.tbl_order tr.tk-stack th,.tkbb-my .tk-cd table.tbl_order tr.tk-stack td{display:block;text-align:left;padding:6px 0 0;}'
+		+ '.tkbb-my .tk-cd table.tbl_order tr.tk-stack{display:flex;flex-direction:column;}'
+		+ '.tkbb-my .tk-cd table.tbl_order tr.tk-stack th,.tkbb-my .tk-cd table.tbl_order tr.tk-stack td{display:block;width:100%;box-sizing:border-box;text-align:left;padding:6px 0 0;}'
 		+ '.tkbb-my .tk-cd table.tbl_order tr.tk-stack td{white-space:nowrap;font-size:14px;padding:2px 0 6px;text-align:right;}'
 		+ '.tkbb-my .tk-cd table.tbl_order tr.tk-stack td strong{display:block;font-size:13px;font-weight:400;color:#7C8340;white-space:normal;}'
 		// 요약 카드·내역
