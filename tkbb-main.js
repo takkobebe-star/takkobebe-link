@@ -1801,6 +1801,7 @@
 		+ '.tkbb-my .tk-banner small{display:block;font-size:12px;color:#3E4220;margin-top:3px;}'
 		// 정보수정·탈퇴 폼
 		+ '.tkbb-my #join_input,.tkbb-my #draw_input{padding:0;margin:0;}'
+		+ '#cnt.tkbb-my #join_input,#cnt.tkbb-my #join_input fieldset,#cnt.tkbb-my #draw_input{background:none !important;}'
 		+ '.tkbb-my #join_input fieldset{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;}'
 		+ '.tkbb-my #join_input legend{display:none;}'
 		+ '.tkbb-my #join_input .box{background:#fff;border-radius:16px;padding:20px 18px;margin:0;border:0;}'
