@@ -1672,7 +1672,7 @@
 		'/mypage/coupon_down_list.php': couponList,
 		'/mypage/counsel_list.php': counselList, '/mypage/qna_list.php': qnaList, '/mypage/review_list.php': reviewList,
 		'/mypage/notify_restock.php': function(c){ return simpleCard(c, 'restock', '재입고 알림'); },
-		'/member/edit_step1.php': editInfo, '/mypage/withdraw_step1.php': withdraw };
+		'/member/edit_step1.php': editInfo, '/member/edit_step2.php': editInfo, '/mypage/withdraw_step1.php': withdraw };
 	if (!PAGES[P]) return;
 
 	var CSS = ''
