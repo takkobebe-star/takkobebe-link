@@ -259,13 +259,11 @@
 			var when = s.m+'/'+s.d+' ('+wd(sd)+') '+(sd === today ? '오전 '+OPEN_HOUR+'시 ' : '')+(e.onSale ? '공구' : '오픈');
 			var tag = e.url ? 'a href="'+e.url+'"' : 'div';
 			var endt = e.url ? 'a' : 'div';
-			var done = false; try { done = !!localStorage.getItem('tkbb_nf_'+sd+'_'+e.title); } catch(x) {}
 			rows += '<li data-d="'+sd+'"><'+tag+' class="rw">'
 			     +   '<div class="th">' + (e.img ? '<img src="'+e.img+'" alt="">' : '') + '<i>'+dd+'</i></div>'
 			     +   '<div class="tx"><div class="n">'+esc(e.title)+'</div><div class="s">'+when+'</div></div>'
-			     + '</'+endt+'>'
-			     + ('<button type="button" class="bt'+(done ? ' on' : '')+'" data-i="'+n+'">'+BELL+(done ? '알림 설정됨' : '오픈 알림')+'</button>')
-			     + '</li>';
+			     +   (e.url ? '<span class="bt">'+BELL+'미리보기</span>' : '<span class="bt off">오픈 예정</span>')
+			     + '</'+endt+'></li>';
 		}
 		if (!rows) rows = '<li style="border:0"><div class="empty">예정된 공구가 곧 올라옵니다</div></li>';
 
@@ -281,36 +279,21 @@
 				+ '.tkbb-cal.v2 .tkbb-day,.tkbb-cal.v2 .tkbb-day .dd{font-size:12px;color:#161616;}'
 				+ '.tkbb-cal.v2 .tkbb-day.on,.tkbb-cal.v2 .tkbb-day.on .dd,.tkbb-cal.v2 .tkbb-day.on .dw{color:#fff;}'
 				+ '.tkbb-cal.v2 .tkbb-day:after{display:none;}'
-				+ '.tkbb-cal.v2 .tkbb-list li{display:flex;align-items:center;gap:10px;padding:0;}'
-				+ '.tkbb-cal.v2 .tkbb-list .rw{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:12px;padding:12px 0;text-decoration:none;color:#161616;}'
-				+ '.tkbb-cal.v2 .tkbb-list .tx{min-width:0;}'
+				+ '.tkbb-cal.v2 .tkbb-list li{display:block;padding:0;}'
+				+ '.tkbb-cal.v2 .tkbb-list .rw{display:flex;align-items:center;gap:12px;padding:12px 0;text-decoration:none;color:#161616;}'
 				+ '.tkbb-cal.v2 .tkbb-list .th{position:relative;width:56px;height:56px;flex:0 0 56px;border-radius:10px;overflow:hidden;background:#E3DFD2;}'
 				+ '.tkbb-cal.v2 .tkbb-list .th img{width:100%;height:100%;object-fit:cover;display:block;}'
 				+ '.tkbb-cal.v2 .tkbb-list .th i{position:absolute;left:4px;bottom:4px;font-style:normal;background:#52728A;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:999px;line-height:1.5;}'
 				+ '.tkbb-cal.v2 .tkbb-list .tx .n{font-size:13.5px;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}'
 				+ '.tkbb-cal.v2 .tkbb-list .tx .s{font-size:11.5px;font-weight:500;color:#52728A;margin-top:3px;}'
-				+ '.tkbb-cal.v2 .tkbb-list .bt{flex:0 0 auto;display:flex;align-items:center;gap:4px;height:32px;margin:0;padding:0 11px;border:1px solid #52728A;border-radius:999px;background:#fff;font-family:inherit;font-size:12px;color:#52728A;white-space:nowrap;cursor:pointer;-webkit-appearance:none;appearance:none;}'
-				+ '.tkbb-cal.v2 .tkbb-list .bt.on{background:#52728A;color:#fff;}'
-				+ '.tkbb-cal.v2 .tkbb-list .bt.on svg{stroke:#fff;}'
-				+ '.tkbb-nf{position:fixed;inset:0;z-index:100000;display:flex;align-items:flex-end;justify-content:center;background:rgba(22,22,22,.45);font-family:inherit;letter-spacing:-0.3px;}'
-				+ '.tkbb-nf .pn{width:100%;max-width:480px;box-sizing:border-box;background:#fff;border-radius:18px 18px 0 0;padding:22px 20px calc(18px + env(safe-area-inset-bottom));color:#161616;}'
-				+ '.tkbb-nf .hd{display:flex;gap:12px;align-items:center;}'
-				+ '.tkbb-nf .hd .th{width:52px;height:52px;flex:0 0 52px;border-radius:10px;overflow:hidden;background:#E3DFD2;}'
-				+ '.tkbb-nf .hd .th img{width:100%;height:100%;object-fit:cover;display:block;}'
-				+ '.tkbb-nf .hd b{display:block;font-size:15px;font-weight:700;line-height:1.35;}'
-				+ '.tkbb-nf .hd span{display:block;font-size:12.5px;color:#52728A;font-weight:500;margin-top:3px;}'
-				+ '.tkbb-nf .ds{font-size:12.5px;color:#6A6A66;line-height:1.55;margin:14px 0 16px;padding:11px 13px;border-radius:10px;background:#F7F5EE;}'
-				+ '.tkbb-nf .ob{display:flex;align-items:center;justify-content:center;gap:6px;height:50px;border-radius:10px;font-size:14.5px;font-weight:700;text-decoration:none;margin-top:8px;}'
-				+ '.tkbb-nf .ob.k{background:#161616;color:#fff;}'
-				+ '.tkbb-nf .ob.w{background:#fff;color:#161616;border:1px solid #DAD5C8;}'
-				+ '.tkbb-nf .ob.p{background:none;color:#6A6A66;font-weight:500;font-size:13px;height:40px;margin-top:4px;}'
-				+ '.tkbb-nf .cl{display:block;width:100%;height:44px;margin-top:6px;border:0;background:none;font-family:inherit;font-size:13.5px;color:#9A9682;cursor:pointer;}'));
+				+ '.tkbb-cal.v2 .tkbb-list .bt{flex:0 0 auto;display:flex;align-items:center;gap:4px;height:32px;padding:0 11px;border:1px solid #52728A;border-radius:999px;font-size:12px;color:#52728A;white-space:nowrap;}'
+				+ '.tkbb-cal.v2 .tkbb-list .bt.off{border-color:#DAD5C8;color:#9A9682;}'));
 			(document.head || document.documentElement).appendChild(cs);
 		}
 
 		var html = '<div class="tkbb-cal v2">'
 		         +   '<div class="st"><h2>곧 오픈해요</h2><a href="https://takkobebe-link.vercel.app/month.html" target="_blank">전체 일정 ›</a></div>'
-		         +   '<div class="sub">오픈 알림을 받아두면 놓치지 않아요</div>'
+		         +   '<div class="sub">오픈 전에 미리 보고, 오픈일을 놓치지 마세요</div>'
 		         +   '<div class="tkbb-days">'+days+'</div>'
 		         +   '<ul class="tkbb-list">'+rows+'</ul>'
 		         + '</div>';
@@ -323,54 +306,8 @@
 			var bs = calEl.querySelectorAll('.tkbb-day'); for (var i=0;i<bs.length;i++) bs[i].classList.toggle('on', bs[i] === b);
 			var ls = calEl.querySelectorAll('.tkbb-list li[data-d]'); for (var j=0;j<ls.length;j++) ls[j].style.display = (!d || ls[j].getAttribute('data-d') === d) ? '' : 'none';
 		});
-		calEl.querySelector('.tkbb-list').addEventListener('click', function(ev){
-			var b = ev.target.closest ? ev.target.closest('.bt[data-i]') : null; if (!b) return;
-			ev.preventDefault(); ev.stopPropagation();
-			openNotify(items[+b.getAttribute('data-i')], b);
-		});
 		if (oldTitle && oldTitle.parentNode) oldTitle.parentNode.insertBefore(calEl, oldTitle);
 		else appendSec(calEl, 0);
-	}
-
-	// ── 오픈 알림: 오픈 시각을 고객 휴대폰 캘린더에 추가 (아이폰 캘린더 .ics / 구글 캘린더)
-	function openNotify(e, btn){
-		if (!e) return;
-		var sd = ymd(e.start), s = md(sd), q = sd.split('-');
-		var key = 'tkbb_nf_'+sd+'_'+e.title;
-		var st = new Date(Date.UTC(+q[0], +q[1]-1, +q[2], OPEN_HOUR - 9, 0)), en = new Date(st.getTime() + 30*60000);
-		var z = function(d){ return d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,''); };
-		var link = e.url || 'https://m.takkobebe.com/';
-		var ics = 'https://takkobebe-link.vercel.app/api/ics?t=' + encodeURIComponent(e.title) + '&d=' + sd + '&h=' + OPEN_HOUR + '&u=' + encodeURIComponent(link);
-		var gcal = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
-		         + '&text=' + encodeURIComponent('[타코베베] ' + e.title + ' 오픈')
-		         + '&dates=' + z(st) + '/' + z(en)
-		         + '&details=' + encodeURIComponent('오전 ' + OPEN_HOUR + '시 공구 오픈!\n' + link)
-		         + '&ctz=Asia/Seoul';
-		var ua = navigator.userAgent || '';
-		var ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && 'ontouchend' in document);
-		var CAL = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>';
-		var bApple = '<a class="ob '+(ios ? 'k' : 'w')+'" data-k="1" href="'+ics+'">'+CAL+'아이폰 캘린더에 추가</a>';
-		var bGoogle = '<a class="ob '+(ios ? 'w' : 'k')+'" data-k="1" href="'+gcal+'" target="_blank" rel="noopener">'+CAL+'구글 캘린더에 추가</a>';
-		var ov = document.createElement('div');
-		ov.className = 'tkbb-nf';
-		ov.innerHTML = '<div class="pn" role="dialog" aria-label="오픈 알림 받기">'
-			+ '<div class="hd"><div class="th">'+(e.img ? '<img src="'+e.img+'" alt="">' : '')+'</div>'
-			+ '<div><b>'+esc(e.title)+'</b><span>'+s.m+'/'+s.d+' ('+wd(sd)+') 오전 '+OPEN_HOUR+'시 오픈</span></div></div>'
-			+ '<div class="ds">휴대폰 캘린더에 오픈 일정을 넣어드려요.<br>아이폰은 <b>하루 전</b>과 <b>10분 전</b>에 알림이 와요. 구글 캘린더는 저장 화면에서 알림 시간을 정할 수 있어요.</div>'
-			+ (ios ? bApple + bGoogle : bGoogle + bApple)
-			+ (e.url ? '<a class="ob p" href="'+e.url+'">상품 미리보기 ›</a>' : '')
-			+ '<button type="button" class="cl">닫기</button></div>';
-		var close = function(){ if (ov.parentNode) ov.parentNode.removeChild(ov); };
-		ov.addEventListener('click', function(ev){
-			if (ev.target === ov || (ev.target.closest && ev.target.closest('.cl'))) { close(); return; }
-			var a = ev.target.closest ? ev.target.closest('a[data-k]') : null;
-			if (a) {
-				try { localStorage.setItem(key, '1'); } catch(x) {}
-				if (btn) { btn.classList.add('on'); btn.lastChild.nodeValue = '알림 설정됨'; }
-				setTimeout(close, 300);
-			}
-		});
-		document.body.appendChild(ov);
 	}
 
 	// ── 이번 공구 : 진행 중인 것 중 가장 먼저 끝나는 공구 1개
