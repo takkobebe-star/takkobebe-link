@@ -1454,7 +1454,8 @@
 		+ '.tkbb-mp .ht{display:flex;align-items:center;justify-content:space-between;font-size:16px;font-weight:600;}'
 		+ '#mypage .tkbb-mp .ht h3{margin:0;padding:0;font-size:16px;font-weight:600;line-height:1.4;}'
 		+ '.tkbb-mp .ro{display:flex;align-items:center;gap:12px;margin-top:14px;}'
-		+ '.tkbb-mp .ro .th{width:56px;height:56px;flex:0 0 56px;border-radius:8px;background:#EEEADF;display:flex;align-items:center;justify-content:center;}'
+		+ '.tkbb-mp .ro .th{width:56px;height:56px;flex:0 0 56px;border-radius:8px;background:#EEEADF;display:flex;align-items:center;justify-content:center;overflow:hidden;}'
+		+ '.tkbb-mp .ro .th img{width:100%;height:100%;object-fit:cover;display:block;}'
 		+ '.tkbb-mp .ro .tx{min-width:0;}'
 		+ '.tkbb-mp .ro .nm{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}'
 		+ '.tkbb-mp .ro .pr{display:flex;align-items:baseline;gap:8px;margin-top:4px;}'
@@ -1471,6 +1472,8 @@
 		+ '.tkbb-mp .lt img{width:100%;height:100%;object-fit:cover;display:block;}'
 		+ '.tkbb-mp .g2{display:grid;grid-template-columns:1fr 1fr;margin-top:6px;}'
 		+ '.tkbb-mp .g2 a{display:flex;align-items:center;gap:8px;min-height:44px;font-size:14px;}'
+		+ '.tkbb-mp .cb{display:flex;gap:8px;margin-top:14px;}'
+		+ '.tkbb-mp .cb a{flex:1;height:48px;display:flex;align-items:center;justify-content:center;border:1px solid #DAD5C8;border-radius:8px;background:#F7F5EE;font-size:14px;font-weight:500;}'
 		+ '.tkbb-mp .ci{margin-top:10px;padding-top:14px;border-top:1px solid #EFEDE6;font-size:13px;color:#6A6A66;line-height:1.6;}'
 		+ '.tkbb-mp .ci b{color:#161616;font-weight:600;}'
 		+ '.tkbb-mp .lk{display:flex;justify-content:center;gap:18px;padding:28px 16px 32px;font-size:13px;color:#6A6A66;}'
@@ -1589,7 +1592,7 @@
 			+ (has('/mypage/order_list.php?sbscr=Y') ? '<a href="/mypage/order_list.php?sbscr=Y">' + sv(I.sub) + '정기배송</a>' : '')
 			+ '<a href="' + QNA + '">' + sv(I.qna) + '상품문의</a></div>';
 		// 공동구매 배너
-		h += '<a class="bn" href="/#tkbb-live"><div><b>이번 주 공동구매 일정 보기</b><small>진행 중 · 오픈 예정 공구를 한눈에</small></div>' + ARW + '</a>';
+		h += '<a class="bn" href="https://takkobebe-link.vercel.app/month.html"><div><b>이번 주 공동구매 일정 보기</b><small>진행 중 · 오픈 예정 공구를 한눈에</small></div>' + ARW + '</a>';
 		// 최근 본 상품
 		h += '<div class="cd bx"><a class="ht" href="/shop/click_prd.php"><h3>최근 본 상품</h3>' + ARW + '</a>';
 		if (seen.length) { h += '<div class="lt">'; for (var q = 0; q < seen.length; q++) h += '<a href="' + esc(seen[q].href) + '"><img src="' + esc(seen[q].src) + '" alt="" loading="lazy"></a>'; h += '</div>'; }
@@ -1605,9 +1608,8 @@
 			+ (has('/mypage/order_list.php?sbscr=Y') ? '<a href="/mypage/order_list.php?sbscr=Y">' + sv18(I.cal) + '정기배송 내역</a>' : '')
 			+ '</div></div>';
 		// 고객센터
-		h += '<div class="cd bx"><div class="ht"><h3>고객센터</h3></div><div class="g2">'
-			+ '<a href="' + QNA + '">상품문의</a><a href="/mypage/qna_list.php">나의 상품문의</a></div>'
-			+ '<div class="ci"><b>041-572-3307</b><br>운영시간 11:00 - 15:30 · 점심시간 12:30 - 13:30<br>공휴일·주말 휴무</div></div>';
+		h += '<div class="cd bx"><div class="ht"><h3>고객센터</h3></div><div>'
+			+ '</div><div class="cb"><a href="' + QNA + '">상품문의</a><a href="/mypage/qna_list.php">나의 상품문의</a></div></div>';
 		h += '</div>';
 		h += '<div class="lk"><a href="' + esc(logoutHref) + '">로그아웃</a><i>|</i><a href="/mypage/withdraw_step1.php">회원 탈퇴</a></div>';
 
@@ -1620,6 +1622,31 @@
 		root.insertBefore(box, root.firstChild);
 		root.classList.add('tkbb-mp-on');
 		cnt.classList.add('tkbb-mp-on');
+		if (last && last.name) loadThumb(box.querySelector('.ro .th'), last.name);
+	}
+
+	// 최근 주문 상품 사진: 주문 목록에는 사진이 없어서, 상품명으로 쇼핑몰을 검색해 같은 이름 상품의 사진을 쓴다.
+	// 못 찾으면 상자 아이콘이 그대로 남는다.
+	function loadThumb(th, name){
+		if (!th || !window.fetch || !window.DOMParser) return;
+		var q = name.replace(/\[[^\]]*\]|\([^)]*\)/g, ' ').replace(/\s(外|외)\s*\d+\s*건?\s*$/, '').replace(/\s+/g, ' ').trim();
+		if (!q) return;
+		var key = function(s){ return String(s || '').replace(/\[[^\]]*\]|\([^)]*\)|\s/g, ''); };
+		fetch('/shop/search_result.php?search_str=' + encodeURIComponent(q), { credentials: 'include' })
+			.then(function(r){ return r.text(); })
+			.then(function(html){
+				var d = new DOMParser().parseFromString(html, 'text/html');
+				var bs = d.querySelectorAll('.box'), pick = null, first = null;
+				for (var i = 0; i < bs.length; i++) {
+					var im = bs[i].querySelector('img'), nm = bs[i].querySelector('.name');
+					if (!im || !im.getAttribute('src')) continue;
+					if (!first) first = im;
+					if (nm && key(nm.textContent) === key(q)) { pick = im; break; }
+				}
+				pick = pick || first;
+				if (pick) th.innerHTML = '<img src="' + esc(pick.getAttribute('src')) + '" alt="">';
+			})
+			.catch(function(){});
 	}
 
 	function start(){ try { build(); } catch (e) { /* 실패하면 원래 화면이 그대로 보인다 */ } }
