@@ -1780,7 +1780,7 @@
 	function txt(el){ return el ? (el.textContent || '').replace(/\s+/g, ' ').trim() : ''; }
 	function el(tag, cls, html){ var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
 	function hide(e){ e.style.display = 'none'; e.setAttribute('data-tk-hid', '1'); }
-	function dot(d){ return String(d || '').replace(/\//g, '.'); }
+	function dot(d){ return String(d || '').replace(/[\/-]/g, '.'); }
 	function stCls(t){ return /취소|환불|반품/.test(t) ? ' gray' : (/배송중|배송완료/.test(t) ? ' blue' : ''); }
 	function stName(t){ return /^미입금$/.test(t) ? '입금대기' : t; }
 	function header(title){
