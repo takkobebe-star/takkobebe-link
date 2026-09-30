@@ -1654,3 +1654,623 @@
 	else start();
 })();
 /* ===== 마이페이지 끝 ===== */
+
+/* ===== 마이페이지 하위 메뉴 (마켓컬리식 카드, 타코베베 컬러) — 2026-09-30 =====
+   위사가 만든 원래 화면 요소를 그대로 옮기거나 읽어서 카드 모양으로 다시 배치한다.
+   버튼·폼은 원래 요소를 옮겨 쓰므로 위사 기능(주문조회, 배송지 변경, 주문 문의 등)은 그대로 동작한다.
+   주소 끝에 ?tkbb_old=1 을 붙이면 원래 화면. 실패하면 원래 화면이 그대로 보인다.
+   되돌리려면 이 블록(시작~끝)만 지우면 된다. */
+(function(){
+	if (window.__TKBB_MYSUB) return; window.__TKBB_MYSUB = 1;
+	if (window.browser_type === 'pc') return;
+	if (/[?&]tkbb_old=1/.test(location.search)) return;
+	var P = location.pathname;
+	var PAGES = { '/mypage/order_list.php': orderList, '/mypage/order_detail.php': orderDetail,
+		'/mypage/wish_list.php': wishList, '/shop/click_prd.php': recentList,
+		'/mypage/milage.php': function(c){ return pointPage(c, 'milage', '적립금', '사용 가능 적립금'); },
+		'/mypage/emoney.php': function(c){ return pointPage(c, 'emoney', '예치금', '보유 예치금'); },
+		'/mypage/coupon_down_list.php': couponList,
+		'/mypage/counsel_list.php': counselList, '/mypage/qna_list.php': qnaList, '/mypage/review_list.php': reviewList,
+		'/mypage/notify_restock.php': function(c){ return simpleCard(c, 'restock', '재입고 알림'); },
+		'/member/edit_step1.php': editInfo, '/member/edit_step2.php': editInfo, '/mypage/withdraw_step1.php': withdraw };
+	if (!PAGES[P]) return;
+
+	var CSS = ''
+		+ '#cnt.tkbb-my{background:#F4F2EC;padding:0 0 24px;letter-spacing:-.02em;color:#161616;}'
+		+ '#cnt.tkbb-my > h2.subtitle,#cnt.tkbb-my > select.top_select_menu{display:none !important;}'
+		+ '#cnt.tkbb-my a{text-decoration:none;}'
+		+ '.tkbb-my .tk-hd{display:flex;align-items:center;gap:4px;height:52px;padding:0 8px;background:#fff;}'
+		+ '.tkbb-my .tk-hd a{width:44px;height:44px;display:flex;align-items:center;justify-content:center;}'
+		+ '.tkbb-my .tk-hd h2{margin:0;padding:0;font-size:18px;font-weight:600;color:#161616;}'
+		+ '.tkbb-my .tk-wr{padding:14px;display:flex;flex-direction:column;gap:12px;}'
+		+ '.tkbb-my .tk-cd{background:#fff;border-radius:16px;padding:20px 18px;}'
+		+ '.tkbb-my .tk-t{font-size:17px;font-weight:700;margin:0 0 14px;padding:0;color:#161616;}'
+		+ '.tkbb-my .tk-date{font-size:20px;font-weight:700;color:#161616;}'
+		+ '.tkbb-my .tk-ono{display:flex;align-items:center;gap:4px;margin-top:6px;font-size:14px;color:#6A6A66;}'
+		+ '.tkbb-my .tk-ono button{width:30px;height:30px;border:0;background:none;padding:0;display:flex;align-items:center;justify-content:center;}'
+		+ '.tkbb-my .tk-top{display:flex;align-items:center;justify-content:space-between;color:#161616;}'
+		+ '.tkbb-my .tk-hr{height:1px;background:#EFEDE6;margin:18px 0;}'
+		+ '.tkbb-my .tk-st{font-size:19px;font-weight:700;color:#7C8340;}'
+		+ '.tkbb-my .tk-st.blue{color:#52728A;}.tkbb-my .tk-st.gray{color:#6A6A66;}'
+		+ '.tkbb-my .tk-pr{display:flex;align-items:center;gap:14px;margin-top:16px;}'
+		+ '.tkbb-my .tk-pr .th{width:64px;height:80px;flex:0 0 64px;border-radius:8px;background:#EEEADF;overflow:hidden;display:flex;align-items:center;justify-content:center;}'
+		+ '.tkbb-my .tk-pr .th img{width:100%;height:100%;object-fit:cover;display:block;}'
+		+ '.tkbb-my .tk-pr .tx{flex:1;min-width:0;}'
+		+ '.tkbb-my .tk-pr .nm{font-size:15px;line-height:1.4;color:#161616;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}'
+		+ '.tkbb-my .tk-pr .pc{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:15px;color:#6A6A66;}'
+		+ '.tkbb-my .tk-pr .pc b{font-size:17px;font-weight:700;color:#161616;}'
+		+ '.tkbb-my .tk-pr .pc i{width:1px;height:12px;background:#DAD5C8;}'
+		+ '.tkbb-my .tk-cart{width:44px;height:44px;flex:0 0 44px;border:1px solid #DAD5C8;border-radius:8px;display:flex;align-items:center;justify-content:center;}'
+		+ '.tkbb-my .tk-cart[hidden]{display:none;}'
+		+ '.tkbb-my .tk-bt{display:flex;gap:8px;margin-top:20px;}'
+		+ '.tkbb-my .tk-bt a{flex:1;height:48px;border-radius:8px;background:#EFEDE6;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#161616;}'
+		+ '.tkbb-my .tk-black{display:flex;align-items:center;justify-content:center;height:52px;border-radius:10px;background:#161616;color:#fff !important;font-size:15px;font-weight:600;}'
+		+ '.tkbb-my .tk-more{display:flex;align-items:center;justify-content:center;height:48px;border-radius:10px;border:1px solid #DAD5C8;background:#fff;font-size:14px;color:#161616;}'
+		// 표(결제 정보)
+		+ '.tkbb-my .tk-cd table.tbl_order{width:100%;border:0;border-collapse:collapse;}'
+		+ '.tkbb-my .tk-cd table.tbl_order th,.tkbb-my .tk-cd table.tbl_order td{border:0;padding:6px 0;font-size:15px;background:none;vertical-align:top;}'
+		+ '.tkbb-my .tk-cd table.tbl_order th{text-align:left;font-weight:400;color:#6A6A66;white-space:nowrap;padding-right:16px;}'
+		+ '.tkbb-my .tk-cd table.tbl_order td{text-align:right;color:#161616;}'
+		+ '.tkbb-my .tk-cd table.tbl_order tr.total_prc th{padding-top:16px;border-top:1px solid #EFEDE6;font-size:16px;font-weight:600;color:#161616;}'
+		+ '.tkbb-my .tk-cd table.tbl_order tr.total_prc td{padding-top:16px;border-top:1px solid #EFEDE6;font-size:20px;font-weight:700;}'
+		+ '.tkbb-my .tk-cd .def_info,.tkbb-my .tk-cd .wrap_inner{padding:0;margin:0;border:0;background:none;}'
+		+ '.tkbb-my .tk-cd .def_info p{margin:0;font-size:14px;color:#6A6A66;line-height:1.6;}'
+		+ '.tkbb-my .tk-cd .def_info p strong{display:block;font-size:15px;font-weight:600;color:#161616;margin-bottom:4px;}'
+		+ '.tkbb-my .tk-cd .def_info .box_btn{display:none;}'
+		+ '.tkbb-my .tk-cd .tk-tt{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}'
+		+ '.tkbb-my .tk-cd .tk-tt .tk-t{margin:0;}'
+		+ '.tkbb-my .tk-cd .tk-sm{height:32px;padding:0 12px;border:1px solid #DAD5C8;border-radius:6px;background:#fff;font-size:13px;color:#161616;display:flex;align-items:center;}'
+		+ '.tkbb-my .tk-cd ul.tab{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0;padding:0;list-style:none;border:0;}'
+		+ '.tkbb-my .tk-cd ul.tab li{float:none;width:auto;margin:0;padding:0;border:0;}'
+		+ '.tkbb-my .tk-cd ul.tab li a{display:flex;align-items:center;justify-content:center;height:46px;border:1px solid #DAD5C8;border-radius:8px;background:#fff;font-size:14px;color:#161616;}'
+		+ '.tkbb-my .tk-cd p.empty{margin:14px 0 0;padding:0;font-size:13px;color:#9A9A94;text-align:left;border:0;}'
+		// 주문내역: 기간 버튼
+		+ '.tkbb-my .tk-per{background:#fff;padding:4px 16px 16px;}'
+		+ '.tkbb-my .tk-per .date{display:flex;gap:6px;overflow-x:auto;margin:0;padding:0;}'
+		+ '.tkbb-my .tk-per .date .box_btn{flex:0 0 auto;width:auto;margin:0;padding:0;border:0;background:none;}'
+		+ '.tkbb-my .tk-per .date input{height:36px;padding:0 14px;border-radius:999px;border:1px solid #DAD5C8;background:#fff;color:#161616;font-size:14px;font-family:inherit;}'
+		+ '.tkbb-my .tk-per .date .on input{background:#161616;border-color:#161616;color:#fff;}'
+		+ '.tkbb-my .tk-per .date_input{display:flex;align-items:center;gap:6px;margin:12px 0 0;font-size:14px;color:#6A6A66;}'
+		+ '.tkbb-my .tk-per .date_input input{flex:1;min-width:0;height:40px;border:1px solid #DAD5C8;border-radius:8px;padding:0 10px;font-size:14px;background:#fff;}'
+		+ '.tkbb-my .tk-per > .box_btn{display:block;margin:8px 0 0;padding:0;border:0;background:none;}'
+		+ '#cnt.tkbb-my .tk-per > .box_btn input{width:100%;height:42px;border:0 !important;border-radius:8px;background:#161616 !important;color:#fff !important;font-size:14px;font-weight:600;font-family:inherit;}'
+		+ '.tkbb-my .tk-per .date{scrollbar-width:none;}.tkbb-my .tk-per .date::-webkit-scrollbar{display:none;}'
+		+ '#cnt.tkbb-my .tk-per .date .box_btn input{background:#fff !important;border:1px solid #DAD5C8 !important;color:#161616 !important;}'
+		+ '#cnt.tkbb-my .tk-per .date .box_btn.on input{background:#161616 !important;border-color:#161616 !important;color:#fff !important;}'
+		+ '.tkbb-my .tk-empty{padding:40px 20px;text-align:center;font-size:15px;color:#6A6A66;}'
+		// 요약 카드·내역
+		+ '.tkbb-my .tk-lb{font-size:14px;color:#6A6A66;}'
+		+ '.tkbb-my .tk-big{font-size:30px;font-weight:700;margin-top:6px;letter-spacing:-.02em;color:#161616;}'
+		+ '.tkbb-my .tk-big small{font-size:20px;font-weight:500;}'
+		+ '.tkbb-my .tk-note{margin-top:14px;padding:12px 14px;border-radius:8px;background:#F7F5EE;font-size:13px;color:#6A6A66;line-height:1.5;}'
+		+ '.tkbb-my .tk-chips{display:flex;gap:8px;margin:0 0 6px;}'
+		+ '.tkbb-my .tk-chips button{height:34px;padding:0 14px;border-radius:999px;border:1px solid #DAD5C8;background:#fff;color:#161616;font-size:13px;font-family:inherit;}'
+		+ '.tkbb-my .tk-chips button.on{background:#161616;border-color:#161616;color:#fff;}'
+		+ '.tkbb-my .tk-row{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid #EFEDE6;}'
+		+ '.tkbb-my .tk-row:last-child{border-bottom:0;padding-bottom:0;}'
+		+ '.tkbb-my .tk-row .d{font-size:13px;color:#9A9A94;}'
+		+ '.tkbb-my .tk-row .r{font-size:15px;margin-top:4px;color:#161616;line-height:1.4;word-break:keep-all;}'
+		+ '.tkbb-my .tk-row .s{font-size:12px;color:#9A9A94;margin-top:4px;}'
+		+ '.tkbb-my .tk-row .a{flex:0 0 auto;text-align:right;}'
+		+ '.tkbb-my .tk-row .a b{display:block;font-size:16px;font-weight:700;color:#161616;}'
+		+ '.tkbb-my .tk-row .a b.plus{color:#7C8340;}'
+		+ '.tkbb-my .tk-row .a span{font-size:12px;color:#9A9A94;}'
+		// 탭
+		+ '.tkbb-my .tk-tabs{display:flex;background:#fff;padding:0 16px;border-bottom:1px solid #EFEDE6;}'
+		+ '.tkbb-my .tk-tabs button{flex:1;height:48px;border:0;border-bottom:2px solid transparent;background:none;font-size:15px;color:#6A6A66;font-family:inherit;}'
+		+ '.tkbb-my .tk-tabs button.on{border-bottom-color:#161616;color:#161616;font-weight:600;}'
+		+ '.tkbb-my .tk-tabs button em{font-style:normal;color:#7C8340;margin-left:4px;}'
+		// 쿠폰
+		+ '.tkbb-my .tk-cp{background:#fff;border-radius:16px;display:flex;overflow:hidden;}'
+		+ '.tkbb-my .tk-cp .l{flex:1;min-width:0;padding:20px 18px;}'
+		+ '.tkbb-my .tk-cp .v{font-size:24px;font-weight:700;color:#7C8340;}'
+		+ '.tkbb-my .tk-cp .n{font-size:15px;margin-top:6px;line-height:1.4;color:#161616;}'
+		+ '.tkbb-my .tk-cp .c{font-size:13px;color:#6A6A66;margin-top:10px;line-height:1.6;}'
+		+ '.tkbb-my .tk-cp .r{width:64px;flex:0 0 64px;border-left:1px dashed #DAD5C8;background:#F7F5EE;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#7C8340;writing-mode:vertical-rl;}'
+		+ '.tkbb-my .tk-cp.off .v,.tkbb-my .tk-cp.off .n,.tkbb-my .tk-cp.off .c,.tkbb-my .tk-cp.off .r{color:#B5B2A8;}'
+		// 관심상품 (위사 원래 목록을 카드 안에서 정리)
+		+ '.tkbb-my .tk-cd #wish_list,.tkbb-my .tk-cd #wish_list form{padding:0;margin:0;}'
+		+ '.tkbb-my .tk-cd #wish_list p.empty{padding:36px 0;margin:0;border:0;text-align:center;font-size:15px;color:#6A6A66;}'
+		+ '.tkbb-my .tk-cd .paging{display:none;}'
+		+ '.tkbb-my .tk-pg .paging{display:flex;justify-content:center;gap:4px;margin:0;padding:0;}'
+		+ '.tkbb-my .tk-cd p.empty{padding:28px 0;margin:0;border:0;text-align:center;font-size:15px;color:#6A6A66;background:none;}'
+		+ '.tkbb-my .tk-cd .wrap_inner{padding:0;margin:0;}'
+		+ '#cnt.tkbb-my .tk-wr > .wrap_inner,#cnt.tkbb-my .tk-wr > #join_input,#cnt.tkbb-my .tk-wr > #draw_input{padding:0 !important;margin:0 !important;}'
+		+ '.tkbb-my .tk-badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 8px;border-radius:999px;background:#EFEDE6;color:#6A6A66;}'
+		+ '.tkbb-my .tk-badge.done{background:#D1D798;color:#3E4220;}'
+		// 상품문의·후기: 위사 목록 한 줄을 카드로
+		+ '.tkbb-my .tk-wr ul.list_qnarev{margin:0;padding:0;list-style:none;border:0;display:flex;flex-direction:column;gap:12px;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev > li{position:relative;background:#fff;border-radius:16px;padding:20px 18px;border:0;margin:0;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .subject{padding:0;margin:0;cursor:pointer;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .subject p{margin:0;padding:0;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .title{font-size:15px;color:#161616;line-height:1.5;margin-top:10px !important;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .title img{display:none;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .stat{font-size:13px;color:#9A9A94;margin-top:6px !important;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .content{margin:14px 0 0;padding:0;font-size:14px;line-height:1.6;color:#3E3E3A;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .content:empty{display:none;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .prdimg{float:none;position:absolute;left:18px;top:20px;width:48px;height:48px;border-radius:8px;overflow:hidden;background:#EEEADF;margin:0;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .prdimg img{width:100%;height:100%;object-fit:cover;display:block;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .subject.prd{padding-left:0;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .prdname{min-height:48px;padding:0 0 16px 60px !important;border-bottom:1px solid #EFEDE6;margin-bottom:14px !important;font-size:14px;color:#6A6A66;display:flex;align-items:center;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .prdname a{color:#6A6A66;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .gradebox{display:none;}'
+		+ '.tkbb-my .tk-stars{display:inline-flex;gap:2px;vertical-align:middle;}'
+		+ '.tkbb-my .tk-wr ul.list_qnarev .grade{display:none;}'
+		+ '.tkbb-my .tk-banner{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-radius:12px;background:#D1D798;color:#161616;}'
+		+ '.tkbb-my .tk-banner b{display:block;font-size:15px;font-weight:700;}'
+		+ '.tkbb-my .tk-banner small{display:block;font-size:12px;color:#3E4220;margin-top:3px;}'
+		// 정보수정·탈퇴 폼
+		+ '.tkbb-my #join_input,.tkbb-my #draw_input{padding:0;margin:0;}'
+		+ '#cnt.tkbb-my #join_input,#cnt.tkbb-my #join_input fieldset,#cnt.tkbb-my #draw_input{background:none !important;}'
+		+ '.tkbb-my #join_input fieldset{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;}'
+		+ '.tkbb-my #join_input legend{display:none;}'
+		+ '.tkbb-my #join_input .box{background:#fff;border-radius:16px;padding:20px 18px;margin:0;border:0;}'
+		+ '.tkbb-my #join_input .box > div{margin:0 0 16px;padding:0;border:0;}'
+		+ '.tkbb-my #join_input .box > div:last-child{margin-bottom:0;}'
+		+ '.tkbb-my #join_input .box > div > label,.tkbb-my #join_input .box > div > label:first-child{display:block;float:none;width:auto;margin:0 0 6px;padding:0;font-size:13px;color:#6A6A66;}'
+		+ '.tkbb-my #join_input .input_area{float:none;width:auto;margin:0;padding:0;}'
+		+ '.tkbb-my #join_input .form_input,.tkbb-my #draw_input .form_input{width:100%;box-sizing:border-box;height:48px;padding:0 14px;border:1px solid #DAD5C8;border-radius:8px;background:#fff;font-size:15px;margin:0 0 8px;}'
+		+ '.tkbb-my #join_input .form_input.readonly{background:#F7F5EE;border-color:#EFEDE6;color:#6A6A66;}'
+		+ '.tkbb-my #join_input .box_btn.gray2{display:block;margin:0 0 8px;padding:0;border:0;background:none;}'
+		+ '.tkbb-my #join_input .box_btn.gray2 a{display:flex;align-items:center;justify-content:center;height:44px;border:1px solid #161616;border-radius:8px;background:#fff;color:#161616;font-size:14px;font-weight:600;}'
+		+ '.tkbb-my #join_input .msg p{margin:0;font-size:12px;color:#6A6A66;}'
+		+ '.tkbb-my #join_input .check_chg,.tkbb-my #join_input .radio_chg{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:15px;}'
+		+ '.tkbb-my #join_input .check_chg label,.tkbb-my #join_input .radio_chg label{font-size:15px;color:#161616;margin:0;}'
+		+ '.tkbb-my #join_input ul.integrate{margin:0;padding:0;list-style:none;}'
+		+ '.tkbb-my #join_input ul.integrate li{display:flex;align-items:center;gap:10px;min-height:52px;border-bottom:1px solid #EFEDE6;padding:0;margin:0;float:none;width:auto;}'
+		+ '.tkbb-my #join_input ul.integrate li:last-child{border-bottom:0;}'
+		+ '.tkbb-my #join_input ul.integrate .name{flex:1;margin:0;font-size:15px;color:#161616;background:none;padding:0;}'
+		+ '.tkbb-my #join_input ul.integrate .state{order:2;margin:0;font-size:12px;color:#9A9A94;}'
+		+ '.tkbb-my #join_input ul.integrate .box_btn{order:3;margin:0;padding:0;border:0;background:none;}'
+		+ '.tkbb-my #join_input ul.integrate .box_btn a{display:flex;align-items:center;height:32px;padding:0 12px;border:1px solid #DAD5C8;border-radius:6px;background:#fff;color:#161616;font-size:13px;}'
+		+ '.tkbb-my .tk-h{margin:0 0 16px;padding:0;font-size:17px;font-weight:700;color:#161616;}'
+		+ '.tkbb-my #join_input .btn,.tkbb-my #draw_input .btn{margin:12px 0 0;padding:0;}'
+		+ '#cnt.tkbb-my #join_input .btn .box_btn,#cnt.tkbb-my #draw_input .btn .box_btn{display:block;margin:0;padding:0;border:0;background:none;}'
+		+ '#cnt.tkbb-my #join_input .btn input[type=submit]{width:100%;height:52px;border:0 !important;border-radius:10px;background:#161616 !important;color:#fff !important;font-size:15px;font-weight:600;font-family:inherit;}'
+		+ '.tkbb-my .tk-link{display:block;text-align:center;padding:14px;font-size:13px;color:#9A9A94 !important;text-decoration:underline !important;}'
+		+ '.tkbb-my #draw_input form{text-align:left !important;}'
+		+ '.tkbb-my #draw_input .box{background:#fff;border-radius:16px;padding:22px 18px;margin:0;border:0;}'
+		+ '.tkbb-my #draw_input .msg{margin:0 0 18px;padding:0;font-size:14px;line-height:1.6;color:#3E3E3A;text-align:left;border:0;background:none;}'
+		+ '.tkbb-my #draw_input textarea.form_input{height:96px;padding:12px 14px;resize:none;}'
+		+ '#cnt.tkbb-my #draw_input .btn{display:flex;gap:8px;}'
+		+ '#cnt.tkbb-my #draw_input .btn .box_btn{flex:1;width:auto;}'
+		+ '#cnt.tkbb-my #draw_input .btn .box_btn input,#cnt.tkbb-my #draw_input .btn .box_btn a{display:flex;align-items:center;justify-content:center;width:100%;height:52px;border-radius:10px;font-size:15px;font-family:inherit;}'
+		+ '#cnt.tkbb-my #draw_input .btn .box_btn input{border:1px solid #DAD5C8 !important;background:#fff !important;color:#6A6A66 !important;}'
+		+ '#cnt.tkbb-my #draw_input .btn .box_btn a{border:0;background:#161616 !important;color:#fff !important;font-weight:600;}'
+		+ '#cnt.tkbb-my #counsel > .box_btn{display:none;}';
+
+	var ARW = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';
+	var CART = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>';
+	var BOX = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9A9A94" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4v10l-9 4-9-4V7z"/><path d="M3 7l9 4 9-4M12 11v10"/></svg>';
+	var COPY = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9A9A94" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h2"/></svg>';
+
+	function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+	function txt(el){ return el ? (el.textContent || '').replace(/\s+/g, ' ').trim() : ''; }
+	function el(tag, cls, html){ var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+	function hide(e){ e.style.display = 'none'; e.setAttribute('data-tk-hid', '1'); }
+	function dot(d){ return String(d || '').replace(/[\/-]/g, '.'); }
+	function stCls(t){ return /취소|환불|반품/.test(t) ? ' gray' : (/배송중|배송완료/.test(t) ? ' blue' : ''); }
+	function stName(t){ return /^미입금$/.test(t) ? '입금대기' : t; }
+	function header(title){
+		var back = document.referrer && document.referrer.indexOf(location.host) > -1 ? 'javascript:history.back()' : '/mypage/mypage.php';
+		return el('div', 'tk-hd', '<a href="' + back + '" aria-label="뒤로가기"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></a><h2>' + esc(title) + '</h2>');
+	}
+	function copyBtn(v){
+		var b = el('button', '', COPY); b.type = 'button'; b.setAttribute('aria-label', '주문번호 복사');
+		b.addEventListener('click', function(){ try { navigator.clipboard.writeText(v); } catch (e) {} });
+		return b;
+	}
+
+	// 상품명으로 검색해서 사진·상품 링크 찾기 (주문 목록에는 사진이 없다). 결과는 세션 동안 기억한다.
+	var CACHE = {};
+	try { CACHE = JSON.parse(sessionStorage.getItem('tkbb_thumbs') || '{}'); } catch (e) {}
+	function findProduct(name, cb, done){
+		done = done || function(){};
+		var q = String(name || '').replace(/\[[^\]]*\]|\([^)]*\)/g, ' ').replace(/\s(外|외)\s*\d+\s*건?\s*$/, '').replace(/\s+/g, ' ').trim();
+		if (!q || !window.fetch) { done(); return; }
+		if (CACHE[q] !== undefined) { if (CACHE[q]) cb(CACHE[q]); done(); return; }
+		var key = function(s){ return String(s || '').replace(/\[[^\]]*\]|\([^)]*\)|\s/g, ''); };
+		fetch('/shop/search_result.php?search_str=' + encodeURIComponent(q), { credentials: 'include' })
+			.then(function(r){ return r.text(); })
+			.then(function(html){
+				var d = new DOMParser().parseFromString(html, 'text/html');
+				var bs = d.querySelectorAll('.box'), pick = null, first = null;
+				for (var i = 0; i < bs.length; i++) {
+					var im = bs[i].querySelector('img'), nm = bs[i].querySelector('.name'), a = bs[i].querySelector('a[href*="pno="]');
+					if (!im || !im.getAttribute('src')) continue;
+					var it = { img: im.getAttribute('src'), href: a ? a.getAttribute('href').replace(/&rURL=[^&]*/, '') : '' };
+					if (!first) first = it;
+					if (nm && key(nm.textContent) === key(q)) { pick = it; break; }
+				}
+				CACHE[q] = pick || first || null;
+				try { sessionStorage.setItem('tkbb_thumbs', JSON.stringify(CACHE)); } catch (e) {}
+				if (CACHE[q]) cb(CACHE[q]);
+				done();
+			}).catch(function(){ done(); });
+	}
+	function fillThumb(card, name, done){
+		findProduct(name, function(it){
+			var th = card.querySelector('.th'); if (th && it.img) th.innerHTML = '<img src="' + esc(it.img) + '" alt="">';
+			var c = card.querySelector('.tk-cart'); if (c && it.href) { c.setAttribute('href', it.href); c.hidden = false; }
+		}, done);
+	}
+
+	/* ---------- 주문내역 ---------- */
+	function orderList(cnt){
+		var box = document.getElementById('order_list');
+		if (!box) return false;
+		var lis = box.querySelectorAll('ul.list > li');
+		var wrap = el('div', 'tk-wr');
+		var cards = [];
+		for (var i = 0; i < lis.length; i++) {
+			var li = lis[i], a = li.querySelector('.no a'), ps = li.querySelectorAll('.info p');
+			var ono = txt(a), date = txt(li.querySelector('.no span')), href = a ? a.getAttribute('href') : '#';
+			var name = txt(ps[0]), pay = txt(li.querySelector('.info strong')), stEl = li.querySelector('.p_color'), st = txt(stEl);
+			var track = stEl ? stEl.querySelector('a[href*="delivery"]') : null;
+			var cd = el('div', 'tk-cd');
+			cd.innerHTML = '<a class="tk-top" href="' + esc(href) + '"><div><div class="tk-date">' + esc(dot(date)) + '</div><div class="tk-ono">주문번호 ' + esc(ono) + '</div></div>' + ARW + '</a>'
+				+ '<div class="tk-hr"></div><div class="tk-st' + stCls(st) + '">' + esc(stName(st)) + '</div>'
+				+ '<div class="tk-pr"><div class="th">' + BOX + '</div><div class="tx"><div class="nm">' + esc(name) + '</div><div class="pc"><b>' + esc(pay) + '</b></div></div>'
+				+ '<a class="tk-cart" hidden aria-label="상품 보기">' + CART + '</a></div>'
+				+ (track || /배송완료/.test(st) ? '<div class="tk-bt">' + (track ? '<a href="' + esc(track.getAttribute('href')) + '" target="_blank" rel="noopener">배송 조회</a>' : '') + (/배송완료/.test(st) ? '<a href="' + esc(href) + '">후기 작성</a>' : '') + '</div>' : '');
+			cd.setAttribute('data-name', name);
+			wrap.appendChild(cd); cards.push(cd);
+		}
+		if (!lis.length) wrap.appendChild(el('div', 'tk-cd tk-empty', '주문 내역이 없어요.'));
+
+		// 한 번에 10개씩 보여주고, 사진은 화면에 보일 때 불러온다
+		var shown = 0, more = el('a', 'tk-more', '더보기'); more.href = 'javascript:void(0)';
+		function showMore(){
+			for (var k = shown; k < Math.min(shown + 10, cards.length); k++) { cards[k].style.display = ''; watch(cards[k]); }
+			shown = Math.min(shown + 10, cards.length);
+			more.style.display = shown < cards.length ? '' : 'none';
+		}
+		// 사진 검색은 3개씩 차례로 (보이는 10개만)
+		var queue = [], running = 0;
+		function pump(){
+			while (running < 3 && queue.length) {
+				var c = queue.shift(); running++;
+				fillThumb(c, c.getAttribute('data-name'), function(){ running--; pump(); });
+			}
+		}
+		function watch(c){ queue.push(c); pump(); }
+		for (var j = 0; j < cards.length; j++) cards[j].style.display = 'none';
+		more.addEventListener('click', showMore);
+		wrap.appendChild(more);
+		showMore();
+
+		// 기간 버튼·날짜 조회는 원래 요소를 옮겨 쓴다 (위사 기능 그대로)
+		var per = el('div', 'tk-per');
+		var search = box.querySelector('.search');
+		if (search) { while (search.firstChild) per.appendChild(search.firstChild); }
+
+		hide(box);
+		var title = /sbscr=Y/.test(location.search) ? '정기배송 주문내역' : '주문내역';
+		cnt.insertBefore(wrap, box); cnt.insertBefore(per, wrap); cnt.insertBefore(header(title), per);
+		return true;
+	}
+
+	/* ---------- 주문 상세 ---------- */
+	function orderDetail(cnt){
+		var od = document.getElementById('order_detail');
+		if (!od) return false;
+		var msg = od.querySelector('p.msg');
+		var ono = txt(msg && msg.querySelector('strong'));
+		var date = msg ? (msg.innerHTML.split(/<br\s*\/?>/i)[1] || '').replace(/<[^>]+>/g, '').trim() : '';
+		var lis = od.querySelectorAll('ul.list_cart > li');
+		var st = '';
+		if (lis.length) { var sEl = lis[0].querySelector('.stat'); st = sEl ? (sEl.childNodes[0] && sEl.childNodes[0].nodeType === 3 ? sEl.childNodes[0].nodeValue : txt(sEl)).replace(/\s+/g, ' ').trim() : ''; }
+
+		var wrap = el('div', 'tk-wr');
+		// 1) 주문 카드
+		var top = el('div', 'tk-cd');
+		top.innerHTML = '<div class="tk-date">' + esc(dot(date)) + '</div><div class="tk-ono">주문번호 ' + esc(ono) + '</div><div class="tk-hr"></div>'
+			+ '<div class="tk-st' + stCls(st) + '">' + esc(stName(st)) + (/미입금|입금대기/.test(st) ? ' <span style="font-size:14px;font-weight:400;">아래 계좌로 입금해 주세요</span>' : '') + '</div>';
+		top.querySelector('.tk-ono').appendChild(copyBtn(ono));
+		var track = null, review = null;
+		for (var i = 0; i < lis.length; i++) {
+			var li = lis[i], img = li.querySelector('.img img'), a = li.querySelector('.info a'), ps = li.querySelectorAll('.info p');
+			var pc = txt(ps[1]); var m = pc.match(/^(.*?)\s*\|\s*(.*)$/);
+			var row = el('div', 'tk-pr', '<div class="th">' + (img ? '<img src="' + esc(img.getAttribute('src')) + '" alt="">' : BOX) + '</div>'
+				+ '<div class="tx"><div class="nm">' + esc(txt(a) || txt(ps[0])) + '</div><div class="pc"><b>' + esc(m ? m[1] : pc) + '</b>' + (m ? '<i></i>' + esc(m[2].replace(/\s+/g, '')) : '') + '</div></div>'
+				+ (a ? '<a class="tk-cart" href="' + esc(a.getAttribute('href')) + '" aria-label="상품 보기">' + CART + '</a>' : ''));
+			top.appendChild(row);
+			track = track || li.querySelector('a[href*="delivery"]');
+			review = review || li.querySelector('.stat .box_btn a');
+		}
+		if (track || review) {
+			var bt = el('div', 'tk-bt');
+			if (track) bt.appendChild(el('a', '', '배송 조회')).setAttribute('href', track.getAttribute('href'));
+			if (review) { review.textContent = '후기 작성'; bt.appendChild(review); }
+			if (track) bt.firstChild.setAttribute('target', '_blank');
+			top.appendChild(bt);
+		}
+		wrap.appendChild(top);
+
+		// 2) 나머지 섹션: 제목(h3) + 바로 다음 상자를 카드 하나로 옮긴다
+		var secs = {}, h3s = od.querySelectorAll('h3.title');
+		for (var j = 0; j < h3s.length; j++) {
+			var t = txt(h3s[j]), body = h3s[j].nextElementSibling;
+			if (!body || t === '주문상품') continue;
+			var cd = el('div', 'tk-cd');
+			var tt = el('div', 'tk-tt', '<h3 class="tk-t">' + esc(t === '주문 1:1문의' ? '주문 문의' : t) + '</h3>');
+			cd.appendChild(tt);
+			if (t === '배송지 정보') {
+				var cb = body.querySelector('.box_btn a');
+				if (cb) { var ch = el('a', 'tk-sm', '변경'); ch.href = 'javascript:void(0)'; ch.onclick = (function(orig){ return function(){ orig.click(); return false; }; })(cb); tt.appendChild(ch); }
+			}
+			body.style.display = '';
+			cd.appendChild(body);
+			secs[t] = cd;
+		}
+		var ORDER = ['결제정보', '결제수단 정보', '배송지 정보', '주문자 정보', '주문 1:1문의'];
+		for (var k = 0; k < ORDER.length; k++) if (secs[ORDER[k]]) { wrap.appendChild(secs[ORDER[k]]); delete secs[ORDER[k]]; }
+		for (var rest in secs) wrap.appendChild(secs[rest]);
+		wrap.appendChild(el('a', 'tk-black', '주문 목록으로')).setAttribute('href', '/mypage/order_list.php');
+
+		hide(od);
+		cnt.insertBefore(wrap, od);
+		cnt.insertBefore(header('주문 상세'), wrap);
+		return true;
+	}
+
+	/* ---------- 관심상품: 위사 목록(폼·버튼 포함)을 카드 안으로 옮긴다 ---------- */
+	function wishList(cnt){
+		var box = document.getElementById('wish_list');
+		if (!box) return false;
+		var wrap = el('div', 'tk-wr'), cd = el('div', 'tk-cd');
+		box.parentNode.insertBefore(wrap, box);
+		cd.appendChild(box); wrap.appendChild(cd);
+		cnt.insertBefore(header('관심상품'), wrap);
+		return true;
+	}
+
+	/* ---------- 최근 본 상품 ---------- */
+	function recentList(cnt){
+		var box = document.getElementById('click_prd');
+		if (!box) return false;
+		var lis = box.querySelectorAll('ul.prd_basic > li');
+		var wrap = el('div', 'tk-wr'), cd = el('div', 'tk-cd');
+		cd.innerHTML = '<h3 class="tk-t">최근 본 상품 <span style="color:#7C8340">' + lis.length + '</span></h3>';
+		for (var i = 0; i < lis.length; i++) {
+			var b = lis[i], a = b.querySelector('.name a') || b.querySelector('a[href*="pno="]'), img = b.querySelector('.prdimg img');
+			var so = b.querySelector('.soldout'), sell = txt(b.querySelector('.sell strong')) || txt(b.querySelector('.discount strong')), cons = txt(b.querySelector('.consumer'));
+			var href = a ? a.getAttribute('href').replace(/&rURL=[^&]*/, '') : '#';
+			var n = parseInt(sell.replace(/[^\d]/g, ''), 10), c = parseInt(cons.replace(/[^\d]/g, ''), 10);
+			var rate = (n && c && c > n) ? Math.round((1 - n / c) * 100) : 0;
+			var row = el('div', 'tk-pr');
+			row.style.cssText = 'margin:0;padding:14px 0;border-bottom:1px solid #EFEDE6;';
+			row.innerHTML = '<a class="th" href="' + esc(href) + '" style="position:relative">' + (img ? '<img src="' + esc(img.getAttribute('src')) + '" alt="">' : BOX)
+				+ (so && getComputedStyle(so).display !== 'none' ? '<span style="position:absolute;inset:0;background:rgba(22,22,22,.48);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;text-align:center">' + esc(txt(so)) + '</span>' : '') + '</a>'
+				+ '<a class="tx" href="' + esc(href) + '"><div class="nm">' + esc(txt(a)) + '</div><div class="pc">' + (rate ? '<span style="color:#52728A;font-weight:700">' + rate + '%</span>' : '') + '<b>' + esc(sell) + '</b></div></a>'
+				+ '<a class="tk-cart" href="' + esc(href) + '" aria-label="상품 보기">' + CART + '</a>';
+			cd.appendChild(row);
+		}
+		if (cd.lastChild && cd.lastChild.style) cd.lastChild.style.borderBottom = '0';
+		if (!lis.length) cd.appendChild(el('div', 'tk-empty', '최근 본 상품이 없어요.'));
+		wrap.appendChild(cd);
+		hide(box);
+		cnt.insertBefore(wrap, box); cnt.insertBefore(header('최근 본 상품'), wrap);
+		return true;
+	}
+
+	/* ---------- 적립금 · 예치금 ---------- */
+	function pointPage(cnt, id, title, label){
+		var box = document.getElementById(id);
+		if (!box) return false;
+		var have = txt(box.querySelector('.box_mp .have span'));
+		var lis = box.querySelectorAll('ul.list_common > li');
+		var wrap = el('div', 'tk-wr');
+		var sum = el('div', 'tk-cd', '<div class="tk-lb">' + esc(label) + '</div><div class="tk-big">' + esc(have || '0') + '<small>원</small></div>'
+			+ (id === 'emoney' ? '<div class="tk-note">예치금은 결제할 때 현금처럼 사용할 수 있어요.</div>' : ''));
+		wrap.appendChild(sum);
+		var cd = el('div', 'tk-cd', '<h3 class="tk-t">' + (id === 'emoney' ? '입금 · 사용 내역' : '적립 · 사용 내역') + '</h3>');
+		var chips = el('div', 'tk-chips', '<button type="button" class="on" data-f="all">전체</button><button type="button" data-f="plus">' + (id === 'emoney' ? '입금' : '적립') + '</button><button type="button" data-f="minus">사용</button>');
+		cd.appendChild(chips);
+		var list = el('div', ''); cd.appendChild(list);
+		var rows = [];
+		for (var i = 0; i < lis.length; i++) {
+			var li = lis[i], ps = li.querySelectorAll('.right_area p'), st = li.querySelectorAll('.right_area p strong');
+			var plus = parseInt(txt(st[0]).replace(/[^\d]/g, ''), 10) || 0, minus = parseInt(txt(st[1]).replace(/[^\d]/g, ''), 10) || 0;
+			var reason = txt(ps[0]), subtotal = txt(ps[2]).replace(/^소계\s*/, ''), exp = ps[3] ? txt(ps[3]).replace(/^만료일\s*/, '') : '';
+			var mm = reason.match(/^상품 구매 \((\S+)\s*\|\s*(.*)\)$/);
+			var r = el('div', 'tk-row');
+			r.setAttribute('data-k', plus > 0 ? 'plus' : 'minus');
+			r.innerHTML = '<div style="min-width:0"><div class="d">' + esc(dot(txt(li.querySelector('.left_area')))) + '</div>'
+				+ '<div class="r">' + esc(mm ? '상품 구매 사용' : reason.replace(/^기타 \((.*)\)$/, '$1')) + '</div>'
+				+ (mm ? '<div class="s">' + esc(mm[2]) + '</div>' : '') + (plus > 0 && exp ? '<div class="s">만료일 ' + esc(dot(exp)) + '</div>' : '') + '</div>'
+				+ '<div class="a">' + (plus > 0 ? '<b class="plus">+' + plus.toLocaleString('ko-KR') + '원</b>' : '<b>−' + minus.toLocaleString('ko-KR') + '원</b>')
+				+ (id === 'emoney' && subtotal ? '<span>소계 ' + esc(subtotal) + '</span>' : '') + '</div>';
+			list.appendChild(r); rows.push(r);
+		}
+		if (!lis.length) list.appendChild(el('div', 'tk-empty', '내역이 없어요.'));
+		wrap.appendChild(cd);
+		var more = el('a', 'tk-more', '더보기'); more.href = 'javascript:void(0)'; wrap.appendChild(more);
+		var f = 'all', limit = 10;
+		function render(){
+			var n = 0, total = 0;
+			for (var k = 0; k < rows.length; k++) {
+				var ok = f === 'all' || rows[k].getAttribute('data-k') === f;
+				if (ok) total++;
+				rows[k].style.display = ok && n < limit ? '' : 'none';
+				if (ok && n < limit) n++;
+			}
+			more.style.display = total > limit ? '' : 'none';
+		}
+		chips.addEventListener('click', function(e){
+			var b = e.target.closest ? e.target.closest('button') : null; if (!b) return;
+			f = b.getAttribute('data-f'); limit = 10;
+			var bs = chips.querySelectorAll('button'); for (var k = 0; k < bs.length; k++) bs[k].className = bs[k] === b ? 'on' : '';
+			render();
+		});
+		more.addEventListener('click', function(){ limit += 10; render(); });
+		render();
+		var pg = box.querySelector('ul.paging'); if (pg && pg.querySelectorAll('li a').length) { var pw = el('div', 'tk-pg'); pw.appendChild(pg); wrap.appendChild(pw); }
+		hide(box);
+		cnt.insertBefore(wrap, box); cnt.insertBefore(header(title), wrap);
+		return true;
+	}
+
+	/* ---------- 쿠폰 ---------- */
+	function couponList(cnt){
+		var box = document.getElementById('coupon');
+		if (!box) return false;
+		var lis = box.querySelectorAll('ul.list_common > li');
+		var today = new Date(); today.setHours(0, 0, 0, 0);
+		var on = [], off = [];
+		for (var i = 0; i < lis.length; i++) {
+			var li = lis[i], ps = li.querySelectorAll('.right_area p');
+			var val = txt(li.querySelector('.left_area')).replace(/\s+/g, '').replace(/원$/, '원');
+			var name = txt(ps[0]), end = txt(ps[1]), lim = txt(ps[2]).replace(/^제한금액\s*:\s*/, ''), max = txt(ps[3]).replace(/^최대할인\s*:\s*/, ''), used = txt(ps[5]).replace(/^사용날짜\s*:\s*/, '');
+			var ed = new Date(end.replace(/-/g, '/')); var isUsed = used && used !== '미사용';
+			var expired = !isNaN(ed) && ed < today;
+			var left = !isNaN(ed) ? Math.round((ed - today) / 864e5) : null;
+			var ok = !isUsed && !expired;
+			var c = el('div', 'tk-cp' + (ok ? '' : ' off'));
+			c.innerHTML = '<div class="l"><div class="v">' + esc(val) + '</div><div class="n">' + esc(name) + '</div>'
+				+ '<div class="c">' + esc(lim.replace(/\s+/g, '')) + ' 이상 구매 시' + (max ? ' · 최대 ' + esc(max.replace(/\s+/g, '')) : '') + '<br>' + esc(dot(end)) + (ok ? '까지' : (isUsed ? ' · 사용 완료' : ' 만료')) + '</div></div>'
+				+ '<div class="r">' + (ok ? (left === 0 ? '오늘까지' : 'D-' + left) : (isUsed ? '사용' : '만료')) + '</div>';
+			(ok ? on : off).push(c);
+		}
+		var tabs = el('div', 'tk-tabs', '<button type="button" class="on" data-t="on">사용 가능<em>' + on.length + '</em></button><button type="button" data-t="off">사용 · 만료</button>');
+		var wrap = el('div', 'tk-wr');
+		function show(t){
+			wrap.innerHTML = '';
+			var arr = t === 'on' ? on : off;
+			for (var k = 0; k < arr.length; k++) wrap.appendChild(arr[k]);
+			if (!arr.length) wrap.appendChild(el('div', 'tk-cd tk-empty', t === 'on' ? '사용할 수 있는 쿠폰이 없어요.' : '사용하거나 만료된 쿠폰이 없어요.'));
+			var bs = tabs.querySelectorAll('button'); for (var k2 = 0; k2 < bs.length; k2++) bs[k2].className = bs[k2].getAttribute('data-t') === t ? 'on' : '';
+		}
+		tabs.addEventListener('click', function(e){ var b = e.target.closest ? e.target.closest('button') : null; if (b) show(b.getAttribute('data-t')); });
+		show('on');
+		hide(box);
+		cnt.insertBefore(wrap, box); cnt.insertBefore(tabs, wrap); cnt.insertBefore(header('쿠폰'), tabs);
+		return true;
+	}
+
+	/* ---------- 위사 상자를 카드 안에 그대로 넣는 단순 페이지 ---------- */
+	function simpleCard(cnt, id, title){
+		var box = document.getElementById(id);
+		if (!box) return false;
+		var wrap = el('div', 'tk-wr'), cd = el('div', 'tk-cd');
+		box.parentNode.insertBefore(wrap, box);
+		cd.appendChild(box); wrap.appendChild(cd);
+		cnt.insertBefore(header(title), wrap);
+		return wrap;
+	}
+
+	/* ---------- 1:1 문의 ---------- */
+	function counselList(cnt){
+		var box = document.getElementById('counsel');
+		var w = simpleCard(cnt, 'counsel', '1:1 문의');
+		if (!w) return false;
+		var wbtn = box.querySelector('.box_btn a');
+		var b = el('a', 'tk-black', '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>&nbsp;문의하기');
+		b.href = wbtn ? wbtn.getAttribute('href') : '/mypage/counsel_step1.php';
+		w.insertBefore(b, w.firstChild);
+		return true;
+	}
+
+	/* ---------- 나의 상품문의 ---------- */
+	function qnaList(cnt){
+		var box = document.getElementById('mypage_qna_list');
+		if (!box) return false;
+		var wrap = el('div', 'tk-wr');
+		box.parentNode.insertBefore(wrap, box);
+		wrap.appendChild(box);
+		var lis = box.querySelectorAll('ul.list_qnarev > li');
+		for (var i = 0; i < lis.length; i++) {
+			var stImg = lis[i].querySelector('.stat img');
+			if (stImg) {
+				var done = !/없음|before/.test((stImg.getAttribute('alt') || '') + stImg.getAttribute('src'));
+				var bd = el('span', 'tk-badge' + (done ? ' done' : ''), done ? '답변완료' : '답변대기');
+				stImg.parentNode.replaceChild(bd, stImg);
+			}
+		}
+		if (!lis.length) { var e = box.querySelector('p.empty'); var cd = el('div', 'tk-cd'); box.parentNode.insertBefore(cd, box); cd.appendChild(box); }
+		wrap.appendChild(el('a', 'tk-black', '상품 문의 게시판 가기')).setAttribute('href', 'https://m.takkobebe.com/shop/product_qna_list.php');
+		cnt.insertBefore(header('나의 상품문의'), wrap);
+		return true;
+	}
+
+	/* ---------- 나의 상품후기 ---------- */
+	function reviewList(cnt){
+		var box = document.getElementById('mypage_review_list');
+		if (!box) return false;
+		var wrap = el('div', 'tk-wr');
+		box.parentNode.insertBefore(wrap, box);
+		var bn = el('a', 'tk-banner', '<div><b>후기 쓰고 적립금 받으세요</b><small>배송완료된 주문에서 후기를 쓸 수 있어요</small></div>' + ARW);
+		bn.href = '/mypage/order_list.php';
+		wrap.appendChild(bn);
+		wrap.appendChild(box);
+		var STAR = function(on){ return '<svg width="16" height="16" viewBox="0 0 24 24" fill="' + (on ? '#7C8340' : '#DAD5C8') + '"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9L12 3z"/></svg>'; };
+		var gs = box.querySelectorAll('.grade');
+		for (var i = 0; i < gs.length; i++) {
+			var n = parseInt(txt(gs[i]), 10) || 0, h = '';
+			for (var k = 1; k <= 5; k++) h += STAR(k <= n);
+			var st = el('span', 'tk-stars', h); st.setAttribute('aria-label', '별점 ' + n + '점');
+			gs[i].parentNode.insertBefore(st, gs[i]);
+		}
+		if (!box.querySelector('ul.list_qnarev > li')) { var cd = el('div', 'tk-cd'); box.parentNode.insertBefore(cd, box); cd.appendChild(box); }
+		cnt.insertBefore(header('나의 상품후기'), wrap);
+		return true;
+	}
+
+	/* ---------- 나의 정보수정: 위사 폼 그대로, 칸 묶음마다 카드 + 제목 ---------- */
+	function editInfo(cnt){
+		var box = document.getElementById('join_input');
+		if (!box) return false;
+		var sub = cnt.querySelector('h2.subtitle'); if (sub) sub.style.display = 'none';
+		var boxes = box.querySelectorAll('fieldset > .box');
+		for (var i = 0; i < boxes.length; i++) {
+			var t = boxes[i].querySelector('.sns') ? 'SNS 계정 연결' : boxes[i].querySelector('#join_sms') ? '혜택 · 알림 수신' : boxes[i].querySelector('#join_cell') ? '연락처 · 주소' : boxes[i].querySelector('#join_pw') ? '로그인 정보' : '';
+			if (t) boxes[i].insertBefore(el('h3', 'tk-h', t), boxes[i].firstChild);
+		}
+		var sb = box.querySelector('.btn input[type=submit]'); if (sb) sb.value = '저장하기';
+		var wrap = el('div', 'tk-wr');
+		box.parentNode.insertBefore(wrap, box);
+		wrap.appendChild(box);
+		wrap.appendChild(el('a', 'tk-link', '회원 탈퇴')).setAttribute('href', '/mypage/withdraw_step1.php');
+		cnt.insertBefore(header('나의 정보수정'), wrap);
+		return true;
+	}
+
+	/* ---------- 회원 탈퇴 ---------- */
+	function withdraw(cnt){
+		var box = document.getElementById('draw_input');
+		if (!box) return false;
+		var inner = box.querySelector('.box');
+		if (inner) inner.insertBefore(el('h3', 'tk-h', '탈퇴하기 전에 꼭 확인해 주세요'), inner.firstChild);
+		var pw = box.querySelector('input[name=pwd]'); if (pw) pw.setAttribute('aria-label', '비밀번호');
+		var ta = box.querySelector('textarea'); if (ta) { ta.setAttribute('placeholder', '탈퇴 사유 (선택) · 더 나은 타코베베가 될 수 있도록 알려주세요'); ta.setAttribute('aria-label', '탈퇴 사유'); }
+		var btn = box.querySelector('.btn');
+		if (btn) {
+			var sb = btn.querySelector('input[type=submit]'), cancel = btn.querySelector('a');
+			if (sb) sb.value = '탈퇴하기';
+			if (cancel) { cancel.textContent = '계속 이용하기'; cancel.setAttribute('href', '/mypage/mypage.php'); btn.insertBefore(cancel.parentNode, btn.firstChild); }
+		}
+		var wrap = el('div', 'tk-wr');
+		box.parentNode.insertBefore(wrap, box);
+		wrap.appendChild(box);
+		cnt.insertBefore(header('회원 탈퇴'), wrap);
+		return true;
+	}
+
+	function start(){
+		var cnt = document.getElementById('cnt');
+		if (!cnt || cnt.classList.contains('tkbb-my')) return;
+		var st = document.createElement('style');
+		st.appendChild(document.createTextNode(CSS));
+		try {
+			(document.head || document.documentElement).appendChild(st);
+			cnt.classList.add('tkbb-my');
+			if (!PAGES[P](cnt)) { cnt.classList.remove('tkbb-my'); st.parentNode.removeChild(st); }
+		} catch (e) {
+			// 실패하면 원래 화면으로 다시 연다 (옮긴 요소까지 확실히 되돌리기 위해)
+			location.replace(location.href + (location.search ? '&' : '?') + 'tkbb_old=1');
+		}
+	}
+	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+	else start();
+})();
+/* ===== 마이페이지 하위 메뉴 끝 ===== */
