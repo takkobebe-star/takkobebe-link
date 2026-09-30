@@ -1753,10 +1753,11 @@
 	// 상품명으로 검색해서 사진·상품 링크 찾기 (주문 목록에는 사진이 없다). 결과는 세션 동안 기억한다.
 	var CACHE = {};
 	try { CACHE = JSON.parse(sessionStorage.getItem('tkbb_thumbs') || '{}'); } catch (e) {}
-	function findProduct(name, cb){
+	function findProduct(name, cb, done){
+		done = done || function(){};
 		var q = String(name || '').replace(/\[[^\]]*\]|\([^)]*\)/g, ' ').replace(/\s(外|외)\s*\d+\s*건?\s*$/, '').replace(/\s+/g, ' ').trim();
-		if (!q || !window.fetch) return;
-		if (CACHE[q] !== undefined) { if (CACHE[q]) cb(CACHE[q]); return; }
+		if (!q || !window.fetch) { done(); return; }
+		if (CACHE[q] !== undefined) { if (CACHE[q]) cb(CACHE[q]); done(); return; }
 		var key = function(s){ return String(s || '').replace(/\[[^\]]*\]|\([^)]*\)|\s/g, ''); };
 		fetch('/shop/search_result.php?search_str=' + encodeURIComponent(q), { credentials: 'include' })
 			.then(function(r){ return r.text(); })
@@ -1773,13 +1774,14 @@
 				CACHE[q] = pick || first || null;
 				try { sessionStorage.setItem('tkbb_thumbs', JSON.stringify(CACHE)); } catch (e) {}
 				if (CACHE[q]) cb(CACHE[q]);
-			}).catch(function(){});
+				done();
+			}).catch(function(){ done(); });
 	}
-	function fillThumb(card, name){
+	function fillThumb(card, name, done){
 		findProduct(name, function(it){
 			var th = card.querySelector('.th'); if (th && it.img) th.innerHTML = '<img src="' + esc(it.img) + '" alt="">';
 			var c = card.querySelector('.tk-cart'); if (c && it.href) { c.setAttribute('href', it.href); c.hidden = false; }
-		});
+		}, done);
 	}
 
 	/* ---------- 주문내역 ---------- */
@@ -1812,8 +1814,15 @@
 			shown = Math.min(shown + 10, cards.length);
 			more.style.display = shown < cards.length ? '' : 'none';
 		}
-		var io = window.IntersectionObserver ? new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) { io.unobserve(e.target); fillThumb(e.target, e.target.getAttribute('data-name')); } }); }, { rootMargin: '200px' }) : null;
-		function watch(c){ if (io) io.observe(c); else fillThumb(c, c.getAttribute('data-name')); }
+		// 사진 검색은 3개씩 차례로 (보이는 10개만)
+		var queue = [], running = 0;
+		function pump(){
+			while (running < 3 && queue.length) {
+				var c = queue.shift(); running++;
+				fillThumb(c, c.getAttribute('data-name'), function(){ running--; pump(); });
+			}
+		}
+		function watch(c){ queue.push(c); pump(); }
 		for (var j = 0; j < cards.length; j++) cards[j].style.display = 'none';
 		more.addEventListener('click', showMore);
 		wrap.appendChild(more);
