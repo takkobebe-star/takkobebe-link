@@ -1452,7 +1452,7 @@
 		+ '.tkbb-mp .os a.on span,.tkbb-mp .os a.on b{color:#52728A;}'
 		+ '.tkbb-mp .bx{padding:18px 16px;}'
 		+ '.tkbb-mp .ht{display:flex;align-items:center;justify-content:space-between;font-size:16px;font-weight:600;}'
-		+ '.tkbb-mp .ht h3{margin:0;padding:0;font-size:16px;font-weight:600;line-height:1.4;}'
+		+ '#mypage .tkbb-mp .ht h3{margin:0;padding:0;font-size:16px;font-weight:600;line-height:1.4;}'
 		+ '.tkbb-mp .ro{display:flex;align-items:center;gap:12px;margin-top:14px;}'
 		+ '.tkbb-mp .ro .th{width:56px;height:56px;flex:0 0 56px;border-radius:8px;background:#EEEADF;display:flex;align-items:center;justify-content:center;}'
 		+ '.tkbb-mp .ro .tx{min-width:0;}'
