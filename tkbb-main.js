@@ -183,7 +183,12 @@
 		// <header> 는 비어 있고 실제 헤더는 고정 요소라 그 뒤에 넣으면 겹친다.
 		var host = tkbbHost();
 		if (!host) return;
-		// C안(2026-09-30): 진행 중 공구는 아래 '지금 진행 중'이 맡는다 → 여기는 오픈 예정만 보여준다 (같은 상품이 두 번 나오지 않게)
+		// 캘린더 B안(2026-09-30): 오픈 예정은 아래 '곧 오픈해요'(캘린더 섹션)로 옮겼다. GNB 바로 아래 가로 줄이 두 개 붙어 보이지 않게
+		// 칩 줄은 그리지 않고, 히어로 등이 자리 기준으로 쓰는 빈 표시만 같은 곳에 둔다.
+		var banner0 = host.querySelector('.swiper-container');
+		var anchor = document.createElement('div'); anchor.className = 'tkbb-chips'; anchor.style.display = 'none';
+		host.insertBefore(anchor, banner0 ? banner0.nextElementSibling : host.firstElementChild);
+		return;
 		var list = soon.slice(0,6);
 		if (!list.length) return;
 		var BELL = '<svg class="bl" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#52728A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>';
@@ -235,44 +240,74 @@
 			if (oldTitle) oldTitle.style.display = 'none';
 		}
 
-		// 날짜 칩 14일치
-		var days = '';
-		for (var k=0;k<14;k++){
-			var day = addDays(today, k);
-			var has = false;
-			for (var j=0;j<soon.length;j++){ if (ymd(soon[j].start) === day) { has = true; break; } }
-			for (var j2=0;j2<live.length;j2++){ if (ymd(live[j2].end) === day) { has = true; break; } }
-			var p = md(day);
-			days += '<div class="tkbb-day'+(k===0?' on':'')+(has?' has':'')+'">'
-			      +   '<span class="dd">'+p.m+'.'+p.d+'</span><span class="dw">'+wd(day)+'</span>'
-			      + '</div>';
+		// 캘린더 B안: 날짜 버튼(전체 + 오픈일) + 사진 달린 오픈 예정 목록
+		var items = soon.slice(0,8);
+		var BELL = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#52728A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>';
+		var seen = {}, days = '<button type="button" class="tkbb-day on" data-d="">전체</button>';
+		for (var k=0;k<items.length;k++){
+			var d0 = ymd(items[k].start);
+			if (seen[d0]) continue; seen[d0] = 1;
+			var p = md(d0);
+			days += '<button type="button" class="tkbb-day" data-d="'+d0+'"><span class="dd">'+p.m+'/'+p.d+'</span><span class="dw">'+wd(d0)+'</span></button>';
 		}
-
-		// 리스트
+		var t0 = today.split('-');
 		var rows = '';
-		var items = soon.slice(0,5);
 		for (var n=0;n<items.length;n++){
-			var e = items[n], s = md(e.start), en2 = md(e.end);
-			var right = e.url ? '<a class="go" href="'+e.url+'">보러가기</a>' : '<span class="soonmark">오픈 예정</span>';
-			rows += '<li>'
-			     +   '<div class="dt"><div class="m">'+s.m+'월</div><div class="d">'+s.d+'</div></div>'
-			     +   '<div class="tx"><div class="n">'+esc(e.title)+'</div>'
-			     +     '<div class="s">'+s.m+'/'+s.d+' – '+en2.m+'/'+en2.d+'</div></div>'
-			     +   right
-			     + '</li>';
+			var e = items[n], s = md(e.start), sd = ymd(e.start), q = sd.split('-');
+			var left = Math.round((Date.UTC(+q[0],+q[1]-1,+q[2]) - Date.UTC(+t0[0],+t0[1]-1,+t0[2])) / 86400000);
+			var dd = left <= 0 ? '오늘' : 'D-' + left;
+			var when = s.m+'/'+s.d+' ('+wd(sd)+') '+(sd === today ? '오전 '+OPEN_HOUR+'시 ' : '')+(e.onSale ? '공구' : '오픈');
+			var tag = e.url ? 'a href="'+e.url+'"' : 'div';
+			var endt = e.url ? 'a' : 'div';
+			rows += '<li data-d="'+sd+'"><'+tag+' class="rw">'
+			     +   '<div class="th">' + (e.img ? '<img src="'+e.img+'" alt="">' : '') + '<i>'+dd+'</i></div>'
+			     +   '<div class="tx"><div class="n">'+esc(e.title)+'</div><div class="s">'+when+'</div></div>'
+			     +   (e.url ? '<span class="bt">'+BELL+'미리보기</span>' : '<span class="bt off">오픈 예정</span>')
+			     + '</'+endt+'></li>';
 		}
 		if (!rows) rows = '<li style="border:0"><div class="empty">예정된 공구가 곧 올라옵니다</div></li>';
 
-		var html = '<div class="tkbb-cal">'
-		         +   '<div class="st"><h2>곧 열려요</h2><a href="https://takkobebe-link.vercel.app/month.html" target="_blank">전체 일정 ›</a></div>'
-		         +   '<div class="sub">공구 일정과 자동으로 맞춰집니다</div>'
+		if (!document.getElementById('tkbb-cal2-css')) {
+			var cs = document.createElement('style'); cs.id = 'tkbb-cal2-css';
+			cs.appendChild(document.createTextNode(''
+				+ '.tkbb-cal.v2{padding-top:26px;}'
+				+ '.tkbb-cal.v2 .st h2{font-size:18px;font-weight:700;}'
+				+ '.tkbb-cal.v2 .st a{font-size:12px;font-weight:400;}'
+				+ '.tkbb-cal.v2 .sub{font-size:12px;font-weight:400;margin:4px 0 14px;}'
+				+ '.tkbb-cal.v2 .tkbb-days{margin-bottom:12px;}'
+				+ '.tkbb-cal.v2 .tkbb-day{font-family:inherit;cursor:pointer;padding:5px 12px;gap:4px;}'
+				+ '.tkbb-cal.v2 .tkbb-day,.tkbb-cal.v2 .tkbb-day .dd{font-size:12px;color:#161616;}'
+				+ '.tkbb-cal.v2 .tkbb-day.on,.tkbb-cal.v2 .tkbb-day.on .dd,.tkbb-cal.v2 .tkbb-day.on .dw{color:#fff;}'
+				+ '.tkbb-cal.v2 .tkbb-day:after{display:none;}'
+				+ '.tkbb-cal.v2 .tkbb-list li{display:block;padding:0;}'
+				+ '.tkbb-cal.v2 .tkbb-list .rw{display:flex;align-items:center;gap:12px;padding:12px 0;text-decoration:none;color:#161616;}'
+				+ '.tkbb-cal.v2 .tkbb-list .th{position:relative;width:56px;height:56px;flex:0 0 56px;border-radius:10px;overflow:hidden;background:#E3DFD2;}'
+				+ '.tkbb-cal.v2 .tkbb-list .th img{width:100%;height:100%;object-fit:cover;display:block;}'
+				+ '.tkbb-cal.v2 .tkbb-list .th i{position:absolute;left:4px;bottom:4px;font-style:normal;background:#52728A;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:999px;line-height:1.5;}'
+				+ '.tkbb-cal.v2 .tkbb-list .tx .n{font-size:13.5px;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}'
+				+ '.tkbb-cal.v2 .tkbb-list .tx .s{font-size:11.5px;font-weight:500;color:#52728A;margin-top:3px;}'
+				+ '.tkbb-cal.v2 .tkbb-list .bt{flex:0 0 auto;display:flex;align-items:center;gap:4px;height:32px;padding:0 11px;border:1px solid #52728A;border-radius:999px;font-size:12px;color:#52728A;white-space:nowrap;}'
+				+ '.tkbb-cal.v2 .tkbb-list .bt.off{border-color:#DAD5C8;color:#9A9682;}'));
+			(document.head || document.documentElement).appendChild(cs);
+		}
+
+		var html = '<div class="tkbb-cal v2">'
+		         +   '<div class="st"><h2>곧 오픈해요</h2><a href="https://takkobebe-link.vercel.app/month.html" target="_blank">전체 일정 ›</a></div>'
+		         +   '<div class="sub">오픈 전에 미리 보고, 오픈일을 놓치지 마세요</div>'
 		         +   '<div class="tkbb-days">'+days+'</div>'
 		         +   '<ul class="tkbb-list">'+rows+'</ul>'
 		         + '</div>';
 		var wrap = document.createElement('div');
 		wrap.innerHTML = html;
-		if (oldTitle && oldTitle.parentNode) oldTitle.parentNode.insertBefore(wrap.firstChild, oldTitle);
-		else appendSec(wrap.firstChild, 0);
+		var calEl = wrap.firstChild;
+		calEl.querySelector('.tkbb-days').addEventListener('click', function(ev){
+			var b = ev.target.closest ? ev.target.closest('.tkbb-day') : null; if (!b) return;
+			var d = b.getAttribute('data-d') || '';
+			var bs = calEl.querySelectorAll('.tkbb-day'); for (var i=0;i<bs.length;i++) bs[i].classList.toggle('on', bs[i] === b);
+			var ls = calEl.querySelectorAll('.tkbb-list li[data-d]'); for (var j=0;j<ls.length;j++) ls[j].style.display = (!d || ls[j].getAttribute('data-d') === d) ? '' : 'none';
+		});
+		if (oldTitle && oldTitle.parentNode) oldTitle.parentNode.insertBefore(calEl, oldTitle);
+		else appendSec(calEl, 0);
 	}
 
 	// ── 이번 공구 : 진행 중인 것 중 가장 먼저 끝나는 공구 1개
