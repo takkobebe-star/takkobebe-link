@@ -482,6 +482,11 @@
 		}
 		if (!targets.length) { drawNext(host, today); return; }
 		// 캘린더에 적힌 순서 그대로. 같은 날짜에서 위로 올리려면 제목 앞에 '1.' '2.' 를 붙인다.
+		// 캘린더 설명란에 '배너순서: 1' 처럼 적은 공구(API 의 order)는 그 숫자 순서대로 맨 앞에 온다. 나머지는 원래 순서 (2026-10-01)
+		targets = targets.map(function(t, i){ return { t: t, i: i }; }).sort(function(a, b){
+			var oa = a.t.order || 999, ob = b.t.order || 999;
+			return oa !== ob ? oa - ob : a.i - b.i;
+		}).map(function(x){ return x.t; });
 
 		Promise.all(targets.map(function(tg){
 			if (tg.img) return Promise.resolve(heroSlide(tg, today, {
