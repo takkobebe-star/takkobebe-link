@@ -74,12 +74,13 @@
 			+ '.tkbb-req .cta2{font-size:14px;font-weight:600;padding:14px 0;border-radius:7px;}'
 			+ '.tkbb-next .lb{font-size:12px;}.tkbb-next .nm{font-size:16px;}.tkbb-next .dt{font-size:13px;}'
 			+ '.tkbb-hero .hb .ds{font-size:13px;}.tkbb-hero .hc{font-size:13px;}'
-			// 섹션 사이 여백 +20px (2026-10-01): 퀵메뉴 16→36 · 곧 오픈해요 26→46 · 일반 섹션 22→42 · 공구 요청 22→42 · 다음 공구 카드 12→32
-			+ '.tkbb-quick{margin-top:36px !important;}'
-			+ '.tkbb-cal.v2{padding-top:46px !important;}'
-			+ '.tkbb-sec{padding-top:42px !important;}'
-			+ '.tkbb-req{margin-top:42px !important;}'
-			+ '.tkbb-next{margin-top:32px !important;}'
+			// 섹션 사이 여백 +40px (2026-10-01 두 번에 걸쳐 +20씩): 퀵메뉴 16→56 · 곧 오픈해요 26→66 · 일반 섹션 22→62 · 공구 요청 22→62 · 다음 공구 카드 12→52
+			// '이거 공구해주세요' 상자 안쪽 위아래 19→29
+			+ '.tkbb-quick{margin-top:56px !important;}'
+			+ '.tkbb-cal.v2{padding-top:66px !important;}'
+			+ '.tkbb-sec{padding-top:62px !important;}'
+			+ '.tkbb-req{margin-top:62px !important;padding-top:29px !important;padding-bottom:29px !important;}'
+			+ '.tkbb-next{margin-top:52px !important;}'
 			+ '.tkbb-next .th{border-radius:3px !important;}';
 		var st = document.createElement('style'); st.id = 'tkbb-main-type';
 		st.appendChild(document.createTextNode(T));
