@@ -675,7 +675,7 @@
 		return '<a class="c" href="' + p.href + '">'
 		     +   '<div class="ib"><img src="' + p.img + '">' + (badge ? '<div class="d">' + badge + '</div>' : '') + '</div>'
 		     +   '<p>' + esc(p.nm) + '</p>'
-		     +   '<b>' + (pct ? '<em class="pc">' + pct + '%</em>' : '') + '<span class="sp">' + esc(p.sell) + '</span>' + (p.cons && pct ? '<s>' + esc(p.cons) + '</s>' : '') + '</b>'
+		     +   '<b>' + (pct ? '<em class="pc">' + pct + '%</em>' : '') + '<span class="sp">' + esc(p.sell) + (p.sell && String(p.sell).indexOf('원') < 0 ? '원' : '') + '</span>' + (p.cons && pct ? '<s>' + esc(p.cons) + '</s>' : '') + '</b>'
 		     + '</a>';
 	}
 	function pickProducts(doc, n){
@@ -1237,9 +1237,10 @@
 			ms.setAttribute('data-tkbb', '1');
 			var sum = 0, bs = ms.getElementsByTagName('strong');
 			for (var i = 0; i < bs.length; i++) sum += parseInt(bs[i].textContent.replace(/[^0-9]/g, ''), 10) || 0;
-			if (sum > 0) {
+			// 2026-10-01 사용자 요청: 안내 금액은 '최대 700원' 으로 고정 (위사 칸에 찍힌 합계와 상관없이)
+			if (sum > 0 || ms.textContent.replace(/\s+/g, '')) {
 				var guest = String(window.mlv) === '10';   // 로그인 안 한 손님은 적립금을 못 받는다
-				ms.innerHTML = '<span class="tkbb-mg">리뷰 작성<b>(' + (guest ? '회원 ' : '') + '최대 ' + sum.toLocaleString('ko-KR') + '원)</b></span>';
+				ms.innerHTML = '<span class="tkbb-mg">후기 작성 시 ' + (guest ? '회원 ' : '') + '적립금 <b>최대 700원</b></span>';
 			}
 		}
 	}
@@ -1863,7 +1864,7 @@
 		'/mypage/coupon_down_list.php': couponList,
 		'/mypage/counsel_list.php': counselList, '/mypage/qna_list.php': qnaList, '/mypage/review_list.php': reviewList,
 		'/mypage/notify_restock.php': function(c){ return simpleCard(c, 'restock', '재입고 알림'); },
-		'/shop/product_qna_list.php': qnaBoard, '/shop/product_qna.php': qnaBoard, '/shop/order_finish.php': orderFinish, '/shop/order.php': orderForm,
+		'/shop/product_qna_list.php': qnaBoard, '/shop/product_qna.php': qnaBoard, '/shop/order_finish.php': orderFinish, '/shop/order.php': orderForm, '/shop/cart.php': cartPage,
 		'/member/edit_step1.php': editInfo, '/member/edit_step2.php': editInfo, '/mypage/withdraw_step1.php': withdraw };
 	if (!PAGES[P]) return;
 
@@ -2728,6 +2729,92 @@
 	}
 
 	/* ---------- 주문서: 폼 밖으로 아무것도 옮기지 않는다 (결제에 필요한 입력값이 폼에 그대로 남도록) ---------- */
+	/* ---------- 장바구니 (2026-10-01) — 위사 요소는 그대로 두고 모양만 카드형으로 (수량·삭제·주문 기능 그대로) ---------- */
+	function cartPage(cnt){
+		var box = document.getElementById('cart');
+		if (!box) return false;
+		var sub = cnt.querySelector('h2.subtitle'); if (sub) sub.style.display = 'none';
+		var C = '#cnt.tkbb-my #cart ';
+		var st = document.createElement('style');
+		st.appendChild(document.createTextNode(''
+			+ '#cnt.tkbb-my #cart{padding:14px 14px 0;}'
+			// 일반배송 / 정기배송 탭 → 알약 두 칸
+			+ C + 'ul.tab_sbs{display:flex;gap:6px;margin:0 0 12px;padding:4px;border:0;border-radius:999px;background:#EAE7DE;}'
+			+ C + 'ul.tab_sbs li{flex:1;float:none;width:auto;margin:0;border:0 !important;}'
+			+ C + 'ul.tab_sbs li a{display:flex;align-items:center;justify-content:center;gap:4px;height:38px;border:0 !important;border-radius:999px;background:none;font-size:14px;color:#6A6A66;}'
+			+ C + 'ul.tab_sbs li.active a{background:#fff;color:#161616;font-weight:600;box-shadow:0 1px 3px rgba(22,22,22,.08);}'
+			+ C + 'ul.tab_sbs li a span{color:#7C8340;font-weight:700;}'
+			// 판매처 묶음 = 흰 카드 한 장 (머리줄 + 상품 + 금액)
+			+ C + 'p.msg_delivery{position:relative;display:flex;align-items:center;flex-wrap:wrap;gap:4px 6px;margin:0;padding:16px 16px 12px 46px;background:#fff;border:0;border-radius:12px 12px 0 0;font-size:13px;color:#6A6A66;}'
+			+ C + 'p.msg_delivery strong{font-size:15px;font-weight:700;color:#161616;}'
+			+ C + 'p.msg_delivery span{font-size:12px;color:#7C8340;}'
+			+ C + 'ul.list_cart{margin:0;padding:0 16px;background:#fff;border:0;}'
+			+ C + 'ul.list_cart > li{position:relative;margin:0;padding:14px 0;border:0;border-top:1px solid #EFEDE6;background:none;}'
+			+ C + 'ul.list_cart .box{display:flex;gap:12px;margin:0;padding:0 0 0 30px;}'
+			+ C + 'ul.list_cart .img{width:64px !important;height:80px !important;flex:0 0 64px;margin:0;float:none;border-radius:5px;overflow:hidden;background:#EEEADF;}'
+			+ C + 'ul.list_cart .img img{width:100% !important;height:100% !important;object-fit:cover;display:block;}'
+			+ C + 'ul.list_cart .info{flex:1;min-width:0;margin:0;padding:0 26px 0 0;float:none;font-size:12px;color:#6A6A66;line-height:1.5;}'
+			+ C + 'ul.list_cart .info > p:first-child a{font-size:14px;color:#161616;line-height:1.4;word-break:keep-all;}'
+			+ C + 'ul.list_cart .info > div:first-of-type{margin-top:4px;font-size:12px;color:#6A6A66;}'
+			+ C + 'ul.list_cart .info .changeCartOption{display:inline-block;margin-left:4px;padding:0 6px;border:1px solid #DAD5C8;border-radius:4px;font-size:11px;color:#6A6A66;line-height:18px;}'
+			+ C + 'ul.list_cart .info > p strong{display:block;margin-top:6px;font-size:16px;font-weight:700;color:#161616;}'
+			+ C + 'ul.list_cart .info .box_qty{position:relative;display:inline-flex !important;align-items:center;width:auto !important;height:34px;padding:0 !important;border:1px solid #DAD5C8;border-radius:7px;overflow:hidden;background:#fff;vertical-align:middle;}'
+			+ C + 'ul.list_cart .info .box_qty > *{position:static !important;float:none !important;margin:0 !important;}'
+			+ C + 'ul.list_cart .info .box_qty a{display:block;width:32px !important;height:32px !important;border:0 !important;background-color:#fff !important;background-position:center !important;}'
+			+ C + 'ul.list_cart .info .box_qty input{display:block;width:38px !important;height:32px !important;border:0 !important;border-left:1px solid #EFEDE6 !important;border-right:1px solid #EFEDE6 !important;border-radius:0 !important;padding:0 !important;font-size:14px !important;color:#161616 !important;text-align:center;background:#fff !important;}'
+			+ C + 'ul.list_cart .info .change{display:inline-flex !important;align-items:center;height:34px !important;margin:0 0 0 6px !important;padding:0 12px !important;border:1px solid #161616 !important;border-radius:7px !important;background:#fff !important;color:#161616 !important;font-size:12px !important;font-weight:600;vertical-align:middle;line-height:1 !important;white-space:nowrap;flex:0 0 auto;width:auto !important;}'
+			+ C + 'ul.list_cart .info > div:last-child{display:flex;align-items:center;margin-top:10px;}'
+			+ C + 'ul.list_cart .total{display:flex;justify-content:space-between;align-items:baseline;margin:12px 0 0 30px;padding:10px 12px;border:0;border-radius:7px;background:#F7F5EE;font-size:12px;color:#6A6A66;}'
+			+ C + 'ul.list_cart .total strong{font-size:14px;color:#161616;}'
+			+ C + 'ul.list_cart .btn_col2 .wish{position:static;}'
+			+ C + 'ul.list_cart .btn_col2{position:static;margin:8px 0 0 30px;display:flex;gap:6px;}'
+			+ C + 'ul.list_cart .btn_col2 .wish a{display:inline-flex;align-items:center;height:30px;padding:0 12px;border:1px solid #DAD5C8 !important;border-radius:7px;background:#fff !important;font-size:12px;color:#6A6A66 !important;}'
+			+ C + 'ul.list_cart li > input.check{position:absolute;left:0;top:16px;margin:0;}'
+			// 상품 지우기(X): 작게, 카드 오른쪽 줄에 맞춤
+			+ C + 'ul.list_cart .btn_col2 .del{position:absolute !important;top:14px !important;right:0 !important;width:22px !important;height:22px !important;margin:0 !important;}'
+			+ C + 'ul.list_cart .btn_col2 .del a{display:flex !important;align-items:center;justify-content:center;width:22px !important;height:22px !important;padding:0 !important;border:0 !important;border-radius:0 !important;background:none !important;}'
+			// 아래 네 버튼: 검정 총액 카드와 검정 주문 버튼 사이에 흰 카드 한 장 (2×2, 가는 선으로 나눔)
+			+ C + '.btn_bottom.btn_col{gap:0 !important;margin:0 !important;background:#fff;}'
+			+ C + '.btn_bottom.btn_col:first-child{border-radius:12px 12px 0 0;border-bottom:1px solid #EFEDE6;}'
+			+ C + '.btn_bottom.btn_col:nth-child(2){border-radius:0 0 12px 12px;margin-bottom:12px !important;}'
+			+ C + '.btn_bottom.btn_col .box_btn{border-radius:0 !important;}'
+			+ C + '.btn_bottom.btn_col .box_btn + .box_btn{border-left:1px solid #EFEDE6 !important;}'
+			+ C + '.btn_bottom.btn_col .box_btn.white a{height:48px;border:0 !important;border-radius:0 !important;background:none !important;color:#3E3E3A !important;font-size:13px;}'
+			+ C + '.btn_bottom.btn_col:nth-child(2) .box_btn.white a{color:#9A9A94 !important;}'
+			+ C + '.wrap_inner.sum{margin:0 0 12px;padding:4px 16px 16px !important;background:#fff;border:0;border-radius:0 0 12px 12px;}'
+			+ C + '.wrap_inner.sum table{width:100%;border-top:1px solid #EFEDE6;}'
+			+ C + '.wrap_inner.sum th,' + C + '.wrap_inner.sum td{padding:10px 0 0;border:0;background:none;font-size:13px;font-weight:400;color:#6A6A66;vertical-align:top;}'
+			+ C + '.wrap_inner.sum td{text-align:right;color:#161616;}'
+			+ C + '.wrap_inner.sum td p{margin:2px 0 0;font-size:12px;color:#9A9A94;}'
+			+ C + '.wrap_inner.sum tr:last-child th{font-weight:600;color:#161616;}'
+			+ C + '.wrap_inner.sum tr:last-child td strong{font-size:16px;font-weight:700;}'
+			// 총 주문 가격
+			+ C + 'p.title_total{margin:4px 0 0;padding:18px 16px 4px;background:#161616;border:0;border-radius:12px 12px 0 0;font-size:15px;font-weight:700;color:#fff;text-align:left !important;}'
+			+ C + 'p.title_total:before,' + C + 'p.title_total:after{display:none !important;}'
+			+ C + '.wrap_inner.sum.total{background:#161616;border-radius:0 0 12px 12px;}'
+			+ C + '.wrap_inner.sum.total table{border-top-color:rgba(255,255,255,.15);}'
+			+ C + '.wrap_inner.sum.total th,' + C + '.wrap_inner.sum.total td,' + C + '.wrap_inner.sum.total td span{color:rgba(255,255,255,.75) !important;}'
+			+ C + '.wrap_inner.sum.total tr:last-child th{color:#fff;}'
+			+ C + '.wrap_inner.sum.total tr:last-child td strong,' + C + '.wrap_inner.sum.total tr:last-child td strong span{font-size:20px !important;color:#D1D798 !important;}'
+			// 버튼
+			+ C + '.wrap_inner:not(.sum):not(.msg){background:none;border:0;padding:0 !important;margin:0;}'
+			+ C + 'form > .wrap_inner:not(.sum){margin-top:12px;}'
+			+ C + '.btn_bottom.btn_col{display:flex;gap:8px;margin:0 0 8px;padding:0;}'
+			+ C + '.btn_bottom.btn_col .box_btn{flex:1;margin:0;padding:0;border:0;}'
+			+ C + '.box_btn.white a{display:flex;align-items:center;justify-content:center;height:44px;border:1px solid #DAD5C8 !important;border-radius:7px !important;background:#fff !important;color:#161616 !important;font-size:13px;}'
+			+ C + '.box_btn{border-radius:7px !important;}'
+			+ C + '.box_btn.large{display:block;margin:4px 0 0;border:0;}'
+			+ C + '.box_btn.large a{display:flex;align-items:center;justify-content:center;height:54px;border:0 !important;border-radius:7px !important;background:#161616 !important;color:#fff !important;font-size:16px;font-weight:700;}'
+			+ C + 'dl.msg{margin:18px 0 0;padding:14px 16px !important;border:0;border-radius:12px;background:#EAE7DE;font-size:12px;color:#6A6A66;line-height:1.6;}'
+			+ C + 'dl.msg dt{margin:0 0 4px;font-size:12px;font-weight:600;color:#161616;}'
+			+ C + 'p.empty{margin:0;padding:48px 0;border:0;border-radius:12px;background:#fff;text-align:center;font-size:14px;color:#6A6A66;}'));
+		(document.head || document.documentElement).appendChild(st);
+		var dm = box.querySelectorAll('p.msg_delivery > span');
+		for (var i = 0; i < dm.length; i++) dm[i].textContent = dm[i].textContent.replace(/^\s*\/\s*/, '');
+		cnt.insertBefore(header('장바구니'), box);
+		return true;
+	}
+
 	function orderForm(cnt){
 		var box = document.getElementById('order');
 		var form = box && box.querySelector('form[name=ordFrm]');
@@ -2770,40 +2857,79 @@
 })();
 /* ===== 마이페이지 하위 메뉴 끝 ===== */
 
-/* ===== 상품후기 작성 팝업 (마켓컬리식 카드, 타코베베 컬러) — 2026-09-30 =====
-   위사가 body 끝에 붙이는 #revWriteAjaxDiv 레이어의 모양만 바꾼다. 기능은 그대로.
-   되돌리려면 이 블록만 지우면 된다. */
+/* ===== 상품후기 작성 팝업 (심플 버전, 타코베베 컬러) — 2026-10-01 =====
+   위사가 body 끝에 붙이는 #revWriteAjaxDiv 레이어의 모양만 바꾼다. 기능(별점·글·사진·등록)은 그대로.
+   흰 바탕 한 장 + 칸마다 작은 회색 제목 + 연한 베이지 입력칸. 작성자 줄과 상품이 이미 정해진 경우의 '분류' 줄은 숨긴다.
+   되돌리려면 이 블록만 지우면 된다. (예전 카드형은 git 기록 2026-09-30) */
 (function(){
 	if (window.__TKBB_REVW) return; window.__TKBB_REVW = 1;
 	if (window.browser_type === 'pc') return;
 	var R = '#revWriteAjaxDiv ';
 	var CSS = ''
-		+ R + '.qnarev_write_popup{background:#F4F2EC !important;border-radius:12px 12px 0 0;padding:22px 16px 20px !important;font-family:inherit;letter-spacing:-.02em;color:#161616;box-sizing:border-box;max-height:88vh;overflow-y:auto;}'
+		+ R + '.qnarev_write_popup{background:#fff !important;border-radius:12px 12px 0 0;padding:22px 20px 18px !important;font-family:inherit;letter-spacing:-.02em;color:#161616;box-sizing:border-box;max-height:88vh;overflow-y:auto;}'
 		+ R + '.qnarev_write{background:none !important;padding:0 !important;border:0 !important;}'
 		+ R + '.qnarev_write_popup{z-index:100001 !important;}'
 		+ R + 'fieldset{border:0;margin:0;padding:0;}'
-		+ R + 'legend{display:block;width:100%;margin:0 0 14px;padding:0;font-size:18px;font-weight:700;color:#161616;border:0 !important;}'
-		+ R + 'fieldset > div{background:#fff;border-radius:12px;padding:16px;margin:0 0 10px;border:0;}'
-		+ R + 'fieldset > div > label{display:block;float:none;width:auto;margin:0 0 6px;padding:0;font-size:13px;color:#6A6A66;}'
-		+ R + '.grade{text-align:center;}'
-		+ R + '.grade .msg{margin:0 0 10px;font-size:14px;font-weight:600;color:#161616;}'
-		+ R + 'select,' + R + '.form_input{width:100%;box-sizing:border-box;min-height:46px;border:1px solid #DAD5C8 !important;border-radius:7px;background:#fff;padding:0 12px;font-size:14px;}'
-		+ R + 'textarea.form_input{height:160px;padding:12px;line-height:1.6;}'
-		+ R + 'input[type=file].form_input{height:auto;min-height:0;padding:9px 12px;line-height:28px;font-size:14px;}'
-		+ R + '.msg_milage{background:#D1D798 !important;display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;font-size:14px;color:#3E4220;}'
-		+ R + '.msg_milage strong{font-size:16px;font-weight:700;color:#161616;}'
-		+ R + '.msg_milage img{height:20px;width:auto;}'
-		+ R + '.btn_col{display:flex;gap:8px;margin:14px 0 0;padding:0;}'
+		+ R + 'legend{display:block;width:100%;margin:0 0 6px;padding:0;font-size:18px;font-weight:700;color:#161616;border:0 !important;}'
+		+ R + 'fieldset > div{background:none !important;border:0 !important;border-radius:0;padding:0;margin:0 0 18px;}'
+		+ R + 'fieldset > div.tk-hide{display:none !important;}'
+		+ R + 'fieldset > div > label{display:block;float:none;width:auto;margin:0 0 8px;padding:0;font-size:13px;font-weight:600;color:#161616;}'
+		+ R + '.grade{text-align:center;padding:18px 0 20px !important;margin:0 0 20px !important;border-bottom:1px solid #EFEDE6 !important;}'
+		+ R + '.grade .msg{margin:0 0 10px;font-size:14px;font-weight:500;color:#6A6A66;}'
+		+ R + 'select,' + R + '.form_input{width:100%;box-sizing:border-box;min-height:46px;border:1px solid transparent !important;border-radius:7px;background:#F7F5EE !important;padding:0 14px;font-size:14px;color:#161616;}'
+		+ R + '.form_input:focus,' + R + 'select:focus{border-color:#B9C077 !important;outline:0;background:#fff !important;}'
+		+ R + 'textarea.form_input{height:150px;padding:12px 14px;line-height:1.6;}'
+		+ R + 'input[type=file].form_input{height:auto;min-height:0;padding:9px 12px;line-height:26px;font-size:13px;color:#6A6A66;}'
+		+ R + 'fieldset > div.tk-file{margin:0 0 8px;}'
+		+ R + 'fieldset > div.tk-file > label{font-weight:400;color:#6A6A66;font-size:12px;}'
+		// 적립금 안내: 칸이 아니라 한 줄 문구 (가운데, 연두 점)
+		+ R + 'fieldset > div.msg_milage{display:flex !important;align-items:center;justify-content:center;gap:6px;margin:4px 0 18px !important;padding:11px 0 !important;background:#F4F6E4 !important;border-radius:7px !important;}'
+		+ R + 'fieldset > div.msg_milage:before{display:none !important;}'
+		+ R + 'fieldset > div.msg_milage .tkbb-mg{color:#3E4220 !important;font-size:13px !important;font-weight:400 !important;}'
+		+ R + 'fieldset > div.msg_milage .tkbb-mg b{color:#161616 !important;font-size:13px !important;font-weight:700 !important;}'
+		+ R + '.btn_col{display:flex;gap:8px;margin:6px 0 0;padding:0;}'
 		+ R + '.btn_col .box_btn{flex:1;display:block;width:auto;margin:0;padding:0;border:0;background:none;float:none;}'
-		+ R + '.btn_col .box_btn input,' + R + '.btn_col .box_btn a{display:flex;align-items:center;justify-content:center;width:100%;height:52px;border-radius:7px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;}'
+		+ R + '.btn_col .box_btn input,' + R + '.btn_col .box_btn a{display:flex;align-items:center;justify-content:center;width:100%;height:50px;border-radius:7px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;}'
 		+ R + '.btn_col .box_btn input{order:2;border:0 !important;background:#161616 !important;color:#fff !important;}'
-		+ R + '.btn_col .box_btn.white a{border:1px solid #DAD5C8 !important;background:#fff !important;color:#161616 !important;}'
-		+ R + '.btn_col .box_btn.white{order:-1;}';
+		+ R + '.btn_col .box_btn.white a{border:1px solid #DAD5C8 !important;background:#fff !important;color:#6A6A66 !important;}'
+		+ R + '.btn_col .box_btn.white{order:-1;flex:0 0 96px;}'
+		// 쓰기 창이 떠 있는 동안 아래 탭바가 등록 버튼을 가리지 않게 숨긴다
+		+ 'body.tkbb-revw-open .fix_footer{display:none !important;}';
 	function add(){
 		var st = document.createElement('style');
 		st.appendChild(document.createTextNode(CSS));
 		(document.head || document.documentElement).appendChild(st);
 	}
 	if (document.head) add(); else document.addEventListener('DOMContentLoaded', add);
+
+	// 창이 뜰 때: 작성자 줄 숨김, 상품이 정해진 창이면 '분류' 줄 숨김, 첨부파일 줄은 작게, 글 칸 안내문
+	function tidy(){
+		var box = document.querySelector('#revWriteAjaxDiv .qnarev_write');
+		if (!box || box.getAttribute('data-tkbb-s')) return;
+		box.setAttribute('data-tkbb-s', '1');
+		var fm = box.querySelector('form');
+		var fixedPno = fm && fm.pno && fm.pno.value;
+		var rows = box.querySelectorAll('fieldset > div');
+		for (var i = 0; i < rows.length; i++) {
+			var lb = rows[i].querySelector(':scope > label');
+			var t = lb ? lb.textContent.replace(/\s+/g, '') : '';
+			if (t === '작성자') rows[i].className += ' tk-hide';
+			else if (fixedPno && rows[i].querySelector('select[name=cate]') && !rows[i].querySelector('.tkbb-pk')) rows[i].className += ' tk-hide';
+			else if (/^첨부파일/.test(t)) { rows[i].className += ' tk-file'; if (lb) lb.textContent = lb.textContent.replace('첨부파일', '사진'); }
+			else if (t === '글내용') lb.textContent = '내용';
+		}
+		var ta = box.querySelector('textarea');
+		if (ta && !ta.getAttribute('placeholder')) ta.setAttribute('placeholder', '받아보신 상품, 어떠셨는지 솔직하게 남겨 주세요');
+		var ti = box.querySelector('input[name=title]');
+		if (ti && (!ti.getAttribute('placeholder') || ti.getAttribute('placeholder') === '제목')) ti.setAttribute('placeholder', '한 줄로 남겨 주세요');
+	}
+	function start(){
+		if (!window.MutationObserver || !document.body) return;
+		new MutationObserver(function(){
+			try { tidy(); } catch (e) {}
+			document.body.classList.toggle('tkbb-revw-open', !!document.querySelector('#revWriteAjaxDiv .qnarev_write'));
+		}).observe(document.body, { childList: true, subtree: true });
+	}
+	if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
 })();
 /* ===== 상품후기 작성 팝업 끝 ===== */
