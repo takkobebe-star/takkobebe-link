@@ -10,6 +10,29 @@
 	(document.head || document.documentElement).appendChild(st);
 })();
 
+/* ===== 상단 장바구니 아이콘 (2026-10-01) — 하트와 같은 선 굵기의 쇼핑백 + 작은 초록 개수 뱃지(0이면 숨김) ===== */
+(function(){
+	if (window.__TKBB_HDCART) return; window.__TKBB_HDCART = 1;
+	if (window.browser_type === 'pc') return;
+	var BAG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23161616' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 8h14l-1.1 12.1a1 1 0 0 1-1 .9H7.1a1 1 0 0 1-1-.9L5 8z'/%3E%3Cpath d='M9 8V6.5a3 3 0 0 1 6 0V8'/%3E%3C/svg%3E";
+	var css = 'header li.btn_cart a{background:url("' + BAG + '") no-repeat center !important;background-size:22px 22px !important;width:24px !important;}'
+		+ 'header li.btn_cart .cart_num{position:absolute !important;top:19px !important;left:14px !important;right:auto !important;min-width:16px !important;width:auto !important;height:16px !important;padding:0 4px !important;box-sizing:border-box;border-radius:999px !important;background:#D1D798 !important;color:#161616 !important;font-size:10px !important;font-weight:700 !important;line-height:16px !important;text-align:center;letter-spacing:0 !important;}'
+		+ 'header li.btn_cart .cart_num.tkbb-zero{display:none !important;}';
+	var st = document.createElement('style'); st.id = 'tkbb-hdcart';
+	st.appendChild(document.createTextNode(css));
+	(document.head || document.documentElement).appendChild(st);
+	function sync(){
+		var n = document.querySelectorAll('header li.btn_cart .cart_num');
+		for (var i = 0; i < n.length; i++) n[i].classList.toggle('tkbb-zero', !(parseInt(n[i].textContent, 10) > 0));
+	}
+	function start(){
+		sync();
+		var n = document.querySelector('header li.btn_cart .cart_num');
+		if (n && window.MutationObserver) new MutationObserver(sync).observe(n, { childList: true, characterData: true, subtree: true });
+	}
+	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
+
 (function(){
 	if (window.__TKBB_CAL) return;
 	window.__TKBB_CAL = 1;
@@ -17,6 +40,44 @@
 	if (P !== '/' && P !== '/index.php' && P !== '/main/index.php') return;
 	// 메인 화면 꾸미기는 모바일 전용. PC 에도 이 파일을 불러오지만(상세페이지용) PC 메인은 건드리지 않는다
 	if (window.browser_type === 'pc') return;
+
+	// 메인 글씨 크기 정리 (2026-10-01): 섹션 제목 18 · 설명 13 · 상품명 13 · 가격 14 · 작은 글씨 12
+	// 마이페이지와 같은 단계(12/13/14/16/18/20/24)만 쓴다. 위 CSS 를 덮어쓰기만 하므로 이 덩어리를 지우면 예전 크기로 돌아간다.
+	(function(){
+		var T = ''
+			+ '.tkbb-sec .st h2,.tkbb-cal.v2 .st h2,.tkbb-req h2{font-size:18px !important;font-weight:700 !important;letter-spacing:-.03em;color:#161616;}'
+			+ '.tkbb-sec .st,.tkbb-cal .st{margin-bottom:6px;}'
+			+ '.tkbb-sec .st a,.tkbb-cal.v2 .st a,.tkbb-sec .st .sm{font-size:13px !important;font-weight:400 !important;color:#6A6A66;}'
+			+ '.tkbb-sec .sub,.tkbb-cal.v2 .sub,.tkbb-req .p{font-size:13px !important;font-weight:400 !important;color:#6A6A66;line-height:1.45;margin-top:0;}'
+			+ '.tkbb-sec .sub{margin:0 0 12px;}'
+			+ '.tkbb-row .c p,.tkbb-grid .c p{font-size:13px;font-weight:400;line-height:1.4;height:36px;margin-top:8px;color:#161616;word-break:keep-all;overflow-wrap:anywhere;}'
+			+ '.tkbb-row .c b,.tkbb-grid .c b{font-size:14px;font-weight:700;margin-top:2px;}'
+			+ '.tkbb-row .c b s,.tkbb-grid .c b s{font-size:12px;font-weight:400;}'
+			+ '.tkbb-row .c .d,.tkbb-grid .c .d{font-size:11px;font-weight:400;}'
+			+ '.tkbb-row .c img,.tkbb-grid .c img{border-radius:12px;}'
+			+ '.tkbb-grid.g3{grid-template-columns:1fr 1fr 1fr;gap:16px 8px;}'
+			+ '.tkbb-grid.g3 .c img{aspect-ratio:1/1.15;}'
+			+ '.tkbb-grid.g3 .c b{display:flex;flex-direction:column;}'
+			+ '.tkbb-grid.g3 .c b s{margin:2px 0 0;}'
+			+ '.tkbb-more{font-size:14px;font-weight:600;padding:14px 0;border-radius:12px;margin:18px 0 0;}'
+			+ '.tkbb-qi{width:56px;}.tkbb-qi .cir{width:52px;height:52px;margin:0 auto;}'
+			+ '.tkbb-qi p{font-size:12px;font-weight:400;letter-spacing:-.04em;margin-top:7px;}'
+			+ '.tkbb-qi .num{font-size:12px;}'
+			+ '.tkbb-cal.v2 .tkbb-day,.tkbb-cal.v2 .tkbb-day .dd{font-size:13px;}'
+			+ '.tkbb-cal.v2 .tkbb-day .dw{font-size:12px;}'
+			+ '.tkbb-cal.v2 .tkbb-list .tx .n{font-size:14px;}'
+			+ '.tkbb-cal.v2 .tkbb-list .tx .s{font-size:12px;margin-top:4px;}'
+			+ '.tkbb-cal.v2 .tkbb-list .bt{font-size:12px;}'
+			+ '.tkbb-cal.v2 .tkbb-list .th i{font-size:11px;}'
+			+ '.tkbb-req li a{font-size:14px;font-weight:400;padding:12px 14px;border-radius:12px;}'
+			+ '.tkbb-req li span{font-size:12px;}'
+			+ '.tkbb-req .cta2{font-size:14px;font-weight:600;padding:14px 0;border-radius:12px;}'
+			+ '.tkbb-next .lb{font-size:12px;}.tkbb-next .nm{font-size:16px;}.tkbb-next .dt{font-size:13px;}'
+			+ '.tkbb-hero .hb .ds{font-size:13px;}.tkbb-hero .hc{font-size:13px;}';
+		var st = document.createElement('style'); st.id = 'tkbb-main-type';
+		st.appendChild(document.createTextNode(T));
+		(document.head || document.documentElement).appendChild(st);
+	})();
 
 	// 일정 API 주소를 PC·모바일이 따로 쓴다(?o=pc / ?o=m). 같은 주소를 쓰면 브라우저가 PC용 응답을 모바일에 재사용해
 	// CORS 로 막히고 모바일 메인 배너가 통째로 안 떴다(2026-09-21). 서버는 쿼리를 무시하고 같은 일정을 준다.
@@ -370,7 +431,9 @@
 		cs.appendChild(document.createTextNode(''
 			+ '.tkbb-hero .lk{display:block;color:#161616;text-decoration:none;}'
 			+ '.tkbb-hero .cta,.tkbb-hero .dday,.tkbb-hero .hdots{display:none !important;}'
-			+ '.tkbb-hero .cnt{position:absolute;right:14px;bottom:14px;z-index:2;background:rgba(255,255,255,.9);color:#161616;font-size:11px;padding:4px 9px;border-radius:999px;font-style:normal;}'
+			+ '.tkbb-hero .cnt{position:absolute;right:14px;bottom:14px;z-index:2;display:flex;align-items:center;gap:7px;height:24px;padding:0 10px;border-radius:999px;background:rgba(22,22,22,.42);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:rgba(255,255,255,.7);font-size:11px;font-weight:500;letter-spacing:.08em;font-variant-numeric:tabular-nums;}'
+			+ '.tkbb-hero .cnt b{color:#fff;font-weight:700;}'
+			+ '.tkbb-hero .cnt i{display:block;width:12px;height:1px;background:rgba(255,255,255,.55);}'
 			+ '.tkbb-hero .cnt:empty{display:none;}'
 			+ '.tkbb-hero .tag{top:14px;left:14px;background:rgba(22,22,22,.72);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:400;}'
 			+ '.tkbb-hero .hc{display:flex;align-items:center;gap:10px;height:40px;padding:0 16px;background:#161616;color:#fff;font-size:13px;letter-spacing:-.02em;}'
@@ -378,12 +441,12 @@
 			+ '.tkbb-hero .hc span{flex:1;min-width:0;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}'
 			+ '.tkbb-hero .hc b{color:#D1D798;font-weight:700;}'
 			+ '.tkbb-hero .hb{padding:18px 20px 4px;}'
-			+ '.tkbb-hero .hb .nm{font-size:22px;font-weight:700;line-height:1.3;letter-spacing:-.04em;color:#161616;}'
+			+ '.tkbb-hero .hb .nm{font-size:20px;font-weight:700;line-height:1.3;letter-spacing:-.04em;color:#161616;}'
 			+ '.tkbb-hero .hb .ds{display:flex;flex-wrap:wrap;gap:2px 6px;margin-top:6px;font-size:13px;color:#6A6A66;line-height:1.45;}'
 			+ '.tkbb-hero .hb .ds span + span:before{content:"|";color:#DAD5C8;margin-right:6px;}'
 			+ '.tkbb-hero .hb .pr{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 8px;margin-top:14px;}'
-			+ '.tkbb-hero .hb .pr em{font-style:normal;font-size:24px;font-weight:900;color:#52728A;}'
-			+ '.tkbb-hero .hb .pr b{font-size:24px;font-weight:900;color:#161616;}'
+			+ '.tkbb-hero .hb .pr em{font-style:normal;font-size:24px;font-weight:600;color:#52728A;}'
+			+ '.tkbb-hero .hb .pr b{font-size:24px;font-weight:600;color:#161616;}'
 			+ '.tkbb-hero .hb .pr small{font-size:16px;font-weight:500;}'
 			+ '.tkbb-hero .hb .pr s{font-size:14px;color:#B5B2A8;}'));
 		(document.head || document.documentElement).appendChild(cs);
@@ -443,7 +506,8 @@
 			var dots = '';
 			for (var j=0;j<slides.length;j++) {
 				dots += '<i' + (j===0 ? ' class="on"' : '') + '></i>';
-				slides[j] = slides[j].replace('{{N}}', slides.length > 1 ? (j+1) + ' / ' + slides.length : '');
+				var p2n = function(n){ return (n < 10 ? '0' : '') + n; };
+				slides[j] = slides[j].replace('{{N}}', slides.length > 1 ? '<b>' + p2n(j+1) + '</b><i></i>' + p2n(slides.length) : '');
 			}
 			heroCss();
 			var h = '<div class="tkbb-hero"><div class="hs">' + slides.join('') + '</div>'
@@ -635,7 +699,7 @@
 		})).then(function(ps){
 			ps = ps.filter(function(x){ return x && x.img; });
 			if (!ps.length) return;
-			var h = '<div class="tkbb-sec" id="tkbb-live"><div class="st"><h2>지금 진행 중</h2><span style="font-size:11px;font-weight:300;color:#6A6A66">마감 임박순</span></div><div class="tkbb-row">';
+			var h = '<div class="tkbb-sec" id="tkbb-live"><div class="st"><h2>지금 진행 중</h2><span class="sm">마감 임박순</span></div><div class="tkbb-row">';
 			for (var i=0;i<ps.length;i++) h += card(ps[i], ps[i].badge);
 			h += '</div></div>';
 			var w = document.createElement('div'); w.innerHTML = h;
@@ -643,15 +707,15 @@
 		});
 	}
 
-	// ── 언제든 살 수 있어요 : 먹거리 분류에서 판매중 4개
+	// ── 언제든 살 수 있어요 : 먹거리 분류에서 판매중 6개 (3열 2행, 2026-10-01)
 	function drawAlways(){
 		fetch('/shop/big_section.php?cno1=1005').then(function(r){ return r.text(); }).then(function(t){
 			var d = new DOMParser().parseFromString(t,'text/html');
-			var ps = pickProducts(d, 4);
+			var ps = pickProducts(d, 6);
 			if (ps.length < 2) return;
 			var h = '<div class="tkbb-sec"><div class="st"><h2>언제든 살 수 있어요</h2>'
 			      + '<a href="/shop/big_section.php?cno1=1005">전체 보기 ›</a></div>'
-			      + '<div class="sub">공구가 끝나도 계속 주문할 수 있는 상품들</div><div class="tkbb-grid">';
+			      + '<div class="sub">공구가 끝나도 계속 주문할 수 있는 상품들</div><div class="tkbb-grid g3">';
 			for (var i=0;i<ps.length;i++) h += card(ps[i], '');
 			h += '</div><a class="tkbb-more" href="/shop/big_section.php?cno1=1005">먹거리 전체 보기</a></div>';
 			var w = document.createElement('div'); w.innerHTML = h;
@@ -1553,7 +1617,20 @@
 		+ '.tkbb-mp .ci{margin-top:10px;padding-top:14px;border-top:1px solid #EFEDE6;font-size:13px;color:#6A6A66;line-height:1.6;}'
 		+ '.tkbb-mp .ci b{color:#161616;font-weight:600;}'
 		+ '.tkbb-mp .lk{display:flex;justify-content:center;gap:18px;padding:28px 16px 32px;font-size:13px;color:#6A6A66;}'
-		+ '.tkbb-mp .lk i{font-style:normal;color:#DAD5C8;}';
+		+ '.tkbb-mp .lk i{font-style:normal;color:#DAD5C8;}'
+		+ '.tkbb-mp .rv{background:#D1D798;border-radius:12px;padding:18px 16px 16px;}'
+		+ '.tkbb-mp .rv .rh{display:flex;align-items:center;justify-content:space-between;gap:8px;}'
+		+ '.tkbb-mp .rv .rh b{font-size:16px;font-weight:700;}'
+		+ '.tkbb-mp .rv .rh span{font-size:12px;color:#3E4220;white-space:nowrap;}'
+		+ '.tkbb-mp .rv p{margin:4px 0 0;font-size:13px;color:#3E4220;}'
+		+ '.tkbb-mp .rv .rp{display:flex;align-items:center;gap:12px;margin-top:14px;background:#fff;border-radius:12px;padding:12px;}'
+		+ '.tkbb-mp .rv .th{width:56px;height:56px;flex:0 0 56px;border-radius:12px;background:#EEEADF;display:flex;align-items:center;justify-content:center;overflow:hidden;}'
+		+ '.tkbb-mp .rv .th img{width:100%;height:100%;object-fit:cover;display:block;}'
+		+ '.tkbb-mp .rv .tx{min-width:0;flex:1;}'
+		+ '.tkbb-mp .rv .nm{font-size:14px;line-height:1.4;word-break:keep-all;}'
+		+ '.tkbb-mp .rv .dt{font-size:12px;color:#6A6A66;margin-top:4px;}'
+		+ '.tkbb-mp .rv .rb{display:flex;align-items:center;justify-content:center;gap:6px;height:48px;margin-top:10px;border-radius:12px;background:#161616;color:#fff !important;font-size:14px;font-weight:600;}'
+		+ '.tkbb-mp .rv .rb span{color:#D1D798;}';
 
 	function sv(d, sw){ return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="' + (sw || 1.5) + '" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>'; }
 	function sv18(d){ return sv(d, 1.6).replace('width="24" height="24"', 'width="18" height="18"'); }
@@ -1609,6 +1686,13 @@
 			else if (t.indexOf('배송중') >= 0) cnt5['배송중']++;
 			else if (t.indexOf('배송완료') >= 0) cnt5['배송완료']++;
 		}
+		// 후기 유도 (A안, 2026-10-01): 최근 3개월 중 배송완료 주문
+		var done = [];
+		for (var dj = 0; dj < ords.length; dj++) {
+			if (txt(ords[dj].querySelector('.p_color')).replace(/\s+/g, '').indexOf('배송완료') < 0) continue;
+			var da = ords[dj].querySelector('.no a'), dp = ords[dj].querySelectorAll('.info p');
+			done.push({ name: txt(dp[0]), date: txt(ords[dj].querySelector('.no span')), href: da ? da.getAttribute('href') : '/mypage/order_list.php' });
+		}
 		var last = null;
 		if (ords.length) {
 			var o = ords[0], ps = o.querySelectorAll('.info p'), la = o.querySelector('.no a');
@@ -1642,6 +1726,15 @@
 			+ '<h2>' + esc(memName) + '<small>님</small></h2></div>'
 			+ '<a class="ed" href="/member/edit_step1.php"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6A6A66" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>회원정보관리</a></div>';
 		h += '<div class="wr">';
+		// 후기 쓰고 적립금 받기 (배송완료 주문이 있을 때만)
+		if (done.length) {
+			var dv = done[0];
+			h += '<div class="rv"><div class="rh"><b>후기 쓰고 적립금 받아가세요</b>' + (done.length > 1 ? '<span>배송완료 ' + done.length + '건</span>' : '') + '</div>'
+				+ '<p>받아보신 상품, 어떠셨어요?</p>'
+				+ '<a class="rp" href="' + esc(dv.href) + '"><div class="th">' + sv(I.box, 1.6).replace(/#161616/, '#9A9A94').replace('width="24" height="24"', 'width="22" height="22"') + '</div>'
+				+ '<div class="tx"><div class="nm">' + esc(dv.name) + '</div><div class="dt">' + (dv.date ? esc(dv.date.replace(/-/g, '.')) + ' 주문 · ' : '') + '배송완료</div></div></a>'
+				+ '<a class="rb" href="' + esc(dv.href) + '">후기 쓰기 <span>+ 적립금 최대 700원</span></a></div>';
+		}
 		// 적립금 / 쿠폰
 		h += '<div class="cd pt">'
 			+ (info['적립금'] != null ? '<a href="/mypage/milage.php"><span>적립금</span><b>' + num(info['적립금']) + '<small>원</small></b></a>' : '')
@@ -1699,6 +1792,7 @@
 		root.classList.add('tkbb-mp-on');
 		cnt.classList.add('tkbb-mp-on');
 		if (last && last.name) loadThumb(box.querySelector('.ro .th'), last.name);
+		if (done.length && done[0].name) loadThumb(box.querySelector('.rv .th'), done[0].name);
 	}
 
 	// 최근 주문 상품 사진: 주문 목록에는 사진이 없어서, 상품명으로 쇼핑몰을 검색해 같은 이름 상품의 사진을 쓴다.
