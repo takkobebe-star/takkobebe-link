@@ -419,22 +419,12 @@
 		}).catch(function(){});
 	}
 
-	// 사진 비율이 배너 칸과 거의 같으면(15% 안쪽) 흐린 띠 없이 꽉 채운다.
-	// 띠는 세로로 긴 사진(로고가 잘리면 안 되는 브랜드 이미지)에만 쓴다 — 조금만 남는 틈에 띠를 깔면 경계가 보인다.
+	// 배너 사진은 항상 칸을 꽉 채운다 (2026-10-01 사용자 선택 1번).
+	// 세로로 긴 상품 사진은 위아래가 조금 잘리지만 좌우 여백(흐린 띠)이 생기지 않는다.
+	// 예전에는 비율 차이가 15%를 넘으면 사진을 통째로 보여 주고 남는 좌우를 흐린 띠로 채웠다.
 	function fitHero(hero){
-		var imgs = hero.querySelectorAll('.ib img');
-		for (var i=0;i<imgs.length;i++) (function(img){
-			function fit(){
-				var ib = img.parentNode;
-				if (!img.naturalWidth || !ib) return;
-				var r = img.naturalWidth / img.naturalHeight;
-				var b = ib.getBoundingClientRect();
-				if (!b.width || !b.height) return;
-				var br = b.width / b.height;
-				if (Math.abs(r - br) / br <= 0.15) ib.className = ib.className + ' full';
-			}
-			if (img.complete) fit(); else img.addEventListener('load', fit);
-		})(imgs[i]);
+		var ibs = hero.querySelectorAll('.ib');
+		for (var i=0;i<ibs.length;i++) if (!/(^|\s)nopic(\s|$)/.test(ibs[i].className) && !/(^|\s)full(\s|$)/.test(ibs[i].className)) ibs[i].className += ' full';
 	}
 
 	// 3초마다 다음 장으로(2026-09-23 사용자 요청, 3.2초 → 3초). 손으로 넘기면 6초 멈춘다.
