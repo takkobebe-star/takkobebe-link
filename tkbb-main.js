@@ -330,27 +330,63 @@
 		var ctaTx = o.soon ? '\uc0c1\ud488 \ubbf8\ub9ac \ubcf4\uae30' : '\ucd5c\ub300 \ud61c\ud0dd\uac00 \uad6c\ub9e4\ud558\ub7ec \uac00\uae30';
 		var dsTx = o.soon ? openTx : dday;
 		var nm = esc(String(o.name||tg.title).split('|')[0].trim());
-		// 사진을 못 읽는 공구(바깥 링크 등)도 배너는 보여 준다 — 글자만 있는 배너
+		// 배너 혼합 2안 (2026-10-01 사용자 선택): 사진 → 검정 마감 띠 → 상품명 → 배송 한 줄 → 할인율·가격·정가
+		var pct = (n1 && n2 && n2 > n1) ? Math.round((1 - n1/n2) * 100) : 0;
+		var e2 = md(tg.end);
+		var badge, msg;
+		if (o.soon) { badge = '오픈 예정'; msg = '<b>' + openTx + '</b>해요'; }
+		else if (dleft <= 0) { badge = '마감 임박'; msg = '이 공구는 <b>오늘 밤 마감</b>돼요'; }
+		else if (dleft === 1) { badge = '마감 임박'; msg = '이 공구는 <b>내일 밤 마감</b>돼요'; }
+		else { badge = 'D-' + dleft; msg = '이 공구는 <b>' + e2.m + '/' + e2.d + ' (' + wd(ymd(tg.end)) + ')</b>까지예요'; }
 		var box = o.img
 		    ? '<div class="ib" style="background-image:url(\'' + o.img + '\')">'
 		      +   '<i class="bg l"></i><i class="bg r"></i>'
-		      +   '<img src="' + o.img + '">'
+		      +   '<img src="' + o.img + '" alt="">'
 		      +   (o.copy ? '<div class="copy">' + esc(o.copy) + '</div>' : '')
 		    : '<div class="ib nopic">'
 		      +   '<div class="npn">' + nm + '</div>'
 		      +   '<div class="npd">' + (o.copy ? esc(o.copy) : dsTx) + '</div>';
-		return '<div class="sl">'
+		return '<div class="sl"><a class="lk" href="' + tg.url + '">'
 		     +   box
-		     +     '<div class="tag">' + tagTx + '</div>'
-		     +     '<a class="cta" href="' + tg.url + '">' + ctaTx + '</a>'
+		     +     '<div class="tag">' + (o.soon ? '오픈 예정' : '이번 공구 최대 혜택가') + '</div>'
+		     +     '<span class="cnt">{{N}}</span>'
 		     +   '</div>'
-		     +   (o.img
-		         ? '<div class="bd"><div class="nm">' + nm + '</div>'
-		           + '<div class="ds">' + (o.ship ? esc(o.ship) + ' \u00b7 ' : '') + dsTx + '</div>'
-		           + (sellTx ? '<div class="pr">' + rate + esc(sellTx) + (o.cons ? '<s>' + esc(o.cons) + '</s>' : '') + '</div>' : '')
-		           + '</div>'
-		         : '')
-		     + '</div>';
+		     +   '<div class="hc"><i>' + badge + '</i><span>' + msg + '</span></div>'
+		     +   '<div class="hb">'
+		     +     (o.img ? '<div class="nm">' + nm + '</div>' : '')
+		     +     (o.ship ? '<div class="ds"><span>' + String(o.ship).split(/\s+·\s+/).map(esc).join('</span><span>') + '</span></div>' : '')
+		     +     (sellTx
+		           ? '<div class="pr">' + (pct ? '<em>' + pct + '%</em>' : '')
+		             + '<b>' + esc(sellTx).replace(/원(~?)\s*$/, '<small>원$1</small>') + '</b>'
+		             + (o.cons ? '<s>' + esc(o.cons) + '</s>' : '') + '</div>'
+		           : '')
+		     +   '</div>'
+		     + '</a></div>';
+	}
+
+	function heroCss(){
+		if (document.getElementById('tkbb-hero-c-css')) return;
+		var cs = document.createElement('style'); cs.id = 'tkbb-hero-c-css';
+		cs.appendChild(document.createTextNode(''
+			+ '.tkbb-hero .lk{display:block;color:#161616;text-decoration:none;}'
+			+ '.tkbb-hero .cta,.tkbb-hero .dday,.tkbb-hero .hdots{display:none !important;}'
+			+ '.tkbb-hero .cnt{position:absolute;right:14px;bottom:14px;z-index:2;background:rgba(255,255,255,.9);color:#161616;font-size:11px;padding:4px 9px;border-radius:999px;font-style:normal;}'
+			+ '.tkbb-hero .cnt:empty{display:none;}'
+			+ '.tkbb-hero .tag{top:14px;left:14px;background:rgba(22,22,22,.72);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:400;}'
+			+ '.tkbb-hero .hc{display:flex;align-items:center;gap:10px;height:40px;padding:0 16px;background:#161616;color:#fff;font-size:13px;letter-spacing:-.02em;}'
+			+ '.tkbb-hero .hc i{flex:0 0 auto;font-style:normal;background:#D1D798;color:#161616;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;}'
+			+ '.tkbb-hero .hc span{flex:1;min-width:0;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}'
+			+ '.tkbb-hero .hc b{color:#D1D798;font-weight:700;}'
+			+ '.tkbb-hero .hb{padding:18px 20px 4px;}'
+			+ '.tkbb-hero .hb .nm{font-size:22px;font-weight:700;line-height:1.3;letter-spacing:-.04em;color:#161616;}'
+			+ '.tkbb-hero .hb .ds{display:flex;flex-wrap:wrap;gap:2px 6px;margin-top:6px;font-size:13px;color:#6A6A66;line-height:1.45;}'
+			+ '.tkbb-hero .hb .ds span + span:before{content:"|";color:#DAD5C8;margin-right:6px;}'
+			+ '.tkbb-hero .hb .pr{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 8px;margin-top:14px;}'
+			+ '.tkbb-hero .hb .pr em{font-style:normal;font-size:24px;font-weight:900;color:#52728A;}'
+			+ '.tkbb-hero .hb .pr b{font-size:24px;font-weight:900;color:#161616;}'
+			+ '.tkbb-hero .hb .pr small{font-size:16px;font-weight:500;}'
+			+ '.tkbb-hero .hb .pr s{font-size:14px;color:#B5B2A8;}'));
+		(document.head || document.documentElement).appendChild(cs);
 	}
 
 	function drawHero(live, soon, today){
@@ -405,7 +441,11 @@
 			slides = slides.filter(function(x){ return x; });
 			if (!slides.length) { drawNext(host, today); return; }
 			var dots = '';
-			for (var j=0;j<slides.length;j++) dots += '<i' + (j===0 ? ' class="on"' : '') + '></i>';
+			for (var j=0;j<slides.length;j++) {
+				dots += '<i' + (j===0 ? ' class="on"' : '') + '></i>';
+				slides[j] = slides[j].replace('{{N}}', slides.length > 1 ? (j+1) + ' / ' + slides.length : '');
+			}
+			heroCss();
 			var h = '<div class="tkbb-hero"><div class="hs">' + slides.join('') + '</div>'
 			      + (slides.length > 1 ? '<div class="hdots">' + dots + '</div>' : '')
 			      + '</div>';
