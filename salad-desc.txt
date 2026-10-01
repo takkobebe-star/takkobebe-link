@@ -1,4 +1,5 @@
 <div class="tkbb-sd">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
   /* 첫 화면(사진 · 한눈에 보기)까지 보이고 나머지는 '상세설명 더보기'로 */
   .wing-detail-more-contents { min-height: 1300px; }
@@ -16,7 +17,7 @@
     margin: 0 auto;
     padding: 8px 4px 0;
     color: var(--sd-ink);
-    font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
     font-size: 14px;
     line-height: 1.4;
     letter-spacing: -0.01em;
@@ -24,7 +25,7 @@
     -webkit-font-smoothing: antialiased;
   }
   .tkbb-sd * { box-sizing: border-box; }
-  .tkbb-sd * { font-size: inherit; line-height: inherit; }
+  .tkbb-sd * { font-size: inherit; line-height: inherit; font-family: inherit; }
   /* PC 스킨이 상세설명 이미지에 max-width:50%를 걸어 두어 덮어씀 */
   .tkbb-sd img { display: block; width: 100%; max-width: 100% !important; height: auto; }
   .tkbb-sd h2, .tkbb-sd h3, .tkbb-sd p, .tkbb-sd ul, .tkbb-sd ol, .tkbb-sd dl, .tkbb-sd dd { margin: 0; padding: 0; }
@@ -109,7 +110,9 @@
   .tkbb-sd .sd-price-list .r s { display: block; font-size: 12.5px; color: #B5B2A8; }
   .tkbb-sd .sd-price-list .r span { display: block; margin-top: 2px; font-size: 18px; font-weight: 700; }
   .tkbb-sd .sd-price-list .r em { margin-right: 6px; font-style: normal; color: var(--sd-blue); }
-  .tkbb-sd .sd-price-ft { margin-top: 12px; font-size: 12.5px; color: var(--sd-muted); }
+  .tkbb-sd .sd-price-ft { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; padding: 14px 0; border-radius: 7px; background: var(--sd-point); font-size: 15px; font-weight: 500; color: var(--sd-ink); }
+  .tkbb-sd .sd-price-ft svg { width: 22px; height: 22px; flex: none; }
+  .tkbb-sd .sd-price-ft b { font-weight: 700; }
   .tkbb-sd .sd-gift { position: relative; margin: 0; padding: 20px 18px 18px; border-radius: 7px; background: #161616; color: #fff; }
   .tkbb-sd .sd-gift .tag { display: inline-block; padding: 3px 9px; border-radius: 999px; background: var(--sd-point); color: #161616; font-size: 11.5px; font-weight: 700; }
   .tkbb-sd .sd-gift .hd { margin-top: 12px; font-size: 18px; font-weight: 500; line-height: 1.45; color: #fff; }
@@ -143,7 +146,7 @@
       <li><div class="l"><span class="no">03</span><b class="nm">산뜻! 라이트 세트</b><span class="cp">5팩 · 닭가슴살 2 · 쉬림프 2 · 리코타치즈 1</span></div><div class="r"><s>52,500원</s><span><em>30%</em>36,900원</span></div></li>
       <li><div class="l"><span class="no">04</span><b class="nm">2배! 더블 세트</b><span class="cp">10팩 · 닭가슴살 · 리코타치즈 · 쉬림프 · 훈제오리 · 소불고기 각 2개</span></div><div class="r"><s>105,000원</s><span><em>34%</em>68,900원</span></div></li>
     </ul>
-    <p class="sd-price-ft">전 제품 무료배송</p>
+    <p class="sd-price-ft"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5h11v9H3z"/><path d="M14 9.5h3.6l3.4 3.4v2.6H14"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg><span>전 제품 <b>무료배송</b></span></p>
   </div>
 </div>
 
