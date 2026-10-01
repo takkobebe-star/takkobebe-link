@@ -17,7 +17,9 @@
 	var BAG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23161616' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 8h14l-1.1 12.1a1 1 0 0 1-1 .9H7.1a1 1 0 0 1-1-.9L5 8z'/%3E%3Cpath d='M9 8V6.5a3 3 0 0 1 6 0V8'/%3E%3C/svg%3E";
 	var css = 'header li.btn_cart a{background:url("' + BAG + '") no-repeat center !important;background-size:22px 22px !important;width:24px !important;}'
 		+ 'header li.btn_cart .cart_num{position:absolute !important;top:19px !important;left:14px !important;right:auto !important;min-width:16px !important;width:auto !important;height:16px !important;padding:0 4px !important;box-sizing:border-box;border-radius:999px !important;background:#D1D798 !important;color:#161616 !important;font-size:10px !important;font-weight:700 !important;line-height:16px !important;text-align:center;letter-spacing:0 !important;}'
-		+ 'header li.btn_cart .cart_num.tkbb-zero{display:none !important;}';
+		+ 'header li.btn_cart .cart_num.tkbb-zero{display:none !important;}'
+		// 오른쪽 아이콘 묶음을 왼쪽 메뉴 버튼(왼쪽 20px)과 같은 여백으로 (원래 33px)
+		+ 'header ul.tkbb-hd-right{right:20px !important;}';
 	var st = document.createElement('style'); st.id = 'tkbb-hdcart';
 	st.appendChild(document.createTextNode(css));
 	(document.head || document.documentElement).appendChild(st);
@@ -27,6 +29,7 @@
 	}
 	function start(){
 		sync();
+		var li = document.querySelector('header li.btn_cart'); if (li && li.parentNode) li.parentNode.classList.add('tkbb-hd-right');
 		var n = document.querySelector('header li.btn_cart .cart_num');
 		if (n && window.MutationObserver) new MutationObserver(sync).observe(n, { childList: true, characterData: true, subtree: true });
 	}
@@ -442,9 +445,9 @@
 		cs.appendChild(document.createTextNode(''
 			+ '.tkbb-hero .lk{display:block;color:#161616;text-decoration:none;}'
 			+ '.tkbb-hero .cta,.tkbb-hero .dday,.tkbb-hero .hdots{display:none !important;}'
-			+ '.tkbb-hero .cnt{position:absolute;right:14px;bottom:14px;z-index:2;display:flex;align-items:center;gap:7px;height:24px;padding:0 10px;border-radius:999px;background:rgba(22,22,22,.42);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:rgba(255,255,255,.7);font-size:11px;font-weight:500;letter-spacing:.08em;font-variant-numeric:tabular-nums;}'
-			+ '.tkbb-hero .cnt b{color:#fff;font-weight:700;}'
-			+ '.tkbb-hero .cnt i{display:block;width:12px;height:1px;background:rgba(255,255,255,.55);}'
+			+ '.tkbb-hero .cnt{position:absolute;right:14px;bottom:14px;z-index:2;display:flex;align-items:baseline;gap:3px;padding:3px 9px;border-radius:999px;background:rgba(22,22,22,.32);color:rgba(255,255,255,.7);font-size:11px;font-weight:400;line-height:1.4;font-variant-numeric:tabular-nums;}'
+			+ '.tkbb-hero .cnt b{color:#fff;font-weight:600;}'
+			+ '.tkbb-hero .cnt i{font-style:normal;}'
 			+ '.tkbb-hero .cnt:empty{display:none;}'
 			+ '.tkbb-hero .tag{top:14px;left:14px;background:rgba(22,22,22,.72);border-radius:1px;padding:5px 10px;font-size:11px;font-weight:400;}'
 			+ '.tkbb-hero .hc{display:flex;align-items:center;gap:10px;height:40px;padding:0 16px;background:#161616;color:#fff;font-size:13px;letter-spacing:-.02em;}'
@@ -522,7 +525,7 @@
 			for (var j=0;j<slides.length;j++) {
 				dots += '<i' + (j===0 ? ' class="on"' : '') + '></i>';
 				var p2n = function(n){ return (n < 10 ? '0' : '') + n; };
-				slides[j] = slides[j].replace('{{N}}', slides.length > 1 ? '<b>' + p2n(j+1) + '</b><i></i>' + p2n(slides.length) : '');
+				slides[j] = slides[j].replace('{{N}}', slides.length > 1 ? '<b>' + (j+1) + '</b><i>/</i>' + slides.length : '');
 			}
 			heroCss();
 			var h = '<div class="tkbb-hero"><div class="hs">' + slides.join('') + '</div>'
@@ -1237,10 +1240,10 @@
 			ms.setAttribute('data-tkbb', '1');
 			var sum = 0, bs = ms.getElementsByTagName('strong');
 			for (var i = 0; i < bs.length; i++) sum += parseInt(bs[i].textContent.replace(/[^0-9]/g, ''), 10) || 0;
-			// 2026-10-01 사용자 요청: 안내 금액은 '최대 700원' 으로 고정 (위사 칸에 찍힌 합계와 상관없이)
+			// 2026-10-01 사용자 요청: 안내 금액은 '최대 1,000원' 으로 고정 (위사 칸에 찍힌 합계와 상관없이)
 			if (sum > 0 || ms.textContent.replace(/\s+/g, '')) {
 				var guest = String(window.mlv) === '10';   // 로그인 안 한 손님은 적립금을 못 받는다
-				ms.innerHTML = '<span class="tkbb-mg">후기 작성 시 ' + (guest ? '회원 ' : '') + '적립금 <b>최대 700원</b></span>';
+				ms.innerHTML = '<span class="tkbb-mg">후기 작성 시 ' + (guest ? '회원 ' : '') + '적립금 <b>최대 1,000원</b></span>';
 			}
 		}
 	}
@@ -1755,7 +1758,7 @@
 				+ '<p>받아보신 상품, 어떠셨어요?</p>'
 				+ '<a class="rp" href="' + esc(dv.href) + '"><div class="th">' + sv(I.box, 1.6).replace(/#161616/, '#9A9A94').replace('width="24" height="24"', 'width="22" height="22"') + '</div>'
 				+ '<div class="tx"><div class="nm">' + esc(dv.name) + '</div><div class="dt">' + (dv.date ? esc(dv.date.replace(/-/g, '.')) + ' 주문 · ' : '') + '배송완료</div></div></a>'
-				+ '<a class="rb" href="' + esc(dv.href) + '">후기 쓰기 <span>+ 적립금 최대 700원</span></a></div>';
+				+ '<a class="rb" href="' + esc(dv.href) + '">후기 쓰기 <span>+ 적립금 최대 1,000원</span></a></div>';
 		}
 		// 적립금 / 쿠폰
 		h += '<div class="cd pt">'
@@ -2224,7 +2227,7 @@
 	}
 
 	/* ---------- 주문내역 ---------- */
-	var REVIEW_LABEL = '후기 작성<small>최대 700원 적립</small>';
+	var REVIEW_LABEL = '후기 작성<small>최대 1,000원 적립</small>';
 	function orderCard(li){
 		var a = li.querySelector('.no a'), ps = li.querySelectorAll('.info p');
 		var ono = txt(a), date = txt(li.querySelector('.no span')), href = a ? a.getAttribute('href') : '#';
@@ -2772,7 +2775,7 @@
 			+ C + 'ul.list_cart li > input.check{position:absolute;left:0;top:16px;margin:0;}'
 			// 상품 지우기(X): 작게, 카드 오른쪽 줄에 맞춤
 			+ C + 'ul.list_cart .btn_col2 .del{position:absolute !important;top:14px !important;right:0 !important;width:22px !important;height:22px !important;margin:0 !important;}'
-			+ C + 'ul.list_cart .btn_col2 .del a{display:flex !important;align-items:center;justify-content:center;width:22px !important;height:22px !important;padding:0 !important;border:0 !important;border-radius:0 !important;background:none !important;}'
+			+ C + 'ul.list_cart .btn_col2 .del a{display:block !important;position:relative;width:22px !important;height:22px !important;padding:0 !important;border:0 !important;border-radius:0 !important;background:none !important;font-size:0 !important;line-height:0 !important;color:transparent !important;text-indent:-9999px;overflow:hidden;}'
 			// 아래 네 버튼: 검정 총액 카드와 검정 주문 버튼 사이에 흰 카드 한 장 (2×2, 가는 선으로 나눔)
 			+ C + '.btn_bottom.btn_col{gap:0 !important;margin:0 !important;background:#fff;}'
 			+ C + '.btn_bottom.btn_col:first-child{border-radius:12px 12px 0 0;border-bottom:1px solid #EFEDE6;}'
