@@ -231,7 +231,8 @@ async function enrich(events) {
     const copy = pick(html, /class="summary"[^>]*>([\s\S]{0,200}?)<\/(?:span|div|p)>/i);
     if (copy && copy.length < 60) ev.copy = copy;
     // 배송정보 행
-    const ship = pick(html, /<th[^>]*>\s*배송정보\s*<\/th>\s*<td[^>]*>([\s\S]{0,200}?)<\/td>/i);
+    // 줄바꿈(<br>)은 가운뎃점으로 살려서 한 줄로 만든다 (붙어서 "무료배송9/29부터"처럼 보이지 않게)
+    const ship = pick(html.replace(/<br\s*\/?>/gi, " · "), /<th[^>]*>\s*배송정보\s*<\/th>\s*<td[^>]*>([\s\S]{0,200}?)<\/td>/i).replace(/^(\s*·\s*)+|(\s*·\s*)+$/g, "");
     if (ship) ev.ship = ship.slice(0, 40);
     // '바로구매' 버튼이 있으면 지금 살 수 있는 상품
     ev.onSale = /바로구매/.test(html);
