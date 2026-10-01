@@ -330,27 +330,85 @@
 		var ctaTx = o.soon ? '\uc0c1\ud488 \ubbf8\ub9ac \ubcf4\uae30' : '\ucd5c\ub300 \ud61c\ud0dd\uac00 \uad6c\ub9e4\ud558\ub7ec \uac00\uae30';
 		var dsTx = o.soon ? openTx : dday;
 		var nm = esc(String(o.name||tg.title).split('|')[0].trim());
-		// 사진을 못 읽는 공구(바깥 링크 등)도 배너는 보여 준다 — 글자만 있는 배너
+		// 배너 C안 (2026-10-01 사용자 선택): 사진 → 마감 시계 띠 → 상품명·배송 → 공구가 상자
+		var q1 = ymd(tg.start).split('-');
+		var cdEnd = o.soon
+			? Date.UTC(+q1[0], +q1[1]-1, +q1[2], OPEN_HOUR - 9, 0, 0)          // 오픈 시각 (한국시간)
+			: Date.UTC(+p2[0], +p2[1]-1, +p2[2], 23 - 9, 59, 59);             // 마감일 밤 11:59:59 (한국시간)
+		var CLK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#D1D798" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>';
+		var pct = (n1 && n2 && n2 > n1) ? Math.round((1 - n1/n2) * 100) : 0;
 		var box = o.img
 		    ? '<div class="ib" style="background-image:url(\'' + o.img + '\')">'
 		      +   '<i class="bg l"></i><i class="bg r"></i>'
-		      +   '<img src="' + o.img + '">'
+		      +   '<img src="' + o.img + '" alt="">'
 		      +   (o.copy ? '<div class="copy">' + esc(o.copy) + '</div>' : '')
 		    : '<div class="ib nopic">'
 		      +   '<div class="npn">' + nm + '</div>'
 		      +   '<div class="npd">' + (o.copy ? esc(o.copy) : dsTx) + '</div>';
-		return '<div class="sl">'
+		return '<div class="sl"><a class="lk" href="' + tg.url + '">'
 		     +   box
 		     +     '<div class="tag">' + tagTx + '</div>'
-		     +     '<a class="cta" href="' + tg.url + '">' + ctaTx + '</a>'
+		     +     '<span class="cnt">{{N}}</span>'
 		     +   '</div>'
-		     +   (o.img
-		         ? '<div class="bd"><div class="nm">' + nm + '</div>'
-		           + '<div class="ds">' + (o.ship ? esc(o.ship) + ' \u00b7 ' : '') + dsTx + '</div>'
-		           + (sellTx ? '<div class="pr">' + rate + esc(sellTx) + (o.cons ? '<s>' + esc(o.cons) + '</s>' : '') + '</div>' : '')
-		           + '</div>'
-		         : '')
-		     + '</div>';
+		     +   '<div class="hc"><span>' + CLK + (o.soon ? '오픈까지' : '공구 마감까지') + '</span><b data-cd="' + cdEnd + '">' + dsTx + '</b></div>'
+		     +   '<div class="hb">'
+		     +     (o.img ? '<div class="nm">' + nm + '</div>' : '')
+		     +     '<div class="ds">' + (o.ship ? '<span>' + String(o.ship).split(/\s+\u00b7\s+/).map(esc).join('</span><span>') + '</span>' : '') + (o.soon ? '<span>' + openTx + '</span>' : '') + '</div>'
+		     +     (sellTx
+		           ? '<div class="pb"><div><div class="lb">공구가</div>'
+		             + '<div class="pr"><span>' + esc(sellTx).replace(/원(~?)\s*$/, '<small>원$1</small>') + '</span>' + (o.cons ? '<s>' + esc(o.cons) + '</s>' : '') + '</div></div>'
+		             + (pct ? '<span class="off"><b>' + pct + '%</b><small>OFF</small></span>' : '')
+		             + '</div>'
+		           : '')
+		     +   '</div>'
+		     + '</a></div>';
+	}
+
+	// 마감·오픈까지 남은 시간을 1초마다 다시 쓴다
+	var CD_ON = false;
+	function startCountdown(){
+		if (CD_ON) return; CD_ON = true;
+		function p2(n){ return (n < 10 ? '0' : '') + n; }
+		function tick(){
+			var els = document.querySelectorAll('.tkbb-hero [data-cd]');
+			var now = Date.now();
+			for (var i=0;i<els.length;i++){
+				var left = Math.floor((+els[i].getAttribute('data-cd') - now) / 1000);
+				if (left <= 0) { els[i].textContent = '곧 마감'; continue; }
+				var d = Math.floor(left / 86400), h = Math.floor(left % 86400 / 3600), m = Math.floor(left % 3600 / 60), sec = left % 60;
+				els[i].textContent = (d ? d + '일 ' : '') + p2(h) + ':' + p2(m) + ':' + p2(sec);
+			}
+		}
+		tick(); setInterval(tick, 1000);
+	}
+
+	function heroCss(){
+		if (document.getElementById('tkbb-hero-c-css')) return;
+		var cs = document.createElement('style'); cs.id = 'tkbb-hero-c-css';
+		cs.appendChild(document.createTextNode(''
+			+ '.tkbb-hero .lk{display:block;color:#161616;text-decoration:none;}'
+			+ '.tkbb-hero .cta,.tkbb-hero .dday,.tkbb-hero .hdots{display:none !important;}'
+			+ '.tkbb-hero .cnt{position:absolute;right:12px;bottom:12px;z-index:2;background:rgba(255,255,255,.9);color:#161616;font-size:11px;padding:4px 9px;border-radius:999px;font-style:normal;}'
+			+ '.tkbb-hero .cnt:empty{display:none;}'
+			+ '.tkbb-hero .tag{border-radius:999px;padding:5px 10px;font-size:11px;}'
+			+ '.tkbb-hero .hc{display:flex;align-items:center;justify-content:space-between;height:40px;padding:0 16px;background:#161616;color:#fff;font-size:13px;letter-spacing:-.02em;}'
+			+ '.tkbb-hero .hc span{display:flex;align-items:center;gap:6px;color:#fff;}'
+			+ '.tkbb-hero .hc b{font-size:15px;font-weight:700;color:#D1D798;letter-spacing:.5px;font-variant-numeric:tabular-nums;}'
+			+ '.tkbb-hero .hb{padding:16px 16px 4px;}'
+			+ '.tkbb-hero .hb .nm{font-size:20px;font-weight:700;line-height:1.35;letter-spacing:-.04em;color:#161616;}'
+			+ '.tkbb-hero .hb .ds{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:6px;font-size:13px;color:#6A6A66;line-height:1.45;}'
+			+ '.tkbb-hero .hb .ds:empty{display:none;}'
+			+ '.tkbb-hero .hb .ds span + span:before{content:"|";color:#DAD5C8;margin-right:10px;}'
+			+ '.tkbb-hero .pb{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;padding:14px 16px;border-radius:12px;background:#F7F5EE;}'
+			+ '.tkbb-hero .pb .lb{font-size:12px;font-weight:700;color:#7C8340;}'
+			+ '.tkbb-hero .pb .pr{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 8px;margin-top:2px;}'
+			+ '.tkbb-hero .pb .pr span{font-size:24px;font-weight:800;color:#161616;letter-spacing:-.02em;}'
+			+ '.tkbb-hero .pb .pr small{font-size:15px;font-weight:500;}'
+			+ '.tkbb-hero .pb .pr s{font-size:13px;color:#B5B2A8;}'
+			+ '.tkbb-hero .pb .off{flex:0 0 58px;width:58px;height:58px;border-radius:50%;background:#52728A;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1;}'
+			+ '.tkbb-hero .pb .off b{font-size:18px;font-weight:800;}'
+			+ '.tkbb-hero .pb .off small{font-size:10px;}'));
+		(document.head || document.documentElement).appendChild(cs);
 	}
 
 	function drawHero(live, soon, today){
@@ -405,7 +463,11 @@
 			slides = slides.filter(function(x){ return x; });
 			if (!slides.length) { drawNext(host, today); return; }
 			var dots = '';
-			for (var j=0;j<slides.length;j++) dots += '<i' + (j===0 ? ' class="on"' : '') + '></i>';
+			for (var j=0;j<slides.length;j++) {
+				dots += '<i' + (j===0 ? ' class="on"' : '') + '></i>';
+				slides[j] = slides[j].replace('{{N}}', slides.length > 1 ? (j+1) + ' / ' + slides.length : '');
+			}
+			heroCss();
 			var h = '<div class="tkbb-hero"><div class="hs">' + slides.join('') + '</div>'
 			      + (slides.length > 1 ? '<div class="hdots">' + dots + '</div>' : '')
 			      + '</div>';
@@ -416,6 +478,7 @@
 			host.insertBefore(el, chips ? chips.nextSibling : host.firstElementChild);
 			fitHero(el);
 			if (slides.length > 1) autoSlide(el, slides.length);
+			startCountdown();
 		}).catch(function(){});
 	}
 
