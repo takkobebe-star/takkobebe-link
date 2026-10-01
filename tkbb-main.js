@@ -54,11 +54,13 @@
 			+ '.tkbb-row .c b,.tkbb-grid .c b{font-size:14px;font-weight:700;margin-top:2px;}'
 			+ '.tkbb-row .c b s,.tkbb-grid .c b s{font-size:12px;font-weight:400;}'
 			+ '.tkbb-row .c .d,.tkbb-grid .c .d{font-size:11px;font-weight:400;}'
-			+ '.tkbb-row .c img,.tkbb-grid .c img{border-radius:7px;}'
+			+ '.tkbb-row .c img,.tkbb-grid .c img{border-radius:5px;}'
 			+ '.tkbb-grid.g3{grid-template-columns:1fr 1fr 1fr;gap:16px 8px;}'
 			+ '.tkbb-grid.g3 .c img{aspect-ratio:1/1.15;}'
-			+ '.tkbb-grid.g3 .c b{display:flex;flex-direction:column;}'
-			+ '.tkbb-grid.g3 .c b s{margin:2px 0 0;}'
+			+ '.tkbb-row .c b,.tkbb-grid .c b{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:4px;}'
+			+ '.tkbb-row .c b em.pc,.tkbb-grid .c b em.pc{font-style:normal;font-size:14px;font-weight:700;color:#52728A;}'
+			+ '.tkbb-row .c b s,.tkbb-grid .c b s{flex-basis:100%;margin:2px 0 0 !important;}'
+			+ ''
 			+ '.tkbb-more{font-size:14px;font-weight:600;padding:14px 0;border-radius:7px;margin:18px 0 0;}'
 			+ '.tkbb-qi{width:56px;}.tkbb-qi .cir{width:52px;height:52px;margin:0 auto;}'
 			+ '.tkbb-qi p{font-size:12px;font-weight:400;letter-spacing:-.04em;margin-top:7px;}'
@@ -74,14 +76,15 @@
 			+ '.tkbb-req .cta2{font-size:14px;font-weight:600;padding:14px 0;border-radius:7px;}'
 			+ '.tkbb-next .lb{font-size:12px;}.tkbb-next .nm{font-size:16px;}.tkbb-next .dt{font-size:13px;}'
 			+ '.tkbb-hero .hb .ds{font-size:13px;}.tkbb-hero .hc{font-size:13px;}'
-			// 섹션 사이 여백 +40px (2026-10-01 두 번에 걸쳐 +20씩): 퀵메뉴 16→56 · 곧 오픈해요 26→66 · 일반 섹션 22→62 · 공구 요청 22→62 · 다음 공구 카드 12→52
+			// 섹션 사이 여백 +40px (2026-10-01 두 번에 걸쳐 +20씩). 단 배너 가격 바로 아래(퀵메뉴 위)는 좁게 24 (사용자 요청)
+			// 퀵메뉴 16→24 · 곧 오픈해요 26→66 · 일반 섹션 22→62 · 공구 요청 22→62 · 다음 공구 카드 12→52
 			// '이거 공구해주세요' 상자 안쪽 위아래 19→29
-			+ '.tkbb-quick{margin-top:56px !important;}'
+			+ '.tkbb-quick{margin-top:24px !important;}'
 			+ '.tkbb-cal.v2{padding-top:66px !important;}'
 			+ '.tkbb-sec{padding-top:62px !important;}'
 			+ '.tkbb-req{margin-top:62px !important;padding-top:29px !important;padding-bottom:29px !important;}'
 			+ '.tkbb-next{margin-top:52px !important;}'
-			+ '.tkbb-next .th{border-radius:3px !important;}';
+			+ '.tkbb-next .th{border-radius:1px !important;}';
 		var st = document.createElement('style'); st.id = 'tkbb-main-type';
 		st.appendChild(document.createTextNode(T));
 		(document.head || document.documentElement).appendChild(st);
@@ -350,7 +353,7 @@
 				+ '.tkbb-cal.v2 .tkbb-day:after{display:none;}'
 				+ '.tkbb-cal.v2 .tkbb-list li{display:block;padding:0;}'
 				+ '.tkbb-cal.v2 .tkbb-list .rw{display:flex;align-items:center;gap:12px;padding:12px 0;text-decoration:none;color:#161616;}'
-				+ '.tkbb-cal.v2 .tkbb-list .th{position:relative;width:56px;height:56px;flex:0 0 56px;border-radius:5px;overflow:hidden;background:#E3DFD2;}'
+				+ '.tkbb-cal.v2 .tkbb-list .th{position:relative;width:56px;height:56px;flex:0 0 56px;border-radius:3px;overflow:hidden;background:#E3DFD2;}'
 				+ '.tkbb-cal.v2 .tkbb-list .th img{width:100%;height:100%;object-fit:cover;display:block;}'
 				+ '.tkbb-cal.v2 .tkbb-list .th i{position:absolute;left:4px;bottom:4px;font-style:normal;background:#D1D798;color:#3E4220;font-size:10px;font-weight:700;padding:1px 6px;border-radius:999px;line-height:1.5;}'
 				+ '.tkbb-cal.v2 .tkbb-list .tx .n{font-size:13.5px;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}'
@@ -452,7 +455,11 @@
 			+ '.tkbb-hero .hb .nm{font-size:20px;font-weight:700;line-height:1.3;letter-spacing:-.04em;color:#161616;}'
 			+ '.tkbb-hero .hb .ds{display:flex;flex-wrap:wrap;gap:2px 6px;margin-top:6px;font-size:13px;color:#6A6A66;line-height:1.45;}'
 			+ '.tkbb-hero .hb .ds span + span:before{content:"|";color:#DAD5C8;margin-right:6px;}'
-			+ '.tkbb-hero .hb .pr{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 8px;margin-top:14px;}'
+			+ '.tkbb-hero .hb .pr{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 8px;margin-top:auto;padding-top:14px;}'
+			// 배너 장마다 상품명 줄 수가 달라도 가격이 늘 아래에 붙게 (가격 아래 빈칸이 장마다 달라지지 않게)
+			+ '.tkbb-hero .sl{display:flex;flex-direction:column;}'
+			+ '.tkbb-hero .lk{flex:1 1 auto;display:flex;flex-direction:column;}'
+			+ '.tkbb-hero .hb{flex:1 1 auto;display:flex;flex-direction:column;}'
 			+ '.tkbb-hero .hb .pr em{font-style:normal;font-size:24px;font-weight:600;color:#52728A;}'
 			+ '.tkbb-hero .hb .pr b{font-size:24px;font-weight:600;color:#161616;}'
 			+ '.tkbb-hero .hb .pr small{font-size:16px;font-weight:500;}'
@@ -662,10 +669,13 @@
 	}
 	function price(el){ var v = el ? el.textContent.replace(/\s+/g,' ').trim() : ''; return /^0\s*\uc6d0$/.test(v) ? '' : v; }
 	function card(p, badge){
+		// 정가가 판매가보다 높으면 할인율을 앞에 붙인다 (2026-10-01)
+		var n1 = parseInt(String(p.sell || '').replace(/[^0-9]/g, ''), 10), n2 = parseInt(String(p.cons || '').replace(/[^0-9]/g, ''), 10);
+		var pct = (n1 && n2 && n2 > n1) ? Math.round((1 - n1 / n2) * 100) : 0;
 		return '<a class="c" href="' + p.href + '">'
 		     +   '<div class="ib"><img src="' + p.img + '">' + (badge ? '<div class="d">' + badge + '</div>' : '') + '</div>'
 		     +   '<p>' + esc(p.nm) + '</p>'
-		     +   '<b>' + esc(p.sell) + (p.cons ? '<s>' + esc(p.cons) + '</s>' : '') + '</b>'
+		     +   '<b>' + (pct ? '<em class="pc">' + pct + '%</em>' : '') + '<span class="sp">' + esc(p.sell) + '</span>' + (p.cons && pct ? '<s>' + esc(p.cons) + '</s>' : '') + '</b>'
 		     + '</a>';
 	}
 	function pickProducts(doc, n){
@@ -693,6 +703,9 @@
 		if (!urls.length) return;
 		// 캘린더 순서 유지
 		Promise.all(urls.slice(0,6).map(function(e){
+			// 서버(API)가 미리 읽어 둔 사진·가격이 있으면 그대로 쓴다.
+			// 바깥 쇼핑몰 링크(예: 설성목장 부리또)는 브라우저가 직접 읽을 수 없어서(CORS) 이 길이 없으면 빠진다.
+			if (e.img) return Promise.resolve({ href: e.url, img: e.img, nm: String(e.name || e.title).split('|')[0].trim(), sell: e.sell || '', cons: e.cons || '', badge: '' });
 			return fetch(e.url).then(function(r){ return r.text(); }).then(function(t){
 				var d = new DOMParser().parseFromString(t,'text/html');
 				var og = function(n){ var m = d.querySelector('meta[property="og:' + n + '"]'); return m ? m.getAttribute('content') : ''; };
