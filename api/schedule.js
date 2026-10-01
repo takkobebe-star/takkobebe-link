@@ -39,6 +39,13 @@ const DESC_FIELDS = [
   ["sell", "가격|판매가|특가", 30],
   ["cons", "정가|원가|소비자가", 30],
   ["ship", "배송", 40],
+  // 메인 배너에서 먼저 보일 순서 (숫자가 작을수록 앞). 예) 캘린더 설명란에 "배너순서: 1"
+  ["order", "배너순서|배너 순서", 4],
+];
+
+// 캘린더 설명란에 '배너순서'가 없을 때 쓰는 기본 순서 (제목에 이 글자가 들어 있으면). 2026-10-01 사용자 요청: 배도라지크림 맨 앞
+const HERO_ORDER = [
+  ["배도라지크림", 1],
 ];
 function descText(s) {
   return String(s || "")
@@ -323,6 +330,13 @@ module.exports = async (req, res) => {
     for (const ev of events) {
       Object.assign(ev, ev.memo);
       delete ev.memo;
+      const o = parseInt(String(ev.order || "").replace(/[^0-9]/g, ""), 10);
+      if (o > 0) ev.order = o;
+      else {
+        delete ev.order;
+        const hit = HERO_ORDER.find(([key]) => ev.title.includes(key) || String(ev.name || "").includes(key));
+        if (hit) ev.order = hit[1];
+      }
     }
 
     // CDN에 1분 캐시 → 캘린더 수정 후 1~2분 안에 반영 (2026-09-29 10분 → 1분)
