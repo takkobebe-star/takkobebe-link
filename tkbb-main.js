@@ -1905,6 +1905,9 @@
 		+ '.tkbb-my .tk-cart[hidden]{display:none;}'
 		+ '.tkbb-my .tk-bt{display:flex;gap:8px;margin-top:20px;}'
 		+ '.tkbb-my .tk-bt a{flex:1;height:56px;border-radius:7px;background:#EFEDE6;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#161616;}'
+		+ '.tkbb-my .tk-bt2{margin-top:8px;}'
+		+ '.tkbb-my .tk-bt2 a.tk-cancel{height:48px;background:#fff;border:1px solid #DAD5C8;font-weight:500;color:#6A6A66;}'
+		+ '.tkbb-my .tk-bt2 .tk-claim{flex:1;padding:12px;border-radius:7px;background:#F7F5EE;font-size:13px;color:#6A6A66;text-align:center;}'
 		+ '.tkbb-my .tk-black{display:flex;align-items:center;justify-content:center;height:52px;border-radius:7px;background:#161616;color:#fff !important;font-size:14px;font-weight:600;}'
 		+ '.tkbb-my .tk-more{display:flex;align-items:center;justify-content:center;height:48px;border-radius:7px;border:1px solid #DAD5C8;background:#fff;font-size:14px;color:#161616;}'
 		// 표(결제 정보)
@@ -2338,6 +2341,30 @@
 			if (review) { review.innerHTML = REVIEW_LABEL; review.className += ' rv'; bt.appendChild(review); }
 			if (track) bt.firstChild.setAttribute('target', '_blank');
 			top.appendChild(bt);
+		}
+		// 취소/반품 버튼 (2026-10-02) — 위사 '취소/환불신청'·'주문문의' 기능을 그대로 부른다.
+		//  · 입금대기·결제완료(1·2): 위사 취소 → 관리자 설정(사용자 취소/환불)에 따라 PG 결제는 바로 환불, 무통장은 환불 계좌 접수
+		//  · 상품준비중(3): 위사 취소요청 접수 → 관리자가 승인하면 환불
+		//  · 배송중·배송완료(4·5): 주문번호가 걸린 주문문의 작성 화면으로 이동
+		//  · 이미 취소/반품 접수 중(10 초과)이면 버튼 대신 안내만
+		var cf = document.orderCustFrm;
+		if (cf && cf.stat && typeof window.orderCust === 'function') {
+			var os = parseInt(cf.stat.value, 10) || 0;
+			var cb = el('div', 'tk-bt tk-bt2');
+			if (os > 10) {
+				cb.appendChild(el('span', 'tk-claim', '취소·반품 접수 내역은 아래 문의 내역에서 확인할 수 있어요'));
+			} else if (os >= 1) {
+				var ca = el('a', 'tk-cancel', '취소/반품');
+				ca.setAttribute('href', 'javascript:;');
+				ca.addEventListener('click', function(ev){
+					ev.preventDefault();
+					if (os <= 3 && window.cancelable === 'true') window.orderCust(2, 12);   // 배송 전 → 취소/환불 신청
+					else if (os <= 2) window.orderCust(2, 12);
+					else window.orderCust(1, 2);                                            // 배송중·배송완료 → 주문문의
+				});
+				cb.appendChild(ca);
+			}
+			if (cb.firstChild) top.appendChild(cb);
 		}
 		wrap.appendChild(top);
 
