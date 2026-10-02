@@ -1905,6 +1905,8 @@
 		+ '.tkbb-my .tk-cart[hidden]{display:none;}'
 		+ '.tkbb-my .tk-bt{display:flex;gap:8px;margin-top:20px;}'
 		+ '.tkbb-my .tk-bt a{flex:1;height:56px;border-radius:7px;background:#EFEDE6;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#161616;}'
+		+ '.tkbb-my .tk-bt a.rv{background:#D1D798;color:#161616;}'
+		+ '.tkbb-my .tk-bt a.rv small{color:#3E4220 !important;}'
 		+ '.tkbb-my .tk-bt2{margin-top:8px;}'
 		+ '.tkbb-my .tk-bt2 a.tk-cancel{height:48px;background:#fff;border:1px solid #DAD5C8;font-weight:500;color:#6A6A66;}'
 		+ '.tkbb-my .tk-bt2 .tk-claim{flex:1;padding:12px;border-radius:7px;background:#F7F5EE;font-size:13px;color:#6A6A66;text-align:center;}'
