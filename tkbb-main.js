@@ -940,8 +940,19 @@
 		if (window.__TKBB_DDAY) return;
 		window.__TKBB_DDAY = 1;
 		var pno = pnoEl.value;
-		fetch('https://takkobebe-link.vercel.app/api/schedule' + (window.browser_type === 'pc' ? '?o=pc' : '?o=m'))   // PC·모바일 캐시를 나눈다
+		// 일정을 받기 전에는 '품절' 버튼 글자를 잠깐 가린다 — 오픈 전 상품이 '품절'로 먼저 보였다가 바뀌는 것을 막는다 (2026-10-02).
+		// 진짜 품절이면 일정 확인 뒤(또는 늦어도 4초 뒤) 그대로 다시 보인다.
+		var held = [], hs = root.querySelectorAll('a');
+		for (var h=0;h<hs.length;h++){ if (hs[h].textContent.replace(/\s+/g,'') === '\ud488\uc808') { hs[h].style.visibility = 'hidden'; held.push(hs[h]); } }
+		function release(){ for (var h=0;h<held.length;h++) held[h].style.visibility = ''; held = []; }
+		setTimeout(release, 4000);
+		// 지난번에 받은 일정이 있으면 먼저 그걸로 판단한다 (일정 서버가 느려도 바로 '판매예정'이 보이게)
+		var CK = 'tkbb_sched_dt', cached = null;
+		try { cached = JSON.parse(localStorage.getItem(CK) || 'null'); } catch (e) {}
+		var fresh = fetch('https://takkobebe-link.vercel.app/api/schedule' + (window.browser_type === 'pc' ? '?o=pc' : '?o=m'))   // PC·모바일 캐시를 나눈다
 			.then(function(r){ return r.json(); })
+			.then(function(d){ try { localStorage.setItem(CK, JSON.stringify({ t: Date.now(), d: d })); } catch (e) {} return d; });
+		(cached && cached.d && Date.now() - cached.t < 30 * 60000 ? Promise.resolve(cached.d) : fresh)
 			.then(function(data){
 				var evs = (data && data.events) || [];
 				var now = new Date(Date.now() + 9*3600000);   // 한국 시각
@@ -1013,7 +1024,7 @@
 					break;
 				}
 				pr.parentNode.insertBefore(b, pr.nextSibling);
-			}).catch(function(){});
+			}).catch(function(){}).then(release);
 	}
 
 	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
