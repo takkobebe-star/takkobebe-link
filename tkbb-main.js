@@ -83,7 +83,7 @@
 			// 퀵메뉴 16→24 · 곧 오픈해요 26→66 · 일반 섹션 22→62 · 공구 요청 22→62 · 다음 공구 카드 12→52
 			// '이거 공구해주세요' 상자 안쪽 위아래 19→29
 			+ '.tkbb-quick{margin-top:24px !important;}'
-			+ '.tkbb-cal.v2{padding-top:66px !important;}'
+			+ '.tkbb-cal.v2{padding-top:36px !important;}'
 			+ '.tkbb-sec{padding-top:62px !important;}'
 			+ '.tkbb-req{margin-top:62px !important;padding-top:29px !important;padding-bottom:29px !important;}'
 			+ '.tkbb-next{margin-top:52px !important;}'
@@ -455,7 +455,7 @@
 			+ '.tkbb-hero .hc span{flex:1;min-width:0;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}'
 			+ '.tkbb-hero .hc b{color:#D1D798;font-weight:700;}'
 			+ '.tkbb-hero .hb{padding:18px 20px 4px;}'
-			+ '.tkbb-hero .hb .nm{font-size:20px;font-weight:700;line-height:1.3;letter-spacing:-.04em;color:#161616;}'
+			+ '.tkbb-hero .hb .nm{font-size:18px;font-weight:600;line-height:1.3;letter-spacing:-.04em;color:#161616;}'
 			+ '.tkbb-hero .hb .ds{display:flex;flex-wrap:wrap;gap:2px 6px;margin-top:6px;font-size:13px;color:#6A6A66;line-height:1.45;}'
 			+ '.tkbb-hero .hb .ds span + span:before{content:"|";color:#DAD5C8;margin-right:6px;}'
 			+ '.tkbb-hero .hb .pr{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 8px;margin-top:auto;padding-top:14px;}'
