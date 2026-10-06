@@ -60,6 +60,9 @@
 			+ '.tkbb-row .c img,.tkbb-grid .c img{border-radius:5px;}'
 			+ '.tkbb-grid.g3{grid-template-columns:1fr 1fr 1fr;gap:16px 8px;}'
 			+ '.tkbb-grid.g3 .c img{aspect-ratio:1/1.15;}'
+			// 언제든 살 수 있어요: 상품명이 한 줄이면 빈 둘째 줄 없이 가격을 바로 붙인다 (최대 두 줄, 2026-10-06)
+			+ '.tkbb-grid.al .c p{height:auto;max-height:36px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}'
+			+ '.tkbb-grid.al .c b{margin-top:4px;}'
 			+ '.tkbb-row .c b,.tkbb-grid .c b{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:4px;}'
 			+ '.tkbb-row .c b em.pc,.tkbb-grid .c b em.pc{font-style:normal;font-size:14px;font-weight:700;color:#52728A;}'
 			+ '.tkbb-row .c b s,.tkbb-grid .c b s{flex-basis:100%;margin:2px 0 0 !important;}'
@@ -741,7 +744,7 @@
 			if (ps.length < 2) return;
 			var h = '<div class="tkbb-sec"><div class="st"><h2>언제든 살 수 있어요</h2>'
 			      + '<a href="/shop/big_section.php?cno1=1005">전체 보기 ›</a></div>'
-			      + '<div class="sub">공구가 끝나도 계속 주문할 수 있는 상품들</div><div class="tkbb-grid">';
+			      + '<div class="sub">공구가 끝나도 계속 주문할 수 있는 상품들</div><div class="tkbb-grid al">';
 			for (var i=0;i<ps.length;i++) h += card(ps[i], '');
 			h += '</div><a class="tkbb-more" href="/shop/big_section.php?cno1=1005">전체 보기</a></div>';
 			var w = document.createElement('div'); w.innerHTML = h;
