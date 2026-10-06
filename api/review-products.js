@@ -1,12 +1,13 @@
 // 상품후기 쓰기 창의 '상품선택' 목록 (로그인 안 한 손님용)
 //   now    = 지금 판매 중 (메뉴 분류 목록에서 품절이 아닌 상품. 위사는 품절 상품을 목록 뒤로 보내므로 품절이 나오는 쪽까지만 읽는다)
-//   recent = 작성일 기준 최근 한 달 안에 판매한 상품 (카카오워크 공구 캘린더 /api/mycal 의 지난 31일 공구 → 상품 연결)
+//   recent = 작성일 기준 두 달 전(같은 날짜)까지 판매한 상품 (카카오워크 공구 캘린더 /api/mycal 의 지난 두 달 공구 → 상품 연결)
+//            2026-10-06 사용자 요청: 한 달 → 두 달
 // 로그인한 손님의 '구매한 상품'은 손님 브라우저가 자기 주문내역에서 직접 읽는다(주문 정보는 이 서버로 오지 않는다).
 // 2026-09-23 사용자 요청.
 
 const SHOP = "https://m.takkobebe.com";
 const API_BASE = "https://takkobebe-link.vercel.app";
-const DAYS = 31;
+const MONTHS = 2;   // 작성일로부터 몇 달 전까지 판매한 상품을 보여 줄지
 
 // 메뉴의 대분류 (쇼핑몰 메뉴 기준 2026-09-23). 없는 분류는 건너뛴다.
 const CATS = ["1005", "1001", "1002", "1006", "1067", "1121", "1043", "1042"];
@@ -147,6 +148,15 @@ async function searchShop(word) {
   return html ? parseBoxes(html) : [];
 }
 
+// 'YYYY-MM-DD' 의 n달 전 같은 날짜 (그 달에 없는 날이면 그 달 마지막 날 — 12/31 → 10/31, 4/30 → 2/28)
+function monthsAgo(ymd, n) {
+  const [y, m, d] = ymd.split("-").map(Number);
+  const t = new Date(Date.UTC(y, m - 1 - n, 1));
+  const last = new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth() + 1, 0)).getUTCDate();
+  t.setUTCDate(Math.min(d, last));
+  return t.toISOString().slice(0, 10);
+}
+
 function kstDate(offsetDays) {
   return new Date(Date.now() + 9 * 3600e3 - (offsetDays || 0) * 86400e3).toISOString().slice(0, 10);
 }
@@ -171,12 +181,13 @@ module.exports = async (req, res) => {
     const now = [], seen = {};
     for (const l of lists) for (const it of l) if (!seen[it.pno]) { seen[it.pno] = 1; now.push({ pno: it.pno, name: showName(it.name, it.pno) }); }
 
-    // ② 최근 한 달 공구 (캘린더)
-    const today = kstDate(0), from = kstDate(DAYS);
+    // ② 최근 두 달 공구 (캘린더)
+    const today = kstDate(0), from = monthsAgo(today, MONTHS);
+    const DAYS = Math.round((Date.parse(today) - Date.parse(from)) / 86400e3);
     const calTxt = await fetchText(`${API_BASE}/api/mycal?days=${DAYS + 2}`, 8000);
     let events = [];
     try { events = (JSON.parse(calTxt).events || []); } catch (e) {}
-    // 지난 31일 안에 끝났거나 진행 중인 공구. 오늘 시작한 공구는 '지금 공구 중' 표시에만 쓰고 '최근 한 달'에는 안 넣는다
+    // 두 달 전 같은 날짜 이후에 끝났거나 진행 중인 공구. 오늘 시작한 공구는 '지금 공구 중' 표시에만 쓰고 '최근 판매'에는 안 넣는다
     events = events.filter((ev) => isProduct(ev.title || "")
       && String(ev.start).slice(0, 10) <= today && String(ev.end).slice(0, 10) >= from)
       .sort((a, b) => (String(a.end) < String(b.end) ? 1 : -1));   // 최근에 끝난 것부터
@@ -232,7 +243,7 @@ module.exports = async (req, res) => {
     // ③ 묶음 나누기
     //   live = 지금 공구 중 (항상 맨 위)
     //   top  = 자주 찾는 상품 — 계란 · 엉덩이쌀빵 · 참기름 · 치즈 차례. 품절이어도 위로 올린다(2026-09-23 사용자)
-    //   now  = 나머지 판매 중 / recent = 나머지 최근 한 달
+    //   now  = 나머지 판매 중 / recent = 나머지 최근 두 달
     const live = now.filter((it) => liveSet[it.pno]);
     const restNow = now.filter((it) => !liveSet[it.pno]);
     const isTop = (it) => prio(it.name) < 99;
