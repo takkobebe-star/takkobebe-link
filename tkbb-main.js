@@ -2434,7 +2434,7 @@
 			ca.addEventListener('click', function(ev){
 				ev.preventDefault();
 				var canOrd = typeof window.orderCust === 'function' && window.cancelable === 'true';
-				if (os >= 4 || !canOrd) { location.href = CS + (ono ? '&tkbb_c=1' : ''); return; }   // 배송 시작 후(또는 위사가 취소를 막은 주문) → 1:1 문의
+				if (os >= 4 || !canOrd) { location.href = 'https://m.takkobebe.com/shop/product_qna_list.php'; return; }   // 배송 시작 후(또는 위사가 취소를 막은 주문) → 1:1 문의 게시판 (2026-10-06 사용자 요청)
 				if (os === 1) { window.orderCust(2, 12); return; }        // 입금 전 → 바로 취소
 				if (!confirm('입금이 확인된 주문이에요.\n취소/환불을 신청하면 관리자 확인 후 환불돼요.\n신청할까요?')) return;
 				window.directcancel = '';                                  // 입금 후엔 즉시 취소 확인창 대신 '신청' 화면으로
