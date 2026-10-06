@@ -316,8 +316,8 @@
 		}
 
 		// 캘린더 B안: 날짜 버튼(전체 + 오픈일) + 사진 달린 오픈 예정 목록
-		var items = soon.slice(0,8);
-		var BELL = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3E4220" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>';
+		// 2026-10-06: 최대 4개 · 썸네일 D-day 표시와 미리보기 종 아이콘은 뺐다
+		var items = soon.slice(0,4);
 		var seen = {}, days = '<button type="button" class="tkbb-day on" data-d="">전체</button>';
 		for (var k=0;k<items.length;k++){
 			var d0 = ymd(items[k].start);
@@ -325,19 +325,16 @@
 			var p = md(d0);
 			days += '<button type="button" class="tkbb-day" data-d="'+d0+'"><span class="dd">'+p.m+'/'+p.d+'</span><span class="dw">'+wd(d0)+'</span></button>';
 		}
-		var t0 = today.split('-');
 		var rows = '';
 		for (var n=0;n<items.length;n++){
-			var e = items[n], s = md(e.start), sd = ymd(e.start), q = sd.split('-');
-			var left = Math.round((Date.UTC(+q[0],+q[1]-1,+q[2]) - Date.UTC(+t0[0],+t0[1]-1,+t0[2])) / 86400000);
-			var dd = left <= 0 ? '오늘' : 'D-' + left;
+			var e = items[n], s = md(e.start), sd = ymd(e.start);
 			var when = s.m+'/'+s.d+' ('+wd(sd)+') '+(sd === today ? '오전 '+OPEN_HOUR+'시 ' : '')+(e.onSale ? '공구' : '오픈');
 			var tag = e.url ? 'a href="'+e.url+'"' : 'div';
 			var endt = e.url ? 'a' : 'div';
 			rows += '<li data-d="'+sd+'"><'+tag+' class="rw">'
-			     +   '<div class="th">' + (e.img ? '<img src="'+e.img+'" alt="">' : '') + '<i>'+dd+'</i></div>'
+			     +   '<div class="th">' + (e.img ? '<img src="'+e.img+'" alt="">' : '') + '</div>'
 			     +   '<div class="tx"><div class="n">'+esc(e.title)+'</div><div class="s">'+when+'</div></div>'
-			     +   (e.url ? '<span class="bt">'+BELL+'미리보기</span>' : '<span class="bt off">오픈 예정</span>')
+			     +   (e.url ? '<span class="bt">미리보기</span>' : '<span class="bt off">오픈 예정</span>')
 			     + '</'+endt+'></li>';
 		}
 		if (!rows) rows = '<li style="border:0"><div class="empty">예정된 공구가 곧 올라옵니다</div></li>';
@@ -746,7 +743,7 @@
 			      + '<a href="/shop/big_section.php?cno1=1005">전체 보기 ›</a></div>'
 			      + '<div class="sub">공구가 끝나도 계속 주문할 수 있는 상품들</div><div class="tkbb-grid g3">';
 			for (var i=0;i<ps.length;i++) h += card(ps[i], '');
-			h += '</div><a class="tkbb-more" href="/shop/big_section.php?cno1=1005">먹거리 전체 보기</a></div>';
+			h += '</div><a class="tkbb-more" href="/shop/big_section.php?cno1=1005">전체 보기</a></div>';
 			var w = document.createElement('div'); w.innerHTML = h;
 			appendSec(w.firstChild, 2);
 		}).catch(function(){});
