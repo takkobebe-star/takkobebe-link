@@ -1831,7 +1831,7 @@
 				+ '<p>받아보신 상품, 어떠셨어요?</p>'
 				+ '<a class="rp" href="' + esc(dv.href) + '"><div class="th">' + sv(I.box, 1.6).replace(/#161616/, '#9A9A94').replace('width="24" height="24"', 'width="22" height="22"') + '</div>'
 				+ '<div class="tx"><div class="nm">' + esc(dv.name) + '</div><div class="dt">' + (dv.date ? esc(dv.date.replace(/-/g, '.')) + ' 주문 · ' : '') + '배송완료</div></div></a>'
-				+ '<a class="rb" href="' + esc(dv.href) + '">후기 쓰기 <span>+ 적립금 최대 700원</span></a></div>';
+				+ '<a class="rb" href="' + esc(dv.href) + '">후기 작성 <span>+ 사진 첨부 시 최대 700원</span></a></div>';
 		}
 		// 적립금 / 쿠폰
 		h += '<div class="cd pt">'
@@ -2022,9 +2022,6 @@
 		+ '.tkbb-my .tk-cd table.tbl_order tr.tk-stack{display:flex;flex-direction:column;}'
 		+ '.tkbb-my .tk-cd table.tbl_order tr.tk-stack th,.tkbb-my .tk-cd table.tbl_order tr.tk-stack td{display:block;width:100%;box-sizing:border-box;text-align:left;padding:6px 0 0;}'
 		+ '.tkbb-my .tk-cd table.tbl_order tr.tk-stack td{white-space:nowrap;font-size:14px;padding:2px 0 6px;text-align:right;}'
-		// 2026-10-06 사용자 요청: 입금계좌 값은 오른쪽 정렬 (안쪽 요소 정렬까지 덮어씀)
-		+ '.tkbb-my table.tbl_order tr.tk-stack td,.tkbb-my table.tbl_order tr.tk-stack td *{text-align:right!important;}'
-		+ '.tkbb-my table.tbl_order tr.tk-stack td{display:block;width:100%;box-sizing:border-box;}'
 		+ '.tkbb-my .tk-cd table.tbl_order tr.tk-stack td strong{display:block;font-size:13px;font-weight:400;color:#7C8340;white-space:normal;}'
 		// 요약 카드·내역
 		+ '.tkbb-my .tk-lb{font-size:14px;color:#6A6A66;}'
@@ -2267,10 +2264,29 @@
 	function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 	function txt(el){ return el ? (el.textContent || '').replace(/\s+/g, ' ').trim() : ''; }
 	function el(tag, cls, html){ var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
-	// 표에서 긴 값(입금계좌)은 제목 아래 한 줄로
+	// 입금계좌: 다른 줄(결제방법 등)처럼 제목은 왼쪽, 값은 같은 줄 오른쪽 (2026-10-06 사용자 요청)
+	// 위사 스킨이 값을 다음 줄에 두거나 왼쪽 정렬을 박아 두는 경우까지 덮어쓴다.
 	function stackLong(root){
 		var ths = root.querySelectorAll('table.tbl_order th');
-		for (var i = 0; i < ths.length; i++) if (/입금계좌|가상계좌/.test(txt(ths[i]))) ths[i].parentNode.className += ' tk-stack';
+		for (var i = 0; i < ths.length; i++) {
+			var th = ths[i];
+			if (!/입금계좌|가상계좌/.test(txt(th))) continue;
+			var tr = th.parentNode, td = th.nextElementSibling;
+			if (!td || td.tagName !== 'TD') {
+				var nx = tr.nextElementSibling, nd = nx && nx.querySelector('td');
+				if (!nd) continue;
+				td = nd; td.removeAttribute('colspan'); th.removeAttribute('colspan'); tr.appendChild(td);
+				if (!nx.querySelector('td,th')) nx.parentNode.removeChild(nx);
+			}
+			tr.style.setProperty('display', 'table-row', 'important');
+			th.style.setProperty('display', 'table-cell', 'important');
+			th.style.setProperty('vertical-align', 'top', 'important');
+			td.style.setProperty('display', 'table-cell', 'important');
+			td.style.setProperty('white-space', 'normal', 'important');
+			td.style.setProperty('word-break', 'keep-all', 'important');
+			var all = [td].concat([].slice.call(td.querySelectorAll('*')));
+			for (var k = 0; k < all.length; k++) all[k].style.setProperty('text-align', 'right', 'important');
+		}
 	}
 	function hide(e){ e.style.display = 'none'; e.setAttribute('data-tk-hid', '1'); }
 	function dot(d){ return String(d || '').replace(/[\/-]/g, '.'); }
@@ -2321,7 +2337,7 @@
 	}
 
 	/* ---------- 주문내역 ---------- */
-	var REVIEW_LABEL = '후기 작성<small>최대 700원 적립</small>';   // 후기 창 안내(최대 700원)와 맞춤 2026-10-06
+	var REVIEW_LABEL = '후기 작성<small>사진 첨부 시 최대 700원</small>';   // 후기 창 안내(최대 700원)와 맞춤 2026-10-06
 	function orderCard(li){
 		var a = li.querySelector('.no a'), ps = li.querySelectorAll('.info p');
 		var ono = txt(a), date = txt(li.querySelector('.no span')), href = a ? a.getAttribute('href') : '#';
