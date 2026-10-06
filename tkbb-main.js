@@ -2993,7 +2993,7 @@
 		+ R + '.btn_col{display:flex;gap:8px;margin:6px 0 0;padding:0;}'
 		+ R + '.btn_col .box_btn{flex:1;display:block;width:auto;margin:0;padding:0;border:0;background:none;float:none;}'
 		+ R + '.btn_col .box_btn input,' + R + '.btn_col .box_btn a{display:flex;align-items:center;justify-content:center;width:100%;height:50px;border-radius:5px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;}'
-		+ R + '.btn_col .box_btn input{order:2;border:0 !important;background:#161616 !important;color:#fff !important;}'
+		+ R + '.btn_col .box_btn input{order:2;border:0 !important;border-radius:5px !important;background:#161616 !important;color:#fff !important;}'
 		+ R + '.btn_col .box_btn.white a{border:1px solid #DAD5C8 !important;background:#fff !important;color:#6A6A66 !important;}'
 		+ R + '.btn_col .box_btn.white{order:-1;flex:0 0 96px;}'
 		// 쓰기 창이 떠 있는 동안 아래 탭바가 등록 버튼을 가리지 않게 숨긴다
