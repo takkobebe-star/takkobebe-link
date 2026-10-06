@@ -957,7 +957,7 @@
 				var live = null, soon = null, past = null;
 				for (var i=0;i<evs.length;i++){
 					var ev = evs[i];
-					if (!ev.url || ev.url.indexOf(pno) < 0) continue;
+					if ((String(ev.url || '') + ' ' + String(ev.shop || '')).indexOf(pno) < 0) continue;   // shop = 바깥 링크로 바꾼 공구의 원래 쇼핑몰 상품
 					if (tkbbNotYet(ev.start, today, now.getUTCHours(), buyable)) { if (!soon) soon = ev; }
 					else if (day(ev.end) < today) past = ev;
 					else if (!live) live = ev;
