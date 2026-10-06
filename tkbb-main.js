@@ -2454,6 +2454,7 @@
 		for (var j = 0; j < h3s.length; j++) {
 			var t = txt(h3s[j]), body = h3s[j].nextElementSibling;
 			if (!body || t === '주문상품') continue;
+			if (t === '주문 1:1문의') continue;   // 주문 문의 섹션은 주문 상세에서 보이지 않게 한다 (2026-10-06 사용자 요청)
 			var cd = el('div', 'tk-cd');
 			var tt = el('div', 'tk-tt', '<h3 class="tk-t">' + esc(t === '주문 1:1문의' ? '주문 문의' : t) + '</h3>');
 			cd.appendChild(tt);
