@@ -1304,18 +1304,41 @@
 	function lset(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 
 	// ── 로그인 안 한 손님 목록 (10분 동안은 다시 받지 않는다) ──
-	function guestGroups(){
-		var c = sget('tkbb_revp_api3');
-		if (c && Date.now() - c.t < 600000) return Promise.resolve(c.g);
-		return fetch(API).then(function(r){ return r.json(); }).then(function(d){
-			var g = [];
-			// 2026-10-06 사용자 요청: '최근 두 달 판매' → '지금 판매 중' 두 묶음만. 지금 공구 중·자주 찾는 상품은 '지금 판매 중' 맨 앞에 합친다
-			if (d.recent && d.recent.length) g.push({ t: '최근 두 달 판매', items: d.recent });
-			var nowAll = [].concat(d.live || [], d.top || [], d.now || []);
-			if (nowAll.length) g.push({ t: '지금 판매 중', items: nowAll });
-			if (g.length) sset('tkbb_revp_api3', { t: Date.now(), g: g });
+	// 목록은 서버가 쇼핑몰을 훑어 만들어서 처음 한 번은 10초 넘게 걸린다(2026-10-06 '불러오는 중'만 뜬다는 제보).
+	// → 이 폰에 하루 동안 남겨 두고 바로 보여 준다. 10분이 지났으면 보여 주면서 뒤에서 새로 받아 둔다.
+	//   쓰기 창이 열리자마자 미리 받기 시작한다(prefetch).
+	var LKEY = 'tkbb_revp_api4', INFLIGHT = null;
+	function today(){ return ymd(new Date(Date.now() + 9 * 3600e3 + new Date().getTimezoneOffset() * 60e3)); }
+	function toGroups(d){
+		var g = [];
+		// 2026-10-06 사용자 요청: '최근 두 달 판매' → '지금 판매 중' 차례. 두 달 기준은 서버(api/review-products)가 작성일(오늘) 기준으로 자른다
+		if (d.recent && d.recent.length) g.push({ t: '최근 두 달 판매', items: d.recent });
+		var nowAll = [].concat(d.live || [], d.top || [], d.now || []);
+		if (nowAll.length) g.push({ t: '지금 판매 중', items: nowAll });
+		return g;
+	}
+	function fetchGroups(){
+		if (INFLIGHT) return INFLIGHT;
+		INFLIGHT = fetch(API).then(function(r){ return r.json(); }).then(function(d){
+			var g = toGroups(d);
+			if (g.length) lset(LKEY, { t: Date.now(), day: today(), g: g });
+			INFLIGHT = null;
 			return g;
-		});
+		}, function(e){ INFLIGHT = null; throw e; });
+		return INFLIGHT;
+	}
+	function cachedGroups(){
+		var c = lget(LKEY);
+		return c && c.day === today() && c.g && c.g.length ? c : null;   // 날짜가 바뀌면 두 달 기준도 바뀌므로 새로
+	}
+	function prefetch(){
+		var c = cachedGroups();
+		if (!c || Date.now() - c.t > 600000) fetchGroups().catch(function(){});
+	}
+	function guestGroups(){
+		var c = cachedGroups();
+		if (c) { if (Date.now() - c.t > 600000) fetchGroups().catch(function(){}); return Promise.resolve(c.g); }
+		return fetchGroups();
 	}
 
 	// ── 로그인한 손님: 주문내역 → 주문 상세 → 상품 ──
@@ -1485,6 +1508,7 @@
 			sel.style.pointerEvents = 'none';
 			return;
 		}
+		prefetch();   // 목록을 미리 받아 둔다
 		sel.innerHTML = '<option value="상품">상품선택</option>';
 		sel.style.pointerEvents = 'none';   // 폰 기본 목록 대신 아래 목록 창
 		row.style.cursor = 'pointer';

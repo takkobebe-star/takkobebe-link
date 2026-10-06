@@ -1,6 +1,6 @@
 // 상품후기 쓰기 창의 '상품선택' 목록 (로그인 안 한 손님용)
 //   now    = 지금 판매 중 (메뉴 분류 목록에서 품절이 아닌 상품. 위사는 품절 상품을 목록 뒤로 보내므로 품절이 나오는 쪽까지만 읽는다)
-//   recent = 작성일 기준 두 달 전(같은 날짜)까지 판매한 상품 (카카오워크 공구 캘린더 /api/mycal 의 지난 두 달 공구 → 상품 연결)
+//   recent = 작성일 기준 두 달 전(같은 날짜)까지 공구로 판매한 상품(지금도 판매 중이어도 여기) (카카오워크 공구 캘린더 /api/mycal 의 지난 두 달 공구 → 상품 연결)
 //            2026-10-06 사용자 요청: 한 달 → 두 달
 // 로그인한 손님의 '구매한 상품'은 손님 브라우저가 자기 주문내역에서 직접 읽는다(주문 정보는 이 서버로 오지 않는다).
 // 2026-09-23 사용자 요청.
@@ -171,39 +171,31 @@ function words(title) {
   return (base.match(/[0-9A-Za-z가-힣.%]{2,}/g) || []).map((w) => w.replace(/[.%]+$/, "")).filter((w) => w.length >= 2 && !WEAK.test(w));
 }
 
-module.exports = async (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
-  if (req.method === "OPTIONS") { res.status(204).end(); return; }
-  try {
-    // ① 지금 판매 중
-    const lists = await Promise.all(CATS.map(onSaleIn));
-    const now = [], seen = {};
-    for (const l of lists) for (const it of l) if (!seen[it.pno]) { seen[it.pno] = 1; now.push({ pno: it.pno, name: showName(it.name, it.pno) }); }
+// 같은 서버 인스턴스가 살아 있는 동안은 30분 동안 다시 만들지 않는다 (CDN 캐시가 비어 있을 때도 빠르게)
+let MEMO = null;
 
-    // ② 최근 두 달 공구 (캘린더)
+async function build() {
+    // ① 지금 판매 중 + ② 최근 두 달 공구(캘린더)를 동시에 읽는다
     const today = kstDate(0), from = monthsAgo(today, MONTHS);
     const DAYS = Math.round((Date.parse(today) - Date.parse(from)) / 86400e3);
-    const calTxt = await fetchText(`${API_BASE}/api/mycal?days=${DAYS + 2}`, 8000);
+    const [lists, calTxt] = await Promise.all([
+      Promise.all(CATS.map(onSaleIn)),
+      fetchText(`${API_BASE}/api/mycal?days=${DAYS + 2}`, 8000),
+    ]);
+    const nowAll = [], onSale = {};
+    for (const l of lists) for (const it of l) if (!onSale[it.pno]) { onSale[it.pno] = 1; nowAll.push({ pno: it.pno, name: showName(it.name, it.pno) }); }
+
     let events = [];
     try { events = (JSON.parse(calTxt).events || []); } catch (e) {}
-    // 두 달 전 같은 날짜 이후에 끝났거나 진행 중인 공구. 오늘 시작한 공구는 '지금 공구 중' 표시에만 쓰고 '최근 판매'에는 안 넣는다
+    // 두 달 전 같은 날짜 이후에 끝났거나 진행 중인 공구
     events = events.filter((ev) => isProduct(ev.title || "")
       && String(ev.start).slice(0, 10) <= today && String(ev.end).slice(0, 10) >= from)
       .sort((a, b) => (String(a.end) < String(b.end) ? 1 : -1));   // 최근에 끝난 것부터
 
-    const recent = [], cache = {}, liveSet = {};
-    const add = (pno, name, end, isLive) => {
-      pno = pno.toUpperCase();
-      if (isLive) liveSet[pno] = 1;          // 지금 공구 중인 상품
-      if (seen[pno]) return;                  // 이미 '지금 판매 중'에 있으면 그대로 둔다
-      if (String(end).slice(0, 10) > today) return;   // 오늘 시작해 아직 안 판 공구는 넣지 않는다
-      seen[pno] = 1;
-      recent.push({ pno, name: showName(name, pno), end: String(end).slice(0, 10) });
-    };
-    const search = async (w) => (cache[w] = cache[w] || (await searchShop(w)));
-
-    for (const ev of events) {
+    // 공구마다 상품 찾기 — 한꺼번에(병렬로). 같은 낱말 검색은 한 번만
+    const cache = {};
+    const search = (w) => (cache[w] = cache[w] || searchShop(w));
+    const pickFor = async (ev) => {
       const title = ev.title || "";
       // 메모에 상품 링크가 있으면 그것들
       const links = [...String(ev.memo || "").matchAll(/pno=([A-F0-9]{16,})/gi)].map((m) => m[1].toUpperCase());
@@ -218,7 +210,7 @@ module.exports = async (req, res) => {
         // 가장 긴 낱말부터 검색해 제목 낱말이 가장 많이 겹치는 상품
         const order = toks.slice().sort((a, b) => b.length - a.length).slice(0, 2);
         const cand = {};
-        for (const w of order) for (const c of await search(w)) cand[c.pno] = c;
+        for (const res of await Promise.all(order.map(search))) for (const c of res) cand[c.pno] = c;
         // 점수 = 띄어쓰기 빼고 겹친 낱말 수, 같으면 띄어쓰기까지 그대로 겹친 낱말이 많은 쪽
         // ('아이스망고' → '트로피코 아이스망고' 가 '설빙 아이스 망고바' 보다 앞)
         let best = [], bestSq = 0, bestLit = -1;
@@ -232,28 +224,49 @@ module.exports = async (req, res) => {
         // 낱말이 하나뿐인 제목(예: '아이스망고')은 1개로 인정, 여러 개면 2개 이상 겹쳐야
         if (bestSq >= Math.min(2, toks.length) && best.length <= 2) picked = best;
       }
-      const evLive = String(ev.start).slice(0, 10) <= today && today <= String(ev.end).slice(0, 10);
-      const evStartedBefore = String(ev.start).slice(0, 10) < today;
-      for (const c of picked) {
-        if (evLive) liveSet[c.pno.toUpperCase()] = 1;
-        if (evStartedBefore) add(c.pno, c.name, ev.end, evLive);
+      return picked;
+    };
+    const picks = await Promise.all(events.map((ev) => pickFor(ev).catch(() => [])));
+
+    // ③ 묶음 (2026-10-06 사용자 요청: '최근 두 달 판매' → '지금 판매 중' 차례)
+    //   recent = 두 달 안에 공구로 판 상품 (지금도 판매 중이어도 여기). 최근에 끝난 공구부터
+    //   now    = 나머지 판매 중 상품 — 지금 공구 중 → 자주 찾는 상품(계란·쌀빵·참기름·치즈) → 나머지
+    const recent = [], inRecent = {}, liveSet = {};
+    events.forEach((ev, i) => {
+      const s0 = String(ev.start).slice(0, 10), e0 = String(ev.end).slice(0, 10);
+      const evLive = s0 <= today && today <= e0;
+      for (const c of picks[i]) {
+        const pno = c.pno.toUpperCase();
+        if (evLive) liveSet[pno] = 1;
+        if (!(s0 < today)) continue;           // 오늘 시작해 아직 안 판 공구는 '최근 판매'에 넣지 않는다
+        if (inRecent[pno]) continue;
+        inRecent[pno] = 1;
+        recent.push({ pno, name: showName(c.name, pno), end: e0 });
       }
-    }
-
-    // ③ 묶음 나누기
-    //   live = 지금 공구 중 (항상 맨 위)
-    //   top  = 자주 찾는 상품 — 계란 · 엉덩이쌀빵 · 참기름 · 치즈 차례. 품절이어도 위로 올린다(2026-09-23 사용자)
-    //   now  = 나머지 판매 중 / recent = 나머지 최근 두 달
-    const live = now.filter((it) => liveSet[it.pno]);
-    const restNow = now.filter((it) => !liveSet[it.pno]);
+    });
+    const rest = nowAll.filter((it) => !inRecent[it.pno]);
     const isTop = (it) => prio(it.name) < 99;
-    const top = byPriority(restNow.filter(isTop).concat(recent.filter(isTop)));
-    const nowRest = restNow.filter((it) => !isTop(it));
-    const recentRest = recent.filter((it) => !isTop(it));
+    const now = rest.filter((it) => liveSet[it.pno])
+      .concat(byPriority(rest.filter((it) => !liveSet[it.pno] && isTop(it))))
+      .concat(rest.filter((it) => !liveSet[it.pno] && !isTop(it)));
+    // live·top 은 예전 화면 코드와 맞추려고 빈 칸으로 남긴다
+    return { recent, now, live: [], top: [], from, today, complete: nowAll.length > 0 };
+}
 
-    const complete = now.length > 0;
-    res.setHeader("Cache-Control", complete ? "s-maxage=3600, stale-while-revalidate=86400" : "s-maxage=60");
-    res.status(200).json({ live, top, now: nowRest, recent: recentRest, from, today });
+module.exports = async (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  if (req.method === "OPTIONS") { res.status(204).end(); return; }
+  try {
+    let d = MEMO && Date.now() - MEMO.t < 30 * 60e3 && MEMO.d.today === kstDate(0) ? MEMO.d : null;
+    if (!d) { d = await build(); if (d.complete) MEMO = { t: Date.now(), d }; }
+    const { complete, ...body } = d;
+    // CDN 1시간 캐시 + 지난 결과를 먼저 주고 뒤에서 새로 만들기(하루). Vercel 전용 헤더도 같이 둔다
+    const cc = complete ? "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400" : "public, max-age=0, s-maxage=60";
+    res.setHeader("Cache-Control", cc);
+    res.setHeader("CDN-Cache-Control", complete ? "max-age=3600, stale-while-revalidate=86400" : "max-age=60");
+    res.setHeader("Vercel-CDN-Cache-Control", complete ? "max-age=3600, stale-while-revalidate=86400" : "max-age=60");
+    res.status(200).json(body);
   } catch (e) {
     res.setHeader("Cache-Control", "s-maxage=60");
     res.status(502).json({ error: String((e && e.message) || e) });
