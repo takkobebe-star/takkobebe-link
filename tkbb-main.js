@@ -1831,7 +1831,7 @@
 				+ '<p>받아보신 상품, 어떠셨어요?</p>'
 				+ '<a class="rp" href="' + esc(dv.href) + '"><div class="th">' + sv(I.box, 1.6).replace(/#161616/, '#9A9A94').replace('width="24" height="24"', 'width="22" height="22"') + '</div>'
 				+ '<div class="tx"><div class="nm">' + esc(dv.name) + '</div><div class="dt">' + (dv.date ? esc(dv.date.replace(/-/g, '.')) + ' 주문 · ' : '') + '배송완료</div></div></a>'
-				+ '<a class="rb" href="' + esc(dv.href) + '">후기 쓰기 <span>+ 적립금 최대 1,000원</span></a></div>';
+				+ '<a class="rb" href="' + esc(dv.href) + '">후기 쓰기 <span>+ 적립금 최대 700원</span></a></div>';
 		}
 		// 적립금 / 쿠폰
 		h += '<div class="cd pt">'
@@ -2022,6 +2022,9 @@
 		+ '.tkbb-my .tk-cd table.tbl_order tr.tk-stack{display:flex;flex-direction:column;}'
 		+ '.tkbb-my .tk-cd table.tbl_order tr.tk-stack th,.tkbb-my .tk-cd table.tbl_order tr.tk-stack td{display:block;width:100%;box-sizing:border-box;text-align:left;padding:6px 0 0;}'
 		+ '.tkbb-my .tk-cd table.tbl_order tr.tk-stack td{white-space:nowrap;font-size:14px;padding:2px 0 6px;text-align:right;}'
+		// 2026-10-06 사용자 요청: 입금계좌 값은 오른쪽 정렬 (안쪽 요소 정렬까지 덮어씀)
+		+ '.tkbb-my table.tbl_order tr.tk-stack td,.tkbb-my table.tbl_order tr.tk-stack td *{text-align:right!important;}'
+		+ '.tkbb-my table.tbl_order tr.tk-stack td{display:block;width:100%;box-sizing:border-box;}'
 		+ '.tkbb-my .tk-cd table.tbl_order tr.tk-stack td strong{display:block;font-size:13px;font-weight:400;color:#7C8340;white-space:normal;}'
 		// 요약 카드·내역
 		+ '.tkbb-my .tk-lb{font-size:14px;color:#6A6A66;}'
