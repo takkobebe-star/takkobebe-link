@@ -831,7 +831,11 @@
 	// 오픈 예정·마감된 공구는 가격을 숨기는데(아래 ③), 일정을 불러오는 동안 가격이 잠깐 보였다 사라지지 않게
 	// 처음엔 가격 줄을 투명하게 두고, 일정 확인이 끝나면 다시 보이게 한다. 무슨 일이 있어도 3초 뒤엔 보인다. (2026-10-06 사용자 요청)
 	var prWait = document.createElement('style');
-	prWait.textContent = 'html.tkbb-prwait #detail .price{visibility:hidden;}';
+	// 상품 설명 속 '공구가' 가격표(○○-price-ttl 제목 · ○○-price-list 목록 · ○○-price-ft 안내 — 망고 mg-, 샐러드 sd- 등)도 함께 숨긴다.
+	// 설명은 늦게 그려질 수 있어 요소를 직접 건드리지 않고 html 에 tkbb-prhide 를 붙여 CSS 로 숨긴다. (2026-10-06 사용자 요청)
+	var DESC_PR = ['-price-ttl', '-price-list', '-price-ft'].map(function(c){ return '#detail .detail_info [class*="' + c + '"]'; });
+	prWait.textContent = 'html.tkbb-prwait #detail .price,' + DESC_PR.map(function(s){ return 'html.tkbb-prwait ' + s; }).join(',') + '{visibility:hidden;}'
+	                   + DESC_PR.map(function(s){ return 'html.tkbb-prhide ' + s; }).join(',') + '{display:none !important;}';
 	(document.head || document.documentElement).appendChild(prWait);
 	document.documentElement.classList.add('tkbb-prwait');
 	function prShow(){ document.documentElement.classList.remove('tkbb-prwait'); }
@@ -993,6 +997,7 @@
 					soonButtons(root, (day(me.start) === today ? '\uc624\ub298' : md(me.start, 1)) + ' \uc624\uc804 10\uc2dc\uc5d0 \ud310\ub9e4\ub97c \uc2dc\uc791\ud569\ub2c8\ub2e4');
 					// 오픈 전 공구는 가격(판매가·할인율·정가)을 숨긴다 (2026-10-06 사용자 요청)
 					pr.style.display = 'none';
+					document.documentElement.classList.add('tkbb-prhide');   // 설명 속 '공구가' 가격표도
 				} else if (me === live) {
 					var p1 = today.split('-'), p2 = day(me.end).split('-');
 					var left = Math.round((Date.UTC(+p2[0],+p2[1]-1,+p2[2]) - Date.UTC(+p1[0],+p1[1]-1,+p1[2])) / 86400000);
@@ -1005,6 +1010,7 @@
 					b.textContent = md(me.end) + ' ' + '\ub9c8\uac10\ub41c \uacf5\uad6c';
 					// 판매가 끝난 공구도 가격을 숨긴다 (2026-10-06 사용자 요청)
 					pr.style.display = 'none';
+					document.documentElement.classList.add('tkbb-prhide');   // 설명 속 '공구가' 가격표도
 				}
 				// 상품에 적어 둔 '판매기간'(추가항목, 글자일 뿐 판매를 막지는 않음)이 캘린더와 다르면 캘린더 날짜로 바꿔 보여 준다.
 				// 날짜만 바꾸고 '11시'·'자정' 같은 나머지 글자는 그대로 둔다. (사용자 요청: 기간이 다르면 캘린더 우선)
