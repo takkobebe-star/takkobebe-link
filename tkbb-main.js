@@ -1277,8 +1277,9 @@
 	if (window.__TKBB_REVP) return; window.__TKBB_REVP = 1;
 
 	var API = 'https://takkobebe-link.vercel.app/api/review-products';
-	var CSS = '.tkbb-pk-back{position:fixed;left:0;top:0;right:0;bottom:0;z-index:1999;background:transparent;}'
-		+ '.tkbb-pk{position:fixed;z-index:2000;box-sizing:border-box;background:rgba(88,88,88,.97);border-radius:20px;padding:9px 0 11px;box-shadow:0 10px 30px rgba(0,0,0,.28);overflow-y:auto;-webkit-overflow-scrolling:touch;text-align:left;}'
+	// 후기 쓰기 창(z-index 100001) 위에 떠야 한다 — 2026-10-06 목록이 창 뒤에 가려 안 보이던 것 수정
+	var CSS = '.tkbb-pk-back{position:fixed;left:0;top:0;right:0;bottom:0;z-index:100002;background:transparent;}'
+		+ '.tkbb-pk{position:fixed;z-index:100003;box-sizing:border-box;background:rgba(88,88,88,.97);border-radius:20px;padding:9px 0 11px;box-shadow:0 10px 30px rgba(0,0,0,.28);overflow-y:auto;-webkit-overflow-scrolling:touch;text-align:left;}'
 		+ '.tkbb-pk .g{color:rgba(255,255,255,.55);font-size:11.3px;font-weight:300;line-height:1.35;padding:9px 20px 3px;}'
 		+ '.tkbb-pk .o{position:relative;color:#fff;font-size:13.5px;font-weight:300;line-height:1.35;padding:6.5px 20px 6.5px 44px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.01em;cursor:pointer;}'
 		+ '.tkbb-pk .o.on:before{content:"\\2713";position:absolute;left:20px;top:6px;color:#fff;font-size:13.5px;font-weight:300;}'
@@ -2991,11 +2992,11 @@
 		+ R + 'fieldset > div.msg_milage .tkbb-mg{color:#3E4220 !important;font-size:13px !important;font-weight:400 !important;}'
 		+ R + 'fieldset > div.msg_milage .tkbb-mg b{color:#161616 !important;font-size:13px !important;font-weight:700 !important;}'
 		+ R + '.btn_col{display:flex;gap:8px;margin:6px 0 0;padding:0;}'
-		+ R + '.btn_col .box_btn{flex:1;display:block;width:auto;margin:0;padding:0;border:0;background:none;float:none;}'
+		+ R + '.btn_col .box_btn{flex:1 1 0;min-width:0;display:block;width:auto;margin:0;padding:0;border:0;background:none;float:none;}'
 		+ R + '.btn_col .box_btn input,' + R + '.btn_col .box_btn a{display:flex;align-items:center;justify-content:center;width:100%;height:50px;border-radius:5px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;}'
 		+ R + '.btn_col .box_btn input{order:2;border:0 !important;border-radius:5px !important;background:#161616 !important;color:#fff !important;}'
 		+ R + '.btn_col .box_btn.white a{border:1px solid #DAD5C8 !important;background:#fff !important;color:#6A6A66 !important;}'
-		+ R + '.btn_col .box_btn.white{order:-1;flex:0 0 96px;}'
+		+ R + '.btn_col .box_btn.white{order:-1;flex:1 1 0;}'   // 취소·확인 같은 너비 (2026-10-06)
 		// 쓰기 창이 떠 있는 동안 아래 탭바가 등록 버튼을 가리지 않게 숨긴다
 		+ 'body.tkbb-revw-open .fix_footer{display:none !important;}';
 	function add(){
