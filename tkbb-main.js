@@ -1867,7 +1867,7 @@
 		'/mypage/coupon_down_list.php': couponList,
 		'/mypage/counsel_list.php': counselList, '/mypage/qna_list.php': qnaList, '/mypage/review_list.php': reviewList,
 		'/mypage/notify_restock.php': function(c){ return simpleCard(c, 'restock', '재입고 알림'); },
-		'/shop/product_qna_list.php': qnaBoard, '/shop/product_qna.php': qnaBoard, '/shop/order_finish.php': orderFinish, '/shop/order.php': orderForm, '/shop/cart.php': cartPage,
+		'/shop/product_qna_list.php': qnaBoard, '/shop/product_qna.php': qnaBoard, '/shop/product_review_list.php': reviewBoard, '/shop/order_finish.php': orderFinish, '/shop/order.php': orderForm, '/shop/cart.php': cartPage,
 		'/member/edit_step1.php': editInfo, '/member/edit_step2.php': editInfo, '/mypage/withdraw_step1.php': withdraw };
 	if (!PAGES[P]) return;
 
@@ -2080,6 +2080,17 @@
 		+ '#cnt.tkbb-my .tk-qa .more_btn,#cnt.tkbb-my .tk-qa .btn_col .box_btn.white{display:block;margin:0;padding:0;border:0;background:none;}'
 		+ '#cnt.tkbb-my .tk-qa .more_btn a,#cnt.tkbb-my .tk-qa .btn_col .box_btn.white a{display:flex;align-items:center;justify-content:center;height:48px;border-radius:7px;border:1px solid #DAD5C8;background:#fff;color:#161616;font-size:14px;}'
 		+ '#cnt.tkbb-my .tk-qa > .btn_col .box_btn:not(.white){display:none;}'
+		// 상품후기 게시판 (Q&A 게시판과 같은 모양, 2026-10-06)
+		+ '.tkbb-my .tk-rv .tk-sort{display:flex;align-items:center;justify-content:space-between;margin-top:12px;}'
+		+ '.tkbb-my .tk-rv .tk-sort a{font-size:13px;color:#9A9A94;}'
+		+ '.tkbb-my .tk-rv .tk-sort a.on{color:#161616;font-weight:600;}'
+		+ '.tkbb-my .tk-rv .tk-sort .so{display:flex;gap:14px;}'
+		+ '.tkbb-my .tk-rv .tk-ph{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border:1px solid #DAD5C8;border-radius:999px;background:#fff;color:#6A6A66 !important;font-size:13px !important;}'
+		+ '.tkbb-my .tk-rv .tk-ph.on{border-color:#161616;background:#161616;color:#fff !important;font-weight:500;}'
+		+ '.tkbb-my .tk-rv ul.list_qnarev .tk-stars{display:inline-block;margin-right:6px;color:#7C8340;font-size:13px;letter-spacing:1px;}'
+		+ '.tkbb-my .tk-rv ul.list_qnarev .stat:empty{display:none;}'
+		+ '#cnt.tkbb-my .tk-rv .more_btn{display:block;margin:0;padding:0;border:0;background:none;}'
+		+ '#cnt.tkbb-my .tk-rv .more_btn a{display:flex;align-items:center;justify-content:center;height:48px;border-radius:7px;border:1px solid #DAD5C8;background:#fff;color:#161616;font-size:14px;}'
 		// 주문완료
 		+ '.tkbb-my .tk-done{text-align:center;padding:30px 18px 26px;}'
 		+ '.tkbb-my .tk-done .ic{width:56px;height:56px;margin:0 auto;border-radius:50%;background:#D1D798;display:flex;align-items:center;justify-content:center;}'
@@ -2697,6 +2708,68 @@
 		for (var r = 0; r < rest.length; r++) wrap.appendChild(rest[r]);
 		hide(box);
 		cnt.insertBefore(header('Q&A'), wrap);
+		return true;
+	}
+
+	/* ---------- 상품후기 게시판 — Q&A 게시판과 같은 모양 (2026-10-06 사용자 요청) ----------
+	   검색 카드(+ 포토후기만 · 최신순/추천순) → 검정 '후기 쓰기' 버튼(맨 위, 항상) → 흰 카드 목록 → 더 보기.
+	   후기 쓰기는 회원만 되므로(관리자 설정) 로그인 안 한 손님에게는 버튼이 로그인 화면으로 보낸다.
+	   목록 줄을 누르면 위사 후기 창(openReviewDetail)이 그대로 열린다. */
+	function reviewBoard(cnt){
+		var box = document.getElementById('qnarev_list_all');
+		var ul = document.getElementById('review_list_body');
+		if (!box || !ul) return false;
+		var wrap = el('div', 'tk-wr tk-rv');
+		box.parentNode.insertBefore(wrap, box);
+		// 검색 + 정렬
+		var sr = box.querySelector('.board_search');
+		var sc = el('div', 'tk-cd tk-srch');
+		if (sr) {
+			sc.appendChild(sr);
+			var sf = sr.querySelector('form'), ss = sr.querySelector('select'), si = sr.querySelector('input.form_input');
+			if (sf && ss && si) { var sb = el('div', 'tk-sbox'); sf.insertBefore(sb, ss); sb.appendChild(ss); sb.appendChild(si); ss.setAttribute('aria-label', '검색 조건'); si.setAttribute('aria-label', '검색어'); si.setAttribute('placeholder', '검색어를 입력하세요'); }
+		}
+		var ps = box.querySelector('.photo_sort');
+		if (ps) {
+			var photo = /[?&]type=2/.test(location.search);
+			var row = el('div', 'tk-sort');
+			var ph = el('a', 'tk-ph' + (photo ? ' on' : ''), '포토후기만');
+			ph.href = photo ? '/shop/product_review_list.php' : '/shop/product_review_list.php?type=2';
+			row.appendChild(ph);
+			var so = el('div', 'so'), sa = ps.querySelectorAll('ul.sort a');
+			for (var i = 0; i < sa.length; i++) { var a2 = el('a', /selected/.test(sa[i].className) ? 'on' : '', txt(sa[i])); a2.href = sa[i].getAttribute('href'); so.appendChild(a2); }
+			row.appendChild(so);
+			sc.appendChild(row);
+		}
+		if (sc.firstChild) wrap.appendChild(sc);
+		// 후기 쓰기 버튼 — 위사 글쓰기 버튼은 회원에게만 나와서 손님에게는 안 보였다. 항상 맨 위에 둔다
+		var wa = box.querySelector('.box_btn.green a, a[onclick*="writeReview"]');
+		var wb = el('a', 'tk-black', '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>&nbsp;후기 쓰기');
+		wb.href = 'javascript:;';
+		wb.addEventListener('click', function(e){
+			e.preventDefault();
+			if (wa) { wa.click(); return; }
+			if (String(window.mlv) !== '10' && typeof window.writeReviewWithoutRa === 'function') { window.writeReviewWithoutRa(0, ''); return; }
+			location.href = '/member/login.php?rURL=' + encodeURIComponent(location.pathname + location.search);   // 손님 → 로그인 후 이 게시판으로
+		});
+		wrap.appendChild(wb);
+		var gb = box.querySelector('.box_btn.green'); if (gb) hide(gb);
+		// 목록: 별점은 숫자만큼 별로
+		wrap.appendChild(ul);
+		var stars = function(){
+			var gs = ul.querySelectorAll('.grade');
+			for (var k = 0; k < gs.length; k++) {
+				var st = gs[k].parentNode; if (!st || st.getAttribute('data-tk')) continue;
+				st.setAttribute('data-tk', '1');
+				var n = Math.max(0, Math.min(5, parseInt(txt(gs[k]), 10) || 0));
+				st.innerHTML = n ? '<span class="tk-stars" aria-label="별점 ' + n + '점">' + '★★★★★'.slice(0, n) + '<span style="color:#DAD5C8">' + '★★★★★'.slice(0, 5 - n) + '</span></span>' : '';
+			}
+		};
+		stars();
+		if (window.MutationObserver) new MutationObserver(stars).observe(ul, { childList: true });
+		var mb = box.querySelector('.more_btn'); if (mb) wrap.appendChild(mb);
+		hide(box);
+		cnt.insertBefore(header('후기'), wrap);
 		return true;
 	}
 
