@@ -2430,7 +2430,7 @@
 		var cf = document.orderCustFrm;
 		var os = cf && cf.stat ? (parseInt(cf.stat.value, 10) || 0) : 0;
 		var cb = el('div', 'tk-bt tk-bt2 tk-bt3');
-		cb.appendChild(el('a', '', '1:1 문의')).setAttribute('href', CS);
+		cb.appendChild(el('a', '', '1:1 문의')).setAttribute('href', 'https://m.takkobebe.com/shop/product_qna_list.php');   // 1:1 문의 게시판 (2026-10-06 사용자 요청)
 		if (os >= 1 && os <= 5) {
 			var ca = el('a', 'tk-cancel', '취소/환불/반품 신청');
 			ca.setAttribute('href', 'javascript:;');
