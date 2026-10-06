@@ -360,7 +360,7 @@
 				+ '.tkbb-cal.v2 .tkbb-list .th img{width:100%;height:100%;object-fit:cover;display:block;}'
 				+ '.tkbb-cal.v2 .tkbb-list .th i{position:absolute;left:4px;bottom:4px;font-style:normal;background:#D1D798;color:#3E4220;font-size:10px;font-weight:700;padding:1px 6px;border-radius:999px;line-height:1.5;}'
 				+ '.tkbb-cal.v2 .tkbb-list .tx .n{font-size:13.5px;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}'
-				+ '.tkbb-cal.v2 .tkbb-list .tx .s{font-size:11.5px;font-weight:500;color:#52728A;margin-top:3px;}'
+				+ '.tkbb-cal.v2 .tkbb-list .tx .s{font-size:11.5px;font-weight:400;color:#9A9A94;margin-top:3px;}'
 				+ '.tkbb-cal.v2 .tkbb-list .bt{flex:0 0 auto;display:flex;align-items:center;gap:4px;height:32px;padding:0 11px;border:1px solid #D1D798;background:#D1D798;border-radius:999px;font-size:12px;font-weight:500;color:#3E4220;white-space:nowrap;}'
 				+ '.tkbb-cal.v2 .tkbb-list .bt.off{border-color:#DAD5C8;background:#fff;font-weight:400;color:#9A9682;}'));
 			(document.head || document.documentElement).appendChild(cs);
@@ -1248,7 +1248,8 @@
 			// 2026-10-01 사용자 요청: 안내 금액은 '최대 1,000원' 으로 고정 (위사 칸에 찍힌 합계와 상관없이)
 			if (sum > 0 || ms.textContent.replace(/\s+/g, '')) {
 				var guest = String(window.mlv) === '10';   // 로그인 안 한 손님은 적립금을 못 받는다
-				ms.innerHTML = '<span class="tkbb-mg">후기 작성 시 ' + (guest ? '회원 ' : '') + '적립금 <b>최대 1,000원</b></span>';
+				// 2026-10-06 사용자 요청: '리뷰 작성(사진 첨부 시 최대 700원)'
+				ms.innerHTML = '<span class="tkbb-mg">리뷰 작성(' + (guest ? '회원 · ' : '') + '사진 첨부 시 <b>최대 700원</b>)</span>';
 			}
 		}
 	}
@@ -1264,8 +1265,8 @@
 /* ===== 상품후기 쓰기 — '분류 선택' 대신 '상품선택' =====
    후기 목록에서 글쓰기를 누르면 상품이 정해지지 않은 쓰기 창(form revFrm, pno 빈 값)이 열린다.
    '분류' 칸(select cate, 항목은 '상품' 하나)을 '상품선택' 칸으로 바꾸고, 누르면 목록 창을 띄운다.
-     · 로그인 안 한 손님: 지금 공구 중 + 자주 찾는 상품 + 지금 판매 중 + 최근 한 달 판매 (https://takkobebe-link.vercel.app/api/review-products)
-     · 로그인한 손님: 내가 구매한 상품 전부 (손님 브라우저가 마이페이지 주문내역·주문 상세를 직접 읽는다 — 주문 정보는 밖으로 안 보낸다).
+     · 모든 손님(2026-10-06~): 지금 공구 중 + 자주 찾는 상품 + 지금 판매 중 + 최근 두 달 판매 (https://takkobebe-link.vercel.app/api/review-products)
+     · (2026-10-06까지) 로그인한 손님: 내가 구매한 상품 전부 (손님 브라우저가 마이페이지 주문내역·주문 상세를 직접 읽는다 — 주문 정보는 밖으로 안 보낸다).
        구매한 상품이 하나도 안 잡히면 로그인 안 한 손님과 같은 목록.
    고르면 폼의 pno(상품 해시)를 채운다. 분류 값은 계속 '상품'으로 보낸다(목록의 '[상품]' 머리말 유지).
    상품 상세에서 연 쓰기 창은 이미 그 상품이 정해져 있어서 칸에 상품명만 보여 준다.
@@ -1277,7 +1278,7 @@
 
 	var API = 'https://takkobebe-link.vercel.app/api/review-products';
 	var CSS = '.tkbb-pk-back{position:fixed;left:0;top:0;right:0;bottom:0;z-index:1999;background:transparent;}'
-		+ '.tkbb-pk{position:fixed;z-index:2000;box-sizing:border-box;background:rgba(88,88,88,.97);border-radius:22px;padding:9px 0 11px;box-shadow:0 10px 30px rgba(0,0,0,.28);overflow-y:auto;-webkit-overflow-scrolling:touch;text-align:left;}'
+		+ '.tkbb-pk{position:fixed;z-index:2000;box-sizing:border-box;background:rgba(88,88,88,.97);border-radius:20px;padding:9px 0 11px;box-shadow:0 10px 30px rgba(0,0,0,.28);overflow-y:auto;-webkit-overflow-scrolling:touch;text-align:left;}'
 		+ '.tkbb-pk .g{color:rgba(255,255,255,.55);font-size:11.3px;font-weight:300;line-height:1.35;padding:9px 20px 3px;}'
 		+ '.tkbb-pk .o{position:relative;color:#fff;font-size:13.5px;font-weight:300;line-height:1.35;padding:6.5px 20px 6.5px 44px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.01em;cursor:pointer;}'
 		+ '.tkbb-pk .o.on:before{content:"\\2713";position:absolute;left:20px;top:6px;color:#fff;font-size:13.5px;font-weight:300;}'
@@ -1297,15 +1298,15 @@
 
 	// ── 로그인 안 한 손님 목록 (10분 동안은 다시 받지 않는다) ──
 	function guestGroups(){
-		var c = sget('tkbb_revp_api');
+		var c = sget('tkbb_revp_api2');
 		if (c && Date.now() - c.t < 600000) return Promise.resolve(c.g);
 		return fetch(API).then(function(r){ return r.json(); }).then(function(d){
 			var g = [];
 			if (d.live && d.live.length) g.push({ t: '지금 공구 중', items: d.live });        // 항상 맨 위
 			if (d.top && d.top.length) g.push({ t: '자주 찾는 상품', items: d.top });         // 계란·쌀빵·참기름·치즈
 			if (d.now && d.now.length) g.push({ t: '지금 판매 중', items: d.now });
-			if (d.recent && d.recent.length) g.push({ t: '최근 한 달 판매', items: d.recent });
-			if (g.length) sset('tkbb_revp_api', { t: Date.now(), g: g });
+			if (d.recent && d.recent.length) g.push({ t: '최근 두 달 판매', items: d.recent });
+			if (g.length) sset('tkbb_revp_api2', { t: Date.now(), g: g });
 			return g;
 		});
 	}
@@ -1453,15 +1454,9 @@
 				if (POP && POP.box === box) render(box, g, cur, g.length ? prefix : '지금 고를 수 있는 상품이 없어요.');
 			});
 		}
-		var job = member()
-			? mineGroups(function(g, done, total){
-				if (POP && POP.box === box && g.length) render(box, g, cur, done < total ? '주문내역을 읽는 중… ' + done + '/' + total : '');
-			}).then(function(g){
-				if (!(POP && POP.box === box)) return;
-				if (g.length) render(box, g, cur, '');
-				else return guest('');
-			})
-			: guest('');
+		// 2026-10-06 사용자 요청: 로그인 여부와 상관없이 '최근 판매 상품'(작성일로부터 두 달 전까지 판매한 상품)을 보여 준다.
+		// (예전 '내가 구매한 상품' 목록 mineGroups 는 남겨 둔다 — 다시 쓰려면 여기서 member() 일 때 mineGroups 를 부르면 된다)
+		var job = guest('');
 		job.catch(function(){
 			if (POP && POP.box === box) render(box, [], cur, '목록을 불러오지 못했어요. 잠시 뒤 다시 눌러 주세요.');
 		});
@@ -2892,7 +2887,7 @@
 })();
 /* ===== 마이페이지 하위 메뉴 끝 ===== */
 
-/* ===== 상품후기 작성 팝업 (심플 버전, 타코베베 컬러) — 2026-10-01 =====
+/* ===== 상품후기 작성 팝업 (심플 버전, 타코베베 컬러) — 2026-10-01 (모서리 -2px: 2026-10-06) =====
    위사가 body 끝에 붙이는 #revWriteAjaxDiv 레이어의 모양만 바꾼다. 기능(별점·글·사진·등록)은 그대로.
    흰 바탕 한 장 + 칸마다 작은 회색 제목 + 연한 베이지 입력칸. 작성자 줄과 상품이 이미 정해진 경우의 '분류' 줄은 숨긴다.
    되돌리려면 이 블록만 지우면 된다. (예전 카드형은 git 기록 2026-09-30) */
@@ -2901,7 +2896,7 @@
 	if (window.browser_type === 'pc') return;
 	var R = '#revWriteAjaxDiv ';
 	var CSS = ''
-		+ R + '.qnarev_write_popup{background:#fff !important;border-radius:12px 12px 0 0;padding:22px 20px 18px !important;font-family:inherit;letter-spacing:-.02em;color:#161616;box-sizing:border-box;max-height:88vh;overflow-y:auto;}'
+		+ R + '.qnarev_write_popup{background:#fff !important;border-radius:10px 10px 0 0;padding:22px 20px 18px !important;font-family:inherit;letter-spacing:-.02em;color:#161616;box-sizing:border-box;max-height:88vh;overflow-y:auto;}'
 		+ R + '.qnarev_write{background:none !important;padding:0 !important;border:0 !important;}'
 		+ R + '.qnarev_write_popup{z-index:100001 !important;}'
 		+ R + 'fieldset{border:0;margin:0;padding:0;}'
@@ -2911,20 +2906,20 @@
 		+ R + 'fieldset > div > label{display:block;float:none;width:auto;margin:0 0 8px;padding:0;font-size:13px;font-weight:600;color:#161616;}'
 		+ R + '.grade{text-align:center;padding:18px 0 20px !important;margin:0 0 20px !important;border-bottom:1px solid #EFEDE6 !important;}'
 		+ R + '.grade .msg{margin:0 0 10px;font-size:14px;font-weight:500;color:#6A6A66;}'
-		+ R + 'select,' + R + '.form_input{width:100%;box-sizing:border-box;min-height:46px;border:1px solid transparent !important;border-radius:7px;background:#F7F5EE !important;padding:0 14px;font-size:14px;color:#161616;}'
+		+ R + 'select,' + R + '.form_input{width:100%;box-sizing:border-box;min-height:46px;border:1px solid transparent !important;border-radius:5px;background:#F7F5EE !important;padding:0 14px;font-size:14px;color:#161616;}'
 		+ R + '.form_input:focus,' + R + 'select:focus{border-color:#B9C077 !important;outline:0;background:#fff !important;}'
 		+ R + 'textarea.form_input{height:150px;padding:12px 14px;line-height:1.6;}'
 		+ R + 'input[type=file].form_input{height:auto;min-height:0;padding:9px 12px;line-height:26px;font-size:13px;color:#6A6A66;}'
 		+ R + 'fieldset > div.tk-file{margin:0 0 8px;}'
 		+ R + 'fieldset > div.tk-file > label{font-weight:400;color:#6A6A66;font-size:12px;}'
 		// 적립금 안내: 칸이 아니라 한 줄 문구 (가운데, 연두 점)
-		+ R + 'fieldset > div.msg_milage{display:flex !important;align-items:center;justify-content:center;gap:6px;margin:4px 0 18px !important;padding:11px 0 !important;background:#F4F6E4 !important;border-radius:7px !important;}'
+		+ R + 'fieldset > div.msg_milage{display:flex !important;align-items:center;justify-content:center;gap:6px;margin:4px 0 18px !important;padding:11px 0 !important;background:#F4F6E4 !important;border-radius:5px !important;}'
 		+ R + 'fieldset > div.msg_milage:before{display:none !important;}'
 		+ R + 'fieldset > div.msg_milage .tkbb-mg{color:#3E4220 !important;font-size:13px !important;font-weight:400 !important;}'
 		+ R + 'fieldset > div.msg_milage .tkbb-mg b{color:#161616 !important;font-size:13px !important;font-weight:700 !important;}'
 		+ R + '.btn_col{display:flex;gap:8px;margin:6px 0 0;padding:0;}'
 		+ R + '.btn_col .box_btn{flex:1;display:block;width:auto;margin:0;padding:0;border:0;background:none;float:none;}'
-		+ R + '.btn_col .box_btn input,' + R + '.btn_col .box_btn a{display:flex;align-items:center;justify-content:center;width:100%;height:50px;border-radius:7px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;}'
+		+ R + '.btn_col .box_btn input,' + R + '.btn_col .box_btn a{display:flex;align-items:center;justify-content:center;width:100%;height:50px;border-radius:5px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;}'
 		+ R + '.btn_col .box_btn input{order:2;border:0 !important;background:#161616 !important;color:#fff !important;}'
 		+ R + '.btn_col .box_btn.white a{border:1px solid #DAD5C8 !important;background:#fff !important;color:#6A6A66 !important;}'
 		+ R + '.btn_col .box_btn.white{order:-1;flex:0 0 96px;}'
