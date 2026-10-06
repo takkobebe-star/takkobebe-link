@@ -60,6 +60,8 @@
 			+ '.tkbb-row .c img,.tkbb-grid .c img{border-radius:5px;}'
 			+ '.tkbb-grid.g3{grid-template-columns:1fr 1fr 1fr;gap:16px 8px;}'
 			+ '.tkbb-grid.g3 .c img{aspect-ratio:1/1.15;}'
+			+ '.tkbb-grid.g2c{grid-template-columns:1fr 1fr;gap:20px 10px;}'
+			+ '.tkbb-grid.g2c .c img{aspect-ratio:1/1;}'
 			+ '.tkbb-row .c b,.tkbb-grid .c b{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:4px;}'
 			+ '.tkbb-row .c b em.pc,.tkbb-grid .c b em.pc{font-style:normal;font-size:14px;font-weight:700;color:#52728A;}'
 			+ '.tkbb-row .c b s,.tkbb-grid .c b s{flex-basis:100%;margin:2px 0 0 !important;}'
@@ -733,7 +735,7 @@
 		});
 	}
 
-	// ── 언제든 살 수 있어요 : 먹거리 분류에서 판매중 6개 (3열 2행, 2026-10-01)
+	// ── 언제든 살 수 있어요 : 먹거리 분류에서 판매중 6개 (2열 3행, 2026-10-06)
 	function drawAlways(){
 		fetch('/shop/big_section.php?cno1=1005').then(function(r){ return r.text(); }).then(function(t){
 			var d = new DOMParser().parseFromString(t,'text/html');
@@ -741,7 +743,7 @@
 			if (ps.length < 2) return;
 			var h = '<div class="tkbb-sec"><div class="st"><h2>언제든 살 수 있어요</h2>'
 			      + '<a href="/shop/big_section.php?cno1=1005">전체 보기 ›</a></div>'
-			      + '<div class="sub">공구가 끝나도 계속 주문할 수 있는 상품들</div><div class="tkbb-grid g3">';
+			      + '<div class="sub">공구가 끝나도 계속 주문할 수 있는 상품들</div><div class="tkbb-grid g2c">';
 			for (var i=0;i<ps.length;i++) h += card(ps[i], '');
 			h += '</div><a class="tkbb-more" href="/shop/big_section.php?cno1=1005">전체 보기</a></div>';
 			var w = document.createElement('div'); w.innerHTML = h;
