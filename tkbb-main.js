@@ -828,6 +828,15 @@
 	if (window.__TKBB_DT) return; window.__TKBB_DT = 1;
 	if (location.pathname.indexOf('/shop/detail.php') < 0) return;
 
+	// 오픈 예정·마감된 공구는 가격을 숨기는데(아래 ③), 일정을 불러오는 동안 가격이 잠깐 보였다 사라지지 않게
+	// 처음엔 가격 줄을 투명하게 두고, 일정 확인이 끝나면 다시 보이게 한다. 무슨 일이 있어도 3초 뒤엔 보인다. (2026-10-06 사용자 요청)
+	var prWait = document.createElement('style');
+	prWait.textContent = 'html.tkbb-prwait #detail .price{visibility:hidden;}';
+	(document.head || document.documentElement).appendChild(prWait);
+	document.documentElement.classList.add('tkbb-prwait');
+	function prShow(){ document.documentElement.classList.remove('tkbb-prwait'); }
+	setTimeout(prShow, 3000);
+
 	function txt(el){ return el ? el.textContent.replace(/\s+/g,' ').trim() : ''; }
 	function num(t){ var n = parseInt(String(t).replace(/[^0-9]/g,''), 10); return isNaN(n) ? 0 : n; }
 
@@ -932,7 +941,7 @@
 
 		// ③ 공구 일정 — 캘린더 일정에서 이 상품을 찾아, 시작 전·진행 중·끝난 뒤를 나눠 보여 준다
 		var pnoEl = root.querySelector('input[name=pno]');
-		if (!pnoEl || root.querySelector('.tkbb-dt-dday, .tkbb-dt-soon')) return;
+		if (!pnoEl || root.querySelector('.tkbb-dt-dday, .tkbb-dt-soon')) { prShow(); return; }
 		// fetch 가 끝나기 전에 run 이 한 번 더 돌면 칩이 두 개 붙는다. 요청 전에 미리 잠근다
 		if (window.__TKBB_DDAY) return;
 		window.__TKBB_DDAY = 1;
@@ -1014,7 +1023,7 @@
 					break;
 				}
 				pr.parentNode.insertBefore(b, pr.nextSibling);
-			}).catch(function(){});
+			}).catch(function(){}).then(prShow);   // 숨길 상품은 위에서 이미 display:none — 나머지는 이때 가격이 보인다
 	}
 
 	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
