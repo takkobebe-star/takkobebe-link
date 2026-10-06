@@ -2446,7 +2446,6 @@
 			cb.appendChild(ca);
 		}
 		top.appendChild(cb);
-		if (os > 10) top.appendChild(el('div', 'tk-bt tk-bt2', '<span class="tk-claim">취소·반품 접수 내역은 아래 문의 내역에서 확인할 수 있어요</span>'));
 		wrap.appendChild(top);
 
 		// 2) 나머지 섹션: 제목(h3) + 바로 다음 상자를 카드 하나로 옮긴다
@@ -2454,6 +2453,7 @@
 		for (var j = 0; j < h3s.length; j++) {
 			var t = txt(h3s[j]), body = h3s[j].nextElementSibling;
 			if (!body || t === '주문상품') continue;
+			if (t === '주문 1:1문의') continue;   // 주문 문의 섹션은 주문 상세에서 보이지 않게 한다 (2026-10-06 사용자 요청)
 			var cd = el('div', 'tk-cd');
 			var tt = el('div', 'tk-tt', '<h3 class="tk-t">' + esc(t === '주문 1:1문의' ? '주문 문의' : t) + '</h3>');
 			cd.appendChild(tt);
