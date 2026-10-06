@@ -1180,10 +1180,16 @@
 (function(){
 	if (window.__TKBB_REV) return; window.__TKBB_REV = 1;
 
-	// 바 높이 72px = 글씨 줄 54px + 아래 빈칸 18px (처음 88px 은 두껍다고 해서 줄임)
-	var CSS = '.tkbb-revbuy{position:fixed;left:var(--tk-l,0);width:var(--tk-w,100%);bottom:0;z-index:101;height:72px;padding:0 0 18px;box-sizing:border-box;background:#D1D798;}'
-		+ '.tkbb-revbuy a{display:block;height:54px;line-height:54px;text-align:center;color:#2E3517;font-size:15px;font-weight:500;letter-spacing:-.02em;text-decoration:none;}'
-		+ '.layer_review_list.tkbb-hasbuy{padding-bottom:72px !important;box-sizing:border-box;}'
+	// 2026-10-06 사용자 요청 '비율 조절': 화면 끝까지 꽉 찬 띠 → 흰 바탕 위 둥근 연두 버튼(높이 50px, 좌우 16px 여백). 아이폰 홈 막대 칸은 safe-area 만큼 띄운다
+	var CSS = '.tkbb-revbuy{position:fixed;left:var(--tk-l,0);width:var(--tk-w,100%);bottom:0;z-index:101;padding:10px 16px calc(12px + env(safe-area-inset-bottom));box-sizing:border-box;background:#fff;border-top:1px solid #EFEDE6;}'
+		+ '.tkbb-revbuy a{display:flex;align-items:center;justify-content:center;height:50px;border-radius:5px;background:#D1D798;color:#161616;font-size:15px;font-weight:600;letter-spacing:-.02em;text-decoration:none;}'
+		+ '.layer_review_list.tkbb-hasbuy{padding-bottom:calc(84px + env(safe-area-inset-bottom)) !important;box-sizing:border-box;}'
+		// 3. 후기 창 댓글 칸: 높이 줄이고(150 → 76px) 오른쪽에 검정 '확인' 버튼 (위사 버튼 그대로, 모양만)
+		+ '#revWriteAjaxDiv .layer_review_list .write{display:flex !important;gap:8px;align-items:stretch;padding:0 !important;border:0 !important;background:none !important;}'
+		+ '#revWriteAjaxDiv .layer_review_list .write:before,#revWriteAjaxDiv .layer_review_list .write:after{display:none !important;}'
+		+ '#revWriteAjaxDiv .layer_review_list .write textarea{flex:1;min-width:0;height:76px !important;min-height:0 !important;margin:0 !important;padding:11px 12px !important;border:1px solid transparent !important;border-radius:5px !important;background:#F7F5EE !important;font-size:14px;line-height:1.5;resize:none;box-sizing:border-box;}'
+		+ '#revWriteAjaxDiv .layer_review_list .write textarea:focus{border-color:#B9C077 !important;background:#fff !important;outline:0;}'
+		+ '#revWriteAjaxDiv .layer_review_list .write .btn_comment{position:static !important;flex:0 0 64px;width:64px !important;height:76px !important;margin:0 !important;padding:0 !important;border:0 !important;border-radius:5px !important;background:#161616 !important;color:#fff !important;-webkit-text-fill-color:#fff;font-size:14px;font-weight:600;font-family:inherit;-webkit-appearance:none;appearance:none;cursor:pointer;}'
 		+ 'body.tkbb-revopen .fix_footer{display:none !important;}'
 		// 검정 네모 칸 — 말풍선 꼭지(:before)를 빼고, 위 내용칸에 붙어 있던 것(margin-top -15px)도 다른 칸처럼 띄운다(-4px 이면 칸 사이 11px 로 다른 칸과 같다). 글씨는 전부 흰색
 		+ '.qnarev_write fieldset > div.msg_milage{margin-top:-4px !important;background-color:#161616 !important;border-color:#161616 !important;}'
@@ -1299,15 +1305,15 @@
 
 	// ── 로그인 안 한 손님 목록 (10분 동안은 다시 받지 않는다) ──
 	function guestGroups(){
-		var c = sget('tkbb_revp_api2');
+		var c = sget('tkbb_revp_api3');
 		if (c && Date.now() - c.t < 600000) return Promise.resolve(c.g);
 		return fetch(API).then(function(r){ return r.json(); }).then(function(d){
 			var g = [];
-			if (d.live && d.live.length) g.push({ t: '지금 공구 중', items: d.live });        // 항상 맨 위
-			if (d.top && d.top.length) g.push({ t: '자주 찾는 상품', items: d.top });         // 계란·쌀빵·참기름·치즈
-			if (d.now && d.now.length) g.push({ t: '지금 판매 중', items: d.now });
+			// 2026-10-06 사용자 요청: '최근 두 달 판매' → '지금 판매 중' 두 묶음만. 지금 공구 중·자주 찾는 상품은 '지금 판매 중' 맨 앞에 합친다
 			if (d.recent && d.recent.length) g.push({ t: '최근 두 달 판매', items: d.recent });
-			if (g.length) sset('tkbb_revp_api2', { t: Date.now(), g: g });
+			var nowAll = [].concat(d.live || [], d.top || [], d.now || []);
+			if (nowAll.length) g.push({ t: '지금 판매 중', items: nowAll });
+			if (g.length) sset('tkbb_revp_api3', { t: Date.now(), g: g });
 			return g;
 		});
 	}
@@ -2987,9 +2993,9 @@
 		+ R + 'fieldset > div.tk-file{margin:0 0 8px;}'
 		+ R + 'fieldset > div.tk-file > label{font-weight:400;color:#6A6A66;font-size:12px;}'
 		// 적립금 안내: 칸이 아니라 한 줄 문구 (가운데, 연두 점)
-		+ R + 'fieldset > div.msg_milage{display:flex !important;align-items:center;justify-content:center;gap:6px;margin:4px 0 18px !important;padding:11px 0 !important;background:#F4F6E4 !important;border-radius:5px !important;}'
+		+ R + 'fieldset > div.msg_milage{display:flex !important;align-items:center;justify-content:center;gap:6px;margin:4px 0 18px !important;padding:11px 0 !important;background:#D1D798 !important;border-radius:5px !important;}'   // 브랜드 연두 (2026-10-06)
 		+ R + 'fieldset > div.msg_milage:before{display:none !important;}'
-		+ R + 'fieldset > div.msg_milage .tkbb-mg{color:#3E4220 !important;font-size:13px !important;font-weight:400 !important;}'
+		+ R + 'fieldset > div.msg_milage .tkbb-mg{color:#161616 !important;font-size:13px !important;font-weight:400 !important;}'
 		+ R + 'fieldset > div.msg_milage .tkbb-mg b{color:#161616 !important;font-size:13px !important;font-weight:700 !important;}'
 		+ R + '.btn_col{display:flex;gap:8px;margin:6px 0 0;padding:0;}'
 		+ R + '.btn_col .box_btn{flex:1 1 0;min-width:0;display:block;width:auto;margin:0;padding:0;border:0;background:none;float:none;}'
