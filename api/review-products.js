@@ -248,13 +248,15 @@ async function build() {
         recent.push({ pno, name: showName(c.name, pno), end: e0 });
       }
     });
-    const rest = nowAll.filter((it) => !inRecent[it.pno]);
     const isTop = (it) => prio(it.name) < 99;
-    const now = rest.filter((it) => liveSet[it.pno])
-      .concat(byPriority(rest.filter((it) => !liveSet[it.pno] && isTop(it))))
-      .concat(rest.filter((it) => !liveSet[it.pno] && !isTop(it)));
+    const order = (arr) => arr.filter((it) => liveSet[it.pno])
+      .concat(byPriority(arr.filter((it) => !liveSet[it.pno] && isTop(it))))
+      .concat(arr.filter((it) => !liveSet[it.pno] && !isTop(it)));
+    const now = order(nowAll.filter((it) => !inRecent[it.pno]));
+    // all = 지금 판매 중인 상품 전부 (공구 상품이어도 포함) — 후기 쓰기 '2. 상시 판매 상품' (2026-10-06)
+    const all = order(nowAll);
     // live·top 은 예전 화면 코드와 맞추려고 빈 칸으로 남긴다
-    return { recent, now, live: [], top: [], from, today, complete: nowAll.length > 0 };
+    return { recent, now, all, live: [], top: [], from, today, complete: nowAll.length > 0 };
 }
 
 module.exports = async (req, res) => {

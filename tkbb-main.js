@@ -1289,6 +1289,10 @@
 		+ '.tkbb-pk .g{color:rgba(255,255,255,.55);font-size:11.3px;font-weight:300;line-height:1.35;padding:9px 20px 3px;}'
 		+ '.tkbb-pk .o{position:relative;color:#fff;font-size:13.5px;font-weight:300;line-height:1.35;padding:6.5px 20px 6.5px 44px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.01em;cursor:pointer;}'
 		+ '.tkbb-pk .o.on:before{content:"\\2713";position:absolute;left:20px;top:6px;color:#fff;font-size:13.5px;font-weight:300;}'
+		+ '.tkbb-pk .c{padding:11px 20px;cursor:pointer;}'
+		+ '.tkbb-pk .c b{display:block;color:#fff;font-size:14.5px;font-weight:500;line-height:1.35;}'
+		+ '.tkbb-pk .c span{display:block;margin-top:2px;color:rgba(255,255,255,.55);font-size:11.5px;font-weight:300;}'
+		+ '.tkbb-pk .bk{padding:8px 20px 6px;color:rgba(255,255,255,.7);font-size:12px;font-weight:400;cursor:pointer;}'
 		+ '.tkbb-pk .msg{color:rgba(255,255,255,.62);font-size:12px;font-weight:300;line-height:1.45;padding:10px 20px;}'
 		+ '.qnarev_write select.tkbb-pk-fixed{background-image:none;padding-left:15px;color:#333;}';
 	var st = document.createElement('style');
@@ -1307,14 +1311,15 @@
 	// 목록은 서버가 쇼핑몰을 훑어 만들어서 처음 한 번은 10초 넘게 걸린다(2026-10-06 '불러오는 중'만 뜬다는 제보).
 	// → 이 폰에 하루 동안 남겨 두고 바로 보여 준다. 10분이 지났으면 보여 주면서 뒤에서 새로 받아 둔다.
 	//   쓰기 창이 열리자마자 미리 받기 시작한다(prefetch).
-	var LKEY = 'tkbb_revp_api4', INFLIGHT = null;
+	var LKEY = 'tkbb_revp_api5', INFLIGHT = null;
 	function today(){ return ymd(new Date(Date.now() + 9 * 3600e3 + new Date().getTimezoneOffset() * 60e3)); }
+	// 2026-10-06 사용자 요청: 먼저 '1. 공구 상품 / 2. 상시 판매 상품'을 고르고 그 목록을 본다
+	//   gb = 공구 상품 — 작성일로부터 두 달 전까지 공구로 판 상품 (두 달 기준은 서버 api/review-products 가 오늘 기준으로 자른다)
+	//   al = 상시 판매 상품 — 지금 판매 중인 상품 전부
 	function toGroups(d){
-		var g = [];
-		// 2026-10-06 사용자 요청: '최근 두 달 판매' → '지금 판매 중' 차례. 두 달 기준은 서버(api/review-products)가 작성일(오늘) 기준으로 자른다
-		if (d.recent && d.recent.length) g.push({ t: '최근 두 달 판매', items: d.recent });
-		var nowAll = [].concat(d.live || [], d.top || [], d.now || []);
-		if (nowAll.length) g.push({ t: '지금 판매 중', items: nowAll });
+		var al = d.all || [].concat(d.live || [], d.top || [], d.now || []);
+		var g = { gb: d.recent || [], al: al };
+		g.length = g.gb.length + g.al.length;   // 아래 '받은 게 있나' 확인용
 		return g;
 	}
 	function fetchGroups(){
@@ -1434,6 +1439,23 @@
 		window.removeEventListener('resize', closePop);
 		POP = null;
 	}
+	var KINDS = [['gb', '1. 공구 상품', '최근 두 달 동안 공구한 상품'], ['al', '2. 상시 판매 상품', '지금 판매 중인 상품 전부']];
+	// 처음 화면: 두 갈래
+	function renderMenu(box){
+		var h = '<div class="g">어떤 상품의 후기인가요?</div>';
+		for (var i = 0; i < KINDS.length; i++) h += '<div class="c" data-k="' + KINDS[i][0] + '"><b>' + esc(KINDS[i][1]) + '</b><span>' + esc(KINDS[i][2]) + '</span></div>';
+		box.innerHTML = h;
+		box.scrollTop = 0;
+	}
+	// 한 갈래의 상품 목록 (맨 위 '‹ 처음으로')
+	function renderKind(box, g, k, cur){
+		var kd = KINDS[k === 'gb' ? 0 : 1], items = (g && g[k]) || [];
+		var h = '<div class="bk">‹ ' + esc(kd[1].replace(/^\d+\.\s*/, '')) + '</div>';
+		for (var j = 0; j < items.length; j++) h += '<div class="o' + (items[j].pno === cur ? ' on' : '') + '" data-pno="' + esc(items[j].pno) + '">' + esc(items[j].name) + '</div>';
+		if (!items.length) h += '<div class="msg">' + (k === 'gb' ? '최근 두 달 동안 공구한 상품이 없어요.' : '지금 고를 수 있는 상품이 없어요.') + '</div>';
+		box.innerHTML = h;
+		box.scrollTop = 0;
+	}
 	function render(box, groups, cur, note){
 		var h = '';
 		for (var i = 0; i < groups.length; i++) {
@@ -1468,7 +1490,17 @@
 		back.addEventListener('click', closePop);
 		if (scroller) scroller.addEventListener('scroll', closePop);
 		window.addEventListener('resize', closePop);
+		var cur = f.pno.value, kind = '';
+		function showKind(){
+			if (!(POP && POP.box === box)) return;
+			render(box, [], cur, '불러오는 중…');
+			guestGroups().then(function(g){ if (POP && POP.box === box && kind) renderKind(box, g, kind, cur); })
+				.catch(function(){ if (POP && POP.box === box) render(box, [], cur, '목록을 불러오지 못했어요. 잠시 뒤 다시 눌러 주세요.'); });
+		}
 		box.addEventListener('click', function(e){
+			var c = e.target.closest ? e.target.closest('.c') : null;
+			if (c) { kind = c.getAttribute('data-k'); showKind(); return; }
+			if (e.target.closest && e.target.closest('.bk')) { kind = ''; renderMenu(box); return; }
 			var o = e.target.closest ? e.target.closest('.o') : null;
 			if (!o) return;
 			f.pno.value = o.getAttribute('data-pno');
@@ -1477,19 +1509,10 @@
 			closePop();
 		});
 
-		var cur = f.pno.value;
-		render(box, [], cur, '불러오는 중…');
-		function guest(prefix){
-			return guestGroups().then(function(g){
-				if (POP && POP.box === box) render(box, g, cur, g.length ? prefix : '지금 고를 수 있는 상품이 없어요.');
-			});
-		}
-		// 2026-10-06 사용자 요청: 로그인 여부와 상관없이 '최근 판매 상품'(작성일로부터 두 달 전까지 판매한 상품)을 보여 준다.
+		// 로그인 여부와 상관없이 같은 목록. 처음에는 '1. 공구 상품 / 2. 상시 판매 상품' 두 갈래 (2026-10-06)
 		// (예전 '내가 구매한 상품' 목록 mineGroups 는 남겨 둔다 — 다시 쓰려면 여기서 member() 일 때 mineGroups 를 부르면 된다)
-		var job = guest('');
-		job.catch(function(){
-			if (POP && POP.box === box) render(box, [], cur, '목록을 불러오지 못했어요. 잠시 뒤 다시 눌러 주세요.');
-		});
+		renderMenu(box);
+		prefetch();
 	}
 
 	// ── 쓰기 창이 열리면 '분류' 칸을 바꾼다 ──
