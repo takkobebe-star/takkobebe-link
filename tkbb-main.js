@@ -1972,6 +1972,10 @@
 		+ '.tkbb-my .tk-bt a{flex:1;height:56px;border-radius:7px;background:#EFEDE6;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#161616;}'
 		+ '.tkbb-my .tk-bt2{margin-top:8px;}'
 		+ '.tkbb-my .tk-bt2 a.tk-cancel{height:48px;background:#fff;border:1px solid #DAD5C8;font-weight:500;color:#6A6A66;}'
+		// 주문 상세 버튼 (2026-10-06 시안): 검정 후기 작성 · 베이지 1:1 문의 | 취소/환불/반품 신청
+		+ '.tkbb-my .tk-bt a.rv.tk-rvb{background:#161616;color:#fff !important;font-weight:600;}'
+		+ '.tkbb-my .tk-bt a.rv.tk-rvb small{color:#D1D798;}'
+		+ '.tkbb-my .tk-bt3 a,.tkbb-my .tk-bt3 a.tk-cancel{height:56px;background:#EEEADF;border:0;font-size:14px;font-weight:500;color:#161616;}'
 		+ '.tkbb-my .tk-bt2 .tk-claim{flex:1;padding:12px;border-radius:7px;background:#F7F5EE;font-size:13px;color:#6A6A66;text-align:center;}'
 		+ '.tkbb-my .tk-black{display:flex;align-items:center;justify-content:center;height:52px;border-radius:7px;background:#161616;color:#fff !important;font-size:14px;font-weight:600;}'
 		+ '.tkbb-my .tk-more{display:flex;align-items:center;justify-content:center;height:48px;border-radius:7px;border:1px solid #DAD5C8;background:#fff;font-size:14px;color:#161616;}'
@@ -2311,7 +2315,7 @@
 	}
 
 	/* ---------- 주문내역 ---------- */
-	var REVIEW_LABEL = '후기 작성<small>최대 1,000원 적립</small>';
+	var REVIEW_LABEL = '후기 작성<small>최대 700원 적립</small>';   // 후기 창 안내(최대 700원)와 맞춤 2026-10-06
 	function orderCard(li){
 		var a = li.querySelector('.no a'), ps = li.querySelectorAll('.info p');
 		var ono = txt(a), date = txt(li.querySelector('.no span')), href = a ? a.getAttribute('href') : '#';
@@ -2411,37 +2415,35 @@
 			track = track || li.querySelector('a[href*="delivery"]');
 			review = review || li.querySelector('.stat .box_btn a');
 		}
-		if (track || review) {
-			var bt = el('div', 'tk-bt');
-			if (track) bt.appendChild(el('a', '', '배송 조회')).setAttribute('href', track.getAttribute('href'));
-			if (review) { review.innerHTML = REVIEW_LABEL; review.className += ' rv'; bt.appendChild(review); }
-			if (track) bt.firstChild.setAttribute('target', '_blank');
-			top.appendChild(bt);
-		}
-		// 취소/반품 버튼 (2026-10-02) — 위사 '취소/환불신청'·'주문문의' 기능을 그대로 부른다.
-		//  · 입금대기·결제완료(1·2): 위사 취소 → 관리자 설정(사용자 취소/환불)에 따라 PG 결제는 바로 환불, 무통장은 환불 계좌 접수
-		//  · 상품준비중(3): 위사 취소요청 접수 → 관리자가 승인하면 환불
-		//  · 배송중·배송완료(4·5): 주문번호가 걸린 주문문의 작성 화면으로 이동
+		// 버튼 배치 (2026-10-06 사용자 시안): 검정 '후기 작성' 한 줄 → (배송 조회) → '1:1 문의' | '취소/환불/반품 신청'
+		if (review) { review.innerHTML = REVIEW_LABEL; review.className += ' rv tk-rvb'; var rb = el('div', 'tk-bt'); rb.appendChild(review); top.appendChild(rb); }
+		if (track) { var tb = el('div', 'tk-bt' + (review ? ' tk-bt2' : '')); var ta = tb.appendChild(el('a', '', '배송 조회')); ta.setAttribute('href', track.getAttribute('href')); ta.setAttribute('target', '_blank'); top.appendChild(tb); }
+		// 취소/환불/반품 (2026-10-06 수정) — 위사 orderCust(취소신청) 와 1:1 문의 글쓰기를 상태별로 나눠 부른다.
+		//  · 입금 전(1): 위사 취소 → 관리자 설정 '고객 직접 취소'가 켜져 있으면 확인 한 번으로 바로 취소(자동)
+		//  · 입금완료·상품준비중(2·3, 배송 전): 위사 취소요청 접수 → 관리자가 승인하면 환불
+		//  · 배송중·배송완료(4·5): 위사가 주문문의를 막으므로('배송완료된 주문서입니다') 1:1 문의 글쓰기로 바로 이동
 		//  · 이미 취소/반품 접수 중(10 초과)이면 버튼 대신 안내만
+		var CS = '/mypage/counsel_step1.php' + (ono ? '?tkbb_ono=' + encodeURIComponent(ono) : '');
 		var cf = document.orderCustFrm;
-		if (cf && cf.stat && typeof window.orderCust === 'function') {
-			var os = parseInt(cf.stat.value, 10) || 0;
-			var cb = el('div', 'tk-bt tk-bt2');
-			if (os > 10) {
-				cb.appendChild(el('span', 'tk-claim', '취소·반품 접수 내역은 아래 문의 내역에서 확인할 수 있어요'));
-			} else if (os >= 1) {
-				var ca = el('a', 'tk-cancel', '취소/반품');
-				ca.setAttribute('href', 'javascript:;');
-				ca.addEventListener('click', function(ev){
-					ev.preventDefault();
-					if (os <= 3 && window.cancelable === 'true') window.orderCust(2, 12);   // 배송 전 → 취소/환불 신청
-					else if (os <= 2) window.orderCust(2, 12);
-					else window.orderCust(1, 2);                                            // 배송중·배송완료 → 주문문의
-				});
-				cb.appendChild(ca);
-			}
-			if (cb.firstChild) top.appendChild(cb);
+		var os = cf && cf.stat ? (parseInt(cf.stat.value, 10) || 0) : 0;
+		var cb = el('div', 'tk-bt tk-bt2 tk-bt3');
+		cb.appendChild(el('a', '', '1:1 문의')).setAttribute('href', CS);
+		if (os >= 1 && os <= 5) {
+			var ca = el('a', 'tk-cancel', '취소/환불/반품 신청');
+			ca.setAttribute('href', 'javascript:;');
+			ca.addEventListener('click', function(ev){
+				ev.preventDefault();
+				var canOrd = typeof window.orderCust === 'function' && window.cancelable === 'true';
+				if (os >= 4 || !canOrd) { location.href = CS + (ono ? '&tkbb_c=1' : ''); return; }   // 배송 시작 후(또는 위사가 취소를 막은 주문) → 1:1 문의
+				if (os === 1) { window.orderCust(2, 12); return; }        // 입금 전 → 바로 취소
+				if (!confirm('입금이 확인된 주문이에요.\n취소/환불을 신청하면 관리자 확인 후 환불돼요.\n신청할까요?')) return;
+				window.directcancel = '';                                  // 입금 후엔 즉시 취소 확인창 대신 '신청' 화면으로
+				window.orderCust(2, 12);
+			});
+			cb.appendChild(ca);
 		}
+		top.appendChild(cb);
+		if (os > 10) top.appendChild(el('div', 'tk-bt tk-bt2', '<span class="tk-claim">취소·반품 접수 내역은 아래 문의 내역에서 확인할 수 있어요</span>'));
 		wrap.appendChild(top);
 
 		// 2) 나머지 섹션: 제목(h3) + 바로 다음 상자를 카드 하나로 옮긴다
@@ -3029,6 +3031,19 @@
 	else start();
 })();
 /* ===== 마이페이지 하위 메뉴 끝 ===== */
+
+/* ===== 1:1 문의 글쓰기 — 주문 상세에서 넘어오면 제목에 주문번호 미리 넣기 (2026-10-06) ===== */
+(function(){
+	if (location.pathname !== '/mypage/counsel_step1.php') return;
+	var m = location.search.match(/[?&]tkbb_ono=([0-9A-Za-z-]{6,30})(?:&|$)/);
+	if (!m) return;
+	function fill(){
+		var f = document.querySelector('form input[name=exec_file][value*="counsel.exe"]');
+		var t = f && f.form ? f.form.title : null;
+		if (t && !t.value) t.value = '[주문번호 ' + m[1] + '] ' + (/[?&]tkbb_c=1/.test(location.search) ? '취소/환불/반품 문의' : '주문 문의');
+	}
+	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fill); else fill();
+})();
 
 /* ===== 상품후기 작성 팝업 (심플 버전, 타코베베 컬러) — 2026-10-01 (모서리 -2px: 2026-10-06) =====
    위사가 body 끝에 붙이는 #revWriteAjaxDiv 레이어의 모양만 바꾼다. 기능(별점·글·사진·등록)은 그대로.
