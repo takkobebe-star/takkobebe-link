@@ -2446,7 +2446,6 @@
 			cb.appendChild(ca);
 		}
 		top.appendChild(cb);
-		if (os > 10) top.appendChild(el('div', 'tk-bt tk-bt2', '<span class="tk-claim">취소·반품 접수 내역은 아래 문의 내역에서 확인할 수 있어요</span>'));
 		wrap.appendChild(top);
 
 		// 2) 나머지 섹션: 제목(h3) + 바로 다음 상자를 카드 하나로 옮긴다
