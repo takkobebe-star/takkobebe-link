@@ -1186,6 +1186,7 @@
 		+ '.layer_review_list.tkbb-hasbuy{padding-bottom:calc(84px + env(safe-area-inset-bottom)) !important;box-sizing:border-box;}'
 		// 3. 후기 창 댓글 칸: 높이 줄이고(150 → 76px) 오른쪽에 검정 '확인' 버튼 (위사 버튼 그대로, 모양만)
 		+ '#revWriteAjaxDiv .layer_review_list .write{display:flex !important;gap:8px;align-items:stretch;padding:0 !important;border:0 !important;background:none !important;}'
+		+ '#revWriteAjaxDiv .layer_review_list .write:before,#revWriteAjaxDiv .layer_review_list .write:after{display:none !important;}'
 		+ '#revWriteAjaxDiv .layer_review_list .write textarea{flex:1;min-width:0;height:76px !important;min-height:0 !important;margin:0 !important;padding:11px 12px !important;border:1px solid transparent !important;border-radius:5px !important;background:#F7F5EE !important;font-size:14px;line-height:1.5;resize:none;box-sizing:border-box;}'
 		+ '#revWriteAjaxDiv .layer_review_list .write textarea:focus{border-color:#B9C077 !important;background:#fff !important;outline:0;}'
 		+ '#revWriteAjaxDiv .layer_review_list .write .btn_comment{position:static !important;flex:0 0 64px;width:64px !important;height:76px !important;margin:0 !important;padding:0 !important;border:0 !important;border-radius:5px !important;background:#161616 !important;color:#fff !important;-webkit-text-fill-color:#fff;font-size:14px;font-weight:600;font-family:inherit;-webkit-appearance:none;appearance:none;cursor:pointer;}'
