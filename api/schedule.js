@@ -116,6 +116,13 @@ const MANUAL = [
   ["설성목장 부리또", SHOP + "/shop/detail.php?pno=5B8E4FD39D9786228649A8A8BEC4E008"],
 ];
 
+// 누르면 바로 바깥 쇼핑몰로 보내는 공구 — 배너 사진·상품명·문구는 위 MANUAL 의 쇼핑몰 상품 것을 그대로 쓴다.
+const LINK_OVERRIDE = [
+  // 보헤미안 로브 → 아모카 상품 페이지 (2026-10-06 사용자 요청)
+  ["보헤미안 로브", "https://www.amoka.co.kr/product/detail.html?product_no=153&cate_no=45&display_group=1"],
+  ["인도원단 핸드메이드 로브", "https://www.amoka.co.kr/product/detail.html?product_no=153&cate_no=45&display_group=1"],
+];
+
 async function fetchText(url) {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), 5000);
@@ -337,6 +344,12 @@ module.exports = async (req, res) => {
         const hit = HERO_ORDER.find(([key]) => ev.title.includes(key) || String(ev.name || "").includes(key));
         if (hit) ev.order = hit[1];
       }
+    }
+
+    // 사진·이름·문구는 쇼핑몰 상품에서 읽고, 누르면 가는 곳만 바깥 링크로 바꾸는 공구 (제목이나 상품명에 이 글자가 있으면)
+    for (const ev of events) {
+      const hit = LINK_OVERRIDE.find(([key]) => ev.title.includes(key) || String(ev.name || "").includes(key));
+      if (hit) { if (ev.url && ev.url !== hit[1]) ev.shop = ev.url; ev.url = hit[1]; }   // shop = 원래 쇼핑몰 상품 (상품 상세의 판매예정 표시용)
     }
 
     // CDN에 1분 캐시 → 캘린더 수정 후 1~2분 안에 반영 (2026-09-29 10분 → 1분)
