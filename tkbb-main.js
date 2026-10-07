@@ -1659,6 +1659,65 @@
 	else document.addEventListener('DOMContentLoaded', start);
 })();
 
+/* ===== 카테고리 화면 상품 순서: 판매 중 → 판매 예정 → 판매 마감 (2026-10-07 사용자 요청) =====
+   판매 중 = 위사 상품 상자에 'out'(품절) 표시가 없는 상품.
+   판매 예정 = 품절 표시지만 공구 일정에 아직 오픈 전으로 잡힌 상품 (일정의 상품번호 pno 로 맞춘다).
+   판매 마감 = 그 밖의 품절 상품. 각 묶음 안에서는 위사가 준 순서(최근 순)를 그대로 둔다.
+   순서를 정하기 전엔 목록을 투명하게 두었다가 보여 준다(깜빡임 방지, 늦어도 2초 뒤엔 보임).
+   되돌리려면 이 블록만 지우면 된다. */
+(function(){
+	if (window.__TKBB_CATSORT) return; window.__TKBB_CATSORT = 1;
+	if (window.browser_type === 'pc') return;
+	if (location.pathname.indexOf('/shop/big_section.php') < 0) return;
+
+	var wait = document.createElement('style');
+	wait.textContent = 'html.tkbb-catwait #cnt ul.prd_basic{opacity:0;}';
+	(document.head || document.documentElement).appendChild(wait);
+	document.documentElement.classList.add('tkbb-catwait');
+	var shown = false;
+	function show(){ if (shown) return; shown = true; document.documentElement.classList.remove('tkbb-catwait'); }
+	setTimeout(show, 2000);
+
+	function pnoOf(u){ var m = String(u || '').match(/pno=([A-F0-9]{16,})/i); return m ? m[1].toUpperCase() : ''; }
+
+	// 오픈 전 공구 상품번호 모음 — 공구는 시작일 오전 10시에 연다
+	var soonP = null;
+	var kst = new Date(Date.now() + 9 * 3600e3), today = kst.toISOString().slice(0, 10), hour = kst.getUTCHours();
+	var got = window.fetch
+		? fetch('https://takkobebe-link.vercel.app/api/schedule?o=m').then(function(r){ return r.json(); }).then(function(d){
+			var s = {};
+			(d && d.events || []).forEach(function(ev){
+				var st = String(ev.start || '').slice(0, 10);
+				if (!(st > today || (st === today && hour < 10))) return;
+				[ev.url, ev.shop].forEach(function(u){ var p = pnoOf(u); if (p) s[p] = 1; });
+			});
+			soonP = s;
+		}).catch(function(){ soonP = {}; })
+		: Promise.resolve();
+
+	function sortList(){
+		var uls = document.querySelectorAll('#cnt ul.prd_basic');
+		for (var k = 0; k < uls.length; k++) {
+			var ul = uls[k], lis = [], ch = ul.children;
+			for (var i = 0; i < ch.length; i++) if (ch[i].tagName === 'LI') lis.push(ch[i]);
+			var rows = lis.map(function(li, idx){
+				var box = li.querySelector('.box'), a = li.querySelector('a[href*="pno="]');
+				var out = box && /(^|\s)out(\s|$)/.test(box.className);
+				var rank = !out ? 0 : (soonP && soonP[pnoOf(a && a.getAttribute('href'))] ? 1 : 2);
+				return { li: li, rank: rank, idx: idx };
+			});
+			rows.sort(function(x, y){ return x.rank - y.rank || x.idx - y.idx; });
+			for (var j = 0; j < rows.length; j++) ul.appendChild(rows[j].li);
+		}
+	}
+
+	function start(){
+		got.then(function(){ try { sortList(); } catch (e) {} show(); });
+	}
+	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+	else start();
+})();
+
 /* ===== 마이페이지 (B안: 오아시스마켓 스타일 카드형, 타코베베 컬러) — 2026-09-30 =====
    /mypage/mypage.php 의 원래 내용(#mypage)을 읽어서 새 모양으로 다시 그린다.
    원래 화면은 지우지 않고 숨기기만 한다. 주소 끝에 ?tkbb_old=1 을 붙이면 원래 화면이 보인다.
