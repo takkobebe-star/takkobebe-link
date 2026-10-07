@@ -2468,6 +2468,9 @@
 				//  · 신용카드 결제완료(2) → 바로 취소(카드 자동 환불)
 				//  · 그 밖(무통장 입금완료·상품준비중·배송중·배송완료, 카드 상품준비중 이후) → 1:1 문의 게시판
 				if (canOrd && (os === 1 || (os === 2 && isCard))) { window.orderCust(2, 12); return; }
+				// 게시판 이동 전 안내 (2026-10-07 사용자 요청): 배송 전 / 배송 후 문구
+				if (!confirm(os >= 4 ? '이미 출발한 주문이에요.\n반품·환불은 1:1 문의로 도와드릴게요.\n문의 게시판으로 이동할까요?'
+					: '이 주문은 1:1 문의로 취소를 도와드릴게요.\n문의 게시판으로 이동할까요?')) return;
 				location.href = 'https://m.takkobebe.com/shop/product_qna_list.php';
 			});
 			cb.appendChild(ca);
