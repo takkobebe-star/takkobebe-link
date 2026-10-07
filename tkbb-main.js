@@ -3155,8 +3155,18 @@
 		document.body.appendChild(cover);
 		var oc = window.confirm, sent = false;
 		window.confirm = function(){ return true; };   // 위사 '등록할까요?' 확인을 한 번만 자동 승인
-		try { sent = typeof window.checkCounselFrm === 'function' ? window.checkCounselFrm(f) !== false : true; } finally { window.confirm = oc; }
-		if (sent) f.submit();
+		try { sent = typeof window.checkCounselFrm === 'function' ? window.checkCounselFrm(f) !== false : true; }
+		catch (e) {
+			// 2026-10-07 수정: 글쓰기 편집기가 아직 덜 떠서 위사 검사가 멈추면(화면이 '취소하고 있어요'에 머묾)
+			// 제목·내용이 채워져 있는지만 직접 보고 바로 보낸다. 내용은 위사 기본 양식이 이미 들어 있다.
+			sent = !!(f.title && f.title.value && f.content && String(f.content.value).replace(/<[^>]*>|\s/g, ''));
+		}
+		finally { window.confirm = oc; }
+		if (sent) {
+			f.submit();
+			// 응답이 오면 위사가 화면을 옮긴다. 8초 넘게 그대로면 안내를 걷어 고객이 직접 할 수 있게 한다
+			setTimeout(function(){ if (cover && cover.parentNode) cover.parentNode.removeChild(cover); }, 8000);
+		}
 		else if (cover && cover.parentNode) cover.parentNode.removeChild(cover);
 	}
 	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(run, 0); }); else setTimeout(run, 0);
