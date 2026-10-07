@@ -2343,7 +2343,8 @@
 	}
 	function fillThumb(card, name, done){
 		findProduct(name, function(it){
-			var th = card.querySelector('.th'); if (th && it.img) th.innerHTML = '<img src="' + esc(it.img) + '" alt="">';
+			// 썸네일을 누르면 상품 페이지로 (2026-10-07)
+			var th = card.querySelector('.th'); if (th && it.img) th.innerHTML = it.href ? '<a href="' + esc(it.href) + '" aria-label="상품 보기" style="display:block;width:100%;height:100%;"><img src="' + esc(it.img) + '" alt=""></a>' : '<img src="' + esc(it.img) + '" alt="">';
 			var c = card.querySelector('.tk-cart'); if (c && it.href) { c.setAttribute('href', it.href); c.hidden = false; }
 		}, done);
 	}
