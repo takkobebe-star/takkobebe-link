@@ -427,8 +427,7 @@
 		     +     '<div class="tag">' + (o.soon ? '오픈 예정' : '이번 공구 최대 혜택가') + '</div>'
 		     +     '<span class="cnt">{{N}}</span>'
 		     +   '</div>'
-		     // noDate: 공구 날짜를 안 보여 주는 상품(쌀빵·브라우니 등)은 마감 띠를 뺀다 (2026-10-07)
-		     +   (tg.noDate ? '' : '<div class="hc"><i>' + badge + '</i><span>' + msg + '</span></div>')
+		     +   '<div class="hc"><i>' + badge + '</i><span>' + msg + '</span></div>'
 		     +   '<div class="hb">'
 		     +     (o.img ? '<div class="nm">' + nm + '</div>' : '')
 		     +     (o.ship ? '<div class="ds"><span>' + String(o.ship).split(/\s+·\s+/).map(esc).join('</span><span>') + '</span></div>' : '')
@@ -1163,7 +1162,6 @@
 				if (isLive) { tag = md(ev.end) + ' ' + '\ub9c8\uac10'; if (big) tag = '\uc9c4\ud589 \uc911' + ' \u00b7 ' + tag; tc = ' live'; }
 				else if (ev.onSale) { tag = md(ev.start, 1) + ' ' + '\uacf5\uad6c'; tc = ' gg'; }   // 이미 파는 상품의 공구
 				else tag = md(ev.start, 1) + ' ' + '\uc624\ud508';
-				if (ev.noDate) tag = '\uc9c4\ud589 \uc911';   // 날짜를 안 보여 주는 상품 — '진행 중'만 (2026-10-07)
 				var href = here(ev.url) || SCHED, ext = !ev.url;
 				var im = ev.img
 					? '<span class="im" style="background-image:url(&quot;' + esc(ev.img) + '&quot;)"><span class="tg' + tc + '">' + tag + '</span></span>'
@@ -1171,7 +1169,7 @@
 					  + (isLive ? '\ub9c8\uac10' : wday(ev.start) + '\uc694\uc77c ' + (ev.onSale ? '\uacf5\uad6c' : '\uc624\ud508')) + '</i></span>';
 				var body = '<p class="nm">' + esc(ev.title) + '</p>';
 				var s1 = num(ev.sell), c1 = num(ev.cons);
-				if ((big || ev.noDate) && s1) {   // 날짜 줄 대신 가격 (noDate, 2026-10-07)
+				if (big && s1) {
 					body += '<p class="pr">' + (c1 > s1 ? '<em>' + Math.round((1 - s1 / c1) * 100) + '%</em>' : '')
 					      + s1.toLocaleString('ko-KR') + '\uc6d0' + (c1 > s1 ? '<s>' + c1.toLocaleString('ko-KR') + '\uc6d0' + '</s>' : '') + '</p>';
 				} else {
