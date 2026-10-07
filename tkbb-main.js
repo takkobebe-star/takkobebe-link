@@ -2446,12 +2446,15 @@
 		if (track) { var tb = el('div', 'tk-bt' + (review ? ' tk-bt2' : '')); var ta = tb.appendChild(el('a', '', '배송 조회')); ta.setAttribute('href', track.getAttribute('href')); ta.setAttribute('target', '_blank'); top.appendChild(tb); }
 		// 취소/환불/반품 (2026-10-06 수정) — 위사 orderCust(취소신청) 와 1:1 문의 글쓰기를 상태별로 나눠 부른다.
 		//  · 입금 전(1): 위사 취소 → 관리자 설정 '고객 직접 취소'가 켜져 있으면 확인 한 번으로 바로 취소(자동)
-		//  · 입금완료·상품준비중(2·3, 배송 전): 위사 취소요청 접수 → 관리자가 승인하면 환불
+		//  · (2026-10-07 변경) 신용카드 결제완료(2)만 바로 취소, 그 밖의 입금완료·상품준비중은 1:1 문의 게시판으로 — 아래 클릭 처리 참고
 		//  · 배송중·배송완료(4·5): 위사가 주문문의를 막으므로('배송완료된 주문서입니다') 1:1 문의 글쓰기로 바로 이동
 		//  · 이미 취소/반품 접수 중(10 초과)이면 버튼 대신 안내만
 		var CS = '/mypage/counsel_step1.php' + (ono ? '?tkbb_ono=' + encodeURIComponent(ono) : '');
 		var cf = document.orderCustFrm;
 		var os = cf && cf.stat ? (parseInt(cf.stat.value, 10) || 0) : 0;
+		var payTx = '', ph = od.querySelectorAll('h3.title');   // 결제수단 정보 상자 글자로 신용카드/무통장 구분 (2026-10-07)
+		for (var pi = 0; pi < ph.length; pi++) if (/결제수단/.test(txt(ph[pi])) && ph[pi].nextElementSibling) payTx = txt(ph[pi].nextElementSibling);
+		var isCard = /카드/.test(payTx) && !/무통장|가상계좌/.test(payTx);
 		var cb = el('div', 'tk-bt tk-bt2 tk-bt3');
 		cb.appendChild(el('a', '', '1:1 문의')).setAttribute('href', 'https://m.takkobebe.com/shop/product_qna_list.php');   // 1:1 문의 게시판 (2026-10-06 사용자 요청)
 		if (os >= 1 && os <= 5) {
@@ -2460,11 +2463,12 @@
 			ca.addEventListener('click', function(ev){
 				ev.preventDefault();
 				var canOrd = typeof window.orderCust === 'function' && window.cancelable === 'true';
-				if (os >= 4 || !canOrd) { location.href = 'https://m.takkobebe.com/shop/product_qna_list.php'; return; }   // 배송 시작 후(또는 위사가 취소를 막은 주문) → 1:1 문의 게시판 (2026-10-06 사용자 요청)
-				if (os === 1) { window.orderCust(2, 12); return; }        // 입금 전 → 바로 취소
-				if (!confirm('입금이 확인된 주문이에요.\n취소/환불을 신청하면 관리자 확인 후 환불돼요.\n신청할까요?')) return;
-				window.directcancel = '';                                  // 입금 후엔 즉시 취소 확인창 대신 '신청' 화면으로
-				window.orderCust(2, 12);
+				// 결제수단·상태별 (2026-10-07 사용자 요청)
+				//  · 무통장 입금대기(1) → 바로 주문취소
+				//  · 신용카드 결제완료(2) → 바로 취소(카드 자동 환불)
+				//  · 그 밖(무통장 입금완료·상품준비중·배송중·배송완료, 카드 상품준비중 이후) → 1:1 문의 게시판
+				if (canOrd && (os === 1 || (os === 2 && isCard))) { window.orderCust(2, 12); return; }
+				location.href = 'https://m.takkobebe.com/shop/product_qna_list.php';
 			});
 			cb.appendChild(ca);
 		}
