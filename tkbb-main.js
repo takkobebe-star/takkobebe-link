@@ -166,6 +166,7 @@
 		var live = [], soon = [];
 		for (var i=0;i<evs.length;i++){
 			var e = evs[i];
+			if (e.noMain) continue;   // 메인에서만 빼는 일정 (공구 달력에는 나온다, 2026-10-07)
 			if (ymd(e.end) < today) continue;
 			if (opened(e, today)) live.push(e); else soon.push(e);
 		}
@@ -970,6 +971,7 @@
 				var live = null, soon = null, past = null;
 				for (var i=0;i<evs.length;i++){
 					var ev = evs[i];
+					if (ev.noDetail) continue;   // 메인에만 거는 상품 — 상품상세 날짜 안내는 붙이지 않는다 (2026-10-07)
 					if ((String(ev.url || '') + ' ' + String(ev.shop || '')).indexOf(pno) < 0) continue;   // shop = 바깥 링크로 바꾼 공구의 원래 쇼핑몰 상품
 					if (tkbbNotYet(ev.start, today, now.getUTCHours(), buyable)) { if (!soon) soon = ev; }
 					else if (day(ev.end) < today) past = ev;
@@ -1145,6 +1147,7 @@
 			var evs = (data && data.events) || [], live = [], soon = [];
 			for (var i=0;i<evs.length;i++){
 				var e = evs[i];
+				if (e.noMain) continue;   // 메인에서만 빼는 일정 (공구 달력에는 나온다, 2026-10-07)
 				if (day(e.end) < today) continue;
 				(day(e.start) <= today ? live : soon).push(e);
 			}

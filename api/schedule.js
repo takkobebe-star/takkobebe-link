@@ -51,12 +51,14 @@ const HERO_ORDER = [
 ];
 
 // ── 캘린더를 고치지 않고 쇼핑몰 노출만 바꾸는 표 (2026-10-07 사용자 요청) ──
-// HIDE: 캘린더에 있어도 메인 배너·지금 진행 중·달력에 안 보이게 할 일정 (제목에 이 글자가 있으면)
+// HIDE: 캘린더에 있어도 메인(배너·지금 진행 중 등)에서만 빼는 일정 (제목에 이 글자가 있으면). 공구 달력에는 그대로 나온다.
+//   API 는 noMain: true 를 붙여 보내고, 메인 화면(tkbb-main.js)이 이 표시가 있는 일정을 건너뛴다.
 const HIDE = [
   /망고\s*100/,   // [추가입고 50명] 돌아온 망고 100 — 2026-10-07 내림
 ];
 // EXTRA: 캘린더에 없어도 일정처럼 보여 줄 상품. 사진·가격·배송은 상품 페이지에서 자동으로 읽는다.
 //   end 날짜 다음 날 0시가 되면 자동으로 사라진다. order 는 배너 순서(작을수록 앞).
+//   상품상세의 공구 날짜 안내는 붙이지 않는다(noDetail: true, 2026-10-07 사용자 요청).
 const EXTRA = [
   { title: "엉덩이쌀빵", start: "2026-10-07", end: "2026-10-11", order: 2, url: "https://m.takkobebe.com/shop/detail.php?pno=03C6B06952C750899BB03D998E631860" },
   { title: "딥초코 브라우니", start: "2026-10-07", end: "2026-10-11", order: 3, url: "https://m.takkobebe.com/shop/detail.php?pno=8613985EC49EB8F757AE6439E879BB2A" },
@@ -312,8 +314,8 @@ module.exports = async (req, res) => {
       .filter((ev) => ev.summary && ev.start && ev.end)
       .filter((ev) => !SKIP.test(ev.summary))
       .map((ev) => ({ title: cleanTitle(ev.summary), start: ev.start, end: ev.end, url: ev.url || null, memo: parseDescFields(ev.desc) }))
-      .filter((ev) => !HIDE.some((re) => re.test(ev.title)))
-      .concat(EXTRA.map((x) => ({ title: x.title, start: x.start, end: x.end, url: x.url, memo: x.order ? { order: String(x.order) } : {} })))
+      .map((ev) => (HIDE.some((re) => re.test(ev.title)) ? { ...ev, noMain: true } : ev))
+      .concat(EXTRA.map((x) => ({ title: x.title, start: x.start, end: x.end, url: x.url, noDetail: true, memo: x.order ? { order: String(x.order) } : {} })))
       .filter((ev) => ev.title && ev.end.slice(0, 10) >= cutoff)
       // 시작일 빠른 순 → 같은 날이면 제목 앞 번호("1.", "2." …) 순, 번호 없는 일정은 번호 있는 일정 뒤
       // → 그것도 같으면 캘린더 파일에 적힌 순서 유지
