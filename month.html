@@ -96,6 +96,9 @@
   .chip { display: inline-block; margin-top: 6px; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 500; }
   .chip.live { background: var(--live); color: var(--live-ink); }
   .chip.soon { background: var(--soon); color: var(--soon-ink); }
+  /* 품절 공구 (2026-10-07 사용자 요청: 망고 100) */
+  .bar.out { background: #EFEDE6; color: #9A9A94; }
+  .chip.out { background: #EFEDE6; color: #6A6A66; }
   .item .go { flex: none; color: var(--muted); }
   .item .go svg { width: 18px; height: 18px; display: block; }
   .empty { padding: 12px 0 6px; font-size: 12.5px; color: var(--muted); }
@@ -155,7 +158,11 @@
     if (s > TODAY || (s === TODAY && HOUR < 11)) return 'soon';
     return 'live';
   }
+  // 품절로 보여 줄 공구 (제목에 이 글자가 있으면). 진행 기간 중에만 '품절'로 바뀐다 (2026-10-07 사용자 요청)
+  var SOLD_OUT = [/망고\s*100/];
+  function soldOut(ev) { return status(ev) === 'live' && SOLD_OUT.some(function (re) { return re.test(ev.title); }); }
   function chip(ev) {
+    if (soldOut(ev)) return '<span class="chip out">품절</span>';
     var st = status(ev), e = ev.end.slice(0, 10), s = ev.start.slice(0, 10);
     if (st === 'live') { var n = diff(TODAY, e); return '<span class="chip live">진행 중 · ' + (n === 0 ? '오늘 마감' : 'D-' + n) + '</span>'; }
     if (st === 'soon') return '<span class="chip soon">' + (s === TODAY ? '오늘' : md(s)) + ' 오전 10시 오픈</span>';
@@ -196,8 +203,8 @@
         var lane = 0;
         while ((lanes[lane] || []).some(function (r) { return !(c1 < r[0] || c0 > r[1]); })) lane++;
         (lanes[lane] = lanes[lane] || []).push([c0, c1]);
-        var cls = 'bar ' + st + (s < w ? ' l' : '') + (e > wEnd ? ' r' : '');
-        bars += '<button class="' + cls + '" data-d="' + (a < TODAY && TODAY <= b ? TODAY : a) + '" style="grid-column:' + (c0 + 1) + ' / ' + (c1 + 2) + ';grid-row:' + (lane + 2) + '">' + esc(ev.title) + '</button>';
+        var cls = 'bar ' + (soldOut(ev) ? 'out' : st) + (s < w ? ' l' : '') + (e > wEnd ? ' r' : '');
+        bars += '<button class="' + cls + '" data-d="' + (a < TODAY && TODAY <= b ? TODAY : a) + '" style="grid-column:' + (c0 + 1) + ' / ' + (c1 + 2) + ';grid-row:' + (lane + 2) + '">' + (soldOut(ev) ? '[품절] ' : '') + esc(ev.title) + '</button>';
       });
       html += '<div class="week' + (bars ? '' : ' quiet') + '">' + cells + bars + '</div>';
     }
