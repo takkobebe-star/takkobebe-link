@@ -418,13 +418,15 @@
 		    ? '<div class="ib" style="background-image:url(\'' + o.img + '\')">'
 		      +   '<i class="bg l"></i><i class="bg r"></i>'
 		      +   '<img src="' + o.img + '" alt="">'
-		      +   (o.copy ? '<div class="copy">' + esc(o.copy) + '</div>' : '')
+		      // 쌀빵·브라우니(noDetail)는 사진 위 문구('레옹아저씨의 야심작' 등)를 넣지 않는다 (2026-10-07)
+		      +   (o.copy && !tg.noDetail ? '<div class="copy">' + esc(o.copy) + '</div>' : '')
 		    : '<div class="ib nopic">'
 		      +   '<div class="npn">' + nm + '</div>'
 		      +   '<div class="npd">' + (o.copy ? esc(o.copy) : dsTx) + '</div>';
 		return '<div class="sl"><a class="lk" href="' + tg.url + '">'
 		     +   box
-		     +     '<div class="tag">' + (o.soon ? '오픈 예정' : '이번 공구 최대 혜택가') + '</div>'
+		     // 쌀빵·브라우니(noDetail)는 사진 위 '이번 공구 최대 혜택가' 딱지를 뺀다 (2026-10-07)
+		     +     (tg.noDetail ? '' : '<div class="tag">' + (o.soon ? '오픈 예정' : '이번 공구 최대 혜택가') + '</div>')
 		     +     '<span class="cnt">{{N}}</span>'
 		     +   '</div>'
 		     // 캘린더 밖에서 직접 건 상품(쌀빵·브라우니, API 의 noDetail)은 날짜 대신 '실시간 베스트셀러' (2026-10-07 사용자 요청)
