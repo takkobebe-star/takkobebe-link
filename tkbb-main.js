@@ -2465,7 +2465,7 @@
 		if (track) { var tb = el('div', 'tk-bt' + (review ? ' tk-bt2' : '')); var ta = tb.appendChild(el('a', '', '배송 조회')); ta.setAttribute('href', track.getAttribute('href')); ta.setAttribute('target', '_blank'); top.appendChild(tb); }
 		// 취소/환불/반품 (2026-10-06 수정) — 위사 orderCust(취소신청) 와 1:1 문의 글쓰기를 상태별로 나눠 부른다.
 		//  · 입금 전(1): 위사 취소 → 관리자 설정 '고객 직접 취소'가 켜져 있으면 확인 한 번으로 바로 취소(자동)
-		//  · (2026-10-07 변경) 신용카드 결제완료(2)만 바로 취소, 그 밖의 입금완료·상품준비중은 1:1 문의 게시판으로 — 아래 클릭 처리 참고
+		//  · (2026-10-07 변경) 결제수단 상관없이 상품준비중 전(1·2)은 바로 취소, 상품준비중부터는 1:1 문의 게시판으로 — 아래 클릭 처리 참고
 		//  · 배송중·배송완료(4·5): 위사가 주문문의를 막으므로('배송완료된 주문서입니다') 1:1 문의 글쓰기로 바로 이동
 		//  · 이미 취소/반품 접수 중(10 초과)이면 버튼 대신 안내만
 		var CS = '/mypage/counsel_step1.php' + (ono ? '?tkbb_ono=' + encodeURIComponent(ono) : '');
@@ -2482,15 +2482,13 @@
 			ca.addEventListener('click', function(ev){
 				ev.preventDefault();
 				var canOrd = typeof window.orderCust === 'function' && window.cancelable === 'true';
-				// 결제수단·상태별 (2026-10-07 사용자 요청)
-				//  · 무통장 입금대기(1) → 바로 주문취소
-				//  · 신용카드 결제완료(2) → 바로 취소(카드 자동 환불)
-				//  · 그 밖(무통장 입금완료·상품준비중·배송중·배송완료, 카드 상품준비중 이후) → 1:1 문의 게시판
-				if (canOrd && (os === 1 || (os === 2 && isCard))) {
-					// 위사 기본 확인창(확인/취소) 대신 같은 '아니오 | 네' 창을 띄운다 (2026-10-07). 문구는 위사 문구 그대로.
+				// 상태별 (2026-10-07 사용자 요청, 결제수단 상관없이)
+				//  · 상품준비중 전(입금대기 1 · 결제완료/입금완료 2) → 확인 후 바로 주문취소
+				//  · 상품준비중·배송중·배송완료 → 1:1 문의 게시판
+				if (canOrd && os <= 2) {
+					// 위사 기본 확인창(확인/취소) 대신 '아니오 | 네' 창을 띄운다 (2026-10-07)
 					// '네'를 누른 뒤 위사 orderCust 안의 confirm 은 한 번만 자동으로 '확인' 처리하고 바로 원래대로 돌려놓는다.
-					var dm = (window._lang_pack && window._lang_pack.mypage_confirm_direct_cancel) || '해당 주문건을 취소하시겠습니까?';
-					tkAsk(dm, function(){
+					tkAsk('이 주문을 취소할까요?', function(){
 						var oc = window.confirm;
 						window.confirm = function(){ return true; };
 						try { window.orderCust(2, 12); } finally { window.confirm = oc; }
