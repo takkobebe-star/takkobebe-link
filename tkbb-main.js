@@ -3136,7 +3136,8 @@
 /* ===== 카드 자동 결제취소 (2026-10-07) — 주문 상세에서 카드 결제완료 주문을 '네'로 취소하면
    위사 '환불 신청' 화면(counsel_step1, cate1=2)에서 취소사유 '고객변심'을 고르고 확인까지 자동으로 누른다.
    주문 상세에서 남긴 표시(같은 주문번호, 2분 안)가 있을 때만 움직이고, 한 번 쓰면 지운다.
-   자동 처리가 안 되면(칸이 없거나 위사 확인에서 막힘) 화면을 그대로 두어 고객이 직접 고르게 한다.
+   자동 처리가 안 되면(칸이 없음) 화면을 그대로 두어 고객이 직접 고르게 하고,
+   보낸 뒤 결제취소가 안 됐으면(위사·카드사 오류) 안내 후 1:1 문의 게시판으로 보낸다 (2026-10-07).
    되돌리려면 이 블록만 지우면 된다. ===== */
 (function(){
 	if (location.pathname !== '/mypage/counsel_step1.php' || !/[?&]cate1=2(&|$)/.test(location.search)) return;
@@ -3145,6 +3146,9 @@
 	if (!mk || !om) return;
 	var p = mk.split('|');
 	if (p[0] !== om[1] || !(Date.now() - (+p[1] || 0) < 120000)) return;
+	// 자동 처리 중에는 위사가 화면을 열 때 띄우는 안내 알림('…즉시 환불됩니다')을 건너뛴다 (화면을 멈추게 해서)
+	var oa = window.alert; window.alert = function(){};
+	setTimeout(function(){ window.alert = oa; }, 3000);
 	var cover = null;
 	function run(){
 		var f = document.querySelector('form[onsubmit*="checkCounselFrm"]');
@@ -3158,22 +3162,28 @@
 		cover.setAttribute('style', 'position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;background:#F7F5EE;font-size:14px;color:#161616;');
 		cover.textContent = '결제를 취소하고 있어요…';
 		document.body.appendChild(cover);
-		var oc = window.confirm, sent = false;
-		window.confirm = function(){ return true; };   // 위사 '등록할까요?' 확인을 한 번만 자동 승인
-		try { sent = typeof window.checkCounselFrm === 'function' ? window.checkCounselFrm(f) !== false : true; }
-		catch (e) {
-			// 2026-10-07 수정: 글쓰기 편집기가 아직 덜 떠서 위사 검사가 멈추면(화면이 '취소하고 있어요'에 머묾)
-			// 제목·내용이 채워져 있는지만 직접 보고 바로 보낸다. 내용은 위사 기본 양식이 이미 들어 있다.
-			sent = !!(f.title && f.title.value && f.content && String(f.content.value).replace(/<[^>]*>|\s/g, ''));
-		}
-		finally { window.confirm = oc; }
-		if (sent) {
-			f.submit();
-			// 응답이 오면 위사가 화면을 옮긴다. 8초 넘게 그대로면 안내를 걷어 고객이 직접 할 수 있게 한다
-			setTimeout(function(){ if (cover && cover.parentNode) cover.parentNode.removeChild(cover); }, 8000);
-		}
-		else if (cover && cover.parentNode) cover.parentNode.removeChild(cover);
+		// 제목·내용이 채워져 있는지만 직접 본다 (위사 검사는 글쓰기 편집기가 덜 뜨면 멈춰서 쓰지 않음, 2026-10-07)
+		if (!(f.title && f.title.value && f.content && String(f.content.value).replace(/<[^>]*>|\s/g, ''))) { done(); return; }
+		// 2026-10-07 수정: 숨은 창으로 보내면 위사 오류 알림이 안 보이고 화면이 멈춘 것처럼 보였다.
+		// 직접 보내고, 끝난 뒤 주문 상태를 다시 읽어 취소됐으면 주문 상세로, 아니면 안내 후 1:1 문의 게시판으로 보낸다.
+		var to = function(u, ms){ setTimeout(function(){ location.href = u; }, ms || 0); };
+		var DETAIL = '/mypage/order_detail.php?ono=' + encodeURIComponent(om[1]);
+		var BOARD = 'https://m.takkobebe.com/shop/product_qna_list.php?tkbb_ono=' + encodeURIComponent(om[1]) + '&tkbb_c=1';
+		var fail = function(){
+			if (cover) cover.innerHTML = '<div style="padding:0 32px;text-align:center;line-height:1.6;word-break:keep-all;">결제취소가 바로 되지 않았어요.<br>1:1 문의로 도와드릴게요.</div>';
+			to(BOARD, 2000);
+		};
+		fetch(f.getAttribute('action') || '/main/exec.php', { method: 'POST', body: new FormData(f), credentials: 'include' })
+			.then(function(r){ return r.text(); })
+			.then(function(){ return fetch(DETAIL, { credentials: 'include' }).then(function(r){ return r.text(); }); })
+			.then(function(html){
+				var d = new DOMParser().parseFromString(html, 'text/html'), s = d.querySelector('#order_detail ul.list_cart .stat');
+				var st = s ? s.textContent.replace(/\s+/g, ' ') : '';
+				if (/취소|환불/.test(st)) to(DETAIL); else fail();
+			})
+			.catch(fail);
 	}
+	function done(){ if (cover && cover.parentNode) cover.parentNode.removeChild(cover); }
 	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(run, 0); }); else setTimeout(run, 0);
 })();
 
