@@ -2484,10 +2484,9 @@
 				var canOrd = typeof window.orderCust === 'function' && window.cancelable === 'true';
 				// 결제수단·상태별 (2026-10-07 사용자 요청)
 				//  · 무통장 입금대기(1) → 바로 주문취소
-				//  · 신용카드 결제완료(2) → 위사가 고객 직접 취소를 허용한 주문(directcancel 'true')만 바로 취소(카드 자동 환불)
-				//    허용 안 된 주문은 위사 '환불 신청' 화면으로 가 버리므로 1:1 문의 게시판으로 보낸다 (2026-10-07 사용자 선택)
+				//  · 신용카드 결제완료(2) → 바로 취소(카드 자동 환불)
 				//  · 그 밖(무통장 입금완료·상품준비중·배송중·배송완료, 카드 상품준비중 이후) → 1:1 문의 게시판
-				if (canOrd && (os === 1 || (os === 2 && isCard && window.directcancel === 'true'))) {
+				if (canOrd && (os === 1 || (os === 2 && isCard))) {
 					// 위사 기본 확인창(확인/취소) 대신 같은 '아니오 | 네' 창을 띄운다 (2026-10-07). 문구는 위사 문구 그대로.
 					// '네'를 누른 뒤 위사 orderCust 안의 confirm 은 한 번만 자동으로 '확인' 처리하고 바로 원래대로 돌려놓는다.
 					var dm = (window._lang_pack && window._lang_pack.mypage_confirm_direct_cancel) || '해당 주문건을 취소하시겠습니까?';
