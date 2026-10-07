@@ -48,7 +48,8 @@
 	// 마이페이지와 같은 단계(12/13/14/16/18/20/24)만 쓴다. 위 CSS 를 덮어쓰기만 하므로 이 덩어리를 지우면 예전 크기로 돌아간다.
 	(function(){
 		var T = ''
-			+ '.tkbb-sec .st h2,.tkbb-cal.v2 .st h2,.tkbb-req h2{font-size:18px !important;font-weight:700 !important;letter-spacing:-.03em;color:#161616;}'
+			// 섹션 제목 굵기 = 메인 배너 상품명 굵기(600)로 맞춤 (2026-10-07 사용자 요청, 이전 700)
+			+ '.tkbb-sec .st h2,.tkbb-cal.v2 .st h2,.tkbb-req h2{font-size:18px !important;font-weight:600 !important;letter-spacing:-.03em;color:#161616;}'
 			+ '.tkbb-sec .st,.tkbb-cal .st{margin-bottom:6px;}'
 			+ '.tkbb-sec .st a,.tkbb-cal.v2 .st a,.tkbb-sec .st .sm{font-size:13px !important;font-weight:400 !important;color:#6A6A66;}'
 			+ '.tkbb-sec .sub,.tkbb-cal.v2 .sub,.tkbb-req .p{font-size:13px !important;font-weight:400 !important;color:#6A6A66;line-height:1.45;margin-top:0;}'
