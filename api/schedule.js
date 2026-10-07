@@ -350,7 +350,8 @@ module.exports = async (req, res) => {
     }
 
     // 상품 정보를 미리 담아 보낸다 (손님 브라우저가 상품 페이지를 따로 안 받아도 되게)
-    try { await enrich(events.slice(0, 8)); } catch (e) {}
+    // 앞 8개만 읽던 것을 16개로 — 9번째 이후 일정(바이오가이아 11/16 등)도 사진이 나오게 (2026-10-07). 동시에 읽어 시간은 거의 같다.
+    try { await enrich(events.slice(0, 16)); } catch (e) {}
 
     // 캘린더 설명란에 직접 적은 가격·배송 문구가 있으면 그 값을 쓴다 (상품 페이지에서 읽은 값보다 우선)
     for (const ev of events) {
