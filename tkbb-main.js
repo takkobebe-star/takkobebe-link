@@ -1667,60 +1667,128 @@
 	else document.addEventListener('DOMContentLoaded', start);
 })();
 
-/* ===== 카테고리 화면 상품 순서: 판매 중 → 판매 예정 → 판매 마감 (2026-10-07 사용자 요청) =====
-   판매 중 = 위사 상품 상자에 'out'(품절) 표시가 없는 상품.
-   판매 예정 = 품절 표시지만 공구 일정에 아직 오픈 전으로 잡힌 상품 (일정의 상품번호 pno 로 맞춘다).
-   판매 마감 = 그 밖의 품절 상품. 각 묶음 안에서는 위사가 준 순서(최근 순)를 그대로 둔다.
-   순서를 정하기 전엔 목록을 투명하게 두었다가 보여 준다(깜빡임 방지, 늦어도 2초 뒤엔 보임).
+/* ===== 카테고리 화면 상품: 모든 쪽을 모아 판매 중 → 판매 예정 → 판매 마감 (2026-10-07 사용자 요청, A안) =====
+   위사 카테고리 화면은 상품을 6개씩 여러 쪽(page=1,2,…)에 나눠 두는데 다음 쪽으로 가는 길이 없어 손님은 첫 6개만 봤다.
+   모든 쪽을 한꺼번에 받아서
+     판매 중(상자에 'out' 표시 없음) 전부 → 판매 예정(품절 표시지만 공구 일정상 오픈 전, 상품번호 pno 로 맞춤) 전부
+     → 판매 마감은 최근 6개만, 나머지는 '마감 상품 더 보기' 버튼으로 12개씩
+   순서로 다시 그린다. 각 묶음 안에서는 위사가 준 순서(최근 순)를 그대로 둔다.
+   상품 칸의 오픈 날짜·[마감]·SOLD OUT 표시는 위사 스킨 스크립트(__TKBB_BADGE2)가 새로 들어온 칸에도 알아서 붙인다.
+   다 받기 전엔 목록을 투명하게 두고(깜빡임 방지, 늦어도 3초 뒤엔 보임), 받은 목록은 폰에 하루 보관해 다음엔 바로 그린다.
    되돌리려면 이 블록만 지우면 된다. */
 (function(){
 	if (window.__TKBB_CATSORT) return; window.__TKBB_CATSORT = 1;
 	if (window.browser_type === 'pc') return;
 	if (location.pathname.indexOf('/shop/big_section.php') < 0) return;
+	var cno = (location.search.match(/[?&]cno1=(\d+)/) || [])[1];
+	if (!cno || !window.fetch || !window.DOMParser || !window.Promise) return;
 
-	var wait = document.createElement('style');
-	wait.textContent = 'html.tkbb-catwait #cnt ul.prd_basic{opacity:0;}';
-	(document.head || document.documentElement).appendChild(wait);
+	var END_FIRST = 6, END_STEP = 12, KEEP = 'tkbb-cat-v1-' + cno;
+
+	var st = document.createElement('style');
+	st.textContent = 'html.tkbb-catwait #cnt ul.prd_basic{opacity:0;}'
+		+ '.tkbb-catmore{display:block;width:calc(100% - 32px);margin:8px 16px 28px;padding:13px 0;border:1px solid #DAD5C8;border-radius:5px;background:#fff;color:#161616;font-family:inherit;font-size:14px;font-weight:500;letter-spacing:-.02em;text-align:center;-webkit-appearance:none;appearance:none;cursor:pointer;}';
+	(document.head || document.documentElement).appendChild(st);
 	document.documentElement.classList.add('tkbb-catwait');
 	var shown = false;
 	function show(){ if (shown) return; shown = true; document.documentElement.classList.remove('tkbb-catwait'); }
-	setTimeout(show, 2000);
+	setTimeout(show, 3000);
+	// 새 칸을 넣으면 스킨 스크립트가 0.12초 뒤 표시를 붙이므로 조금 기다렸다 보여 준다
+	function showSoon(){ setTimeout(show, 200); }
 
 	function pnoOf(u){ var m = String(u || '').match(/pno=([A-F0-9]{16,})/i); return m ? m[1].toUpperCase() : ''; }
 
-	// 오픈 전 공구 상품번호 모음 — 공구는 시작일 오전 10시에 연다
-	var soonP = null;
+	// 오픈 전 공구 상품번호 — 공구는 시작일 오전 10시에 연다
 	var kst = new Date(Date.now() + 9 * 3600e3), today = kst.toISOString().slice(0, 10), hour = kst.getUTCHours();
-	var got = window.fetch
-		? fetch('https://takkobebe-link.vercel.app/api/schedule?o=m').then(function(r){ return r.json(); }).then(function(d){
-			var s = {};
-			(d && d.events || []).forEach(function(ev){
-				var st = String(ev.start || '').slice(0, 10);
-				if (!(st > today || (st === today && hour < 10))) return;
-				[ev.url, ev.shop].forEach(function(u){ var p = pnoOf(u); if (p) s[p] = 1; });
-			});
-			soonP = s;
-		}).catch(function(){ soonP = {}; })
-		: Promise.resolve();
+	var soonP = fetch('https://takkobebe-link.vercel.app/api/schedule?o=m').then(function(r){ return r.json(); }).then(function(d){
+		var s = {};
+		(d && d.events || []).forEach(function(ev){
+			var sd = String(ev.start || '').slice(0, 10);
+			if (!(sd > today || (sd === today && hour < 10))) return;
+			[ev.url, ev.shop].forEach(function(u){ var p = pnoOf(u); if (p) s[p] = 1; });
+		});
+		return s;
+	}).catch(function(){ return {}; });
 
-	function sortList(){
-		var uls = document.querySelectorAll('#cnt ul.prd_basic');
-		for (var k = 0; k < uls.length; k++) {
-			var ul = uls[k], lis = [], ch = ul.children;
-			for (var i = 0; i < ch.length; i++) if (ch[i].tagName === 'LI') lis.push(ch[i]);
-			var rows = lis.map(function(li, idx){
-				var box = li.querySelector('.box'), a = li.querySelector('a[href*="pno="]');
-				var out = box && /(^|\s)out(\s|$)/.test(box.className);
-				var rank = !out ? 0 : (soonP && soonP[pnoOf(a && a.getAttribute('href'))] ? 1 : 2);
-				return { li: li, rank: rank, idx: idx };
+	// 한 쪽 받기 → [{p: 상품번호, out: 품절?, h: 칸 HTML}]
+	function getPage(n){
+		return fetch('/shop/big_section.php?cno1=' + cno + '&page=' + n, { credentials: 'include' })
+			.then(function(r){ return r.text(); })
+			.then(function(t){
+				var d = new DOMParser().parseFromString(t, 'text/html');
+				var lis = d.querySelectorAll('ul.prd_basic > li'), out = [];
+				for (var i = 0; i < lis.length; i++) {
+					var a = lis[i].querySelector('a[href*="pno="]'), box = lis[i].querySelector('.box');
+					out.push({ p: pnoOf(a && a.getAttribute('href')), out: !!(box && /(^|\s)out(\s|$)/.test(box.className)), h: lis[i].outerHTML });
+				}
+				return out;
+			}).catch(function(){ return []; });
+	}
+	// 8쪽씩 동시에 받는다. 빈 쪽이나 이미 본 상품뿐인 쪽이 나오면 끝
+	function loadAll(){
+		var seen = {}, rows = [], p = 1;
+		function wave(){
+			var ps = [];
+			for (var i = 0; i < 8; i++) ps.push(getPage(p + i));
+			p += 8;
+			return Promise.all(ps).then(function(lists){
+				for (var i = 0; i < lists.length; i++) {
+					var fresh = 0;
+					for (var j = 0; j < lists[i].length; j++) {
+						var r = lists[i][j];
+						if (r.p && !seen[r.p]) { seen[r.p] = 1; rows.push(r); fresh++; }
+					}
+					if (!fresh) return rows;
+				}
+				return p > 80 ? rows : wave();
 			});
-			rows.sort(function(x, y){ return x.rank - y.rank || x.idx - y.idx; });
-			for (var j = 0; j < rows.length; j++) ul.appendChild(rows[j].li);
 		}
+		return wave();
+	}
+
+	function rank(rows, soon){
+		return rows.map(function(r){ return { p: r.p, k: !r.out ? 0 : (soon[r.p] ? 1 : 2), h: r.h }; });
+	}
+	function sig(rows){ return rows.map(function(r){ return r.p + r.k; }).join(','); }
+
+	function render(rows){
+		var ul = document.querySelector('#cnt ul.prd_basic');
+		if (!ul || !rows.length) return;
+		var g = [[], [], []];
+		rows.forEach(function(r){ g[r.k].push(r); });
+		var rest = g[2].slice(END_FIRST);
+		ul.innerHTML = g[0].concat(g[1], g[2].slice(0, END_FIRST)).map(function(r){ return r.h; }).join('');
+		// 위사 원래 '더 보기'(prdMore — 다음 쪽을 정렬 없이 이어 붙임)는 겹치므로 숨긴다
+		var wm = document.querySelectorAll('#cnt a[onclick*="prdMore"]');
+		for (var w = 0; w < wm.length; w++) { var wb = wm[w].closest('.box_btn') || wm[w]; wb.style.display = 'none'; }
+		var old = document.getElementById('tkbb-catmore');
+		if (old && old.parentNode) old.parentNode.removeChild(old);
+		if (!rest.length) return;
+		var btn = document.createElement('button');
+		btn.type = 'button'; btn.id = 'tkbb-catmore'; btn.className = 'tkbb-catmore';
+		function label(){ btn.textContent = '마감 상품 더 보기 (' + rest.length + ')'; }
+		label();
+		btn.onclick = function(){
+			ul.insertAdjacentHTML('beforeend', rest.splice(0, END_STEP).map(function(r){ return r.h; }).join(''));
+			if (rest.length) label(); else if (btn.parentNode) btn.parentNode.removeChild(btn);
+		};
+		ul.parentNode.insertBefore(btn, ul.nextSibling);
 	}
 
 	function start(){
-		got.then(function(){ try { sortList(); } catch (e) {} show(); });
+		// 폰에 보관한 목록(하루 안)이 있으면 먼저 그린다
+		var kept = null;
+		try { var k = JSON.parse(localStorage.getItem(KEEP) || 'null'); if (k && Date.now() - k.t < 86400000 && k.rows && k.rows.length) kept = k.rows; } catch (e) {}
+		if (kept) { try { render(kept); } catch (e) {} showSoon(); }
+
+		Promise.all([soonP, loadAll()]).then(function(v){
+			var rows = rank(v[1], v[0]);
+			if (!rows.length) { show(); return; }
+			try { localStorage.setItem(KEEP, JSON.stringify({ t: Date.now(), rows: rows })); } catch (e) {}
+			// 보관본과 순서·상태가 같으면 다시 그리지 않는다 (펼쳐 둔 '더 보기'도 그대로)
+			if (!kept || sig(kept) !== sig(rows)) { try { render(rows); } catch (e) {} }
+			showSoon();
+		}).catch(show);
 	}
 	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
 	else start();
