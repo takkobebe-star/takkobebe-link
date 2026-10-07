@@ -435,7 +435,7 @@
 		                      : '<div class="hc"><i>' + badge + '</i><span>' + msg + '</span></div>')
 		     +   '<div class="hb">'
 		     +     (o.img ? '<div class="nm">' + nm + '</div>' : '')
-		     +     (o.ship ? '<div class="ds"><span>' + String(o.ship).split(/\s+·\s+/).map(esc).join('</span><span>') + '</span></div>' : '')
+		     +     (o.ship ? '<div class="ds"><span>' + String(o.ship).replace(/\s*\($/, '').split(/\s+·\s+/).map(esc).join('</span><span>') + '</span></div>' : '')   // 40자에서 잘려 끝에 남은 '(' 는 뗀다 (2026-10-07)
 		     +     (sellTx
 		           ? '<div class="pr">' + (pct ? '<em>' + pct + '%</em>' : '')
 		             + '<b>' + esc(sellTx).replace(/원(~?)\s*$/, '<small>원$1</small>') + '</b>'
