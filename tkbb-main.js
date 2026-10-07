@@ -712,7 +712,8 @@
 	// ── 지금 진행 중 : 진행 중인 공구 상품들
 	function drawLive(live, today){
 		var urls = [];
-		for (var i=0;i<live.length;i++){ if (live[i].url) urls.push(live[i]); }
+		// 배너에만 건 상품(쌀빵·브라우니, API 의 noDetail)은 '지금 진행 중'에 넣지 않는다 (2026-10-07 사용자 요청)
+		for (var i=0;i<live.length;i++){ if (live[i].url && !live[i].noDetail) urls.push(live[i]); }
 		if (!urls.length) return;
 		// 캘린더 순서 유지
 		Promise.all(urls.slice(0,6).map(function(e){
