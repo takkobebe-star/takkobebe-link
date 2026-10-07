@@ -11,7 +11,7 @@
     --sd-line: #E6E2D8;
     --sd-point: #D1D798;
     --sd-deep: #7C8340;
-    --sd-blue: #52728A;
+    --sd-blue: #7c8339;
     --sd-white: #FFFFFF;
     max-width: 720px;
     margin: 0 auto;

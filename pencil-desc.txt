@@ -9,7 +9,7 @@
     --pc-ink: #161616;
     --pc-muted: #6A6A66;
     --pc-line: #E6E2D8;
-    --pc-deep: #52728A;
+    --pc-deep: #7c8339;
     --pc-white: #FFFFFF;
     max-width: 720px;
     margin: 0 auto;
