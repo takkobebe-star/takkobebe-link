@@ -38,8 +38,12 @@
 
 - 위 점검을 모두 통과하면 사용자 확인을 기다리지 않고 Claude가 바로 Merge합니다.
   ```
-  gh pr merge <번호> --merge --delete-branch
+  gh api -X PUT repos/takkobebe-star/takkobebe-link/pulls/<번호>/merge -f merge_method=merge
+  gh api -X DELETE repos/takkobebe-star/takkobebe-link/git/refs/heads/<브랜치>
   ```
+  Claude 세션에서는 `gh pr create/merge/checks`(GraphQL)가 막혀 있어 위처럼 REST(`gh api`)로 합니다.
+  PR 만들기: `gh api repos/takkobebe-star/takkobebe-link/pulls -f title=... -f head=<브랜치> -f base=main -f body=...`
+  체크 확인: `gh api repos/takkobebe-star/takkobebe-link/commits/<커밋>/check-runs` 와 `.../commits/<커밋>/status`
   Merge commit 방식만 씁니다. squash·rebase 방식, `--admin`(보호 규칙 우회), main 직접 push는 쓰지 않습니다.
 - Merge 직전에 한 번 더 `git fetch origin main` 합니다. 그사이 main이 바뀌었으면 rebase → diff 확인 후 다시 점검합니다.
 - 아래 중 하나라도 해당하면 Merge하지 않고 PR 링크와 이유만 알립니다.
