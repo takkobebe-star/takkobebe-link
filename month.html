@@ -134,7 +134,9 @@
 
 <script>
 (function () {
-  var API = '/api/schedule?o=cal';   // 달력 전용 캐시 키 (메인 ?o=m · PC ?o=pc 와 나눈다)
+  // 메인(?o=m)과 같은 주소를 쓴다 — 손님이 많은 메인이 늘 데워 두므로 달력도 바로 받는다 (2026-10-07 로딩 5초 → 즉시)
+  var API = '/api/schedule?o=m';
+  var KEEP = 'tkbb-cal-v1';   // 폰에 하루 보관 — 다시 열면 받기 전에 바로 그린다
   var DOW = ['일', '월', '화', '수', '목', '금', '토'];
   var CHEV = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>';
 
@@ -239,14 +241,20 @@
     EVENTS = (list || []).filter(function (ev) { return ev && ev.start && ev.end && ev.title && !ev.noDetail; });
     MIN = monthOf(TODAY);
     MAX = EVENTS.reduce(function (m, ev) { var x = monthOf(ev.end); return x > m ? x : m; }, MIN);
-    VIEW = MIN;
+    if (!VIEW || VIEW < MIN || VIEW > MAX) VIEW = MIN;   // 새 일정으로 다시 그릴 때 보던 달은 그대로
     drawGrid(); drawLists();
   }
   // 일정이 오기 전에도 달력 틀은 먼저 그린다
-  start([]);
-  document.getElementById('daySec').innerHTML = '<p class="empty">공구 일정을 불러오고 있어요…</p>';
-  fetch(API).then(function (r) { return r.json(); }).then(function (d) { start(d.events); })
-    .catch(function () { start([]); document.getElementById('daySec').innerHTML = '<p class="empty">일정을 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.</p>'; });
+  // 폰에 보관한 일정(하루 안)이 있으면 그것부터 바로 그리고, 새 일정이 오면 바뀐 경우에만 다시 그린다
+  var kept = null;
+  try { var k = JSON.parse(localStorage.getItem(KEEP) || 'null'); if (k && Date.now() - k.t < 86400000 && k.events) kept = k.events; } catch (e) {}
+  if (kept) start(kept);
+  else { start([]); document.getElementById('daySec').innerHTML = '<p class="empty">공구 일정을 불러오고 있어요…</p>'; }
+  fetch(API).then(function (r) { return r.json(); }).then(function (d) {
+    if (!d || !d.events) throw 0;
+    try { localStorage.setItem(KEEP, JSON.stringify({ t: Date.now(), events: d.events })); } catch (e) {}
+    if (!kept || JSON.stringify(kept) !== JSON.stringify(d.events)) start(d.events);
+  }).catch(function () { if (kept) return; start([]); document.getElementById('daySec').innerHTML = '<p class="empty">일정을 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.</p>'; });
 })();
 </script>
 </body>
