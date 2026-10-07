@@ -14,4 +14,4 @@ tkbb-main.js 의 onerror 가 기존 상품사진으로 대신 채운다.
 원형 47px 로 잘려 보이므로 정사각 320x320, 피사체가 가운데.
 흰 배경 그림(화장품·후기)은 배경을 옅은 베이지로 갈아끼웠다.
 원본은 takkobebe-shop/backup/퀵메뉴원본/ 에 있다.
-저장 후 배포: npx vercel deploy --prod --yes --scope takko
+저장 후 배포: 브랜치 → PR → main 에 Merge (직접 vercel deploy 하지 않는다, CLAUDE.md 3번)
