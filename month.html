@@ -228,7 +228,8 @@
   });
 
   function start(list) {
-    EVENTS = (list || []).filter(function (ev) { return ev && ev.start && ev.end && ev.title; });
+    // 캘린더 밖에서 메인에만 건 상품(쌀빵·브라우니, API 의 noDetail)은 공구 달력에 넣지 않는다 (2026-10-07 사용자 요청)
+    EVENTS = (list || []).filter(function (ev) { return ev && ev.start && ev.end && ev.title && !ev.noDetail; });
     MIN = monthOf(TODAY);
     MAX = EVENTS.reduce(function (m, ev) { var x = monthOf(ev.end); return x > m ? x : m; }, MIN);
     VIEW = MIN;
