@@ -2490,7 +2490,11 @@
 					// 위사 기본 확인창(확인/취소) 대신 같은 '아니오 | 네' 창을 띄운다 (2026-10-07). 문구는 위사 문구 그대로.
 					// '네'를 누른 뒤 위사 orderCust 안의 confirm 은 한 번만 자동으로 '확인' 처리하고 바로 원래대로 돌려놓는다.
 					var dm = (window._lang_pack && window._lang_pack.mypage_confirm_direct_cancel) || '해당 주문건을 취소하시겠습니까?';
+					var cardPaid = os === 2 && isCard;
+					if (cardPaid) dm = '이 주문을 취소할까요?\n카드 결제도 바로 취소돼요.';   // 2026-10-07 사용자 요청
 					tkAsk(dm, function(){
+						// 카드 결제완료: 위사 '환불 신청' 화면에서 사유(고객변심)·확인을 자동으로 처리하도록 표시를 남긴다 (아래 '카드 자동 결제취소' 블록)
+						if (cardPaid && ono) { try { sessionStorage.setItem('tkbb_autorefund', ono + '|' + Date.now()); } catch (e) {} }
 						var oc = window.confirm;
 						window.confirm = function(){ return true; };
 						try { window.orderCust(2, 12); } finally { window.confirm = oc; }
@@ -3122,6 +3126,40 @@
 		if (t && !t.value) t.value = '[주문번호 ' + m[1] + '] ' + (/[?&]tkbb_c=1/.test(location.search) ? '취소/환불/반품 문의' : '주문 문의');
 	}
 	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fill); else fill();
+})();
+
+/* ===== 카드 자동 결제취소 (2026-10-07) — 주문 상세에서 카드 결제완료 주문을 '네'로 취소하면
+   위사 '환불 신청' 화면(counsel_step1, cate1=2)에서 취소사유 '고객변심'을 고르고 확인까지 자동으로 누른다.
+   주문 상세에서 남긴 표시(같은 주문번호, 2분 안)가 있을 때만 움직이고, 한 번 쓰면 지운다.
+   자동 처리가 안 되면(칸이 없거나 위사 확인에서 막힘) 화면을 그대로 두어 고객이 직접 고르게 한다.
+   되돌리려면 이 블록만 지우면 된다. ===== */
+(function(){
+	if (location.pathname !== '/mypage/counsel_step1.php' || !/[?&]cate1=2(&|$)/.test(location.search)) return;
+	var mk = null; try { mk = sessionStorage.getItem('tkbb_autorefund'); sessionStorage.removeItem('tkbb_autorefund'); } catch (e) {}
+	var om = location.search.match(/[?&]ono=([0-9A-Za-z-]+)/);
+	if (!mk || !om) return;
+	var p = mk.split('|');
+	if (p[0] !== om[1] || !(Date.now() - (+p[1] || 0) < 120000)) return;
+	var cover = null;
+	function run(){
+		var f = document.querySelector('form[onsubmit*="checkCounselFrm"]');
+		if (!f || !f.reason || f.ono && f.ono.value !== om[1]) return;
+		var ok = false;
+		for (var i = 0; i < f.reason.options.length; i++) if (f.reason.options[i].value === '고객변심') { f.reason.selectedIndex = i; ok = true; }
+		if (!ok) return;
+		if (f.title && !f.title.value) f.title.value = '[주문번호 ' + om[1] + '] 결제취소 (고객변심)';
+		// 진행 중 안내 (깜빡임 대신)
+		cover = document.createElement('div');
+		cover.setAttribute('style', 'position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;background:#F7F5EE;font-size:14px;color:#161616;');
+		cover.textContent = '결제를 취소하고 있어요…';
+		document.body.appendChild(cover);
+		var oc = window.confirm, sent = false;
+		window.confirm = function(){ return true; };   // 위사 '등록할까요?' 확인을 한 번만 자동 승인
+		try { sent = typeof window.checkCounselFrm === 'function' ? window.checkCounselFrm(f) !== false : true; } finally { window.confirm = oc; }
+		if (sent) f.submit();
+		else if (cover && cover.parentNode) cover.parentNode.removeChild(cover);
+	}
+	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(run, 0); }); else setTimeout(run, 0);
 })();
 
 /* ===== 1:1 문의 글쓰기 주문번호 (2026-10-07) — 주문 상세 '취소/환불/반품 신청'에서 넘어오면
