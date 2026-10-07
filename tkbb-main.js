@@ -2413,6 +2413,25 @@
 		return true;
 	}
 
+	/* ---------- '아니오 | 네' 확인 창 (2026-10-07) — 기본 confirm 창은 버튼 글자를 바꿀 수 없어 직접 그린다 ---------- */
+	function tkAsk(msg, onYes){
+		var ov = document.createElement('div');
+		ov.setAttribute('style', 'position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:0 24px;background:rgba(22,22,22,.45);');
+		ov.innerHTML = '<div role="dialog" aria-modal="true" style="width:100%;max-width:320px;padding:24px 20px 16px;border-radius:12px;background:#fff;box-sizing:border-box;">'
+			+ '<p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:#161616;text-align:center;white-space:pre-line;word-break:keep-all;letter-spacing:-0.01em;">' + esc(msg) + '</p>'
+			+ '<div style="display:flex;gap:8px;">'
+			+ '<button type="button" data-a="n" style="flex:1 1 0;height:48px;margin:0;padding:0;border:1px solid #DAD5C8;border-radius:5px;background:#fff;font:inherit;font-size:14px;font-weight:500;color:#6A6A66;">아니오</button>'
+			+ '<button type="button" data-a="y" style="flex:1 1 0;height:48px;margin:0;padding:0;border:1px solid #161616;border-radius:5px;background:#161616;font:inherit;font-size:14px;font-weight:700;color:#fff;">네</button>'
+			+ '</div></div>';
+		ov.addEventListener('click', function(e){
+			var a = e.target.getAttribute && e.target.getAttribute('data-a');
+			if (e.target !== ov && !a) return;
+			document.body.removeChild(ov);
+			if (a === 'y') onYes();
+		});
+		document.body.appendChild(ov);
+	}
+
 	/* ---------- 주문 상세 ---------- */
 	function orderDetail(cnt){
 		var od = document.getElementById('order_detail');
@@ -2468,7 +2487,12 @@
 				//  · 신용카드 결제완료(2) → 바로 취소(카드 자동 환불)
 				//  · 그 밖(무통장 입금완료·상품준비중·배송중·배송완료, 카드 상품준비중 이후) → 1:1 문의 게시판
 				if (canOrd && (os === 1 || (os === 2 && isCard))) { window.orderCust(2, 12); return; }
-				location.href = 'https://m.takkobebe.com/shop/product_qna_list.php';
+				// 게시판 이동 전 안내 (2026-10-07 사용자 요청): 배송 전 / 배송 후 문구, '아니오 | 네' 버튼 창
+				// 이동할 때 주문번호를 함께 넘겨 문의 글 본문에 미리 채운다 (아래 '1:1 문의 글쓰기 주문번호' 블록)
+				tkAsk(os >= 4 ? '이미 출발한 주문이에요.\n반품·환불은 1:1 문의로 도와드릴게요.\n문의 게시판으로 이동할까요?'
+					: '이 주문은 1:1 문의로 취소를 도와드릴게요.\n문의 게시판으로 이동할까요?', function(){
+					location.href = 'https://m.takkobebe.com/shop/product_qna_list.php' + (ono ? '?tkbb_ono=' + encodeURIComponent(ono) + '&tkbb_c=1' : '');
+				});
 			});
 			cb.appendChild(ca);
 		}
@@ -3087,6 +3111,35 @@
 		if (t && !t.value) t.value = '[주문번호 ' + m[1] + '] ' + (/[?&]tkbb_c=1/.test(location.search) ? '취소/환불/반품 문의' : '주문 문의');
 	}
 	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fill); else fill();
+})();
+
+/* ===== 1:1 문의 글쓰기 주문번호 (2026-10-07) — 주문 상세 '취소/환불/반품 신청'에서 넘어오면
+   문의 글쓰기 창을 열고, 본문에 '주문번호 : ○○' 줄을 채운다(본문에 주문번호 줄이 있으면 그 줄에, 없으면 1번 위에 한 줄 넣음).
+   분류는 '취소/환불/반품'으로 골라 둔다. 되돌리려면 이 블록만 지우면 된다. ===== */
+(function(){
+	if (location.pathname !== '/shop/product_qna_list.php') return;
+	var m = location.search.match(/[?&]tkbb_ono=([0-9A-Za-z-]{6,30})(?:&|$)/);
+	if (!m) return;
+	var ono = m[1];
+	function fill(){
+		var f = document.qnaFrm;
+		if (!f || !f.content) return;
+		var ta = f.content, v = ta.value;
+		if (v.indexOf(ono) < 0) {
+			if (/주문번호[^\n]*/.test(v)) v = v.replace(/(주문번호[^:\n]*:?)[ \t]*/, '$1 ' + ono);
+			else if (/(^|\n)[ \t]*1\.[ \t]*성함/.test(v)) v = v.replace(/(^|\n)([ \t]*1\.[ \t]*성함)/, '$1주문번호 : ' + ono + '\n \n$2');
+			else v = '주문번호 : ' + ono + '\n\n' + v;
+			ta.value = v;
+		}
+		if (/[?&]tkbb_c=1/.test(location.search) && f.cate && !f.cate.value) { f.cate.value = '취소/환불/반품'; }
+	}
+	function run(){
+		var qd = document.getElementById('qnaWriteDiv');
+		if (qd && qd.style.display === 'none' && typeof window.writeQna === 'function') window.writeQna();   // 글쓰기 창 열기 (위사 기능 그대로)
+		fill(); setTimeout(fill, 300);
+		if (qd && qd.scrollIntoView) setTimeout(function(){ qd.scrollIntoView({ block: 'start' }); }, 350);
+	}
+	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
 })();
 
 /* ===== 상품후기 작성 팝업 (심플 버전, 타코베베 컬러) — 2026-10-01 (모서리 -2px: 2026-10-06) =====
