@@ -2150,6 +2150,10 @@
 		+ '.tkbb-my .tk-qw label{display:block;font-size:13px;color:#6A6A66;margin:0 0 6px;}'
 		+ '.tkbb-my .tk-qw select,.tkbb-my .tk-qw .form_input{width:100%;box-sizing:border-box;min-height:46px;border:1px solid #DAD5C8;border-radius:7px;background:#fff;padding:0 12px;font-size:14px;}'
 		+ '.tkbb-my .tk-qw textarea.form_input{height:180px;padding:12px;line-height:1.6;}'
+		+ '#cnt.tkbb-my .tk-qw .tk-qw-pair{display:flex;gap:10px;align-items:flex-end;clear:both;}'
+		+ '#cnt.tkbb-my .tk-qw .tk-qw-f{flex:1 1 0;min-width:0;}'
+		+ '#cnt.tkbb-my .tk-qw .tk-qw-f > :first-child{display:block;float:none;width:auto;margin:0 0 6px;padding:0;font-size:13px;color:#6A6A66;line-height:1.4;}'
+		+ '#cnt.tkbb-my .tk-qw .tk-qw-f input{display:block;float:none;width:100% !important;height:46px;min-height:46px;margin:0 !important;box-sizing:border-box;vertical-align:top;}'
 		+ '#cnt.tkbb-my .tk-qw input[type=file].form_input{height:auto;min-height:0;padding:9px 12px;line-height:28px;font-size:14px;}'
 		+ '#cnt.tkbb-my .tk-qw .btn .box_btn{display:block;margin:0;padding:0;border:0;background:none;}'
 		+ '#cnt.tkbb-my .tk-qw .btn .box_btn{border-radius:7px !important;overflow:hidden;}'
@@ -2784,6 +2788,20 @@
 		if (qw) { var qc = el('div', 'tk-cd tk-qw'); qc.appendChild(qw); wrap.appendChild(qc); qc.style.display = 'none';
 			var qd = qw.querySelector('#qnaWriteDiv');
 			if (qd && window.MutationObserver) new MutationObserver(function(){ qc.style.display = qd.style.display === 'none' ? 'none' : ''; }).observe(qd, { attributes: true, attributeFilter: ['style'] });
+			// 2026-10-07 사용자 요청: 작성자·비밀번호 칸을 한 줄에 나란히(라벨 위, 입력칸 아래 높이 맞춤). 위사 입력칸 그대로 옮기기만 한다
+			var pwI = qw.querySelector('input[type=password]'), nmI = null;
+			if (pwI) {
+				var tis = qw.querySelectorAll('input[type=text], input:not([type])');
+				for (var t = 0; t < tis.length; t++) if (tis[t].compareDocumentPosition(pwI) & 4) nmI = tis[t];
+				var lab = function(w){ var ls = qw.querySelectorAll('label, span, strong, p, dt'); for (var k = 0; k < ls.length; k++) if (txt(ls[k]) === w && !ls[k].querySelector('input, select, textarea')) return ls[k]; return null; };
+				var nL = lab('작성자'), pL = lab('비밀번호');
+				if (nmI && nL && pL && !/^(TR|TH|TD|TBODY|TABLE)$/.test(nL.parentNode.nodeName)) {
+					var pair = el('div', 'tk-qw-pair'), f1 = el('div', 'tk-qw-f'), f2 = el('div', 'tk-qw-f');
+					nL.parentNode.insertBefore(pair, nL);
+					f1.appendChild(nL); f1.appendChild(nmI); f2.appendChild(pL); f2.appendChild(pwI);
+					pair.appendChild(f1); pair.appendChild(f2);
+				}
+			}
 		}
 		var ul = box.querySelector('ul.list_qnarev');
 		if (ul) {
