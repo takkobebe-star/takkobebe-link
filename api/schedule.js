@@ -59,9 +59,10 @@ const HIDE = [
 // EXTRA: 캘린더에 없어도 일정처럼 보여 줄 상품. 사진·가격·배송은 상품 페이지에서 자동으로 읽는다.
 //   end 날짜 다음 날 0시가 되면 자동으로 사라진다. order 는 배너 순서(작을수록 앞).
 //   상품상세의 공구 날짜 안내는 붙이지 않는다(noDetail: true, 2026-10-07 사용자 요청).
+//   메인 배너의 마감 날짜 띠도 빼고(noDate: true), sell·cons 를 적으면 상품 페이지 가격 대신 그 값을 쓴다 (2026-10-07).
 const EXTRA = [
-  { title: "엉덩이쌀빵", start: "2026-10-07", end: "2026-10-11", order: 2, url: "https://m.takkobebe.com/shop/detail.php?pno=03C6B06952C750899BB03D998E631860" },
-  { title: "딥초코 브라우니", start: "2026-10-07", end: "2026-10-11", order: 3, url: "https://m.takkobebe.com/shop/detail.php?pno=8613985EC49EB8F757AE6439E879BB2A" },
+  { title: "엉덩이쌀빵", start: "2026-10-07", end: "2026-10-11", order: 2, sell: "10,500원", cons: "12,000원", url: "https://m.takkobebe.com/shop/detail.php?pno=03C6B06952C750899BB03D998E631860" },
+  { title: "딥초코 브라우니", start: "2026-10-07", end: "2026-10-11", order: 3, sell: "6,000원", cons: "7,000원", url: "https://m.takkobebe.com/shop/detail.php?pno=8613985EC49EB8F757AE6439E879BB2A" },
 ];
 function descText(s) {
   return String(s || "")
@@ -315,7 +316,7 @@ module.exports = async (req, res) => {
       .filter((ev) => !SKIP.test(ev.summary))
       .map((ev) => ({ title: cleanTitle(ev.summary), start: ev.start, end: ev.end, url: ev.url || null, memo: parseDescFields(ev.desc) }))
       .map((ev) => (HIDE.some((re) => re.test(ev.title)) ? { ...ev, noMain: true } : ev))
-      .concat(EXTRA.map((x) => ({ title: x.title, start: x.start, end: x.end, url: x.url, noDetail: true, memo: x.order ? { order: String(x.order) } : {} })))
+      .concat(EXTRA.map((x) => ({ title: x.title, start: x.start, end: x.end, url: x.url, noDetail: true, noDate: true, memo: Object.assign(x.order ? { order: String(x.order) } : {}, x.sell ? { sell: x.sell } : {}, x.cons ? { cons: x.cons } : {}) })))
       .filter((ev) => ev.title && ev.end.slice(0, 10) >= cutoff)
       // 시작일 빠른 순 → 같은 날이면 제목 앞 번호("1.", "2." …) 순, 번호 없는 일정은 번호 있는 일정 뒤
       // → 그것도 같으면 캘린더 파일에 적힌 순서 유지
