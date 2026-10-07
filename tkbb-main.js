@@ -427,7 +427,9 @@
 		     +     '<div class="tag">' + (o.soon ? '오픈 예정' : '이번 공구 최대 혜택가') + '</div>'
 		     +     '<span class="cnt">{{N}}</span>'
 		     +   '</div>'
-		     +   '<div class="hc"><i>' + badge + '</i><span>' + msg + '</span></div>'
+		     // 캘린더 밖에서 직접 건 상품(쌀빵·브라우니, API 의 noDetail)은 날짜 대신 '실시간 베스트셀러' (2026-10-07 사용자 요청)
+		     +   (tg.noDetail ? '<div class="hc"><span>실시간 베스트셀러</span></div>'
+		                      : '<div class="hc"><i>' + badge + '</i><span>' + msg + '</span></div>')
 		     +   '<div class="hb">'
 		     +     (o.img ? '<div class="nm">' + nm + '</div>' : '')
 		     +     (o.ship ? '<div class="ds"><span>' + String(o.ship).split(/\s+·\s+/).map(esc).join('</span><span>') + '</span></div>' : '')
