@@ -2486,7 +2486,17 @@
 				//  · 무통장 입금대기(1) → 바로 주문취소
 				//  · 신용카드 결제완료(2) → 바로 취소(카드 자동 환불)
 				//  · 그 밖(무통장 입금완료·상품준비중·배송중·배송완료, 카드 상품준비중 이후) → 1:1 문의 게시판
-				if (canOrd && (os === 1 || (os === 2 && isCard))) { window.orderCust(2, 12); return; }
+				if (canOrd && (os === 1 || (os === 2 && isCard))) {
+					// 위사 기본 확인창(확인/취소) 대신 같은 '아니오 | 네' 창을 띄운다 (2026-10-07). 문구는 위사 문구 그대로.
+					// '네'를 누른 뒤 위사 orderCust 안의 confirm 은 한 번만 자동으로 '확인' 처리하고 바로 원래대로 돌려놓는다.
+					var dm = (window._lang_pack && window._lang_pack.mypage_confirm_direct_cancel) || '해당 주문건을 취소하시겠습니까?';
+					tkAsk(dm, function(){
+						var oc = window.confirm;
+						window.confirm = function(){ return true; };
+						try { window.orderCust(2, 12); } finally { window.confirm = oc; }
+					});
+					return;
+				}
 				// 게시판 이동 전 안내 (2026-10-07 사용자 요청): 배송 전 / 배송 후 문구, '아니오 | 네' 버튼 창
 				// 이동할 때 주문번호를 함께 넘겨 문의 글 본문에 미리 채운다 (아래 '1:1 문의 글쓰기 주문번호' 블록)
 				tkAsk(os >= 4 ? '이미 출발한 주문이에요.\n반품·환불은 1:1 문의로 도와드릴게요.\n문의 게시판으로 이동할까요?'
