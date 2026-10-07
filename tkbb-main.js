@@ -91,7 +91,15 @@
 			+ '.tkbb-sec{padding-top:62px !important;}'
 			+ '.tkbb-req{margin-top:62px !important;padding-top:29px !important;padding-bottom:29px !important;}'
 			+ '.tkbb-next{margin-top:52px !important;}'
-			+ '.tkbb-next .th{border-radius:1px !important;}';
+			+ '.tkbb-next .th{border-radius:1px !important;}'
+			// 제목 ↔ 서브타이틀 2px로 붙이고, 서브타이틀 ↔ 썸네일(목록) +10px (2026-10-07 사용자 요청)
+			// 곧 오픈해요 6+4→2 · 14→24 / 언제든 살 수 있어요 6→2 · 12→22 / 이거 공구해주세요 →2 · 11→21 / 지금 진행 중(서브타이틀 없음) 제목 아래 6→16
+			+ '.tkbb-sec .st,.tkbb-cal.v2 .st{margin-bottom:2px !important;}'
+			+ '.tkbb-cal.v2 .sub{margin:0 0 24px !important;}'
+			+ '.tkbb-sec .sub{margin:0 0 22px !important;}'
+			+ '.tkbb-req .p{margin:2px 0 0 !important;}'
+			+ '.tkbb-req ul{margin-top:21px !important;}'
+			+ '#tkbb-live .st{margin-bottom:16px !important;}';
 		var st = document.createElement('style'); st.id = 'tkbb-main-type';
 		st.appendChild(document.createTextNode(T));
 		(document.head || document.documentElement).appendChild(st);
