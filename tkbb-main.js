@@ -3090,8 +3090,9 @@
 	   목록 화면에서만 바꾼다. 글 보기·글쓰기 화면과 다른 게시판(basic_3 등)은 그대로. */
 
 	/* 공구 요청하기 시트 (2026-10-08 사용자 선택 A안 — 상품후기 작성 창과 같은 모양)
-	   제품명 · 제목 · 내용 · 사진 1·2 → '확인'을 누르면 보이지 않는 칸에 위사 글쓰기 화면을 열어 값을 채우고 위사 등록(checkMariWrite)을 그대로 거친다.
-	   본문은 '- 제품명 : …' 줄 + 내용. 작성자는 로그인한 회원 이름(위사가 채움). 관련 상품 선택은 이 시트에서 뺐다. */
+	   제목 · 내용 · 사진 1·2 → '확인'을 누르면 보이지 않는 칸에 위사 글쓰기 화면을 열어 값을 채우고 위사 등록(checkMariWrite)을 그대로 거친다.
+	   내용 칸에는 위사 관리자에 적힌 고정글(안녕하세요. 타코지기입니다… 성함/제품명/이유)을 그대로 미리 채운다 (2026-10-08 사용자 요청 — 따로 있던 제품명 칸은 고정글과 겹쳐 뺐다).
+	   작성자는 로그인한 회원 이름(위사가 채움). 관련 상품 선택은 이 시트에서 뺐다. */
 	var WS_URL = '/board/?db=basic_2&mari_mode=write%40write';
 	function wishSheet(){
 		if (document.querySelector('.tk-ws')) return;
@@ -3108,7 +3109,8 @@
 				+ '.tk-ws label.s{display:block;margin:0 0 8px;font-size:12px;font-weight:400;color:#6A6A66;}'
 				+ '.tk-ws input[type=text],.tk-ws textarea{display:block;width:100%;box-sizing:border-box;margin:0 0 18px;border:1px solid transparent;border-radius:5px;background:#F7F5EE;font-size:14px;font-family:inherit;color:#161616;-webkit-appearance:none;appearance:none;}'
 				+ '.tk-ws input[type=text]{height:46px;padding:0 14px;}'
-				+ '.tk-ws textarea{height:150px;padding:12px 14px;line-height:1.6;resize:none;}'
+				+ '.tk-ws textarea{height:300px;padding:12px 14px;line-height:1.6;resize:none;transition:opacity .15s;}'
+				+ '.tk-ws textarea.ld{opacity:0;}'
 				+ '.tk-ws input[type=text]:focus,.tk-ws textarea:focus{border-color:#B9C077;background:#fff;outline:0;}'
 				+ '.tk-ws input[type=file]{display:block;width:100%;box-sizing:border-box;margin:0 0 8px;padding:9px 12px;line-height:26px;border-radius:5px;background:#F7F5EE;font-size:13px;color:#6A6A66;}'
 				+ '.tk-ws .mg{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px;margin:0 0 18px;padding:11px 8px;border-radius:5px;background:#D1D798;font-size:13px;color:#161616;text-align:center;}'
@@ -3125,9 +3127,8 @@
 		sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-modal', 'true'); sh.setAttribute('aria-label', '공구 요청하기');
 		sh.innerHTML = '<div class="hd"><h3>공구 요청하기</h3><button type="button" class="x" aria-label="닫기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9A94" stroke-width="1.8" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button></div>'
 			+ '<p class="in">가격이 부담돼서 망설인 제품이 있나요? 알려 주시면 공구를 열어 볼게요.</p>'
-			+ '<label class="t" for="tk-ws-p">제품명</label><input type="text" id="tk-ws-p" placeholder="공구 받고 싶은 제품 이름">'
 			+ '<label class="t" for="tk-ws-t">제목</label><input type="text" id="tk-ws-t" placeholder="한 줄로 남겨 주세요">'
-			+ '<label class="t" for="tk-ws-c">내용</label><textarea id="tk-ws-c" placeholder="왜 좋은지, 어디서 보셨는지 편하게 적어 주세요"></textarea>'
+			+ '<label class="t" for="tk-ws-c">내용</label><textarea id="tk-ws-c" class="ld"></textarea>'
 			+ '<div class="mg">공구가 열리면 <b>요청해 주신 분께 제품을 보내드려요</b></div>'
 			+ '<label class="s" for="tk-ws-f1">사진 1</label><input type="file" id="tk-ws-f1" accept="image/*">'
 			+ '<label class="s" for="tk-ws-f2">사진 2</label><input type="file" id="tk-ws-f2" accept="image/*">'
@@ -3142,13 +3143,25 @@
 		var ok = sh.querySelector('.k');
 		var $ = function(id){ return sh.querySelector('#' + id); };
 		var line = function(s){ return esc(s).replace(/\r?\n/g, '<br>'); };
+		// 고정글: 위사 글쓰기 화면의 내용 칸(content2) 그대로. <br> → 줄바꿈. 못 읽으면 빈 칸 + 안내문
+		var tpl = '', ta = $('tk-ws-c');
+		var show = function(){ ta.classList.remove('ld'); };
+		if (window.fetch && window.DOMParser) fetch(WS_URL, { credentials: 'include' }).then(function(r){ return r.text(); }).then(function(h){
+			var src = new DOMParser().parseFromString(h, 'text/html').getElementById('content2');
+			var raw = src ? src.value : '';
+			var dec = document.createElement('div'); dec.innerHTML = raw.replace(/<br\s*\/?>\s*/gi, '\n');
+			tpl = (dec.textContent || '').replace(/[ \t]+\n/g, '\n').replace(/^\s+|\s+$/g, '');
+			if (tpl && !ta.value) ta.value = tpl;
+			if (!tpl) ta.setAttribute('placeholder', '왜 좋은지, 어디서 보셨는지 편하게 적어 주세요');
+			show();
+		}).catch(function(){ ta.setAttribute('placeholder', '왜 좋은지, 어디서 보셨는지 편하게 적어 주세요'); show(); });
+		else show();
 		ok.addEventListener('click', function(){
 			if (busy) return;
-			var p = $('tk-ws-p').value.trim(), t = $('tk-ws-t').value.trim(), c = $('tk-ws-c').value.trim();
-			if (!p) { alert('제품명을 적어 주세요.'); $('tk-ws-p').focus(); return; }
+			var t = $('tk-ws-t').value.trim(), c = $('tk-ws-c').value.trim();
 			if (!t) { alert('제목을 적어 주세요.'); $('tk-ws-t').focus(); return; }
-			if (!c) { alert('내용을 적어 주세요.'); $('tk-ws-c').focus(); return; }
-			var html = '- 제품명 : ' + line(p) + '<br><br>' + line(c);
+			if (!c || c === tpl) { alert('내용을 적어 주세요.'); $('tk-ws-c').focus(); return; }
+			var html = line(c);
 			var files = [$('tk-ws-f1').files[0], $('tk-ws-f2').files[0]];
 			busy = true; ok.disabled = true; ok.textContent = '등록 중…';
 			var fail = function(){ busy = false; ok.disabled = false; ok.textContent = '확인'; };
