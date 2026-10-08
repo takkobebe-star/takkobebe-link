@@ -1057,6 +1057,54 @@
 	setTimeout(run, 2200);
 })();
 
+/* ===== 상품상세 — 설명 이미지 속 가격 부분 잘라 숨기기 (2026-10-08 사용자 요청) =====
+   위사 관리자에 이미지로 올린 상세설명은 글자로 숨길 수 없어, 이미지에서 가격이 있는 띠만 빼고 위·아래를 이어 붙여 보여 준다.
+   CUT : 이미지 파일 이름 → [가로, 세로(원본 px), [숨길 시작 비율, 끝 비율], ...]
+   - 바이오가이아 장유산균 첫 이미지: '구성'(세트별 정가·할인가·할인율) 부분 */
+(function(){
+	if (window.__TKBB_DCUT) return; window.__TKBB_DCUT = 1;
+	if (location.pathname.indexOf('/shop/detail.php') < 0) return;
+	var CUT = {
+		'bb6c890272b4c4dae4d21399241d04fd.jpg': [1000, 17701, [0.3808, 0.7909]]
+	};
+	var names = Object.keys(CUT);
+	// 잘라 붙이기 전 원본이 잠깐 보이지 않게 미리 감춘다
+	var st = document.createElement('style');
+	st.textContent = names.map(function(n){ return '#detail .detail_info img[src*="' + n + '"]:not(.tkbb-cut)'; }).join(',') + '{visibility:hidden !important;}';
+	(document.head || document.documentElement).appendChild(st);
+
+	function cut(){
+		var di = document.querySelector('#detail .detail_info');
+		if (!di) return;
+		names.forEach(function(n){
+			var ims = di.querySelectorAll('img[src*="' + n + '"]:not(.tkbb-cut)');
+			for (var i=0;i<ims.length;i++){
+				var im = ims[i], c = CUT[n], w = c[0], h = c[1], keep = [], from = 0;
+				for (var k=2;k<c.length;k++){ if (c[k][0] > from) keep.push([from, c[k][0]]); from = c[k][1]; }
+				if (from < 1) keep.push([from, 1]);
+				var box = document.createElement('div');
+				box.className = 'tkbb-cutbox';
+				box.style.cssText = 'display:block;width:100%;max-width:' + (im.style.maxWidth || '100%') + ';margin:0 auto;';
+				keep.forEach(function(r){
+					var part = document.createElement('div');
+					part.style.cssText = 'overflow:hidden;width:100%;aspect-ratio:' + w + '/' + Math.round(h * (r[1] - r[0])) + ';';
+					var cp = im.cloneNode(false);
+					cp.classList.add('tkbb-cut');
+					cp.removeAttribute('width'); cp.removeAttribute('height');
+					cp.style.cssText = 'display:block;width:100%;max-width:100% !important;height:auto;margin:0;margin-top:' + (-r[0] * h / w * 100) + '%;';
+					part.appendChild(cp);
+					box.appendChild(part);
+				});
+				im.parentNode.replaceChild(box, im);
+			}
+		});
+	}
+	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', cut);
+	else cut();
+	setTimeout(cut, 1200);
+	setTimeout(cut, 3000);
+})();
+
 /* ===== 관심상품(하트) 확인창 없애기 =====
    위사 addWish 는 저장에 성공하면 "위시리스트에 추가하였습니다. 위시리스트로 이동하시겠습니까?" 를 confirm 으로 띄운다.
    저장은 이 창이 뜨기 전에 이미 끝나 있으므로(동기 ajax), 창만 '취소'로 건너뛰고
