@@ -415,7 +415,7 @@
         a.rel = "noopener";
         const t = el("span");
         t.append(el("span", "lb", "마감된 공구"), el("span", "tt", c.title));
-        t.appendChild(el("span", "ds", md(c.end, ".") + "(" + dow(c.end) + ") 마감 · 배송·교환·반품은 본사에 문의해 주세요"));
+        t.appendChild(el("span", "ds", md(c.end, ".") + "(" + dow(c.end) + ") 마감 · 배송·교환·반품 문의"));
         a.append(t, el("span", "go", "고객센터 ›"));
         sec.appendChild(a);
       });
