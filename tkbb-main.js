@@ -1290,8 +1290,8 @@
 			// 2026-10-01 사용자 요청: 안내 금액은 '최대 1,000원' 으로 고정 (위사 칸에 찍힌 합계와 상관없이)
 			if (sum > 0 || ms.textContent.replace(/\s+/g, '')) {
 				var guest = String(window.mlv) === '10';   // 로그인 안 한 손님은 적립금을 못 받는다
-				// 2026-10-06 사용자 요청: '리뷰 작성(사진 첨부 시 최대 700원)'
-				ms.innerHTML = '<span class="tkbb-mg">리뷰 작성(' + (guest ? '회원 · ' : '') + '사진 첨부 시 <b>최대 700원</b>)</span>';
+				// 2026-10-06 사용자 요청: '리뷰 작성(사진 첨부 시 최대 700원)' / 2026-10-08: 후기 이벤트(~11.10) 동안 최대 1,000원
+				ms.innerHTML = '<span class="tkbb-mg">리뷰 작성(' + (guest ? '회원 · ' : '') + '사진 첨부 시 <b>최대 ' + (Date.now() < Date.UTC(2026, 10, 10, 15) ? '1,000' : '700') + '원</b>)</span>';
 			}
 		}
 	}
@@ -1975,7 +1975,7 @@
 				+ '<p>받아보신 상품, 어떠셨어요?</p>'
 				+ '<a class="rp" href="' + esc(dv.href) + '"><div class="th">' + sv(I.box, 1.6).replace(/#161616/, '#9A9A94').replace('width="24" height="24"', 'width="22" height="22"') + '</div>'
 				+ '<div class="tx"><div class="nm">' + esc(dv.name) + '</div><div class="dt">' + (dv.date ? esc(dv.date.replace(/-/g, '.')) + ' 주문 · ' : '') + '배송완료</div></div></a>'
-				+ '<a class="rb" href="' + esc(dv.href) + '">후기 작성 <span>+ 사진 첨부 시 최대 700원</span></a></div>';
+				+ '<a class="rb" href="' + esc(dv.href) + '">후기 작성 <span>+ 사진 첨부 시 최대 ' + (Date.now() < Date.UTC(2026, 10, 10, 15) ? '1,000' : '700') + '원</span></a></div>';   // 2026-10-08 후기 이벤트(~11.10) 동안 1,000원
 		}
 		// 적립금 / 쿠폰
 		h += '<div class="cd pt">'
@@ -2498,7 +2498,7 @@
 	}
 
 	/* ---------- 주문내역 ---------- */
-	var REVIEW_LABEL = '후기 작성<small>사진 첨부 시 최대 700원</small>';   // 후기 창 안내(최대 700원)와 맞춤 2026-10-06
+	var REVIEW_LABEL = '후기 작성<small>사진 첨부 시 최대 ' + (Date.now() < Date.UTC(2026, 10, 10, 15) ? '1,000' : '700') + '원</small>';   // 후기 창 안내와 맞춤 2026-10-06 · 2026-10-08 후기 이벤트(~11.10) 동안 1,000원
 	function orderCard(li){
 		var a = li.querySelector('.no a'), ps = li.querySelectorAll('.info p');
 		var ono = txt(a), date = txt(li.querySelector('.no span')), href = a ? a.getAttribute('href') : '#';
