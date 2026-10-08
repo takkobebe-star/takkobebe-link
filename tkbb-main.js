@@ -3120,7 +3120,9 @@
 				+ '.tk-ws .bt .c{border:1px solid #DAD5C8;background:#fff;color:#6A6A66;}'
 				+ '.tk-ws .bt .k{border:0;background:#161616;color:#fff;}'
 				+ '.tk-ws .bt .k[disabled]{opacity:.5;}'
-				+ 'body.tk-ws-open{overflow:hidden;}body.tk-ws-open .fix_footer{display:none !important;}';
+				+ 'body.tk-ws-open{overflow:hidden;}body.tk-ws-open .fix_footer{display:none !important;}'
+				// 넓은 화면(PC)에서는 후기 쓰기 창처럼 가운데 뜨는 팝업으로 (2026-10-08 사용자 요청). 폰은 그대로 아래에서 올라온다
+				+ '@media (min-width:600px){.tk-ws{left:50%;right:auto;top:50%;bottom:auto;width:480px;max-width:calc(100% - 40px);max-height:88vh;transform:translate(-50%,-50%);border-radius:12px;padding-bottom:20px;}}';
 			document.head.appendChild(css);
 		}
 		var bg = el('div', 'tk-ws-bg'), sh = el('div', 'tk-ws');
