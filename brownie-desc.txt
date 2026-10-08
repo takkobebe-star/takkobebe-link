@@ -96,7 +96,7 @@
 <div class="bw-block bw-intro">
   <img src="https://takkobebe-link.vercel.app/img/brownie/main.jpg" width="720" height="740" alt="흰 접시 위에 세 조각 겹쳐 쌓은 딥초코 브라우니">
   <h2><span>빵엔 진심인 레옹아저씨의</span>꾸덕한 딥초코 브라우니</h2>
-  <p>벨기에산 다크초콜릿과 코코아 파우더, 우리밀로 구운 브라우니예요. 속까지 꾸덕하고, 한 입 베어 물면 진한 초코 맛이 가득 퍼져요.</p>
+  <p>벨기에산 다크초콜릿과 우리밀로 구운 꾸덕한 브라우니예요. 속까지 촘촘하고 진해서, 아이 재우고 커피 한 잔 곁들이면 하루 끝이 조금 달콤해져요.</p>
   <p class="bw-note">레옹아저씨 · 1개 220g(±10g)</p>
 </div>
 
@@ -108,7 +108,7 @@
     <li><b>우리밀</b><span>밀가루는 우리밀을 썼어요</span></li>
     <li><b>안 넣었어요</b><span>보존제 · 인공색소 · 인공향료</span></li>
     <li><b>냉장 · 냉동 보관</b><span>오래 두실 땐 냉동해 주세요</span></li>
-    <li><b>1개 220g</b><span>자르지 않고 한 개 그대로 먹어요</span></li>
+    <li><b>1개 220g</b><span>한 판이 아니라 큼직한 한 개예요</span></li>
   </ul>
 </div>
 
