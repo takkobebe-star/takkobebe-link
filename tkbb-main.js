@@ -2200,6 +2200,9 @@
 		// 관심상품 (위사 원래 목록을 카드 안에서 정리)
 		+ '.tkbb-my .tk-cd #wish_list,.tkbb-my .tk-cd #wish_list form{padding:0;margin:0;}'
 		+ '.tkbb-my .tk-cd #wish_list p.empty{padding:36px 0;margin:0;border:0;text-align:center;font-size:14px;color:#6A6A66;}'
+		+ '#cnt.tkbb-my .tk-cd #wish_list .left_area img{border-radius:7px;object-fit:cover;}'
+		+ '#cnt.tkbb-my .tk-cd #wish_list select{border-radius:5px;}'
+		+ '#cnt.tkbb-my .tk-cd #wish_list .box_btn a{border-radius:5px !important;}'
 		+ '.tkbb-my .tk-cd .paging{display:none;}'
 		+ '.tkbb-my .tk-pg .paging{display:flex;justify-content:center;gap:4px;margin:0;padding:0;}'
 		+ '.tkbb-my .tk-cd p.empty{padding:28px 0;margin:0;border:0;text-align:center;font-size:14px;color:#6A6A66;background:none;}'
