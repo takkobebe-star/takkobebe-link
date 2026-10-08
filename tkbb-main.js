@@ -3587,8 +3587,8 @@
 	if (location.pathname.indexOf('/board/') !== 0 || !/[?&]db=basic_2(&|$)/.test(location.search) || !/mari_mode=(write|modify)/.test(decodeURIComponent(location.search))) return;
 	var R = '#boardwrite ';
 	var CSS = ''
-		+ '#cnt.tkbb-wbw{background:#fff;padding:0 0 calc(110px + env(safe-area-inset-bottom));letter-spacing:-.02em;color:#161616;}'
-		+ '#cnt.tkbb-wbw > h2.subtitle{text-align:left;margin:0;padding:22px 20px 6px;border:0;font-size:18px;font-weight:700;color:#161616;}'
+		+ '#cnt.tkbb-wbw{background:#fff;padding:0 0 32px;letter-spacing:-.02em;color:#161616;}'
+		+ '#cnt.tkbb-wbw > h2.subtitle{text-align:left;margin:0;padding:22px 20px 18px;border:0;font-size:18px;font-weight:700;color:#161616;}'
 		+ R + '{padding:0 20px !important;margin:0 !important;}'
 		+ R + 'fieldset{border:0;margin:0;padding:0;}'
 		+ R + 'fieldset > div{background:none !important;border:0 !important;padding:0;margin:0 0 18px;}'
