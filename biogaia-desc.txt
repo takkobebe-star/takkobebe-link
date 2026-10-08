@@ -1,6 +1,6 @@
 <div class="tkbb-bg">
 <style>
-  /* 연필깎이(pencil-desc.txt)와 같은 틀. 첫 화면(사진·한눈에 보기)까지 보이고 나머지는 '상세설명 더보기'로 */
+  /* 연필깎이(pencil-desc.txt)와 같은 틀. 첫 화면(사진·소개)부터 보이고 나머지는 '상세설명 더보기'로 */
   /* 스킨이 상세설명 안 글씨 크기를 모두 inherit(13px)로 묶어 두어, 선택자 앞에 body #detail 을 붙여 이긴다 */
   /* 가격은 넣지 않는다 (2026-10-08 사용자 요청) */
   .wing-detail-more-contents { min-height: 860px; }
@@ -44,12 +44,6 @@
 
   body #detail .tkbb-bg .bg-media { margin: 0 0 14px; border-radius: 8px; background: var(--bg-surface); }
 
-  /* 한눈에 보기 */
-  body #detail .tkbb-bg .bg-glance { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-  body #detail .tkbb-bg .bg-glance li { padding: 13px 14px; border-radius: 8px; background: var(--bg-surface); }
-  body #detail .tkbb-bg .bg-glance b { display: block; font-size: 14px; font-weight: 500; }
-  body #detail .tkbb-bg .bg-glance span { display: block; margin-top: 4px; font-size: 12.5px; font-weight: 300; color: var(--bg-muted); line-height: 1.45; }
-
   /* 번호 단계 */
   body #detail .tkbb-bg .bg-num { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--bg-deep); color: var(--bg-white); font-size: 12px; font-weight: 500; font-style: normal; }
   body #detail .tkbb-bg .bg-steps { display: grid; gap: 10px; }
@@ -74,11 +68,26 @@
   body #detail .tkbb-bg .bg-why b { display: block; font-size: 16px; font-weight: 500; line-height: 1.35; }
   body #detail .tkbb-bg .bg-why span { display: block; margin-top: 4px; font-size: 13.5px; font-weight: 300; line-height: 1.55; color: var(--bg-muted); }
 
+  /* 어떤 걸 고를까요 — 작은 사진 옆에 번호·이름, 아래에 정보 */
+  body #detail .tkbb-bg .bg-pick { padding-block: 18px; border-top: 1px solid var(--bg-line); }
+  body #detail .tkbb-bg .bg-lead + .bg-pick { padding-top: 0; border-top: 0; }
+  body #detail .tkbb-bg .bg-pick:last-child { padding-bottom: 0; }
+  body #detail .tkbb-bg .bg-pick-head { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 14px; align-items: center; margin-bottom: 12px; }
+  body #detail .tkbb-bg .bg-thumb { border-radius: 7px; background: var(--bg-surface); }
+  body #detail .tkbb-bg .bg-no { display: block; margin-bottom: 3px; font-style: normal; font-size: 13px; font-weight: 700; color: var(--bg-deep); }
+  body #detail .tkbb-bg .bg-pick .bg-sub { margin: 0 0 3px; }
+  body #detail .tkbb-bg .bg-pick .bg-sub + .bg-cap { margin: 0; }
+  body #detail .tkbb-bg .bg-pick .bg-rows { gap: 6px; font-size: 13.5px; }
+  body #detail .tkbb-bg .bg-pick .bg-rows > div { grid-template-columns: 84px minmax(0, 1fr); }
+  body #detail .tkbb-bg .bg-pick .bg-rows dt { color: var(--bg-muted); font-weight: 400; }
+
   /* 제품 비교 표 */
   body #detail .tkbb-bg .bg-cmp { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   body #detail .tkbb-bg .bg-cmp table { width: 100%; min-width: 520px; border-collapse: collapse; font-size: 12.5px; }
   body #detail .tkbb-bg .bg-cmp th, body #detail .tkbb-bg .bg-cmp td { padding: 9px 6px; border-top: 1px solid var(--bg-line); text-align: center; vertical-align: middle; font-weight: 300; line-height: 1.45; background: transparent; }
   body #detail .tkbb-bg .bg-cmp thead th { border-top: 0; font-weight: 500; color: var(--bg-ink); }
+  body #detail .tkbb-bg .bg-cmp thead th { vertical-align: top; }
+  body #detail .tkbb-bg .bg-cmp thead .bg-no { margin-bottom: 2px; }
   body #detail .tkbb-bg .bg-cmp tbody th { text-align: left; color: var(--bg-muted); font-weight: 400; white-space: nowrap; }
 
   /* 기능성 */
@@ -112,7 +121,6 @@
     .wing-detail-more-contents { min-height: 1180px; }
     body #detail .tkbb-bg .bg-title { font-size: 27px; }
     body #detail .tkbb-bg .bg-intro h2 { font-size: 26px; }
-    body #detail .tkbb-bg .bg-glance { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 </style>
 
@@ -121,18 +129,6 @@
   <h2><span>하루 한 번, 아이 입맛에 맞게</span>바이오가이아 프로바이오틱스</h2>
   <p>모유에서 분리한 유산균 L. 루테리를 담은 스웨덴 바이오가이아예요. 씹어 먹는 타블렛, 물과 삼키는 캡슐, 음료에 떨어뜨리는 드롭까지 다섯 가지 중에서 아이에게 맞는 것을 고르면 돼요.</p>
   <p class="bg-note">바이오가이아 · 건강기능식품 · 수입 (주)그레이스</p>
-</div>
-
-<div class="bg-block">
-  <h3 class="bg-title">한눈에 보기</h3>
-  <ul class="bg-glance">
-    <li><b>L. 루테리 유산균</b><span>모유에서 분리한 DSM 17938 균주</span></li>
-    <li><b>하루 한 번</b><span>1정 · 1캡슐 · 또는 5방울</span></li>
-    <li><b>다섯 가지 제형</b><span>츄어블 타블렛 · 캡슐 · 액상 드롭</span></li>
-    <li><b>비타민 D 함께</b><span>오렌지 타블렛 · 이지 드롭에 들어 있어요</span></li>
-    <li><b>밀크프리 · 글루텐프리</b><span>바이오가이아 제품 공통이에요</span></li>
-    <li><b>건강기능식품</b><span>식약처 인정 기능성 원료</span></li>
-  </ul>
 </div>
 
 <div class="bg-block">
@@ -149,50 +145,61 @@
   <h3 class="bg-title">어떤 걸 고를까요</h3>
   <p class="bg-lead">아이가 씹어 먹을 수 있는지, 비타민 D도 함께 챙길지에 따라 골라 주세요.</p>
 
-  <p class="bg-sub">프로텍티스 타블렛 비타민D+</p>
-  <p class="bg-cap">오렌지맛 츄어블 · 유산균에 비타민 D까지</p>
-  <img class="bg-media" src="https://takkobebe-link.vercel.app/img/biogaia/tablet.jpg" width="720" height="560" loading="lazy" decoding="async" alt="주황색 바이오가이아 프로텍티스 타블렛 비타민D+ 상자 여섯 개">
-  <dl class="bg-rows">
-    <div><dt>먹는 법</dt><dd>하루 1회 1정, 씹어서</dd></div>
-    <div><dt>들어 있는 것</dt><dd>프로바이오틱스 1억 CFU · 비타민 D 20μg (800IU)</dd></div>
-    <div><dt>용량</dt><dd>13.5g (450mg × 30정) · 한 상자 한 달</dd></div>
-  </dl>
-
-  <p class="bg-sub">프로텍티스 캡슐</p>
-  <p class="bg-cap">맛과 냄새 없이 물과 함께 삼켜요</p>
-  <img class="bg-media" src="https://takkobebe-link.vercel.app/img/biogaia/capsule.jpg" width="720" height="560" loading="lazy" decoding="async" alt="흰색 원통 용기에 담긴 바이오가이아 프로텍티스 캡슐 네 통">
-  <dl class="bg-rows">
-    <div><dt>먹는 법</dt><dd>하루 1회 1캡슐, 충분한 물과 함께</dd></div>
-    <div><dt>들어 있는 것</dt><dd>프로바이오틱스 1억 CFU</dd></div>
-    <div><dt>용량</dt><dd>8.4g (280mg × 30캡슐) · 한 통 한 달</dd></div>
-  </dl>
-
-  <p class="bg-sub">NEW 가스트러스 타블렛</p>
-  <p class="bg-cap">감귤맛 츄어블 · 두 가지 균주 2억 CFU</p>
-  <img class="bg-media" src="https://takkobebe-link.vercel.app/img/biogaia/gastrus.jpg" width="720" height="560" loading="lazy" decoding="async" alt="하늘색 바이오가이아 가스트러스 타블렛 상자 세 개와 블리스터">
-  <dl class="bg-rows">
-    <div><dt>먹는 법</dt><dd>하루 1회 1정, 씹어서</dd></div>
-    <div><dt>들어 있는 것</dt><dd>프로바이오틱스 2억 CFU (L. 루테리 DSM 17938 · ATCC PTA 6475)</dd></div>
-    <div><dt>용량</dt><dd>21g (700mg × 30정) · 한 상자 한 달</dd></div>
-  </dl>
-
-  <p class="bg-sub">프로텍티스 베이비 드롭</p>
-  <p class="bg-cap">액상형 · 감미료와 향료 없이</p>
-  <img class="bg-media" src="https://takkobebe-link.vercel.app/img/biogaia/baby.jpg" width="720" height="560" loading="lazy" decoding="async" alt="노란 무늬의 바이오가이아 프로텍티스 베이비 드롭 튜브 세 개">
-  <dl class="bg-rows">
-    <div><dt>먹는 법</dt><dd>잘 흔든 뒤 하루 1회 5방울(0.17ml)을 시원한 음료나 물에 타서</dd></div>
-    <div><dt>들어 있는 것</dt><dd>프로바이오틱스 1억 CFU</dd></div>
-    <div><dt>용량</dt><dd>5ml · 한 개 약 한 달</dd></div>
-  </dl>
-
-  <p class="bg-sub">프로텍티스 이지 드롭 + 비타민D</p>
-  <p class="bg-cap">액상형 · 베이비 드롭에 비타민 D를 더했어요</p>
-  <img class="bg-media" src="https://takkobebe-link.vercel.app/img/biogaia/easy.jpg" width="720" height="560" loading="lazy" decoding="async" alt="노란 무늬의 바이오가이아 프로텍티스 이지 드롭 비타민D 튜브 세 개">
-  <dl class="bg-rows">
-    <div><dt>먹는 법</dt><dd>잘 흔든 뒤 하루 1회 5방울(0.17ml)을 시원한 음료나 물에 타서</dd></div>
-    <div><dt>들어 있는 것</dt><dd>프로바이오틱스 1억 CFU · 비타민 D 10μg (400IU)</dd></div>
-    <div><dt>용량</dt><dd>10ml · 한 개 약 두 달</dd></div>
-  </dl>
+  <div class="bg-pick">
+    <div class="bg-pick-head">
+      <img class="bg-thumb" src="https://takkobebe-link.vercel.app/img/biogaia/tablet.jpg" width="720" height="560" loading="lazy" decoding="async" alt="주황색 바이오가이아 프로텍티스 타블렛 비타민D+ 상자 여섯 개">
+      <div><i class="bg-no">01</i><p class="bg-sub">프로텍티스 타블렛 비타민D+</p><p class="bg-cap">오렌지맛 츄어블 · 유산균에 비타민 D까지</p></div>
+    </div>
+    <dl class="bg-rows">
+      <div><dt>먹는 법</dt><dd>하루 1회 1정, 씹어서</dd></div>
+      <div><dt>들어 있는 것</dt><dd>프로바이오틱스 1억 CFU · 비타민 D 20μg (800IU)</dd></div>
+      <div><dt>용량</dt><dd>13.5g (450mg × 30정) · 한 상자 한 달</dd></div>
+    </dl>
+  </div>
+  <div class="bg-pick">
+    <div class="bg-pick-head">
+      <img class="bg-thumb" src="https://takkobebe-link.vercel.app/img/biogaia/capsule.jpg" width="720" height="560" loading="lazy" decoding="async" alt="흰색 원통 용기에 담긴 바이오가이아 프로텍티스 캡슐 네 통">
+      <div><i class="bg-no">02</i><p class="bg-sub">프로텍티스 캡슐</p><p class="bg-cap">맛과 냄새 없이 물과 함께 삼켜요</p></div>
+    </div>
+    <dl class="bg-rows">
+      <div><dt>먹는 법</dt><dd>하루 1회 1캡슐, 충분한 물과 함께</dd></div>
+      <div><dt>들어 있는 것</dt><dd>프로바이오틱스 1억 CFU</dd></div>
+      <div><dt>용량</dt><dd>8.4g (280mg × 30캡슐) · 한 통 한 달</dd></div>
+    </dl>
+  </div>
+  <div class="bg-pick">
+    <div class="bg-pick-head">
+      <img class="bg-thumb" src="https://takkobebe-link.vercel.app/img/biogaia/gastrus.jpg" width="720" height="560" loading="lazy" decoding="async" alt="하늘색 바이오가이아 가스트러스 타블렛 상자 세 개와 블리스터">
+      <div><i class="bg-no">03</i><p class="bg-sub">NEW 가스트러스 타블렛</p><p class="bg-cap">감귤맛 츄어블 · 두 가지 균주 2억 CFU</p></div>
+    </div>
+    <dl class="bg-rows">
+      <div><dt>먹는 법</dt><dd>하루 1회 1정, 씹어서</dd></div>
+      <div><dt>들어 있는 것</dt><dd>프로바이오틱스 2억 CFU (L. 루테리 DSM 17938 · ATCC PTA 6475)</dd></div>
+      <div><dt>용량</dt><dd>21g (700mg × 30정) · 한 상자 한 달</dd></div>
+    </dl>
+  </div>
+  <div class="bg-pick">
+    <div class="bg-pick-head">
+      <img class="bg-thumb" src="https://takkobebe-link.vercel.app/img/biogaia/baby.jpg" width="720" height="560" loading="lazy" decoding="async" alt="노란 무늬의 바이오가이아 프로텍티스 베이비 드롭 튜브 세 개">
+      <div><i class="bg-no">04</i><p class="bg-sub">프로텍티스 베이비 드롭</p><p class="bg-cap">액상형 · 감미료와 향료 없이</p></div>
+    </div>
+    <dl class="bg-rows">
+      <div><dt>먹는 법</dt><dd>잘 흔든 뒤 하루 1회 5방울(0.17ml)을 시원한 음료나 물에 타서</dd></div>
+      <div><dt>들어 있는 것</dt><dd>프로바이오틱스 1억 CFU</dd></div>
+      <div><dt>용량</dt><dd>5ml · 한 개 약 한 달</dd></div>
+    </dl>
+  </div>
+  <div class="bg-pick">
+    <div class="bg-pick-head">
+      <img class="bg-thumb" src="https://takkobebe-link.vercel.app/img/biogaia/easy.jpg" width="720" height="560" loading="lazy" decoding="async" alt="노란 무늬의 바이오가이아 프로텍티스 이지 드롭 비타민D 튜브 세 개">
+      <div><i class="bg-no">05</i><p class="bg-sub">프로텍티스 이지 드롭 + 비타민D</p><p class="bg-cap">액상형 · 베이비 드롭에 비타민 D를 더했어요</p></div>
+    </div>
+    <dl class="bg-rows">
+      <div><dt>먹는 법</dt><dd>잘 흔든 뒤 하루 1회 5방울(0.17ml)을 시원한 음료나 물에 타서</dd></div>
+      <div><dt>들어 있는 것</dt><dd>프로바이오틱스 1억 CFU · 비타민 D 10μg (400IU)</dd></div>
+      <div><dt>용량</dt><dd>10ml · 한 개 약 두 달</dd></div>
+    </dl>
+  </div>
 </div>
 
 <div class="bg-block">
@@ -200,7 +207,7 @@
   <div class="bg-cmp">
     <table>
       <thead>
-        <tr><th></th><th>타블렛 비타민D+</th><th>캡슐</th><th>가스트러스</th><th>베이비 드롭</th><th>이지 드롭</th></tr>
+        <tr><th></th><th><i class="bg-no">01</i>타블렛 비타민D+</th><th><i class="bg-no">02</i>캡슐</th><th><i class="bg-no">03</i>가스트러스</th><th><i class="bg-no">04</i>베이비 드롭</th><th><i class="bg-no">05</i>이지 드롭</th></tr>
       </thead>
       <tbody>
         <tr><th>형태</th><td>츄어블</td><td>캡슐</td><td>츄어블</td><td>액상</td><td>액상</td></tr>
