@@ -3494,7 +3494,7 @@
 /* ===== 상품후기 작성 팝업 끝 ===== */
 
 /* ===== 메인 팝업 — 후기 이벤트 '후기 남기면 최대 1,000원 적립' (2026-10-08 ~ 2026.11.10) =====
-   메인(모바일·PC)에서 한 번 뜬다. 사진을 누르면 상품후기 게시판(맨 위 '후기 쓰기')으로.
+   메인(모바일·PC)에서 한 번 뜬다. 팝업 안을 누르면 상품후기 게시판(맨 위 '후기 쓰기')으로.
    '오늘 하루 보지 않기'는 이 폰에 날짜만 저장. 11월 11일 0시(한국 시간)부터 저절로 안 뜬다.
    빼려면 이 덩어리를 지우면 된다. */
 (function(){
@@ -3506,13 +3506,29 @@
 	var KEY = 'tkbb_pop1110_hide';
 	var today = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);   // 한국 날짜
 	try { if (localStorage.getItem(KEY) === today) return; } catch (e) {}
-	var IMG = 'https://takkobebe-link.vercel.app/img/popup/review-event-1110-v2.jpg';
 	var LINK = '/shop/product_review_list.php';
 	var css = '#tkbb-pop{position:fixed;inset:0;z-index:100002;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(22,22,22,.5);opacity:0;transition:opacity .2s;font-family:inherit;letter-spacing:-.02em;box-sizing:border-box;}'
 		+ '#tkbb-pop.on{opacity:1;}'
 		+ '#tkbb-pop .bx{width:100%;max-width:320px;background:#fff;border-radius:12px;overflow:hidden;}'
-		+ '#tkbb-pop .bx a.im{display:block;}'
-		+ '#tkbb-pop .bx img{display:block;width:100% !important;max-width:100% !important;height:auto;}'
+		// 2026-10-08: 이미지 → 글자로 다시 그림 (같은 모양). '사진 후기 1건당 총 1,000원'과 '후기 쓰러 가기'를 키움
+		+ '#tkbb-pop .ct{display:block;padding:26px 18px 18px;text-align:center;color:#161616;text-decoration:none;word-break:keep-all;}'
+		+ '#tkbb-pop .h{margin:0;font-size:25px;font-weight:700;line-height:1.3;letter-spacing:-.04em;color:#161616;}'
+		+ '#tkbb-pop .h em{font-style:normal;font-size:inherit;font-weight:inherit;color:#6E7A38;}'
+		+ '#tkbb-pop .s{margin:8px 0 0;font-size:13px;font-weight:400;color:#6A6A66;}'
+		+ '#tkbb-pop .bg{margin:18px 0 0;padding:12px 12px 0;background:#F7F5EE;border-radius:12px;}'
+		+ '#tkbb-pop .cs{display:flex;align-items:center;gap:6px;}'
+		+ '#tkbb-pop .cd{flex:1 1 0;padding:12px 4px 12px;background:#fff;border-radius:10px;}'
+		+ '#tkbb-pop .ic{display:flex;align-items:center;justify-content:center;width:32px;height:32px;margin:0 auto 7px;border-radius:50%;background:#F1F2DF;}'
+		+ '#tkbb-pop .cd p{margin:0;font-size:13px;font-weight:600;color:#161616;}'
+		+ '#tkbb-pop .cd b{display:block;margin-top:2px;font-size:22px;font-weight:700;letter-spacing:-.03em;line-height:1.2;color:#161616;}'
+		+ '#tkbb-pop .cd b small{font-size:13px;font-weight:700;margin-left:1px;}'
+		+ '#tkbb-pop .cd b.g{color:#6E7A38;}'
+		+ '#tkbb-pop .pl{flex:0 0 22px;height:22px;border-radius:50%;background:#fff;font-size:15px;line-height:22px;color:#161616;}'
+		+ '#tkbb-pop .tt{margin:12px 0 0;padding:12px 0 13px;border-top:1px solid #E6E2D8;font-size:14px;font-weight:400;color:#6A6A66;}'
+		+ '#tkbb-pop .tt b{margin-left:6px;font-size:17px;font-weight:700;color:#161616;}'
+		+ '#tkbb-pop .go{display:block;margin:16px 0 0;height:52px;line-height:52px;border-radius:5px;background:#D1D798;font-size:17px;font-weight:700;color:#161616;}'
+		+ '#tkbb-pop .nt{margin:12px 0 0;padding:0;list-style:none;text-align:left;font-size:12px;font-weight:400;line-height:1.6;letter-spacing:-.04em;color:#6A6A66;}'
+		+ '#tkbb-pop .nt li{margin:0;padding:0;font-size:12px;letter-spacing:-.04em;}'   // 위사가 li 를 13px 로 덮는다
 		+ '#tkbb-pop .bt{display:flex;border-top:1px solid #EFEDE6;}'
 		+ '#tkbb-pop .bt button{flex:1 1 0;margin:0;padding:0;height:48px;border:0;border-radius:0;background:#fff;font:inherit;font-size:14px;font-weight:400;color:#6A6A66;cursor:pointer;-webkit-appearance:none;}'
 		+ '#tkbb-pop .bt button+button{border-left:1px solid #EFEDE6;color:#161616;font-weight:500;}'
@@ -3524,7 +3540,17 @@
 		(document.head || document.documentElement).appendChild(st);
 		var w = document.createElement('div'); w.id = 'tkbb-pop';
 		w.setAttribute('role', 'dialog'); w.setAttribute('aria-modal', 'true'); w.setAttribute('aria-label', '후기 이벤트 안내');
-		w.innerHTML = '<div class="bx"><a class="im" href="' + LINK + '"><img alt="후기 남기면 최대 1,000원 적립. 텍스트 후기 300원, 사진 첨부 시 700원 추가. 이벤트 기간 2026.10.10 – 11.10"></a>'
+		w.innerHTML = '<div class="bx"><a class="ct" href="' + LINK + '">'
+			+ '<p class="h">후기 남기면<br><em>최대 1,000원</em> 적립</p>'
+			+ '<p class="s">써 보신 그대로, 솔직한 후기를 들려주세요</p>'
+			+ '<div class="bg"><div class="cs">'
+			+ '<div class="cd"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6E7A38" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 4.5l3 3L8 19l-4 1 1-4z"/><path d="M13 21h7"/></svg></span><p>텍스트 후기</p><b>300<small>원</small></b></div>'
+			+ '<span class="pl">+</span>'
+			+ '<div class="cd"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6E7A38" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg></span><p>사진 첨부 시</p><b class="g">+700<small>원</small></b></div>'
+			+ '</div><p class="tt">사진 후기 1건당<b>총 1,000원</b></p></div>'
+			+ '<span class="go">후기 쓰러 가기</span>'
+			+ '<ul class="nt"><li>· 이벤트 기간 : 2026.10.10 – 11.10</li><li>· 텍스트 후기 300원, 사진을 함께 올리면 700원이 더해져요</li></ul>'
+			+ '</a>'
 			+ '<div class="bt"><button type="button" data-x="day">오늘 하루 보지 않기</button><button type="button" data-x="close">닫기</button></div></div>';
 		function close(){ w.classList.remove('on'); document.body.classList.remove('tkbb-pop-open'); setTimeout(function(){ if (w.parentNode) w.parentNode.removeChild(w); }, 220); }
 		w.addEventListener('click', function(e){
@@ -3533,10 +3559,8 @@
 			else if (b) close();
 			else if (e.target === w) close();   // 바깥 어두운 곳을 눌러도 닫힘
 		});
-		var img = w.querySelector('img');
-		// 깜빡임 금지: 사진을 다 받은 뒤에 보여 준다. 사진을 못 받으면 아예 띄우지 않는다
-		img.onload = function(){ document.body.appendChild(w); document.body.classList.add('tkbb-pop-open'); requestAnimationFrame(function(){ w.classList.add('on'); }); };
-		img.src = IMG;
+		// 글자로 그려 기다릴 사진이 없다 — 투명하게 붙인 뒤 바로 보여 준다
+		document.body.appendChild(w); document.body.classList.add('tkbb-pop-open'); requestAnimationFrame(function(){ w.classList.add('on'); });
 	}
 	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
