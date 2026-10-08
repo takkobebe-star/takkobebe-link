@@ -3513,17 +3513,19 @@
 
 /* ===== 메인 팝업 — 후기 이벤트 '후기 남기면 최대 1,000원 적립' (2026-10-08 ~ 2026.11.10) =====
    메인(모바일·PC)에서 한 번 뜬다. 사진을 누르면 상품후기 게시판(맨 위 '후기 쓰기')으로.
-   '오늘 하루 보지 않기'는 이 폰에 날짜만 저장. 11월 11일 0시(한국 시간)부터 저절로 안 뜬다.
+   '오늘 하루 보지 않기'는 이 폰에 날짜만 저장. 10월 10일 0시부터 뜨고 11월 11일 0시(한국 시간)부터 저절로 안 뜬다.
    빼려면 이 덩어리를 지우면 된다. */
 (function(){
 	if (window.__TKBB_POP1110) return; window.__TKBB_POP1110 = 1;
 	var P = location.pathname;
 	if (P !== '/' && P !== '/index.php' && P !== '/main/index.php') return;
+	var START = Date.UTC(2026, 9, 9, 15, 0, 0);   // 2026.10.10 00:00 한국 시간부터 보임 (2026-10-08 사용자 요청)
 	var END = Date.UTC(2026, 10, 10, 15, 0, 0);   // 2026.11.11 00:00 한국 시간
-	if (Date.now() >= END) return;
+	var PREVIEW = /[?&]tkbbpop=1(&|$)/.test(location.search);   // 미리 보기: 메인 주소 뒤에 ?tkbbpop=1
+	if (!PREVIEW && (Date.now() < START || Date.now() >= END)) return;
 	var KEY = 'tkbb_pop1110_hide';
 	var today = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);   // 한국 날짜
-	try { if (localStorage.getItem(KEY) === today) return; } catch (e) {}
+	try { if (!PREVIEW && localStorage.getItem(KEY) === today) return; } catch (e) {}
 	var IMG = 'https://takkobebe-link.vercel.app/img/popup/review-event-1110-v3.jpg';
 	var LINK = '/shop/product_review_list.php';
 	var css = '#tkbb-pop{position:fixed;inset:0;z-index:100002;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(22,22,22,.5);opacity:0;transition:opacity .2s;font-family:inherit;letter-spacing:-.02em;box-sizing:border-box;}'
