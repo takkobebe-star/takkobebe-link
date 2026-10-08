@@ -2084,7 +2084,7 @@
 		'/mypage/coupon_down_list.php': couponList,
 		'/mypage/counsel_list.php': counselList, '/mypage/qna_list.php': qnaList, '/mypage/review_list.php': reviewList,
 		'/mypage/notify_restock.php': function(c){ return simpleCard(c, 'restock', '재입고 알림'); },
-		'/shop/product_qna_list.php': qnaBoard, '/shop/product_qna.php': qnaBoard, '/shop/product_review_list.php': reviewBoard, '/shop/order_finish.php': orderFinish, '/shop/order.php': orderForm, '/shop/cart.php': cartPage,
+		'/shop/product_qna_list.php': qnaBoard, '/shop/product_qna.php': qnaBoard, '/shop/product_review_list.php': reviewBoard, '/board/': wishBoard, '/board/index.php': wishBoard, '/shop/order_finish.php': orderFinish, '/shop/order.php': orderForm, '/shop/cart.php': cartPage,
 		'/member/edit_step1.php': editInfo, '/member/edit_step2.php': editInfo, '/mypage/withdraw_step1.php': withdraw };
 	if (!PAGES[P]) return;
 
@@ -2316,6 +2316,15 @@
 		+ '.tkbb-my .tk-rv ul.list_qnarev .stat:empty{display:none;}'
 		+ '#cnt.tkbb-my .tk-rv .more_btn{display:block;margin:0;padding:0;border:0;background:none;}'
 		+ '#cnt.tkbb-my .tk-rv .more_btn a{display:flex;align-items:center;justify-content:center;height:48px;border-radius:7px;border:1px solid #DAD5C8;background:#fff;color:#161616;font-size:14px;}'
+		// 이거 공구해주세요 게시판 (Q&A 게시판과 같은 모양, 2026-10-08)
+		+ '.tkbb-my .tk-wb ul.list_qnarev > li{cursor:pointer;}'
+		+ '.tkbb-my .tk-wb ul.list_qnarev .no{display:none;}'
+		+ '.tkbb-my .tk-wb ul.list_qnarev .title{margin-top:0 !important;word-break:keep-all;}'
+		+ '#cnt.tkbb-my .tk-wb ul.list_qnarev .stat{display:flex;align-items:center;gap:8px;min-height:24px;margin-top:8px !important;line-height:1;}'
+		+ '#cnt.tkbb-my .tk-wb ul.list_qnarev .stat .tk-badge{line-height:18px;}'
+		+ '#cnt.tkbb-my .tk-wb ul.list_qnarev .stat .tx{font-size:13px;color:#9A9A94;}'
+		+ '#cnt.tkbb-my .tk-wb .box_btn.tk-more{display:block;width:auto;margin:0;padding:0;border:0;background:none;}'
+		+ '#cnt.tkbb-my .tk-wb .box_btn.tk-more a{display:flex;align-items:center;justify-content:center;height:48px;border-radius:7px !important;border:1px solid #DAD5C8 !important;background:#fff !important;color:#161616 !important;font-size:14px !important;font-weight:400 !important;}'
 		// 주문완료
 		+ '.tkbb-my .tk-done{text-align:center;padding:30px 18px 26px;}'
 		+ '.tkbb-my .tk-done .ic{width:56px;height:56px;margin:0 auto;border-radius:50%;background:#D1D798;display:flex;align-items:center;justify-content:center;}'
@@ -3070,6 +3079,57 @@
 		var mb = box.querySelector('.more_btn'); if (mb) wrap.appendChild(mb);
 		hide(box);
 		cnt.insertBefore(header('후기'), wrap);
+		return true;
+	}
+
+	/* ---------- 이거 공구해주세요 게시판(/board/?db=basic_2) — Q&A 게시판과 같은 모양 (2026-10-08 사용자 요청) ----------
+	   검색 카드 → 검정 '공구 요청하기' 버튼 → 흰 카드 목록(제목 / 작성자 | 날짜, 댓글 있으면 연두 배지) → 더 보기.
+	   목록 화면에서만 바꾼다. 글 보기·글쓰기 화면과 다른 게시판(basic_3 등)은 그대로. */
+	function wishBoard(cnt){
+		if (!/[?&]db=basic_2(&|$)/.test(location.search) || /[?&](no|mari_mode)=/.test(location.search)) return false;
+		var box = document.getElementById('boardlist');
+		var ul = document.getElementById('boardlist_body');
+		if (!box || !ul) return false;
+		var wrap = el('div', 'tk-wr tk-wb');
+		box.parentNode.insertBefore(wrap, box);
+		var sr = box.querySelector('.board_search');
+		if (sr) {
+			var sc = el('div', 'tk-cd tk-srch'); sc.appendChild(sr); wrap.appendChild(sc);
+			var sf = sr.querySelector('form'), ss = sr.querySelector('select'), si = sr.querySelector('input.form_input');
+			if (sf && ss && si) { var sb = el('div', 'tk-sbox'); sf.insertBefore(sb, ss); sb.appendChild(ss); sb.appendChild(si); ss.setAttribute('aria-label', '검색 조건'); si.setAttribute('aria-label', '검색어'); si.setAttribute('placeholder', '검색어를 입력하세요'); }
+		}
+		// 글쓰기 버튼 (위사 mariExec('write@write') 그대로 누른다)
+		var wa = box.querySelector('.box_btn.green a, a[onclick*="write@write"]');
+		if (wa) {
+			var b = el('a', 'tk-black', '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>&nbsp;공구 요청하기');
+			b.href = 'javascript:;';
+			b.addEventListener('click', function(e){ e.preventDefault(); wa.click(); });
+			wrap.appendChild(b);
+		}
+		// 목록: '쁘니 | 2026-10-05 | 댓글 : 1' → [댓글 1] 쁘니 | 2026.10.05
+		ul.classList.add('list_qnarev');
+		wrap.appendChild(ul);
+		var tidy = function(){
+			var ss2 = ul.querySelectorAll('.stat');
+			for (var i = 0; i < ss2.length; i++) {
+				var st = ss2[i]; if (st.getAttribute('data-tk')) continue;
+				st.setAttribute('data-tk', '1');
+				var ps = txt(st).split('|').map(function(s){ return s.trim(); });
+				var nm = ps[0] || '', dt = '', cm = 0;
+				for (var k = 1; k < ps.length; k++) {
+					if (/^\d{4}-\d{2}-\d{2}/.test(ps[k])) dt = dot(ps[k].slice(0, 10));
+					else if (/댓글/.test(ps[k])) cm = parseInt(ps[k].replace(/\D/g, ''), 10) || 0;
+				}
+				st.innerHTML = (cm ? '<span class="tk-badge done">댓글 ' + cm + '</span>' : '') + '<span class="tx">' + esc(nm) + (dt ? ' | ' + dt : '') + '</span>';
+			}
+		};
+		tidy();
+		if (window.MutationObserver) new MutationObserver(tidy).observe(ul, { childList: true });
+		var mb = box.querySelector('.box_btn.purple'); if (mb) { mb.classList.add('tk-more'); wrap.appendChild(mb); }
+		hide(box);
+		var hd = header('이거 공구해주세요');
+		if (!(document.referrer && document.referrer.indexOf(location.host) > -1)) hd.querySelector('a').setAttribute('href', '/');
+		cnt.insertBefore(hd, wrap);
 		return true;
 	}
 
