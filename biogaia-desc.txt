@@ -67,6 +67,13 @@
   body #detail .tkbb-bg .bg-sub:first-of-type { margin-top: 0; }
   body #detail .tkbb-bg .bg-sub + .bg-cap { margin: 0 0 12px; font-size: 13px; font-weight: 300; color: var(--bg-muted); }
 
+  /* 특별한 이유 — 상자 없이 줄 나눔, 번호만 올리브 */
+  body #detail .tkbb-bg .bg-why li { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 8px; padding-block: 16px; border-top: 1px solid var(--bg-line); }
+  body #detail .tkbb-bg .bg-why li:first-child { padding-top: 0; border-top: 0; }
+  body #detail .tkbb-bg .bg-why i { font-style: normal; font-size: 18px; font-weight: 700; line-height: 1.25; color: var(--bg-deep); }
+  body #detail .tkbb-bg .bg-why b { display: block; font-size: 16px; font-weight: 500; line-height: 1.35; }
+  body #detail .tkbb-bg .bg-why span { display: block; margin-top: 4px; font-size: 13.5px; font-weight: 300; line-height: 1.55; color: var(--bg-muted); }
+
   /* 제품 비교 표 */
   body #detail .tkbb-bg .bg-cmp { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   body #detail .tkbb-bg .bg-cmp table { width: 100%; min-width: 520px; border-collapse: collapse; font-size: 12.5px; }
@@ -126,6 +133,16 @@
     <li><b>밀크프리 · 글루텐프리</b><span>바이오가이아 제품 공통이에요</span></li>
     <li><b>건강기능식품</b><span>식약처 인정 기능성 원료</span></li>
   </ul>
+</div>
+
+<div class="bg-block">
+  <h3 class="bg-title">바이오가이아가 특별한 이유</h3>
+  <ol class="bg-why">
+    <li><i aria-hidden="true">01</i><div><b>모유에서 찾은 유산균</b><span>담긴 유산균 L. 루테리 DSM 17938은 모유에서 분리한 균주예요. 사람에게서 온 유산균이에요.</span></div></li>
+    <li><i aria-hidden="true">02</i><div><b>한 가지 유산균만 연구해 온 회사</b><span>1990년 스웨덴에서 시작한 바이오가이아는 L. 루테리 한 가지 유산균으로 제품을 만들어 왔어요.</span></div></li>
+    <li><i aria-hidden="true">03</i><div><b>아기 때부터 클 때까지 같은 유산균</b><span>삼키기 어려운 아기는 드롭으로, 씹을 수 있으면 타블렛으로, 알약이 편해지면 캡슐로. 제형만 바꾸고 같은 균주를 이어 먹일 수 있어요.</span></div></li>
+    <li><i aria-hidden="true">04</i><div><b>꼭 필요한 것만 담은 드롭</b><span>베이비 드롭의 원료는 유산균, 해바라기유, 글리세린지방산에스테르 세 가지예요. 감미료와 향료는 넣지 않았어요.</span></div></li>
+  </ol>
 </div>
 
 <div class="bg-block">
