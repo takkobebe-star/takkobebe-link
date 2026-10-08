@@ -3240,14 +3240,6 @@
 			// 상품 지우기(X): 작게, 카드 오른쪽 줄에 맞춤
 			+ C + 'ul.list_cart .btn_col2 .del{position:absolute !important;top:14px !important;right:0 !important;width:22px !important;height:22px !important;margin:0 !important;}'
 			+ C + 'ul.list_cart .btn_col2 .del a{display:block !important;position:relative;width:22px !important;height:22px !important;padding:0 !important;border:0 !important;border-radius:0 !important;background:none !important;font-size:0 !important;line-height:0 !important;color:transparent !important;text-indent:-9999px;overflow:hidden;}'
-			// 아래 네 버튼: 검정 총액 카드와 검정 주문 버튼 사이에 흰 카드 한 장 (2×2, 가는 선으로 나눔)
-			+ C + '.btn_bottom.btn_col{gap:0 !important;margin:0 !important;background:#fff;}'
-			+ C + '.btn_bottom.btn_col:first-child{border-radius:12px 12px 0 0;border-bottom:1px solid #EFEDE6;}'
-			+ C + '.btn_bottom.btn_col:nth-child(2){border-radius:0 0 12px 12px;margin-bottom:12px !important;}'
-			+ C + '.btn_bottom.btn_col .box_btn{border-radius:0 !important;}'
-			+ C + '.btn_bottom.btn_col .box_btn + .box_btn{border-left:1px solid #EFEDE6 !important;}'
-			+ C + '.btn_bottom.btn_col .box_btn.white a{height:48px;border:0 !important;border-radius:0 !important;background:none !important;color:#3E3E3A !important;font-size:13px;}'
-			+ C + '.btn_bottom.btn_col:nth-child(2) .box_btn.white a{color:#9A9A94 !important;}'
 			+ C + '.wrap_inner.sum{margin:0 0 12px;padding:4px 16px 16px !important;background:#fff;border:0;border-radius:0 0 12px 12px;}'
 			+ C + '.wrap_inner.sum table{width:100%;border-top:1px solid #EFEDE6;}'
 			+ C + '.wrap_inner.sum th,' + C + '.wrap_inner.sum td{padding:10px 0 0;border:0;background:none;font-size:13px;font-weight:400;color:#6A6A66;vertical-align:top;}'
@@ -3255,27 +3247,38 @@
 			+ C + '.wrap_inner.sum td p{margin:2px 0 0;font-size:12px;color:#9A9A94;}'
 			+ C + '.wrap_inner.sum tr:last-child th{font-weight:600;color:#161616;}'
 			+ C + '.wrap_inner.sum tr:last-child td strong{font-size:16px;font-weight:700;}'
-			// 총 주문 가격
-			+ C + 'p.title_total{margin:4px 0 0;padding:18px 16px 4px;background:#161616;border:0;border-radius:12px 12px 0 0;font-size:15px;font-weight:700;color:#fff;text-align:left !important;}'
+			// 판매처가 한 곳뿐이면 판매처 금액표는 숨기고(아래 결제금액과 같은 내용) 상품 카드 아래를 둥글게 (2026-10-08 컬리 스타일)
+			+ '#cnt.tkbb-my #cart.tk-one-sum form > .wrap_inner.sum:not(.total){display:none !important;}'
+			+ '#cnt.tkbb-my #cart.tk-one-sum ul.list_cart{padding-bottom:4px;border-radius:0 0 12px 12px;}'
+			// 총 주문 가격 → 컬리처럼 흰 카드에 줄 나눔, 결제금액만 크게 (2026-10-08)
+			+ C + 'p.title_total{margin:12px 0 0;padding:18px 16px 2px;background:#fff;border:0;border-radius:12px 12px 0 0;font-size:16px;font-weight:600;color:#161616;text-align:left !important;}'
 			+ C + 'p.title_total:before,' + C + 'p.title_total:after{display:none !important;}'
-			+ C + '.wrap_inner.sum.total{background:#161616;border-radius:0 0 12px 12px;}'
-			+ C + '.wrap_inner.sum.total table{border-top-color:rgba(255,255,255,.15);}'
-			+ C + '.wrap_inner.sum.total th,' + C + '.wrap_inner.sum.total td,' + C + '.wrap_inner.sum.total td span{color:rgba(255,255,255,.75) !important;}'
-			+ C + '.wrap_inner.sum.total tr:last-child th{color:#fff;}'
-			+ C + '.wrap_inner.sum.total tr:last-child td strong,' + C + '.wrap_inner.sum.total tr:last-child td strong span{font-size:20px !important;color:#D1D798 !important;}'
-			// 버튼
+			+ C + '.wrap_inner.sum.total{margin:0 0 12px;padding:4px 16px 18px !important;background:#fff;border-radius:0 0 12px 12px;}'
+			+ C + '.wrap_inner.sum.total table{border-top:0;border-collapse:collapse;}'
+			+ C + '.wrap_inner.sum.total th,' + C + '.wrap_inner.sum.total td{padding:12px 0 0;font-size:14px;color:#6A6A66;vertical-align:middle;}'
+			+ C + '.wrap_inner.sum.total td,' + C + '.wrap_inner.sum.total td span{color:#161616;}'
+			+ C + '.wrap_inner.sum.total tr:nth-last-child(2) > *{padding-bottom:16px;}'
+			+ C + '.wrap_inner.sum.total tr:last-child > *{padding-top:16px;border-top:1px solid #EFEDE6;}'
+			+ C + '.wrap_inner.sum.total tr:last-child th{font-size:15px;font-weight:600;color:#161616;}'
+			+ C + '.wrap_inner.sum.total tr:last-child td strong,' + C + '.wrap_inner.sum.total tr:last-child td strong span{font-size:20px !important;font-weight:700;color:#161616 !important;}'
+			// 버튼: 결제금액 바로 아래 '전체상품 주문하기' 하나를 크게 → 계속 쇼핑하기·선택상품 주문하기 → 결제 간편버튼 → 삭제·비우기는 작은 글자 링크
 			+ C + '.wrap_inner:not(.sum):not(.msg){background:none;border:0;padding:0 !important;margin:0;}'
-			+ C + 'form > .wrap_inner:not(.sum){margin-top:12px;}'
-			+ C + '.btn_bottom.btn_col{display:flex;gap:8px;margin:0 0 8px;padding:0;}'
+			+ C + 'form > .wrap_inner:not(.sum){display:flex;flex-direction:column;margin-top:0;}'
+			+ C + '.btn_bottom.btn_col{display:flex;gap:8px;margin:0 0 8px;padding:0;background:none;}'
 			+ C + '.btn_bottom.btn_col .box_btn{flex:1;margin:0;padding:0;border:0;}'
-			+ C + '.box_btn.white a{display:flex;align-items:center;justify-content:center;height:44px;border:1px solid #DAD5C8 !important;border-radius:7px !important;background:#fff !important;color:#161616 !important;font-size:13px;}'
-			+ C + '.box_btn{border-radius:7px !important;}'
-			+ C + '.box_btn.large{display:block;margin:4px 0 0;border:0;}'
-			+ C + '.box_btn.large a{display:flex;align-items:center;justify-content:center;height:54px;border:0 !important;border-radius:7px !important;background:#161616 !important;color:#fff !important;font-size:16px;font-weight:700;}'
+			+ C + '.box_btn.white a{display:flex;align-items:center;justify-content:center;height:46px;border:1px solid #DAD5C8 !important;border-radius:5px !important;background:#fff !important;color:#161616 !important;font-size:14px;}'
+			+ C + '.box_btn{border-radius:5px !important;}'
+			+ C + '.box_btn.large{order:-1;display:block;margin:0 0 10px;border:0;}'
+			+ C + '.box_btn.large a{display:flex;align-items:center;justify-content:center;height:54px;border:0 !important;border-radius:5px !important;background:#161616 !important;color:#fff !important;font-size:16px;font-weight:700;}'
+			+ C + 'form > .wrap_inner > .btn_bottom.btn_col:nth-child(2){order:1;justify-content:center;gap:0;margin:4px 0 0;}'
+			+ C + 'form > .wrap_inner > .btn_bottom.btn_col:nth-child(2) .box_btn{position:relative;flex:0 0 auto;}'
+			+ C + 'form > .wrap_inner > .btn_bottom.btn_col:nth-child(2) .box_btn + .box_btn:before{content:"";position:absolute;left:0;top:13px;width:1px;height:12px;background:#DAD5C8;}'
+			+ C + 'form > .wrap_inner > .btn_bottom.btn_col:nth-child(2) .box_btn.white a{height:38px;padding:0 14px;border:0 !important;background:none !important;color:#9A9A94 !important;font-size:12px;}'
 			+ C + 'dl.msg{margin:18px 0 0;padding:14px 16px !important;border:0;border-radius:12px;background:#EAE7DE;font-size:12px;color:#6A6A66;line-height:1.6;}'
 			+ C + 'dl.msg dt{margin:0 0 4px;font-size:12px;font-weight:600;color:#161616;}'
 			+ C + 'p.empty{margin:0;padding:48px 0;border:0;border-radius:12px;background:#fff;text-align:center;font-size:14px;color:#6A6A66;}'));
 		(document.head || document.documentElement).appendChild(st);
+		if (box.querySelectorAll('form > .wrap_inner.sum:not(.total)').length === 1) box.classList.add('tk-one-sum');
 		var dm = box.querySelectorAll('p.msg_delivery > span');
 		for (var i = 0; i < dm.length; i++) dm[i].textContent = dm[i].textContent.replace(/^\s*\/\s*/, '');
 		// 수량 +/- 또는 직접 입력 → 잠깐 기다렸다가(연속 클릭 묶음) 바로 적용 (2026-10-08)
