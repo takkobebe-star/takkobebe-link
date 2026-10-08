@@ -3768,6 +3768,74 @@
 })();
 /* ===== 이거 공구해주세요 글쓰기 끝 ===== */
 
+/* ===== 이거 공구해주세요 글 보기(/board/?db=basic_2&mari_mode=view@view) — 상품후기 창과 같은 모양 (2026-10-08 사용자 요청) =====
+   흰 바탕 한 장: 위 '이거 공구해주세요' + 닫기(X → 목록) / 작성자 | 날짜 (회색) / 제목 (굵게) / 내용 / 선 / 댓글 / 댓글 칸(베이지) + 검정 버튼.
+   삭제·수정은 위사 버튼 그대로, 작은 글자로. 목록 버튼은 X 가 대신한다. 되돌리려면 이 블록만 지우면 된다. */
+(function(){
+	if (window.__TKBB_WBV) return; window.__TKBB_WBV = 1;
+	if (window.browser_type === 'pc') return;
+	if (location.pathname.indexOf('/board/') !== 0 || !/[?&]db=basic_2(&|$)/.test(location.search) || !/mari_mode=view/.test(decodeURIComponent(location.search))) return;
+	var V = '#cnt.tkbb-wbv ';
+	var CSS = ''
+		+ '#cnt.tkbb-wbv{background:#fff;padding:0 0 32px;letter-spacing:-.02em;color:#161616;}'
+		+ V + '> h2.subtitle{display:none !important;}'
+		+ V + '.tk-wbv-hd{display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 4px 0 20px;border-bottom:1px solid #EFEDE6;background:#fff;}'
+		+ V + '.tk-wbv-hd h2{margin:0;padding:0;font-size:16px;font-weight:600;color:#161616;}'
+		+ V + '.tk-wbv-hd a{width:48px;height:48px;display:flex;align-items:center;justify-content:center;}'
+		+ V + '#boardview{padding:22px 20px 0 !important;margin:0 !important;border:0 !important;}'
+		+ V + '#boardview .info,' + V + '#boardview .subject{margin:0;padding:0;border:0 !important;background:none;}'
+		+ V + '#boardview .subject{display:flex;flex-direction:column;}'
+		+ V + '#boardview .subject .stat{order:-1;margin:0 0 10px;padding:0;font-size:13px;color:#6A6A66;}'
+		+ V + '#boardview .subject .title{margin:0 0 14px;padding:0;font-size:16px;line-height:1.45;word-break:keep-all;}'
+		+ V + '#boardview .subject .title strong{font-size:16px !important;font-weight:600 !important;color:#161616;}'
+		+ V + '#boardview .boxview{margin:0;padding:0 0 22px;border:0 !important;background:none;}'
+		+ V + '#boardview .boxview .content{margin:0;padding:0;font-size:14px;line-height:1.7;color:#161616;word-break:keep-all;overflow-wrap:anywhere;}'
+		+ V + '#boardview .boxview .content img{max-width:100% !important;height:auto !important;border-radius:7px;}'
+		+ V + '#boardview > .btn{display:flex;justify-content:flex-end;gap:14px;margin:0 0 4px;padding:0 0 18px;border:0;border-bottom:1px solid #EFEDE6;background:none;}'
+		+ V + '#boardview > .btn .box_btn{display:inline;margin:0;padding:0;border:0;background:none;float:none;width:auto;}'
+		+ V + '#boardview > .btn .box_btn a{display:inline;padding:0;border:0 !important;background:none !important;font-size:13px;font-weight:400;color:#6A6A66 !important;text-decoration:underline;text-underline-offset:3px;height:auto;line-height:1.4;}'
+		+ V + '#boardview > .btn .box_btn.tk-list{display:none;}'
+		+ V + '.list_comment{margin:0;padding:0 20px;border:0;}'
+		+ V + '.list_comment ul{margin:0;padding:0;border:0;}'
+		+ V + '.list_comment li{position:relative;margin:0;padding:18px 0;border:0;border-bottom:1px solid #EFEDE6;background:none;list-style:none;}'
+		+ V + '.list_comment li .name{display:inline !important;float:none !important;width:auto !important;margin:0 !important;padding:0 !important;font-size:13px;font-weight:600;color:#161616;}'
+		+ V + '.list_comment li .date{display:inline !important;float:none !important;position:static !important;margin:0 0 0 6px;padding:0;font-size:12px;color:#9A9A94;}'
+		+ V + '.list_comment li .date p{display:none;}'
+		+ V + '.list_comment li .date img{width:14px;height:auto;margin-left:6px;vertical-align:-2px;opacity:.5;}'
+		+ V + '.list_comment li .content{margin:8px 0 0 !important;padding:0 !important;font-size:14px;line-height:1.6;color:#161616;word-break:keep-all;}'
+		+ V + '.cmtWrite{margin:18px 20px 0;padding:0;border:0;background:none;}'
+		+ V + '.cmtWrite .write_comment{margin:0;padding:0;border:0 !important;background:none !important;}'
+		+ V + '.cmtWrite .inputbox{display:flex;gap:8px;align-items:stretch;margin:0;padding:0;border:0 !important;background:none !important;}'
+		+ V + '.cmtWrite .inputbox:before,' + V + '.cmtWrite .inputbox:after{display:none !important;}'
+		+ V + '.cmtWrite .inputbox textarea{flex:1;min-width:0;height:76px !important;min-height:0 !important;margin:0 !important;padding:11px 12px !important;border:1px solid transparent !important;border-radius:5px !important;background:#F7F5EE !important;font-size:14px;line-height:1.5;font-family:inherit;color:#161616;resize:none;box-sizing:border-box;}'
+		+ V + '.cmtWrite .inputbox textarea:focus{border-color:#B9C077 !important;background:#fff !important;outline:0;}'
+		+ V + '.cmtWrite .inputbox .btn_comment{position:static !important;flex:0 0 76px;width:76px !important;height:76px !important;margin:0 !important;padding:0 8px !important;border:0 !important;border-radius:5px !important;background:#161616 !important;color:#fff !important;-webkit-text-fill-color:#fff;font-size:13px;font-weight:600;line-height:1.35;white-space:normal;word-break:keep-all;font-family:inherit;-webkit-appearance:none;appearance:none;cursor:pointer;}'
+		+ V + '.wrap_inner{margin:0;padding-left:0;padding-right:0;}';
+	function dot(s){ var m = String(s).match(/(\d{4})[-\/.](\d{2})[-\/.](\d{2})/); return m ? m[1] + '.' + m[2] + '.' + m[3] : s; }
+	function run(){
+		var bv = document.getElementById('boardview'), cnt = document.getElementById('cnt');
+		if (!bv || !cnt || cnt.classList.contains('tkbb-wbv')) return;
+		var st = document.createElement('style');
+		st.appendChild(document.createTextNode(CSS));
+		document.head.appendChild(st);
+		cnt.classList.add('tkbb-wbv');
+		// 목록 주소 (위사 목록 버튼 그대로)
+		var listA = null, bts = bv.querySelectorAll('.btn .box_btn a');
+		for (var i = 0; i < bts.length; i++) if (bts[i].textContent.replace(/\s+/g, '') === '목록') { listA = bts[i]; bts[i].parentNode.classList.add('tk-list'); }
+		var hd = document.createElement('div'); hd.className = 'tk-wbv-hd';
+		hd.innerHTML = '<h2>이거 공구해주세요</h2><a aria-label="목록으로" href="' + (listA ? listA.getAttribute('href') : '/board/?db=basic_2').replace(/"/g, '&quot;') + '"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9A94" stroke-width="1.8" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></a>';
+		bv.parentNode.insertBefore(hd, bv);
+		// '쁘니 | 2026-10-05 21:05:37 | 조회수 10' → '쁘니 | 2026.10.05'
+		var stat = bv.querySelector('.subject .stat');
+		if (stat) { var ps = stat.textContent.split('|').map(function(s){ return s.trim(); }); if (ps.length > 1) stat.textContent = ps[0] + ' | ' + dot(ps[1]); }
+		// 댓글 날짜 '2026/03/10 16:42' → '2026.03.10'
+		var ds = document.querySelectorAll('#cnt .list_comment li .date > span');
+		for (var k = 0; k < ds.length; k++) ds[k].textContent = dot(ds[k].textContent);
+	}
+	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
+})();
+/* ===== 이거 공구해주세요 글 보기 끝 ===== */
+
 /* ===== 메인 팝업 — 후기 이벤트 '후기 남기면 최대 1,000원 적립' (2026-10-08 ~ 2026.11.10) =====
    메인(모바일·PC)에서 한 번 뜬다. 사진을 누르면 상품후기 게시판(맨 위 '후기 쓰기')으로.
    '오늘 하루 보지 않기'는 이 폰에 날짜만 저장. 10월 10일 0시부터 뜨고 11월 11일 0시(한국 시간)부터 저절로 안 뜬다.
