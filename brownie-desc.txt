@@ -2,14 +2,14 @@
 <style>
   /* 첫 화면(사진·한눈에 보기)까지 보이고 나머지는 '상세설명 더보기'로 */
   /* 스킨이 상세설명 안 글씨 크기를 모두 inherit(13px)로 묶어 두어, 선택자 앞에 body #detail 을 붙여 이긴다 */
-  .wing-detail-more-contents { min-height: 770px; }
+  .wing-detail-more-contents { min-height: 200px; }
 
   body #detail .tkbb-bw {
     --bw-surface: #F5F3EE;
     --bw-ink: #161616;
     --bw-muted: #6A6A66;
     --bw-line: #E6E2D8;
-    --bw-deep: #7c8339;
+    --bw-deep: #52728A;
     --bw-white: #FFFFFF;
     max-width: 720px;
     margin: 0 auto;
@@ -87,7 +87,7 @@
 
   @media (min-width: 768px) {
     body #detail .tkbb-bw .bw-block { padding-block: 40px; }
-    .wing-detail-more-contents { min-height: 918px; }
+    .wing-detail-more-contents { min-height: 300px; }
     body #detail .tkbb-bw .bw-title { font-size: 27px; }
     body #detail .tkbb-bw .bw-intro h2 { font-size: 26px; }
     body #detail .tkbb-bw .bw-glance { grid-template-columns: repeat(3, minmax(0, 1fr)); }
