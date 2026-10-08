@@ -3506,11 +3506,11 @@
 	var KEY = 'tkbb_pop1110_hide';
 	var today = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);   // 한국 날짜
 	try { if (localStorage.getItem(KEY) === today) return; } catch (e) {}
-	var IMG = 'https://takkobebe-link.vercel.app/img/popup/review-event-1110.jpg';
+	var IMG = 'https://takkobebe-link.vercel.app/img/popup/review-event-1110-v2.jpg';
 	var LINK = '/shop/product_review_list.php';
 	var css = '#tkbb-pop{position:fixed;inset:0;z-index:100002;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(22,22,22,.5);opacity:0;transition:opacity .2s;font-family:inherit;letter-spacing:-.02em;box-sizing:border-box;}'
 		+ '#tkbb-pop.on{opacity:1;}'
-		+ '#tkbb-pop .bx{width:100%;max-width:360px;background:#fff;border-radius:12px;overflow:hidden;}'
+		+ '#tkbb-pop .bx{width:100%;max-width:320px;background:#fff;border-radius:12px;overflow:hidden;}'
 		+ '#tkbb-pop .bx a.im{display:block;}'
 		+ '#tkbb-pop .bx img{display:block;width:100% !important;max-width:100% !important;height:auto;}'
 		+ '#tkbb-pop .bt{display:flex;border-top:1px solid #EFEDE6;}'
