@@ -3277,10 +3277,23 @@
 		for (var i = 0; i < dm.length; i++) dm[i].textContent = dm[i].textContent.replace(/^\s*\/\s*/, '');
 		// 수량 +/- 또는 직접 입력 → 잠깐 기다렸다가(연속 클릭 묶음) 바로 적용 (2026-10-08)
 		// 위사 [수량변경]은 폼 전송 후 페이지 전체를 다시 불러와 느림 → 뒤에서 저장하고 장바구니 내용만 바꿔 끼운다. 실패하면 원래 버튼으로.
-		st.appendChild(document.createTextNode('#cnt.tkbb-my #cart.tk-saving .wrap_inner.sum,#cnt.tkbb-my #cart.tk-saving ul.list_cart .info > p strong{opacity:.4;transition:opacity .15s;}'));
+		// 저장 중에도 흐리게 하지 않고, 상품 가격은 누르는 즉시 (개당 가격 × 수량)으로 바꿔 보여 준다 (2026-10-08)
 		function qtyMark(){
 			var qIn = box.querySelectorAll('ul.list_cart .box_qty input');
-			for (var q = 0; q < qIn.length; q++) qIn[q].setAttribute('data-tk-ea', qIn[q].value);
+			for (var q = 0; q < qIn.length; q++) {
+				qIn[q].setAttribute('data-tk-ea', qIn[q].value);
+				var li = qIn[q].closest('ul.list_cart > li'), pr = li && li.querySelector('.info > p strong');
+				var pm = pr && pr.textContent.match(/\d[\d,]*/), p = pm && parseInt(pm[0].replace(/,/g, ''), 10), e = parseInt(qIn[q].value, 10);
+				if (li) { if (p > 0 && e > 0) li.setAttribute('data-tk-unit', p / e); else li.removeAttribute('data-tk-unit'); }
+			}
+		}
+		function qtyPrice(li){
+			var inp = li.querySelector('.box_qty input'), pr = li.querySelector('.info > p strong');
+			var u = parseFloat(li.getAttribute('data-tk-unit')), e = inp && parseInt(inp.value, 10);
+			if (!pr || !(u > 0) || !(e > 0)) return;
+			var v = String(Math.round(u * e)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+			var w = document.createTreeWalker(pr, NodeFilter.SHOW_TEXT), tn;
+			while ((tn = w.nextNode())) if (/\d/.test(tn.nodeValue)) { tn.nodeValue = tn.nodeValue.replace(/\d[\d,]*/, v); break; }
 		}
 		qtyMark();
 		var qSaving = false, qAgain = false;
@@ -3336,11 +3349,13 @@
 		function qtyLater(t, ms){
 			var li = t.closest && t.closest('ul.list_cart > li');
 			if (!li) return;
+			qtyPrice(li);
 			clearTimeout(li._tkQty);
 			li._tkQty = setTimeout(function(){ qtyApply(li); }, ms);
 		}
 		box.addEventListener('click', function(e){ var a = e.target.closest && e.target.closest('.box_qty a'); if (a) qtyLater(a, 350); });
 		box.addEventListener('change', function(e){ if (e.target.matches && e.target.matches('.box_qty input')) qtyLater(e.target, 0); });
+		box.addEventListener('input', function(e){ var li = e.target.matches && e.target.matches('.box_qty input') && e.target.closest('ul.list_cart > li'); if (li) qtyPrice(li); });
 		cnt.insertBefore(header('장바구니'), box);
 		return true;
 	}
