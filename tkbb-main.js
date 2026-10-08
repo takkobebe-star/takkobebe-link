@@ -2322,6 +2322,7 @@
 		+ '.tkbb-my .tk-wb ul.list_qnarev .title{margin-top:0 !important;word-break:keep-all;}'
 		+ '#cnt.tkbb-my .tk-wb ul.list_qnarev .stat{display:flex;align-items:center;gap:8px;min-height:24px;margin-top:8px !important;line-height:1;}'
 		+ '#cnt.tkbb-my .tk-wb ul.list_qnarev .stat .tk-badge{line-height:18px;}'
+		+ '#cnt.tkbb-my .tk-wb ul.list_qnarev .stat .tx{font-size:13px;color:#9A9A94;}'
 		+ '#cnt.tkbb-my .tk-wb .box_btn.tk-more{display:block;width:auto;margin:0;padding:0;border:0;background:none;}'
 		+ '#cnt.tkbb-my .tk-wb .box_btn.tk-more a{display:flex;align-items:center;justify-content:center;height:48px;border-radius:7px;border:1px solid #DAD5C8;background:#fff;color:#161616;font-size:14px;}'
 		// 주문완료
