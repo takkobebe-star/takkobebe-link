@@ -3225,7 +3225,8 @@
 			+ C + 'ul.list_cart .info .box_qty > *{position:static !important;float:none !important;margin:0 !important;}'
 			+ C + 'ul.list_cart .info .box_qty a{display:block;width:32px !important;height:32px !important;border:0 !important;background-color:#fff !important;background-position:center !important;}'
 			+ C + 'ul.list_cart .info .box_qty input{display:block;width:38px !important;height:32px !important;border:0 !important;border-left:1px solid #EFEDE6 !important;border-right:1px solid #EFEDE6 !important;border-radius:0 !important;padding:0 !important;font-size:14px !important;color:#161616 !important;text-align:center;background:#fff !important;}'
-			+ C + 'ul.list_cart .info .change{display:inline-flex !important;align-items:center;height:34px !important;margin:0 0 0 6px !important;padding:0 12px !important;border:1px solid #161616 !important;border-radius:7px !important;background:#fff !important;color:#161616 !important;font-size:12px !important;font-weight:600;vertical-align:middle;line-height:1 !important;white-space:nowrap;flex:0 0 auto;width:auto !important;}'
+			// [수량변경] 버튼은 숨기고, 수량을 바꾸면 아래 스크립트가 대신 눌러 바로 적용 (2026-10-08)
+			+ C + 'ul.list_cart .info .change{display:none !important;}'
 			+ C + 'ul.list_cart .info > div:last-child{display:flex;align-items:center;margin-top:10px;}'
 			+ C + 'ul.list_cart .total{display:flex;justify-content:space-between;align-items:baseline;margin:12px 0 0 30px;padding:10px 12px;border:0;border-radius:7px;background:#F7F5EE;font-size:12px;color:#6A6A66;}'
 			+ C + 'ul.list_cart .total strong{font-size:14px;color:#161616;}'
@@ -3274,6 +3275,23 @@
 		(document.head || document.documentElement).appendChild(st);
 		var dm = box.querySelectorAll('p.msg_delivery > span');
 		for (var i = 0; i < dm.length; i++) dm[i].textContent = dm[i].textContent.replace(/^\s*\/\s*/, '');
+		// 수량 +/- 또는 직접 입력 → 잠깐 기다렸다가(연속 클릭 묶음) 위사 [수량변경] 버튼을 대신 누른다 (2026-10-08)
+		var qIn = box.querySelectorAll('ul.list_cart .box_qty input');
+		for (var q = 0; q < qIn.length; q++) qIn[q].setAttribute('data-tk-ea', qIn[q].value);
+		function qtyApply(li){
+			var inp = li.querySelector('.box_qty input'), chg = li.querySelector('.info .change');
+			if (!inp || !chg || inp.value === inp.getAttribute('data-tk-ea')) return;
+			inp.setAttribute('data-tk-ea', inp.value);
+			chg.click();
+		}
+		function qtyLater(t, ms){
+			var li = t.closest && t.closest('ul.list_cart > li');
+			if (!li) return;
+			clearTimeout(li._tkQty);
+			li._tkQty = setTimeout(function(){ qtyApply(li); }, ms);
+		}
+		box.addEventListener('click', function(e){ var a = e.target.closest && e.target.closest('.box_qty a'); if (a) qtyLater(a, 700); });
+		box.addEventListener('change', function(e){ if (e.target.matches && e.target.matches('.box_qty input')) qtyLater(e.target, 0); });
 		cnt.insertBefore(header('장바구니'), box);
 		return true;
 	}
