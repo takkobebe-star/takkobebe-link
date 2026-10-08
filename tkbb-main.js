@@ -3244,7 +3244,8 @@
 			+ C + '.wrap_inner.sum table{width:100%;border-top:1px solid #EFEDE6;}'
 			+ C + '.wrap_inner.sum th,' + C + '.wrap_inner.sum td{padding:10px 0 0;border:0;background:none;font-size:13px;font-weight:400;color:#6A6A66;vertical-align:top;}'
 			+ C + '.wrap_inner.sum td{text-align:right;color:#161616;}'
-			+ C + '.wrap_inner.sum td p{margin:2px 0 0;font-size:12px;color:#9A9A94;}'
+			// 배송비 아래 '일반배송비 / 개별배송비' 쪼갠 줄은 위 배송비와 같은 숫자가 반복돼 숨김 (2026-10-08)
+			+ C + '.wrap_inner.sum td p{display:none !important;}'
 			+ C + '.wrap_inner.sum tr:last-child th{font-weight:600;color:#161616;}'
 			+ C + '.wrap_inner.sum tr:last-child td strong{font-size:16px;font-weight:700;}'
 			// 판매처가 한 곳뿐이면 판매처 금액표는 숨기고(아래 결제금액과 같은 내용) 상품 카드 아래를 둥글게 (2026-10-08 컬리 스타일)
