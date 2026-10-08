@@ -3492,3 +3492,52 @@
 	if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
 })();
 /* ===== 상품후기 작성 팝업 끝 ===== */
+
+/* ===== 메인 팝업 — 후기 이벤트 '후기 남기면 최대 1,000원 적립' (2026-10-08 ~ 2026.11.10) =====
+   메인(모바일·PC)에서 한 번 뜬다. 사진을 누르면 상품후기 게시판(맨 위 '후기 쓰기')으로.
+   '오늘 하루 보지 않기'는 이 폰에 날짜만 저장. 11월 11일 0시(한국 시간)부터 저절로 안 뜬다.
+   빼려면 이 덩어리를 지우면 된다. */
+(function(){
+	if (window.__TKBB_POP1110) return; window.__TKBB_POP1110 = 1;
+	var P = location.pathname;
+	if (P !== '/' && P !== '/index.php' && P !== '/main/index.php') return;
+	var END = Date.UTC(2026, 10, 10, 15, 0, 0);   // 2026.11.11 00:00 한국 시간
+	if (Date.now() >= END) return;
+	var KEY = 'tkbb_pop1110_hide';
+	var today = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);   // 한국 날짜
+	try { if (localStorage.getItem(KEY) === today) return; } catch (e) {}
+	var IMG = 'https://takkobebe-link.vercel.app/img/popup/review-event-1110.jpg';
+	var LINK = '/shop/product_review_list.php';
+	var css = '#tkbb-pop{position:fixed;inset:0;z-index:100002;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(22,22,22,.5);opacity:0;transition:opacity .2s;font-family:inherit;letter-spacing:-.02em;box-sizing:border-box;}'
+		+ '#tkbb-pop.on{opacity:1;}'
+		+ '#tkbb-pop .bx{width:100%;max-width:360px;background:#fff;border-radius:12px;overflow:hidden;}'
+		+ '#tkbb-pop .bx a.im{display:block;}'
+		+ '#tkbb-pop .bx img{display:block;width:100% !important;max-width:100% !important;height:auto;}'
+		+ '#tkbb-pop .bt{display:flex;border-top:1px solid #EFEDE6;}'
+		+ '#tkbb-pop .bt button{flex:1 1 0;margin:0;padding:0;height:48px;border:0;border-radius:0;background:#fff;font:inherit;font-size:14px;font-weight:400;color:#6A6A66;cursor:pointer;-webkit-appearance:none;}'
+		+ '#tkbb-pop .bt button+button{border-left:1px solid #EFEDE6;color:#161616;font-weight:500;}'
+		+ 'body.tkbb-pop-open{overflow:hidden;}';
+	function start(){
+		if (!document.body || document.getElementById('tkbb-pop')) return;
+		var st = document.createElement('style'); st.id = 'tkbb-pop-css';
+		st.appendChild(document.createTextNode(css));
+		(document.head || document.documentElement).appendChild(st);
+		var w = document.createElement('div'); w.id = 'tkbb-pop';
+		w.setAttribute('role', 'dialog'); w.setAttribute('aria-modal', 'true'); w.setAttribute('aria-label', '후기 이벤트 안내');
+		w.innerHTML = '<div class="bx"><a class="im" href="' + LINK + '"><img alt="후기 남기면 최대 1,000원 적립. 텍스트 후기 300원, 사진 첨부 시 700원 추가. 이벤트 기간 2026.10.10 – 11.10"></a>'
+			+ '<div class="bt"><button type="button" data-x="day">오늘 하루 보지 않기</button><button type="button" data-x="close">닫기</button></div></div>';
+		function close(){ w.classList.remove('on'); document.body.classList.remove('tkbb-pop-open'); setTimeout(function(){ if (w.parentNode) w.parentNode.removeChild(w); }, 220); }
+		w.addEventListener('click', function(e){
+			var b = e.target.closest ? e.target.closest('button') : null;
+			if (b && b.getAttribute('data-x') === 'day') { try { localStorage.setItem(KEY, today); } catch (er) {} close(); }
+			else if (b) close();
+			else if (e.target === w) close();   // 바깥 어두운 곳을 눌러도 닫힘
+		});
+		var img = w.querySelector('img');
+		// 깜빡임 금지: 사진을 다 받은 뒤에 보여 준다. 사진을 못 받으면 아예 띄우지 않는다
+		img.onload = function(){ document.body.appendChild(w); document.body.classList.add('tkbb-pop-open'); requestAnimationFrame(function(){ w.classList.add('on'); }); };
+		img.src = IMG;
+	}
+	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
+/* ===== 메인 팝업 끝 ===== */
