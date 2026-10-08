@@ -3088,6 +3088,104 @@
 	/* ---------- 이거 공구해주세요 게시판(/board/?db=basic_2) — Q&A 게시판과 같은 모양 (2026-10-08 사용자 요청) ----------
 	   검색 카드 → 검정 '공구 요청하기' 버튼 → 흰 카드 목록(제목 / 작성자 | 날짜, 댓글 있으면 연두 배지) → 더 보기.
 	   목록 화면에서만 바꾼다. 글 보기·글쓰기 화면과 다른 게시판(basic_3 등)은 그대로. */
+
+	/* 공구 요청하기 시트 (2026-10-08 사용자 선택 A안 — 상품후기 작성 창과 같은 모양)
+	   제품명 · 제목 · 내용 · 사진 1·2 → '확인'을 누르면 보이지 않는 칸에 위사 글쓰기 화면을 열어 값을 채우고 위사 등록(checkMariWrite)을 그대로 거친다.
+	   본문은 '- 제품명 : …' 줄 + 내용. 작성자는 로그인한 회원 이름(위사가 채움). 관련 상품 선택은 이 시트에서 뺐다. */
+	var WS_URL = '/board/?db=basic_2&mari_mode=write%40write';
+	function wishSheet(){
+		if (document.querySelector('.tk-ws')) return;
+		if (!document.getElementById('tk-ws-css')) {
+			var css = document.createElement('style'); css.id = 'tk-ws-css';
+			css.textContent = ''
+				+ '.tk-ws-bg{position:fixed;inset:0;z-index:100000;background:rgba(22,22,22,.5);}'
+				+ '.tk-ws{position:fixed;left:0;right:0;bottom:0;z-index:100001;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#fff;border-radius:12px 12px 0 0;padding:22px 20px calc(18px + env(safe-area-inset-bottom));box-sizing:border-box;letter-spacing:-.02em;color:#161616;font-family:inherit;}'
+				+ '.tk-ws .hd{display:flex;align-items:center;justify-content:space-between;margin:0 0 6px;}'
+				+ '.tk-ws .hd h3{margin:0;padding:0;font-size:18px;font-weight:700;color:#161616;}'
+				+ '.tk-ws .hd button{width:44px;height:44px;margin-right:-12px;border:0;background:none;display:flex;align-items:center;justify-content:center;padding:0;}'
+				+ '.tk-ws .in{margin:0 0 20px;padding:0 0 20px;border-bottom:1px solid #EFEDE6;font-size:14px;line-height:1.6;color:#6A6A66;word-break:keep-all;}'
+				+ '.tk-ws label.t{display:block;margin:0 0 8px;font-size:13px;font-weight:600;color:#161616;}'
+				+ '.tk-ws label.s{display:block;margin:0 0 8px;font-size:12px;font-weight:400;color:#6A6A66;}'
+				+ '.tk-ws input[type=text],.tk-ws textarea{display:block;width:100%;box-sizing:border-box;margin:0 0 18px;border:1px solid transparent;border-radius:5px;background:#F7F5EE;font-size:14px;font-family:inherit;color:#161616;-webkit-appearance:none;appearance:none;}'
+				+ '.tk-ws input[type=text]{height:46px;padding:0 14px;}'
+				+ '.tk-ws textarea{height:150px;padding:12px 14px;line-height:1.6;resize:none;}'
+				+ '.tk-ws input[type=text]:focus,.tk-ws textarea:focus{border-color:#B9C077;background:#fff;outline:0;}'
+				+ '.tk-ws input[type=file]{display:block;width:100%;box-sizing:border-box;margin:0 0 8px;padding:9px 12px;line-height:26px;border-radius:5px;background:#F7F5EE;font-size:13px;color:#6A6A66;}'
+				+ '.tk-ws .mg{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px;margin:0 0 18px;padding:11px 8px;border-radius:5px;background:#D1D798;font-size:13px;color:#161616;text-align:center;}'
+				+ '.tk-ws .mg b{font-weight:700;}'
+				+ '.tk-ws .bt{display:flex;gap:8px;margin:16px 0 0;}'
+				+ '.tk-ws .bt button{flex:1 1 0;min-width:0;height:50px;border-radius:5px;font-size:14px;font-weight:600;font-family:inherit;-webkit-appearance:none;appearance:none;}'
+				+ '.tk-ws .bt .c{border:1px solid #DAD5C8;background:#fff;color:#6A6A66;}'
+				+ '.tk-ws .bt .k{border:0;background:#161616;color:#fff;}'
+				+ '.tk-ws .bt .k[disabled]{opacity:.5;}'
+				+ 'body.tk-ws-open{overflow:hidden;}body.tk-ws-open .fix_footer{display:none !important;}';
+			document.head.appendChild(css);
+		}
+		var bg = el('div', 'tk-ws-bg'), sh = el('div', 'tk-ws');
+		sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-modal', 'true'); sh.setAttribute('aria-label', '공구 요청하기');
+		sh.innerHTML = '<div class="hd"><h3>공구 요청하기</h3><button type="button" class="x" aria-label="닫기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9A94" stroke-width="1.8" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button></div>'
+			+ '<p class="in">가격이 부담돼서 망설인 제품이 있나요? 알려 주시면 공구를 열어 볼게요.</p>'
+			+ '<label class="t" for="tk-ws-p">제품명</label><input type="text" id="tk-ws-p" placeholder="공구 받고 싶은 제품 이름">'
+			+ '<label class="t" for="tk-ws-t">제목</label><input type="text" id="tk-ws-t" placeholder="한 줄로 남겨 주세요">'
+			+ '<label class="t" for="tk-ws-c">내용</label><textarea id="tk-ws-c" placeholder="왜 좋은지, 어디서 보셨는지 편하게 적어 주세요"></textarea>'
+			+ '<div class="mg">공구가 열리면 <b>요청해 주신 분께 제품을 보내드려요</b></div>'
+			+ '<label class="s" for="tk-ws-f1">사진 1</label><input type="file" id="tk-ws-f1" accept="image/*">'
+			+ '<label class="s" for="tk-ws-f2">사진 2</label><input type="file" id="tk-ws-f2" accept="image/*">'
+			+ '<div class="bt"><button type="button" class="c">취소</button><button type="button" class="k">확인</button></div>';
+		document.body.appendChild(bg); document.body.appendChild(sh);
+		document.body.classList.add('tk-ws-open');
+		var ifr = null, busy = false;
+		var close = function(){ if (busy) return; bg.remove(); sh.remove(); if (ifr) ifr.remove(); document.body.classList.remove('tk-ws-open'); };
+		bg.addEventListener('click', close);
+		sh.querySelector('.x').addEventListener('click', close);
+		sh.querySelector('.c').addEventListener('click', close);
+		var ok = sh.querySelector('.k');
+		var $ = function(id){ return sh.querySelector('#' + id); };
+		var line = function(s){ return esc(s).replace(/\r?\n/g, '<br>'); };
+		ok.addEventListener('click', function(){
+			if (busy) return;
+			var p = $('tk-ws-p').value.trim(), t = $('tk-ws-t').value.trim(), c = $('tk-ws-c').value.trim();
+			if (!p) { alert('제품명을 적어 주세요.'); $('tk-ws-p').focus(); return; }
+			if (!t) { alert('제목을 적어 주세요.'); $('tk-ws-t').focus(); return; }
+			if (!c) { alert('내용을 적어 주세요.'); $('tk-ws-c').focus(); return; }
+			var html = '- 제품명 : ' + line(p) + '<br><br>' + line(c);
+			var files = [$('tk-ws-f1').files[0], $('tk-ws-f2').files[0]];
+			busy = true; ok.disabled = true; ok.textContent = '등록 중…';
+			var fail = function(){ busy = false; ok.disabled = false; ok.textContent = '확인'; };
+			var timer = setTimeout(function(){ fail(); alert('등록이 늦어지고 있어요. 잠시 후 다시 눌러 주세요.'); }, 30000);
+			var sent = false;
+			ifr = document.createElement('iframe');
+			ifr.style.cssText = 'position:absolute;width:1px;height:1px;left:-9999px;top:0;border:0;';
+			ifr.setAttribute('aria-hidden', 'true');
+			ifr.addEventListener('load', function(){
+				var w = ifr.contentWindow, d = ifr.contentDocument;
+				if (sent) {   // 등록 후 위사가 목록으로 보내면 끝
+					if (!/mari_mode=write/.test(decodeURIComponent(w.location.search))) { clearTimeout(timer); busy = false; location.reload(); }
+					return;
+				}
+				var f = d && d.getElementById('wrtFrm');
+				if (!f || typeof w.checkMariWrite !== 'function') { clearTimeout(timer); fail(); alert('글쓰기 화면을 열지 못했어요. 잠시 후 다시 시도해 주세요.'); return; }
+				f.title.value = t;
+				w.submitContents = function(){};   // 에디터 대신 시트에서 쓴 글을 보낸다
+				if (f.content2) f.content2.value = html;
+				f.content.value = html;
+				var ups = f.querySelectorAll('input[type=file]');
+				for (var i = 0; i < files.length; i++) {
+					if (!files[i] || !ups[i] || !window.DataTransfer) continue;
+					try { var dt = new DataTransfer(); dt.items.add(files[i]); ups[i].files = dt.files; } catch (e) {}
+				}
+				if (w.checkMariWrite(f) === false) { clearTimeout(timer); fail(); return; }
+				sent = true;
+				f.submit();
+				// 위사가 목록으로 보내지 않고 같은 칸 안에서만 끝내는 경우 대비: 응답 칸이 다 읽히면 목록을 새로 읽는다
+				var tg = f.getAttribute('target'), hf = tg && d.querySelector('iframe[name="' + tg + '"]');
+				if (hf) hf.addEventListener('load', function(){ setTimeout(function(){ if (busy) { clearTimeout(timer); busy = false; location.reload(); } }, 800); });
+			});
+			ifr.src = WS_URL;
+			document.body.appendChild(ifr);
+		});
+	}
+
 	function wishBoard(cnt){
 		if (!/[?&]db=basic_2(&|$)/.test(location.search) || /[?&](no|mari_mode)=/.test(location.search)) return false;
 		var box = document.getElementById('boardlist');
@@ -3106,7 +3204,8 @@
 		if (wa) {
 			var b = el('a', 'tk-black', '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>&nbsp;공구 요청하기');
 			b.href = 'javascript:;';
-			b.addEventListener('click', function(e){ e.preventDefault(); wa.click(); });
+			// 2026-10-08 A안: 글쓰기 화면으로 넘어가지 않고 후기 창처럼 아래에서 시트가 올라온다 (로그인 안 한 손님은 위사 그대로)
+			b.addEventListener('click', function(e){ e.preventDefault(); if (String(window.mlv) === '10') { wa.click(); return; } wishSheet(); });
 			wrap.appendChild(b);
 		}
 		// 목록: '쁘니 | 2026-10-05 | 댓글 : 1' → [댓글 1] 쁘니 | 2026.10.05
