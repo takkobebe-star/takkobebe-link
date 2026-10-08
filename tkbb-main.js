@@ -3768,6 +3768,163 @@
 })();
 /* ===== 이거 공구해주세요 글쓰기 끝 ===== */
 
+/* ===== 이거 공구해주세요 글쓰기 — 상품선택 창을 타코베베 모양으로 (2026-10-08 사용자 요청) =====
+   위사 창의 클래스 이름을 몰라도 되게 '내용'으로 찾는다: 표 머리에 '분류'·'상품'이 있고, 같은 창에 '확인'·'닫기'가 있는 덩어리.
+   검색칸 베이지 + 검정 '검색' / 머리줄·분류 칸 숨김, 줄마다 체크 | 사진 64px(7px) | 상품명(굵게 2줄) · 가격(회색) / 쪽 번호 작게 / '닫기 | 확인' 같은 너비.
+   고르기·검색·쪽 넘김·확인은 위사 그대로, 모양만. 같은 주소의 창(iframe)으로 뜨면 그 안에도 넣는다. 되돌리려면 이 블록만 지우면 된다. */
+(function(){
+	if (window.__TKBB_WRP) return; window.__TKBB_WRP = 1;
+	if (window.browser_type === 'pc') return;
+	function isWrite(l){ try { return l.pathname.indexOf('/board/') === 0 && /[?&]db=basic_2(&|$)/.test(l.search) && /mari_mode=(write|modify)/.test(decodeURIComponent(l.search)); } catch (e) { return false; } }
+	var inFrame = false; try { inFrame = window.parent !== window && isWrite(window.parent.location); } catch (e) {}
+	if (!isWrite(location) && !inFrame) return;
+	var C = '.tkbb-rp ';
+	var CSS = ''
+		+ '.tkbb-rp{background:#fff !important;color:#161616;letter-spacing:-.02em;word-break:keep-all;}'
+		// 검색
+		+ C + '.tk-sch{display:flex !important;gap:6px;align-items:stretch;margin:0 0 6px !important;padding:0 !important;border:0 !important;background:none !important;}'
+		+ C + '.tk-sch input.tk-q{flex:1 1 auto;min-width:0;width:auto !important;height:44px !important;box-sizing:border-box;border:1px solid transparent !important;border-radius:5px !important;background:#F7F5EE !important;padding:0 14px !important;font-size:14px;color:#161616;-webkit-appearance:none;appearance:none;outline:0;}'
+		+ C + '.tk-sch input.tk-q:focus{border-color:#B9C077 !important;background:#fff !important;}'
+		+ C + '.tk-sbtn{flex:0 0 64px;display:flex !important;align-items:center;justify-content:center;width:64px !important;height:44px !important;margin:0 !important;padding:0 !important;box-sizing:border-box;border:0 !important;border-radius:5px !important;background:#161616 !important;color:#fff !important;-webkit-text-fill-color:#fff;font-size:14px !important;font-weight:600;font-family:inherit;-webkit-appearance:none;appearance:none;}'
+		+ C + '.tk-sbtn *{color:#fff !important;font-size:14px !important;background:none !important;border:0 !important;padding:0 !important;}'
+		// 목록: 표 대신 줄 나눔
+		+ C + 'table.tk-tb,' + C + 'table.tk-tb > tbody{display:block !important;width:100% !important;border:0 !important;margin:0 !important;}'
+		+ C + 'table.tk-tb{border-top:1px solid #DAD5C8 !important;}'
+		+ C + 'table.tk-tb caption,' + C + 'table.tk-tb colgroup,' + C + 'table.tk-tb thead,' + C + 'table.tk-tb tr.tk-hd,' + C + 'td.tk-cat{display:none !important;}'
+		+ C + 'table.tk-tb tr{display:flex !important;align-items:center;gap:12px;padding:14px 0 !important;border:0 !important;border-bottom:1px solid #EFEDE6 !important;background:none !important;cursor:pointer;}'
+		+ C + 'table.tk-tb td{display:block !important;width:auto !important;height:auto !important;padding:0 !important;border:0 !important;background:none !important;text-align:left !important;vertical-align:middle;}'
+		+ C + 'td.tk-ck{flex:0 0 22px;display:flex !important;align-items:center;justify-content:center;}'
+		+ C + 'td.tk-ck input{width:20px;height:20px;margin:0;accent-color:#161616;}'
+		+ C + 'td.tk-im{flex:0 0 64px;}'
+		+ C + 'td.tk-im img{display:block;width:64px !important;height:64px !important;max-width:none !important;object-fit:cover;border-radius:7px;background:#F7F5EE;}'
+		+ C + 'td.tk-nm{flex:1 1 auto;min-width:0;font-size:13px !important;color:#6A6A66 !important;line-height:1.45;}'
+		+ C + 'td.tk-nm .tk-n{display:-webkit-box !important;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;margin:0 0 3px;font-size:14px !important;font-weight:500 !important;color:#161616 !important;line-height:1.4;}'
+		+ C + 'td.tk-nm .tk-p{display:block;font-size:13px !important;font-weight:400 !important;color:#6A6A66 !important;}'
+		// 쪽 번호
+		+ C + '.tk-pgw{display:flex !important;flex-wrap:wrap;justify-content:center;gap:4px;margin:18px 0 0 !important;padding:0 !important;border:0 !important;background:none !important;}'
+		+ C + '.tk-pg{display:flex !important;align-items:center;justify-content:center;min-width:30px;height:30px;margin:0 !important;padding:0 6px !important;box-sizing:border-box;float:none !important;border:0 !important;border-radius:5px !important;background:none !important;color:#9A9A94 !important;font-size:13px !important;font-weight:400 !important;line-height:1;}'
+		+ C + '.tk-pg.tk-on{background:#D1D798 !important;color:#3E4220 !important;font-weight:600 !important;}'
+		// 닫기 | 확인
+		+ C + '.tk-bw{display:flex !important;gap:8px;margin:22px 0 0 !important;padding:0 !important;border:0 !important;background:none !important;}'
+		+ C + '.tk-bw > .tk-bi{flex:1 1 0;min-width:0;display:block !important;width:auto !important;margin:0 !important;padding:0 !important;float:none !important;border:0 !important;background:none !important;}'
+		+ C + '.tk-bw > .tk-bi.tk-x{order:-1;}'
+		+ C + '.tk-b{display:flex !important;align-items:center;justify-content:center;width:100% !important;height:50px !important;margin:0 !important;padding:0 !important;box-sizing:border-box;float:none !important;border-radius:5px !important;font-size:14px !important;font-weight:600 !important;font-family:inherit;-webkit-appearance:none;appearance:none;cursor:pointer;}'
+		+ C + '.tk-b.tk-ok{border:0 !important;background:#161616 !important;color:#fff !important;-webkit-text-fill-color:#fff;}'
+		+ C + '.tk-b.tk-x{border:1px solid #DAD5C8 !important;background:#fff !important;color:#6A6A66 !important;-webkit-text-fill-color:#6A6A66;}'
+		+ C + '.tk-b *{color:inherit !important;font:inherit !important;background:none !important;border:0 !important;padding:0 !important;}';
+
+	function txt(el){ return (el.value !== undefined && /^(INPUT|BUTTON)$/.test(el.tagName) && el.type !== 'text' ? (el.value || el.textContent) : el.textContent).replace(/\s+/g, ''); }
+	function btns(root, word){
+		var out = [], els = root.querySelectorAll('a,button,input[type=button],input[type=submit],span,div');
+		for (var i = 0; i < els.length; i++) {
+			var e = els[i];
+			if (/^(SPAN|DIV)$/.test(e.tagName) && (e.children.length || !e.onclick && !e.getAttribute('onclick'))) continue;
+			if (txt(e) === word) out.push(e);
+		}
+		return out;
+	}
+	// 버튼을 감싼 줄(같은 부모)까지 올라가 그 부모의 직속 자식을 돌려준다
+	function itemIn(row, el){ while (el && el.parentElement !== row) el = el.parentElement; return el; }
+	function common(a, b){ for (var p = a.parentElement; p; p = p.parentElement) if (p.contains(b)) return p; return null; }
+
+	function style(doc){
+		var tables = doc.querySelectorAll('table');
+		for (var t = 0; t < tables.length; t++) {
+			var tb = tables[t];
+			var heads = tb.querySelectorAll('th'), hs = '';
+			for (var h = 0; h < heads.length; h++) hs += '|' + heads[h].textContent.replace(/\s+/g, '');
+			if (hs.indexOf('|분류') < 0 || hs.indexOf('|상품') < 0) continue;
+			// 창 덩어리: 표에서 위로 올라가며 '확인'·'닫기'가 함께 있는 곳
+			var box = null;
+			for (var p = tb.parentElement; p && p !== doc.body; p = p.parentElement) { if (btns(p, '확인').length && btns(p, '닫기').length) { box = p; break; } }
+			if (!box) box = (doc.body && tb.ownerDocument !== document) ? doc.body : null;
+			if (!box) continue;
+			if (!doc.getElementById('tkbb-wrp-css')) { var s = doc.createElement('style'); s.id = 'tkbb-wrp-css'; s.appendChild(doc.createTextNode(CSS)); (doc.head || doc.documentElement).appendChild(s); }
+			box.classList.add('tkbb-rp');
+			tb.classList.add('tk-tb');
+			// 줄 정리
+			var trs = tb.querySelectorAll('tr');
+			for (var r = 0; r < trs.length; r++) {
+				var tr = trs[r];
+				if (tr.querySelector('th')) { tr.classList.add('tk-hd'); continue; }
+				var tds = tr.querySelectorAll(':scope > td');
+				for (var d = 0; d < tds.length; d++) {
+					var td = tds[d], tx = td.textContent.replace(/\s+/g, '');
+					if (td.querySelector('input[type=checkbox],input[type=radio]')) td.classList.add('tk-ck');
+					else if (!tx) td.classList.add(d > 0 && td.querySelector('img') ? 'tk-im' : 'tk-ck');
+					else if (/\d원/.test(tx)) {
+						td.classList.add('tk-nm');
+						// 가격·상품명 글자 조각에 이름표 (조각이 따로 있을 때만)
+						var leaves = td.querySelectorAll('*');
+						var named = false;
+						for (var k = 0; k < leaves.length; k++) {
+							var lf = leaves[k];
+							if (lf.children.length || /^(IMG|BR|INPUT)$/.test(lf.tagName)) continue;
+							var lt = lf.textContent.replace(/\s+/g, '');
+							if (!lt) continue;
+							if (/^[\d,]+원$/.test(lt)) lf.classList.add('tk-p');
+							else if (!named) { lf.classList.add('tk-n'); named = true; }
+						}
+					}
+					else td.classList.add('tk-cat');
+				}
+			}
+			// 검색칸 + 검색 버튼
+			var q = box.querySelector('input[type=text],input[type=search],input:not([type])'), sb = btns(box, '검색')[0];
+			if (q && sb) {
+				q.classList.add('tk-q'); sb.classList.add('tk-sbtn');
+				var sr = common(q, sb);
+				if (sr && !sr.contains(tb)) sr.classList.add('tk-sch');
+			}
+			// 닫기 | 확인
+			var ok = btns(box, '확인'), cl = btns(box, '닫기');
+			if (ok.length && cl.length) {
+				var o = ok[ok.length - 1], x = cl[cl.length - 1];
+				o.classList.add('tk-b', 'tk-ok'); x.classList.add('tk-b', 'tk-x');
+				var bw = common(o, x);
+				if (bw && !bw.contains(tb)) {
+					bw.classList.add('tk-bw');
+					var io = itemIn(bw, o), ix = itemIn(bw, x);
+					if (io) io.classList.add('tk-bi');
+					if (ix) ix.classList.add('tk-bi', 'tk-x');
+				}
+			}
+			// 쪽 번호: 표 밖에서 숫자·화살표만 있는 줄
+			var cands = box.querySelectorAll('a,strong,span,em,b');
+			for (var c = 0; c < cands.length; c++) {
+				var pe = cands[c];
+				if (tb.contains(pe) || pe.children.length) continue;
+				var pt = pe.textContent.replace(/\s+/g, '');
+				if (!/^(\d{1,3}|[<>]{1,2}|[‹›«»]|이전|다음|처음|마지막)$/.test(pt)) continue;
+				var pw = pe.parentElement;
+				if (pw && pw.tagName === 'A' && pw.children.length === 1) { pe = pw; pw = pw.parentElement; }   // <a><span>2</span></a>
+				if (!pw || pw.contains(tb) || !pw.querySelector('a')) continue;
+				pe.classList.add('tk-pg'); pw.classList.add('tk-pgw');
+				if (/^\d/.test(pt) && (pe.tagName !== 'A' || /\b(on|active|now|current|sel)\b/.test(pe.className))) pe.classList.add('tk-on');
+			}
+		}
+	}
+	function frames(){
+		var fs = document.querySelectorAll('iframe');
+		for (var i = 0; i < fs.length; i++) {
+			var f = fs[i];
+			if (f.id === 'editorFrm' || f.__tkRp) continue;
+			f.__tkRp = 1;
+			(function(f){ var go = function(){ try { if (f.contentDocument) style(f.contentDocument); } catch (e) {} }; go(); f.addEventListener('load', go); })(f);
+		}
+	}
+	var busy = false;
+	function tick(){ if (busy) return; busy = true; try { style(document); if (!inFrame) frames(); } catch (e) {} busy = false; }
+	function start(){
+		tick();
+		new MutationObserver(function(ms){
+			for (var i = 0; i < ms.length; i++) { if (ms[i].addedNodes.length) { tick(); return; } }
+		}).observe(document.body, { childList: true, subtree: true });
+	}
+	if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
+})();
+/* ===== 이거 공구해주세요 상품선택 창 끝 ===== */
+
 /* ===== 이거 공구해주세요 글 보기(/board/?db=basic_2&mari_mode=view@view) — 상품후기 창과 같은 모양 (2026-10-08 사용자 요청) =====
    흰 바탕 한 장: 위 '이거 공구해주세요' + 닫기(X → 목록) / 작성자 | 날짜 (회색) / 제목 (굵게) / 내용 / 선 / 댓글 / 댓글 칸(베이지) + 검정 버튼.
    삭제·수정은 위사 버튼 그대로, 작은 글자로. 목록 버튼은 X 가 대신한다. 되돌리려면 이 블록만 지우면 된다. */
