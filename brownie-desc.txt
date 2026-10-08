@@ -137,8 +137,7 @@
 <div class="bw-block">
   <h3 class="bw-title">온 가족 간식으로</h3>
   <img class="bw-media" src="https://takkobebe-link.vercel.app/img/brownie/kids.jpg" width="720" height="477" loading="lazy" decoding="async" alt="식판에 담긴 브라우니 조각과 우유병 앞에 앉은 두 아이">
-  <p>한 입 크기로 잘라 우유 한 잔과 곁들이면 아이 간식으로도, 엄마 커피 타임 디저트로도 좋아요.</p>
-  <p class="bw-note">밀 · 계란 · 버터(우유)가 들어 있어요. 알레르기가 있다면 원재료를 꼭 확인해 주세요.</p>
+  <p class="bw-note">한 입 크기로 잘라 우유 한 잔과 곁들이면 아이 간식으로도, 엄마 커피 타임 디저트로도 좋아요. 밀 · 계란 · 버터(우유)가 들어 있으니 알레르기가 있다면 원재료를 꼭 확인해 주세요.</p>
 </div>
 
 <div class="bw-block">
