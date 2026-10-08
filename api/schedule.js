@@ -86,6 +86,18 @@ function parseDescFields(desc) {
   return out;
 }
 
+// ── 마감된 공구의 본사 고객센터 링크 (2026-10-08 사용자 요청) ──
+// 캘린더 설명란에 "고객센터: https://..." 한 줄을 적으면, 공구가 끝난 뒤 2주 동안 링크 페이지(인스타 링크)에
+// '마감된 공구 · 본사 고객센터' 카드로 보여 준다. 이 링크는 구매 링크로 쓰지 않는다.
+const CLOSED_DAYS = 14;
+function csLink(desc) {
+  for (const line of descText(desc).split("\n")) {
+    const m = line.match(/^\s*(?:본사\s*)?(?:고객센터|CS)(?:\s*[:：]\s*|\s+)(https?:\/\/[^\s"'<>]+)/i);
+    if (m) return m[1];
+  }
+  return "";
+}
+
 function parseIcs(text) {
   // 접힌 줄(다음 줄이 공백으로 시작) 펼치기
   const lines = text.replace(/\r\n/g, "\n").replace(/\n[ \t]/g, "").split("\n");
@@ -106,8 +118,11 @@ function parseIcs(text) {
     // 일정 메모나 URL 필드에 상품 링크가 있으면 구매 링크로 사용
     if (key === "DESCRIPTION" || key === "URL") {
       // 카카오워크 메모는 &를 &amp; 로 적어 보낸다
-      const m = unescapeIcs(val).replace(/&amp;/g, "&").match(/https?:\/\/[^\s"'<>]+/);
-      if (m && !cur.url) {
+      // '고객센터:' 줄에 적은 본사 고객센터 링크는 구매 링크로 쓰지 않는다 (2026-10-08)
+      const raw = unescapeIcs(val).replace(/&amp;/g, "&");
+      const csUrl = key === "DESCRIPTION" ? csLink(raw) : "";
+      const m = [(raw.match(/https?:\/\/[^\s"'<>]+/g) || []).find((x) => !csUrl || (x !== csUrl && !x.includes(encodeURIComponent(csUrl))))].filter(Boolean);
+      if (m.length && !cur.url) {
         let u = m[0];
         // 쇼핑몰 상품 주소는 검색·분류 꼬리(rURL, cno1 …)를 떼고 상품번호만 남긴다.
         // 검색 결과에서 복사한 링크는 상품번호가 뒤에 붙어 있기도 하다.
@@ -311,7 +326,18 @@ module.exports = async (req, res) => {
     const text = await r.text();
 
     const cutoff = new Date(Date.now() - 2 * 86400000).toISOString().slice(0, 10);
-    const events = parseIcs(text)
+    const parsed = parseIcs(text);
+
+    // 끝난 지 2주 안 된 공구 중 설명란에 '고객센터:' 링크가 있는 것 → 링크 페이지 카드용 (events 와 따로 보내 다른 화면엔 영향 없음)
+    const kstToday = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+    const closedFrom = new Date(Date.now() + 9 * 3600e3 - CLOSED_DAYS * 86400000).toISOString().slice(0, 10);
+    const closed = parsed
+      .filter((ev) => ev.summary && ev.end && !SKIP.test(ev.summary))
+      .map((ev) => ({ title: cleanTitle(ev.summary).replace(/^\s*\d+\s*[.)]\s*/, ""), end: ev.end, cs: csLink(ev.desc) }))
+      .filter((ev) => ev.title && ev.cs && ev.end.slice(0, 10) < kstToday && ev.end.slice(0, 10) >= closedFrom)
+      .sort((a, b) => (a.end < b.end ? 1 : a.end > b.end ? -1 : 0));
+
+    const events = parsed
       .filter((ev) => ev.summary && ev.start && ev.end)
       .filter((ev) => !SKIP.test(ev.summary))
       .map((ev) => ({ title: cleanTitle(ev.summary), start: ev.start, end: ev.end, url: ev.url || null, memo: parseDescFields(ev.desc) }))
@@ -376,7 +402,7 @@ module.exports = async (req, res) => {
     // 1분이 지나면 다음 손님 한 명은 이전 결과를 받고 그동안 새로 만든다. 방문이 뜸할 때도 5분 넘게 묵은 결과는 주지 않는다.
     // 너무 줄이면 매번 쇼핑몰 상품 페이지를 10여 개씩 읽어 배너가 느려지고 쇼핑몰에도 부담이 간다.
     res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
-    res.status(200).json({ events });
+    res.status(200).json({ events, closed });
   } catch (e) {
     res.status(502).json({ error: String(e && e.message || e) });
   }

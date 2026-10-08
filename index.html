@@ -392,12 +392,35 @@
   // 카카오워크 캘린더에서 일정을 불러옴
   fetch("/api/schedule")
     .then((r) => { if (!r.ok) throw 0; return r.json(); })
-    .then((data) => render(Array.isArray(data.events) ? data.events : []))
+    .then((data) => {
+      render(Array.isArray(data.events) ? data.events : []);
+      renderClosed(Array.isArray(data.closed) ? data.closed : []);
+    })
     .catch(() => {
       const box = document.getElementById("nowList");
       box.innerHTML = "";
       box.appendChild(el("p", "none", "일정을 불러오지 못했어요. 잠시 후 다시 열어 주세요."));
     });
+
+  // 마감된 공구 → 본사 고객센터 카드 (2026-10-08)
+  // 캘린더 설명란에 "고객센터: https://..." 를 적은 공구만, 마감 다음 날부터 2주 동안 보인다 (기간 계산은 /api/schedule).
+  function renderClosed(list) {
+    const sec = document.getElementById("shipSec");
+    list
+      .filter((c) => c && c.title && /^https?:\/\//.test(c.cs || ""))
+      .forEach((c) => {
+        const a = el("a");
+        a.href = c.cs;
+        a.target = "_blank";
+        a.rel = "noopener";
+        const t = el("span");
+        t.append(el("span", "lb", "마감된 공구"), el("span", "tt", c.title));
+        t.appendChild(el("span", "ds", md(c.end, ".") + "(" + dow(c.end) + ") 마감 · 배송·교환·반품은 본사에 문의해 주세요"));
+        a.append(t, el("span", "go", "고객센터 ›"));
+        sec.appendChild(a);
+      });
+    sec.hidden = !sec.children.length;
+  }
 
   // 배송 안내 카드
   (function () {
