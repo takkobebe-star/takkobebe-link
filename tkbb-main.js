@@ -4045,3 +4045,36 @@
 	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
 /* ===== 메인 팝업 끝 ===== */
+
+/* ===== 브라우니 상세설명 소개 문구 바꾸기 =====
+   브라우니 상세설명은 위사 관리자에 직접 붙여 넣은 글이라 저장소 파일(brownie-desc.txt)을 고쳐도 화면이 안 바뀐다.
+   그래서 화면에서 소개 문단 한 줄만 새 문구로 바꿔 보여 준다. 깜빡임 없게 바꾸기 전엔 투명, 3초 뒤엔 무조건 보인다.
+   되돌리려면 이 블록만 지우면 된다. (2026-10-08 사용자 요청) */
+(function(){
+	if (window.__TKBB_BWI) return; window.__TKBB_BWI = 1;
+	if (location.pathname.indexOf('/shop/detail.php') < 0) return;
+	var OLD = '설탕 단맛만 앞서지 않고, 진한 초코 맛에 단맛과 짠맛이 함께 어우러져요.';
+	var NEW = '속까지 꾸덕하고, 한 입 베어 물면 진한 초코 맛이 가득 퍼져요.';
+	var SEL = '.tkbb-bw .bw-intro > p:not(.bw-note)';
+	var st = document.createElement('style');
+	st.textContent = SEL + ':not([data-tkbb-bwi]){visibility:hidden;}';
+	(document.head || document.documentElement).appendChild(st);
+	function done(){ if (st.parentNode) st.parentNode.removeChild(st); }
+	function fix(){
+		var ps = document.querySelectorAll(SEL), hit = false;
+		for (var i = 0; i < ps.length; i++) {
+			var p = ps[i];
+			var t = p.textContent.replace(/\s+/g, ' ').trim();   // 위사에 붙여 넣으며 줄바꿈·띄어쓰기가 달라졌어도 찾게
+			if (t.indexOf(OLD) >= 0) p.textContent = t.replace(OLD, NEW);
+			p.setAttribute('data-tkbb-bwi', '1');
+			hit = true;
+		}
+		return hit;
+	}
+	if (fix()) return;
+	var mo = window.MutationObserver ? new MutationObserver(function(){ if (fix()) { mo.disconnect(); } }) : null;
+	if (mo) mo.observe(document.documentElement, { childList: true, subtree: true });
+	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ if (fix() && mo) mo.disconnect(); });
+	setTimeout(function(){ if (mo) mo.disconnect(); fix(); done(); }, 3000);
+})();
+/* ===== 브라우니 소개 문구 끝 ===== */
