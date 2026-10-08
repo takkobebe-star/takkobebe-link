@@ -251,6 +251,28 @@
           "value": "https://takkobebe.mywisa.com"
         }
       ]
+    },
+    {
+      "source": "/brownie-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/img/brownie/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,184 @@
+<div class="tkbb-bw">
+<style>
+  /* 첫 화면(사진·한눈에 보기)까지 보이고 나머지는 '상세설명 더보기'로 */
+  /* 스킨이 상세설명 안 글씨 크기를 모두 inherit(13px)로 묶어 두어, 선택자 앞에 body #detail 을 붙여 이긴다 */
+  .wing-detail-more-contents { min-height: 770px; }
+
+  body #detail .tkbb-bw {
+    --bw-surface: #F5F3EE;
+    --bw-ink: #161616;
+    --bw-muted: #6A6A66;
+    --bw-line: #E6E2D8;
+    --bw-deep: #7c8339;
+    --bw-white: #FFFFFF;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 8px 4px 0;
+    color: var(--bw-ink);
+    font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+  }
+  body #detail .tkbb-bw * { box-sizing: border-box; }
+  .tkbb-bw * { font-size: inherit; line-height: inherit; }
+  /* PC 스킨이 상세설명 이미지에 max-width:50%를 걸어 두어 덮어씀 */
+  body #detail .tkbb-bw img { display: block; width: 100%; max-width: 100% !important; height: auto; }
+  body #detail .tkbb-bw h2, body #detail .tkbb-bw h3, body #detail .tkbb-bw p, body #detail .tkbb-bw ul, body #detail .tkbb-bw ol, body #detail .tkbb-bw dl, body #detail .tkbb-bw dd, body #detail .tkbb-bw table { margin: 0; padding: 0; }
+  body #detail .tkbb-bw ul, body #detail .tkbb-bw ol { list-style: none; }
+
+  body #detail .tkbb-bw .bw-block { padding-block: 32px; border-top: 1px solid var(--bw-line); }
+  body #detail .tkbb-bw .bw-block:first-child { padding-top: 8px; border-top: 0; }
+  body #detail .tkbb-bw .bw-title { margin-bottom: 14px; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+  body #detail .tkbb-bw .bw-note { margin-top: 12px; font-size: 12.5px; color: var(--bw-muted); }
+
+  body #detail .tkbb-bw .bw-intro img { border-radius: 8px; background: var(--bw-surface); }
+  body #detail .tkbb-bw .bw-intro h2 { margin-top: 18px; font-size: 22px; font-weight: 500; line-height: 1.3; letter-spacing: -0.02em; }
+  body #detail .tkbb-bw .bw-intro h2 span { display: block; font-weight: 300; }
+  body #detail .tkbb-bw .bw-intro p { margin-top: 8px; font-size: 14.5px; font-weight: 300; }
+  body #detail .tkbb-bw .bw-intro .bw-note { margin-top: 10px; font-size: 12.5px; }
+
+  /* 레옹아저씨 상세 이미지에서 글자 없는 사진만 잘라 720px로 줄임. 비율은 img 의 width·height 값으로 잡힌다 */
+  body #detail .tkbb-bw .bw-media { margin: 0 0 16px; border-radius: 8px; background: var(--bw-surface); }
+  body #detail .tkbb-bw .bw-media.is-end { margin: 16px 0 0; }
+
+  /* 한눈에 보기 */
+  body #detail .tkbb-bw .bw-glance { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  body #detail .tkbb-bw .bw-glance li { padding: 13px 14px; border-radius: 8px; background: var(--bw-surface); }
+  body #detail .tkbb-bw .bw-glance b { display: block; font-size: 14px; font-weight: 500; }
+  body #detail .tkbb-bw .bw-glance span { display: block; margin-top: 4px; font-size: 12.5px; font-weight: 300; color: var(--bw-muted); line-height: 1.45; }
+
+  /* 번호 단계 */
+  body #detail .tkbb-bw .bw-num { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--bw-deep); color: var(--bw-white); font-size: 12px; font-weight: 500; font-style: normal; }
+  body #detail .tkbb-bw .bw-steps { display: grid; gap: 10px; }
+  body #detail .tkbb-bw .bw-steps li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; font-size: 14px; }
+  body #detail .tkbb-bw .bw-steps .bw-num { margin-top: -1px; }
+  body #detail .tkbb-bw .bw-steps small { display: block; margin-top: 2px; font-size: 12.5px; color: var(--bw-muted); }
+
+  /* 이름 · 설명 두 칸 */
+  body #detail .tkbb-bw .bw-rows { display: grid; gap: 10px; }
+  body #detail .tkbb-bw .bw-rows > div { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 12px; }
+  body #detail .tkbb-bw .bw-rows dt { font-weight: 500; }
+  body #detail .tkbb-bw .bw-rows dd { font-weight: 300; }
+
+  body #detail .tkbb-bw .bw-sub { margin: 24px 0 12px; font-size: 16px; font-weight: 700; }
+
+  /* 자주 묻는 질문 · 고시 */
+  body #detail .tkbb-bw .bw-acc details { border-top: 1px solid var(--bw-line); }
+  body #detail .tkbb-bw .bw-acc details:last-child { border-bottom: 1px solid var(--bw-line); }
+  body #detail .tkbb-bw .bw-block.bw-faq { padding-bottom: 8px; }
+  body #detail .tkbb-bw .bw-acc summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-block: 14px; font-size: 14.5px; cursor: pointer; }
+  body #detail .tkbb-bw .bw-acc summary::-webkit-details-marker { display: none; }
+  body #detail .tkbb-bw .bw-acc summary svg { width: 18px; height: 18px; flex: none; color: var(--bw-muted); transition: transform .15s; }
+  body #detail .tkbb-bw .bw-acc details[open] summary svg { transform: rotate(180deg); }
+  body #detail .tkbb-bw .bw-acc .bw-a { padding-bottom: 16px; font-size: 14px; font-weight: 300; }
+  body #detail .tkbb-bw .bw-acc .bw-steps { padding-bottom: 16px; }
+  body #detail .tkbb-bw .bw-dots { padding-bottom: 16px; display: grid; gap: 6px; font-size: 13.5px; font-weight: 300; }
+  body #detail .tkbb-bw .bw-dots li { position: relative; padding-left: 10px; }
+  body #detail .tkbb-bw .bw-dots li::before { content: ""; position: absolute; left: 0; top: .62em; width: 3px; height: 3px; border-radius: 50%; background: var(--bw-muted); }
+
+  body #detail .tkbb-bw .bw-gosi { padding-bottom: 16px; }
+  body #detail .tkbb-bw .bw-gosi table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  body #detail .tkbb-bw .bw-gosi th, body #detail .tkbb-bw .bw-gosi td { padding: 9px 2px; border-top: 1px solid var(--bw-line); text-align: left; vertical-align: top; font-weight: 300; line-height: 1.5; }
+  body #detail .tkbb-bw .bw-gosi th { width: 38%; padding-right: 10px; color: var(--bw-muted); font-weight: 400; background: transparent; }
+  body #detail .tkbb-bw .bw-gosi tr:first-child th, body #detail .tkbb-bw .bw-gosi tr:first-child td { border-top: 0; }
+
+  @media (min-width: 768px) {
+    body #detail .tkbb-bw .bw-block { padding-block: 40px; }
+    .wing-detail-more-contents { min-height: 918px; }
+    body #detail .tkbb-bw .bw-title { font-size: 27px; }
+    body #detail .tkbb-bw .bw-intro h2 { font-size: 26px; }
+    body #detail .tkbb-bw .bw-glance { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+</style>
+<div class="bw-block bw-intro">
+  <img src="https://takkobebe-link.vercel.app/img/brownie/main.jpg" width="720" height="740" alt="흰 접시 위에 세 조각 겹쳐 쌓은 딥초코 브라우니">
+  <h2><span>빵엔 진심인 레옹아저씨의</span>꾸덕한 딥초코 브라우니</h2>
+  <p>벨기에산 다크초콜릿과 코코아 파우더, 우리밀로 구운 브라우니예요. 설탕 단맛만 앞서지 않고, 진한 초코 맛에 단맛과 짠맛이 함께 어우러져요.</p>
+  <p class="bw-note">레옹아저씨 · 1개 220g(±10g)</p>
+</div>
+
+<div class="bw-block">
+  <h3 class="bw-title">한눈에 보기</h3>
+  <ul class="bw-glance">
+    <li><b>꾸덕한 식감</b><span>속까지 촘촘하고 진득해요</span></li>
+    <li><b>벨기에산 초콜릿</b><span>다크초콜릿 · 카카오매스 · 코코아 파우더</span></li>
+    <li><b>우리밀</b><span>밀가루는 우리밀을 썼어요</span></li>
+    <li><b>안 넣었어요</b><span>보존제 · 인공색소 · 인공향료</span></li>
+    <li><b>냉장 · 냉동 보관</b><span>오래 두실 땐 냉동해 주세요</span></li>
+    <li><b>1개 220g</b><span>한 판을 잘라 나눠 먹기 좋아요</span></li>
+  </ul>
+</div>
+
+<div class="bw-block">
+  <h3 class="bw-title">이렇게 만들어요</h3>
+  <ol class="bw-steps">
+    <li><i class="bw-num" aria-hidden="true">1</i><span>벨기에산 코코아 파우더와 우리밀을 섞어요.</span></li>
+    <li><i class="bw-num" aria-hidden="true">2</i><span>반죽을 틀에 담아요.</span></li>
+    <li><i class="bw-num" aria-hidden="true">3</i><span>알맞은 온도에서 구워요.</span></li>
+  </ol>
+
+  <p class="bw-sub">속까지 꾸덕해요</p>
+  <img class="bw-media" src="https://takkobebe-link.vercel.app/img/brownie/cut.jpg" width="720" height="479" loading="lazy" decoding="async" alt="손으로 든 브라우니 단면, 속이 촘촘하고 진득한 모습">
+  <p class="bw-note">겉은 얇게 바삭하고 속은 진득해요. 다크초콜릿 16%, 버터 20.8%가 들어가 진한 초코 맛이 나요.</p>
+</div>
+
+<div class="bw-block">
+  <h3 class="bw-title">크기</h3>
+  <img class="bw-media" src="https://takkobebe-link.vercel.app/img/brownie/size.jpg" width="720" height="310" loading="lazy" decoding="async" alt="브라우니 한 개와 높이 18.5cm, 지름 10cm 컵의 크기 비교">
+  <dl class="bw-rows">
+    <div><dt>중량</dt><dd>1개 220g(±10g)</dd></div>
+    <div><dt>크기 비교</dt><dd>높이 18.5cm · 지름 10cm 컵 옆에 둔 모습이에요</dd></div>
+  </dl>
+</div>
+
+<div class="bw-block">
+  <h3 class="bw-title">온 가족 간식으로</h3>
+  <img class="bw-media" src="https://takkobebe-link.vercel.app/img/brownie/kids.jpg" width="720" height="477" loading="lazy" decoding="async" alt="식판에 담긴 브라우니 조각과 우유병 앞에 앉은 두 아이">
+  <p class="bw-note">한 입 크기로 잘라 우유 한 잔과 곁들이면 아이 간식으로도, 엄마 커피 타임 디저트로도 좋아요. 밀 · 계란 · 버터(우유)가 들어 있으니 알레르기가 있다면 원재료를 꼭 확인해 주세요.</p>
+</div>
+
+<div class="bw-block">
+  <h3 class="bw-title">보관</h3>
+  <dl class="bw-rows">
+    <div><dt>받으시면</dt><dd>냉장 또는 냉동 보관해 주세요.</dd></div>
+    <div><dt>오래 두실 땐</dt><dd>냉동 보관하고, 드시기 전에 실온에서 자연해동해 주세요.</dd></div>
+    <div><dt>개봉 후</dt><dd>보존제를 넣지 않아 되도록 빨리 드시는 게 좋아요.</dd></div>
+    <div><dt>소비기한</dt><dd>제품에 따로 표기돼 있어요.</dd></div>
+  </dl>
+</div>
+
+<div class="bw-block bw-faq">
+  <h3 class="bw-title">자주 묻는 질문 및 상품 정보</h3>
+  <div class="bw-acc">
+    <details>
+      <summary>냉동한 브라우니는 어떻게 먹나요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="bw-a">드시기 전에 꺼내 실온에서 자연해동해 주세요. 먹을 만큼만 잘라 나눠 얼려 두면 꺼내 먹기 편해요.</p>
+    </details>
+    <details>
+      <summary>알레르기 성분이 있나요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <ul class="bw-dots">
+        <li>원재료에 밀(우리밀), 계란, 버터(우유)가 들어 있어요.</li>
+        <li>알레르기가 있는 분은 아래 원재료를 확인한 뒤 드셔 주세요.</li>
+      </ul>
+    </details>
+    <details>
+      <summary>상품 정보 제공 고시<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <div class="bw-gosi">
+        <table>
+          <tr><th>제품명</th><td>꾸덕 브라우니</td></tr>
+          <tr><th>생산자 및 소재지</th><td>충남 천안시 서부구 불당26로80 14동 1층</td></tr>
+          <tr><th>제조연월일 · 소비기한</th><td>제품 별도 표기</td></tr>
+          <tr><th>내용량</th><td>220g(±10g)</td></tr>
+          <tr><th>원재료명 및 함량</th><td>다크초콜릿(벨기에) 16%, 카카오매쓰(벨기에) 1.4%, 우리밀 8.7%, 코코아파우더(벨기에) 4%, 베이킹파우더(국산) 0.05%, 계란(국산) 18%, 설탕(필리핀) 31%, 소금(국산) 0.05%, 버터(뉴질랜드) 20.8%</td></tr>
+          <tr><th>보관 방법</th><td>냉장 또는 냉동 보관 · 장기 보관 시 냉동 후 자연해동</td></tr>
+          <tr><th>주의사항</th><td>보존제를 넣지 않은 식품이에요. 개봉 후 되도록 빨리 드세요.</td></tr>
+          <tr><th>소비자 상담</th><td>041-572-3307</td></tr>
+        </table>
+      </div>
+    </details>
+  </div>
+</div>
+</div>
