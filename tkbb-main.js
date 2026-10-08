@@ -3578,6 +3578,71 @@
 })();
 /* ===== 상품후기 작성 팝업 끝 ===== */
 
+/* ===== 이거 공구해주세요 글쓰기(/board/?db=basic_2&mari_mode=write@write) — 상품후기 작성 팝업과 같은 모양 (2026-10-08 사용자 요청) =====
+   흰 바탕 + 칸마다 작은 제목 + 연한 베이지 입력칸(모서리 5px) + 아래 '취소 | 확인' 같은 너비. 작성자 줄은 숨긴다.
+   기능(에디터·첨부·상품선택·등록)은 위사 그대로, 모양만. 되돌리려면 이 블록만 지우면 된다. */
+(function(){
+	if (window.__TKBB_WBW) return; window.__TKBB_WBW = 1;
+	if (window.browser_type === 'pc') return;
+	if (location.pathname.indexOf('/board/') !== 0 || !/[?&]db=basic_2(&|$)/.test(location.search) || !/mari_mode=(write|modify)/.test(decodeURIComponent(location.search))) return;
+	var R = '#boardwrite ';
+	var CSS = ''
+		+ '#cnt.tkbb-wbw{background:#fff;padding:0 0 calc(110px + env(safe-area-inset-bottom));letter-spacing:-.02em;color:#161616;}'
+		+ '#cnt.tkbb-wbw > h2.subtitle{text-align:left;margin:0;padding:22px 20px 6px;border:0;font-size:18px;font-weight:700;color:#161616;}'
+		+ R + '{padding:0 20px !important;margin:0 !important;}'
+		+ R + 'fieldset{border:0;margin:0;padding:0;}'
+		+ R + 'fieldset > div{background:none !important;border:0 !important;padding:0;margin:0 0 18px;}'
+		+ R + 'fieldset > div.tk-hide{display:none !important;}'
+		+ R + 'fieldset > div > label{display:block !important;position:static !important;float:none;width:auto;height:auto;overflow:visible;clip:auto;margin:0 0 8px;padding:0;font-size:13px;font-weight:600;color:#161616;}'
+		+ R + '.form_input{width:100%;box-sizing:border-box;min-height:46px;border:1px solid transparent !important;border-radius:5px !important;background:#F7F5EE !important;padding:0 14px;font-size:14px;color:#161616;}'
+		+ R + '.form_input:focus{border-color:#B9C077 !important;outline:0;background:#fff !important;}'
+		+ R + 'input[type=file].form_input{height:auto;min-height:0;padding:9px 12px;line-height:26px;font-size:13px;color:#6A6A66;}'
+		+ R + 'fieldset > div.tk-file{margin:0 0 8px;}'
+		+ R + 'fieldset > div.tk-file > label{font-weight:400;color:#6A6A66;font-size:12px;}'
+		+ R + '.contents{background:none !important;}'
+		+ R + '.contents iframe.editorFrm{display:block;border-radius:5px;}'
+		+ R + '.related_prd_write{margin:10px 0 0;padding:0;}'
+		+ R + '.related_prd_write .box_btn{display:block;margin:0;padding:0;border:0;background:none;}'
+		+ R + '.related_prd_write .box_btn a{display:flex;align-items:center;justify-content:center;height:46px;border:1px solid #DAD5C8 !important;border-radius:5px !important;background:#fff !important;color:#161616 !important;font-size:14px;font-weight:500;}'
+		+ R + '.related_prd_write p.empty{margin:8px 0 0;padding:0;border:0;background:none;font-size:12px;color:#9A9A94;text-align:left;}'
+		+ R + '.btn_col{display:flex;gap:8px;margin:24px 0 0;padding:0;}'
+		+ R + '.btn_col .box_btn{flex:1 1 0;min-width:0;display:block;width:auto;margin:0;padding:0;border:0;background:none;float:none;}'
+		+ R + '.btn_col .box_btn input,' + R + '.btn_col .box_btn a{display:flex;align-items:center;justify-content:center;width:100%;height:50px;border-radius:5px !important;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;-webkit-appearance:none;appearance:none;box-sizing:border-box;}'
+		+ R + '.btn_col .box_btn input{border:0 !important;background:#161616 !important;color:#fff !important;-webkit-text-fill-color:#fff;}'
+		+ R + '.btn_col .box_btn.white a{border:1px solid #DAD5C8 !important;background:#fff !important;color:#6A6A66 !important;}'
+		+ R + '.btn_col .box_btn.white{order:-1;}';   // 취소 | 확인 (같은 너비)
+	// 에디터 안(같은 주소의 iframe) 테두리도 연하게·둥글게
+	var ECSS = '#smart_editor2_content,#se2_tool,#se2_img_preview{border-color:#EFEDE6 !important;}'
+		+ '#smart_editor2_content{border-radius:5px;overflow:hidden;}#se2_img_preview{border-radius:5px;margin-top:6px;}';
+	function editor(){
+		var fr = document.getElementById('editorFrm');
+		if (!fr) return;
+		var put = function(){ try { var d = fr.contentDocument; if (!d || !d.head || d.getElementById('tkbb-wbw-e')) return; var s = d.createElement('style'); s.id = 'tkbb-wbw-e'; s.appendChild(d.createTextNode(ECSS)); d.head.appendChild(s); } catch (e) {} };
+		put(); fr.addEventListener('load', put);
+	}
+	function run(){
+		var bw = document.getElementById('boardwrite'), cnt = document.getElementById('cnt');
+		if (!bw || !cnt) return;
+		var st = document.createElement('style');
+		st.appendChild(document.createTextNode(CSS));
+		document.head.appendChild(st);
+		cnt.classList.add('tkbb-wbw');
+		var rows = bw.querySelectorAll('fieldset > div');
+		for (var i = 0; i < rows.length; i++) {
+			var lb = rows[i].querySelector(':scope > label');
+			var t = lb ? lb.textContent.replace(/\s+/g, '') : '';
+			if (rows[i].classList.contains('name') || t === '작성자') rows[i].classList.add('tk-hide');
+			else if (/^첨부파일/.test(t)) { rows[i].classList.add('tk-file'); lb.textContent = lb.textContent.replace('첨부파일', '사진'); }
+			else if (t === '글내용') lb.textContent = '내용';
+		}
+		var ti = bw.querySelector('input[name=title]');
+		if (ti && (!ti.getAttribute('placeholder') || ti.getAttribute('placeholder') === '제목')) ti.setAttribute('placeholder', '공구 받고 싶은 상품을 한 줄로 남겨 주세요');
+		editor();
+	}
+	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
+})();
+/* ===== 이거 공구해주세요 글쓰기 끝 ===== */
+
 /* ===== 메인 팝업 — 후기 이벤트 '후기 남기면 최대 1,000원 적립' (2026-10-08 ~ 2026.11.10) =====
    메인(모바일·PC)에서 한 번 뜬다. 사진을 누르면 상품후기 게시판(맨 위 '후기 쓰기')으로.
    '오늘 하루 보지 않기'는 이 폰에 날짜만 저장. 10월 10일 0시부터 뜨고 11월 11일 0시(한국 시간)부터 저절로 안 뜬다.
