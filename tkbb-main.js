@@ -3506,7 +3506,7 @@
 	var KEY = 'tkbb_pop1110_hide';
 	var today = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);   // 한국 날짜
 	try { if (localStorage.getItem(KEY) === today) return; } catch (e) {}
-	var IMG = 'https://takkobebe-link.vercel.app/img/popup/review-event-1110.jpg';
+	var IMG = 'https://takkobebe-link.vercel.app/img/popup/review-event-1110-v3.jpg';
 	var LINK = '/shop/product_review_list.php';
 	var css = '#tkbb-pop{position:fixed;inset:0;z-index:100002;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(22,22,22,.5);opacity:0;transition:opacity .2s;font-family:inherit;letter-spacing:-.02em;box-sizing:border-box;}'
 		+ '#tkbb-pop.on{opacity:1;}'
