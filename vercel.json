@@ -273,6 +273,28 @@
           "value": "https://takkobebe.mywisa.com"
         }
       ]
+    },
+    {
+      "source": "/biogaia-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/img/biogaia/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        }
+      ]
     }
   ]
 }
