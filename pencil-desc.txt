@@ -220,9 +220,9 @@
   </ul>
   <dl class="pc-rows pc-gap">
     <div><dt>충전하면서</dt><dd>충전 중에도 그대로 쓸 수 있습니다</dd></div>
-    <div><dt>표시등</dt><dd>충전 중 파란 불 깜빡임 · 충전 완료 파란 불 켜짐</dd></div>
+    <div><dt>표시등</dt><dd>충전 중 (파란 LED 깜박임)<br>충전 완료 (파란 LED 켜짐)</dd></div>
   </dl>
-  <p class="pc-note">함께 드리는 USB Type-C 케이블로 충전해 주세요. 5V보다 높은 충전기는 쓰지 않습니다.</p>
+  <p class="pc-note">함께 드리는 USB Type-C 케이블로 충전해 주세요. 5V보다 높은 충전기를 사용하지 말아주세요!</p>
 </div>
 
 <div class="pc-block">
