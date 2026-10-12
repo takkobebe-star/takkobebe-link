@@ -1140,7 +1140,9 @@
 		+ S + ' .r span{display:block;margin-top:2px;font-size:18px;font-weight:700;}'
 		+ S + ' .r em{margin-right:6px;font-style:normal;color:#7C8340;}'
 		+ S + ' .tkbb-op-price-ft{display:flex;align-items:center;justify-content:center;gap:8px;margin:16px 0 0;padding:14px 0;border-radius:7px;background:#D1D798;font-size:15px;font-weight:500;}'
-		+ S + ' .tkbb-op-price-ft svg{width:22px;height:22px;flex:none;}';
+		+ S + ' .tkbb-op-price-ft svg{width:22px;height:22px;flex:none;}'
+		// 연필깎이처럼 <style> 다음에 오는 첫 묶음 위 선은 지운다 — 배송정보 표 선과 겹쳐 두 줄로 보였다 (2026-10-12 사용자 요청)
+		+ 'body #detail .tkbb-pc > .pc-block:first-of-type{border-top:0 !important;}';
 	(document.head || document.documentElement).appendChild(st);
 
 	function txt(el){ return el ? el.textContent.replace(/\s+/g,' ').trim() : ''; }
