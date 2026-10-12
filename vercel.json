@@ -1,4 +1,6 @@
 {
+  "buildCommand": "sh scripts/deploy-guard.sh",
+  "outputDirectory": ".",
   "headers": [
     {
       "source": "/hanwoo-desc.txt",
