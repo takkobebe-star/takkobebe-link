@@ -212,7 +212,7 @@
 
 <div class="pc-block">
   <h3 class="pc-title">선 없이 쓰는 충전식</h3>
-  <img class="pc-media" src="https://takkobebe-link.vercel.app/img/pencil/charge.jpg" width="720" height="720" loading="lazy" decoding="async" alt="노란 뚜껑 연필깎이 옆면에 USB Type-C 케이블을 꽂아 충전하는 모습">
+  <img class="pc-media" src="https://takkobebe-link.vercel.app/img/pencil/charge.jpg" width="720" height="607" loading="lazy" decoding="async" alt="노란 뚜껑 연필깎이 옆면에 USB Type-C 케이블을 꽂아 충전하는 모습">
   <ul class="pc-stat">
     <li><small>배터리</small><b>2,500<em>mAh</em></b></li>
     <li><small>충전 시간</small><b>약 2<em>시간</em></b></li>
