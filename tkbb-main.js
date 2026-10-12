@@ -1115,6 +1115,87 @@
 	setTimeout(cut, 3000);
 })();
 
+/* ===== 상품상세 — 옵션별 공구가 자동 표 (2026-10-12 사용자 요청) =====
+   위사에서 상품·옵션 가격만 설정하면 상세설명 맨 위에 '옵션별 공구가'를 그린다 (급찐급빠 샐러드 '세트별 공구가' 모양).
+   - 가격: 상품 판매가·정가 + 옵션 추가금액(옵션 값 '이름::추가금::...'). 할인율 = (1 - 공구가/정가) 반올림
+   - 배송: 상품정보의 '배송정보' 줄
+   - 상세설명에 직접 넣은 가격표(○○-price-list)가 있으면 그리지 않는다. 옵션 단계가 둘 이상(색상×크기 등)이면 그리지 않는다
+   - 클래스가 tkbb-op-price-* 라서 오픈 전·마감 공구는 위 ③이 자동으로 숨긴다
+   되돌리려면 이 블록만 지우면 된다. */
+(function(){
+	if (window.__TKBB_OPTP) return; window.__TKBB_OPTP = 1;
+	if (location.pathname.indexOf('/shop/detail.php') < 0) return;
+	var st = document.createElement('style');
+	var S = 'body #detail .tkbb-op';
+	st.textContent = S + '{max-width:720px;margin:0 auto;padding:8px 4px 28px;color:#161616;font-size:14px;line-height:1.4;letter-spacing:-0.01em;word-break:keep-all;text-align:left;}'
+		+ S + ' *{box-sizing:border-box;}'
+		+ S + ' ul{margin:0;padding:0;list-style:none;}'
+		+ S + ' .tkbb-op-price-ttl{margin:0;padding:0 0 12px;border-bottom:2px solid #161616;font-size:18px;font-weight:700;letter-spacing:-0.02em;}'
+		+ S + ' .tkbb-op-price-list li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:end;padding:18px 0;border-bottom:1px solid #E6E2D8;}'
+		+ S + ' .no{display:block;font-size:11.5px;font-weight:500;letter-spacing:0.08em;color:#6A6A66;}'
+		+ S + ' .nm{display:block;margin-top:4px;font-size:16px;font-weight:600;line-height:1.35;}'
+		+ S + ' .so{display:block;margin-top:4px;font-size:13px;font-weight:300;color:#6A6A66;}'
+		+ S + ' .r{text-align:right;white-space:nowrap;}'
+		+ S + ' .r s{display:block;font-size:12.5px;color:#B5B2A8;}'
+		+ S + ' .r span{display:block;margin-top:2px;font-size:18px;font-weight:700;}'
+		+ S + ' .r em{margin-right:6px;font-style:normal;color:#7C8340;}'
+		+ S + ' .tkbb-op-price-ft{display:flex;align-items:center;justify-content:center;gap:8px;margin:16px 0 0;padding:14px 0;border-radius:7px;background:#D1D798;font-size:15px;font-weight:500;}'
+		+ S + ' .tkbb-op-price-ft svg{width:22px;height:22px;flex:none;}';
+	(document.head || document.documentElement).appendChild(st);
+
+	function txt(el){ return el ? el.textContent.replace(/\s+/g,' ').trim() : ''; }
+	function num(t){ var n = parseInt(String(t).replace(/[^0-9]/g,''), 10); return isNaN(n) ? 0 : n; }
+	function won(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원'; }
+	function esc(t){ return String(t).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+	function build(){
+		var root = document.getElementById('detail');
+		var di = root && root.querySelector('.detail_info');
+		if (!di || di.querySelector('.tkbb-op')) return;
+		if (di.querySelector('[class*="-price-list"]')) return;   // 상세설명에 직접 만든 가격표가 있다
+		var pr = root.querySelector('.price');
+		var sell = num(txt(pr && pr.querySelector('.sell'))), cons = num(txt(pr && pr.querySelector('.consumer')));
+		if (!sell) return;
+		var sels = root.querySelectorAll('select.wing_multi_option');
+		if (sels.length !== 1) return;
+		var rows = [], os = sels[0].options;
+		for (var i=0;i<os.length;i++){
+			var v = os[i].value || '';
+			if (v.indexOf('::') < 0) continue;   // '::컬러선택::' 같은 안내 줄
+			var add = Math.round(parseFloat(v.split('::')[1]) || 0);
+			var name = txt(os[i]).replace(/\s*\(\s*[+\-]?[\d,]+\s*원?\s*\)\s*$/, '');   // 끝의 (+1,000원) 표기는 뺀다
+			var out = /품절/.test(txt(os[i])) || os[i].disabled;
+			if (out) name = name.replace(/\s*\[?\(?품절\)?\]?\s*/g, '');
+			rows.push({ name: name, p: sell + add, c: cons ? cons + add : 0, out: out });
+		}
+		if (!rows.length) return;
+		var ship = '';
+		var ths = root.querySelectorAll('th');
+		for (var t=0;t<ths.length;t++){ if (txt(ths[t]).replace(/\s/g,'') === '배송정보') { ship = txt(ths[t].nextElementSibling); break; } }
+		var h = '<h3 class="tkbb-op-price-ttl">옵션별 공구가</h3><ul class="tkbb-op-price-list">';
+		rows.forEach(function(r, k){
+			var pct = r.c > r.p ? Math.round((1 - r.p / r.c) * 100) : 0;
+			h += '<li><div class="l"><span class="no">' + (k < 9 ? '0' : '') + (k + 1) + '</span><b class="nm">' + esc(r.name) + '</b>'
+			   + (r.out ? '<span class="so">품절</span>' : '') + '</div><div class="r">'
+			   + (pct ? '<s>' + won(r.c) + '</s>' : '') + '<span>' + (pct ? '<em>' + pct + '%</em>' : '') + won(r.p) + '</span></div></li>';
+		});
+		h += '</ul>';
+		if (ship) h += '<p class="tkbb-op-price-ft"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5h11v9H3z"/><path d="M14 9.5h3.6l3.4 3.4v2.6H14"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg><span>' + esc(ship) + '</span></p>';
+		var box = document.createElement('div');
+		box.className = 'tkbb-op';
+		box.innerHTML = h;
+		var more = di.querySelector('.wing-detail-more-contents');
+		var host = more || di;
+		host.insertBefore(box, host.firstChild);
+		// 접힌 첫 화면에서 대표 사진이 밀려 잘리지 않게, 표 높이만큼 접힘 높이를 늘린다
+		if (more) more.style.minHeight = ((parseFloat(getComputedStyle(more).minHeight) || 0) + box.offsetHeight) + 'px';
+	}
+	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', build);
+	else build();
+	setTimeout(build, 1200);
+	setTimeout(build, 3000);
+})();
+
 /* ===== 관심상품(하트) 확인창 없애기 =====
    위사 addWish 는 저장에 성공하면 "위시리스트에 추가하였습니다. 위시리스트로 이동하시겠습니까?" 를 confirm 으로 띄운다.
    저장은 이 창이 뜨기 전에 이미 끝나 있으므로(동기 ajax), 창만 '취소'로 건너뛰고
