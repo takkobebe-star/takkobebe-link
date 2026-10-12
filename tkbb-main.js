@@ -1198,6 +1198,47 @@
 	setTimeout(build, 3000);
 })();
 
+/* ===== 상품상세 — 본사 이미지만 올린 상세설명 자동 틀 (2026-10-12 사용자 요청) =====
+   관리자에서 상세설명에 본사 이미지만 올린 상품도 우리 상세(연필깎이·샐러드)와 같은 폭·모양으로 보이게 한다.
+   - 이미지: 위사 PC의 50% 제한을 풀고 최대 720px 가운데, 이미지 사이 틈(줄바꿈·글자 기준선) 없앰
+   - 접기: 첫 이미지까지(최대 1000px) 보이고 나머지는 '상세설명 더보기' (위 옵션별 공구가 표가 있으면 표 + 첫 이미지)
+   - 우리가 만든 상세설명(tkbb-○○ 틀)이나 <script>로 불러오는 상세설명은 건드리지 않는다
+   되돌리려면 이 블록만 지우면 된다. */
+(function(){
+	if (window.__TKBB_AUTOF) return; window.__TKBB_AUTOF = 1;
+	if (location.pathname.indexOf('/shop/detail.php') < 0) return;
+	var OURS = 'script,[class*="tkbb-"]:not([class*="tkbb-op"]):not([class*="tkbb-cut"])';
+	// 화면이 그려지기 전부터 적용되게 CSS 로 고른다 (:has 를 모르는 옛 브라우저는 위사 기본 모양 그대로)
+	var A = 'body #detail .detail_info:not(:has(' + OURS + '))';
+	var st = document.createElement('style');
+	st.textContent = A + ' img:not(.tkbb-cut){display:block;max-width:min(100%,720px) !important;height:auto !important;margin-left:auto !important;margin-right:auto !important;vertical-align:top;}'
+		+ A + ' img + br{display:none;}'
+		+ A + ' p:has(> img){margin:0 !important;padding:0 !important;line-height:0;}';
+	(document.head || document.documentElement).appendChild(st);
+
+	function fold(){
+		var di = document.querySelector('#detail .detail_info');
+		if (!di || di.querySelector(OURS)) return;
+		var more = di.querySelector('.wing-detail-more-contents');
+		if (!more || more.getAttribute('data-tkbb-af')) return;
+		var ims = more.querySelectorAll('img'), im = null;
+		for (var i=0;i<ims.length;i++){ if (!ims[i].closest('.tkbb-op')) { im = ims[i]; break; } }
+		if (!im) return;
+		function set(){
+			if (more.getAttribute('data-tkbb-af') || !im.offsetHeight) return;
+			more.setAttribute('data-tkbb-af', '1');
+			var top = more.getBoundingClientRect().top, r = im.getBoundingClientRect();
+			more.style.minHeight = Math.round(r.top - top + Math.min(r.height, 1000)) + 'px';
+		}
+		if (im.complete && im.naturalWidth) set();
+		else im.addEventListener('load', set);
+	}
+	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fold);
+	else fold();
+	setTimeout(fold, 1500);
+	setTimeout(fold, 3500);
+})();
+
 /* ===== 관심상품(하트) 확인창 없애기 =====
    위사 addWish 는 저장에 성공하면 "위시리스트에 추가하였습니다. 위시리스트로 이동하시겠습니까?" 를 confirm 으로 띄운다.
    저장은 이 창이 뜨기 전에 이미 끝나 있으므로(동기 ajax), 창만 '취소'로 건너뛰고
