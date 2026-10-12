@@ -30,7 +30,7 @@
   body #detail .tkbb-pc ul, body #detail .tkbb-pc ol { list-style: none; }
 
   body #detail .tkbb-pc .pc-block { padding-block: 32px; border-top: 1px solid var(--pc-line); }
-  body #detail .tkbb-pc .pc-block:first-child { padding-top: 8px; border-top: 0; }
+  body #detail .tkbb-pc .pc-block:first-of-type { padding-top: 8px; border-top: 0; }
   body #detail .tkbb-pc .pc-title { margin-bottom: 14px; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
   body #detail .tkbb-pc .pc-note { margin-top: 12px; font-size: 12.5px; color: var(--pc-muted); }
 
@@ -114,8 +114,8 @@
 <div class="pc-block pc-price">
   <h3 class="pc-price-ttl">옵션별 공구가</h3>
   <ul class="pc-price-list">
-      <li><img src="https://takkobebe-link.vercel.app/img/pencil/opt-yellow.jpg" width="240" height="300" alt="노란 뚜껑 자동연필깎이"><div class="l"><span class="no">01</span><b class="nm">옐로우</b><span class="cp">본체 · 케이블 · 청소솔 · UV 스티커</span></div><div class="r"><s>54,900원</s><span><em>33%</em>36,900원</span></div></li>
-      <li><img src="https://takkobebe-link.vercel.app/img/pencil/opt-green.jpg" width="240" height="300" alt="초록 뚜껑 자동연필깎이"><div class="l"><span class="no">02</span><b class="nm">그린</b><span class="cp">본체 · 케이블 · 청소솔 · UV 스티커</span></div><div class="r"><s>54,900원</s><span><em>33%</em>36,900원</span></div></li>
+      <li><img src="https://takkobebe-link.vercel.app/img/pencil/opt-yellow.jpg" width="240" height="300" alt="노란 뚜껑 자동연필깎이"><div class="l"><span class="no">01</span><b class="nm">옐로우</b><span class="cp">본체 · 케이블 · 청소솔 · 꾸밈 스티커</span></div><div class="r"><s>54,900원</s><span><em>33%</em>36,900원</span></div></li>
+      <li><img src="https://takkobebe-link.vercel.app/img/pencil/opt-green.jpg" width="240" height="300" alt="초록 뚜껑 자동연필깎이"><div class="l"><span class="no">02</span><b class="nm">그린</b><span class="cp">본체 · 케이블 · 청소솔 · 꾸밈 스티커</span></div><div class="r"><s>54,900원</s><span><em>33%</em>36,900원</span></div></li>
   </ul>
   <p class="pc-price-ft"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5h11v9H3z"/><path d="M14 9.5h3.6l3.4 3.4v2.6H14"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg><span><b>10/13(화)</b>부터 순차발송</span></p>
 </div>
@@ -209,9 +209,9 @@
     <li><i class="pc-num" aria-hidden="true">2</i><span>USB Type-C 케이블</span></li>
     <li><i class="pc-num" aria-hidden="true">3</i><span>청소솔</span></li>
     <li><i class="pc-num" aria-hidden="true">4</i><span>사용설명서</span></li>
-    <li><i class="pc-num" aria-hidden="true">5</i><span>꾸밈용 UV 스티커<small>아이 취향대로 붙여 꾸밀 수 있습니다</small></span></li>
+    <li><i class="pc-num" aria-hidden="true">5</i><span>꾸밈 스티커<small>아이 취향대로 붙여 꾸밀 수 있습니다</small></span></li>
   </ol>
-  <img class="pc-media is-end" src="https://takkobebe-link.vercel.app/img/pencil/sticker.webp" width="720" height="405" loading="lazy" decoding="async" alt="UV 스티커를 떼어 연필깎이 몸통에 붙이는 모습">
+  <img class="pc-media is-end" src="https://takkobebe-link.vercel.app/img/pencil/sticker.webp" width="720" height="405" loading="lazy" decoding="async" alt="꾸밈 스티커를 떼어 연필깎이 몸통에 붙이는 모습">
 </div>
 
 <div class="pc-block pc-faq">
@@ -223,7 +223,7 @@
         <li>위쪽 연필가루통이 1/3 넘게 차면 비운 뒤 사용해 주세요.</li>
         <li>가루통에 뚜껑을 끼울 때 센서가 반응해 잠깐 돌 수 있습니다. 고장이 아닙니다.</li>
         <li>길이 8cm보다 짧은 몽당연필은 칼날에 끼일 수 있습니다.</li>
-        <li>UV 스티커는 한 번 붙이면 다시 떼어 쓸 수 없고, 날카로운 것으로 세게 긁으면 표면이 상할 수 있습니다.</li>
+        <li>꾸밈 스티커는 한 번 붙이면 다시 떼어 쓸 수 없고, 날카로운 것으로 세게 긁으면 표면이 상할 수 있습니다.</li>
       </ul>
     </details>
     <details>
