@@ -306,9 +306,13 @@ module.exports = async (req, res) => {
     return;
   }
   try {
-    const r = await fetch(url);
+    // 2026-10-12 구글 캘린더 수정이 1분 안에 보이도록: 구글 쪽 캐시를 거치지 않게 매번 새로 받는다
+    const r = await fetch(url, { cache: "no-store" });
     if (!r.ok) throw new Error("ics fetch failed: " + r.status);
     const text = await r.text();
+    // 어느 캘린더를 읽는지 확인용 (주소는 비밀이라 종류만 내보낸다)
+    const host = (() => { try { return new URL(url).hostname; } catch (e) { return ""; } })();
+    const src = /google\.com$/.test(host) ? "google" : /kakao/.test(host) ? "kakaowork" : "other";
 
     const cutoff = new Date(Date.now() - 2 * 86400000).toISOString().slice(0, 10);
     const events = parseIcs(text)
@@ -372,11 +376,11 @@ module.exports = async (req, res) => {
       if (hit) { if (ev.url && ev.url !== hit[1]) ev.shop = ev.url; ev.url = hit[1]; }   // shop = 원래 쇼핑몰 상품 (상품 상세의 판매예정 표시용)
     }
 
-    // CDN에 1분 캐시 → 캘린더 수정 후 1~2분 안에 반영 (2026-09-29 10분 → 1분)
-    // 1분이 지나면 다음 손님 한 명은 이전 결과를 받고 그동안 새로 만든다. 방문이 뜸할 때도 5분 넘게 묵은 결과는 주지 않는다.
+    // CDN 캐시 30초 + 묵은 결과 허용 30초 → 캘린더 수정 후 1분 안에 반영 (2026-10-12 60초+5분 → 30초+30초)
+    // 30초가 지나면 다음 손님 한 명은 이전 결과를 받고 그동안 새로 만든다. 1분 넘게 묵은 결과는 주지 않는다.
     // 너무 줄이면 매번 쇼핑몰 상품 페이지를 10여 개씩 읽어 배너가 느려지고 쇼핑몰에도 부담이 간다.
-    res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
-    res.status(200).json({ events });
+    res.setHeader("Cache-Control", "s-maxage=30, stale-while-revalidate=30");
+    res.status(200).json({ events, src });
   } catch (e) {
     res.status(502).json({ error: String(e && e.message || e) });
   }
