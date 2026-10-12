@@ -751,11 +751,21 @@
 		});
 	}
 
-	// ── 언제든 살 수 있어요 : 먹거리 분류에서 판매중 6개 (2열 3행, 2026-10-06 · 이전 3열 2행)
+	// ── 언제든 살 수 있어요 : 먹거리 분류에서 판매중 8개 (2열 4행, 2026-10-10 사용자 요청 · 이전 6개 2열 3행)
+	// 분류 페이지는 한 번에 6~7개만 내려주므로 2쪽(&page=2)까지 받아 8개를 채운다. 같은 상품은 걸러 낸다.
 	function drawAlways(){
-		fetch('/shop/big_section.php?cno1=1005').then(function(r){ return r.text(); }).then(function(t){
-			var d = new DOMParser().parseFromString(t,'text/html');
-			var ps = pickProducts(d, 6);
+		var URL1 = '/shop/big_section.php?cno1=1005';
+		var get = function(u){ return fetch(u).then(function(r){ return r.text(); }).catch(function(){ return ''; }); };
+		Promise.all([get(URL1), get(URL1 + '&page=2')]).then(function(ts){
+			var ps = [], seen = {};
+			for (var k=0;k<ts.length;k++){
+				if (!ts[k]) continue;
+				var list = pickProducts(new DOMParser().parseFromString(ts[k],'text/html'), 8);
+				for (var j=0;j<list.length && ps.length<8;j++){
+					if (seen[list[j].href]) continue;
+					seen[list[j].href] = 1; ps.push(list[j]);
+				}
+			}
 			if (ps.length < 2) return;
 			var h = '<div class="tkbb-sec"><div class="st"><h2>언제든 살 수 있어요</h2>'
 			      + '<a href="/shop/big_section.php?cno1=1005">전체 보기 ›</a></div>'
