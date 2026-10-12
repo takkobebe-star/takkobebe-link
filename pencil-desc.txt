@@ -228,13 +228,13 @@
 <div class="pc-block">
   <h3 class="pc-title">구성</h3>
   <ol class="pc-steps">
-    <li><i class="pc-num" aria-hidden="true">1</i><span>본체</span></li>
-    <li><i class="pc-num" aria-hidden="true">2</i><span>USB Type-C 케이블</span></li>
+    <li><i class="pc-num" aria-hidden="true">1</i><span>단상자</span></li>
+    <li><i class="pc-num" aria-hidden="true">2</i><span>본체 (그린 or 옐로우)</span></li>
     <li><i class="pc-num" aria-hidden="true">3</i><span>청소솔</span></li>
     <li><i class="pc-num" aria-hidden="true">4</i><span>사용설명서</span></li>
-    <li><i class="pc-num" aria-hidden="true">5</i><span>꾸밈 스티커<small>아이 취향대로 붙여 꾸밀 수 있습니다</small></span></li>
+    <li><i class="pc-num" aria-hidden="true">5</i><span>USB Type-C 케이블</span></li>
   </ol>
-  <img class="pc-media is-end" src="https://takkobebe-link.vercel.app/img/pencil/components.jpg" width="720" height="384" loading="lazy" decoding="async" alt="연필깎이 본체와 상자, 청소솔, 사용설명서, USB Type-C 케이블을 나란히 놓은 구성품 사진">
+  <img class="pc-media is-end" src="https://takkobebe-link.vercel.app/img/pencil/components.jpg" width="716" height="399" loading="lazy" decoding="async" alt="구성품 — 1 단상자, 2 본체(그린 또는 옐로우), 3 청소솔, 4 사용설명서, 5 USB Type-C 케이블">
 </div>
 
 <div class="pc-block pc-faq">
