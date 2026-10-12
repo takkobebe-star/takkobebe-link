@@ -140,7 +140,20 @@ const LINK_OVERRIDE = [
   ["인도원단 핸드메이드 로브", "https://www.amoka.co.kr/product/detail.html?product_no=153&cate_no=45&display_group=1"],
 ];
 
+// 2026-10-12 일정은 10초마다 새로 만들지만, 쇼핑몰 상품 페이지는 1분 동안 재사용한다 (쇼핑몰 부담·배너 속도)
+const PAGE_CACHE = new Map();
+const PAGE_TTL = 60000;
 async function fetchText(url) {
+  const hit = PAGE_CACHE.get(url);
+  if (hit && Date.now() - hit.t < PAGE_TTL) return hit.html;
+  const html = await fetchTextNow(url);
+  if (html) {
+    if (PAGE_CACHE.size > 300) PAGE_CACHE.clear();
+    PAGE_CACHE.set(url, { t: Date.now(), html });
+  }
+  return html;
+}
+async function fetchTextNow(url) {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), 5000);
   try {
@@ -376,10 +389,10 @@ module.exports = async (req, res) => {
       if (hit) { if (ev.url && ev.url !== hit[1]) ev.shop = ev.url; ev.url = hit[1]; }   // shop = 원래 쇼핑몰 상품 (상품 상세의 판매예정 표시용)
     }
 
-    // CDN 캐시 30초 + 묵은 결과 허용 30초 → 캘린더 수정 후 1분 안에 반영 (2026-10-12 60초+5분 → 30초+30초)
-    // 30초가 지나면 다음 손님 한 명은 이전 결과를 받고 그동안 새로 만든다. 1분 넘게 묵은 결과는 주지 않는다.
-    // 너무 줄이면 매번 쇼핑몰 상품 페이지를 10여 개씩 읽어 배너가 느려지고 쇼핑몰에도 부담이 간다.
-    res.setHeader("Cache-Control", "s-maxage=30, stale-while-revalidate=30");
+    // CDN 캐시 5초 + 묵은 결과 허용 5초 → 캘린더 수정 후 10초 안에 반영 (2026-10-12 30초+30초 → 5초+5초)
+    // 5초가 지나면 다음 손님 한 명은 이전 결과를 받고 그동안 새로 만든다. 10초 넘게 묵은 결과는 주지 않는다.
+    // 쇼핑몰 상품 페이지는 위 PAGE_CACHE로 1분 재사용하므로 자주 새로 만들어도 쇼핑몰 부담은 그대로다.
+    res.setHeader("Cache-Control", "s-maxage=5, stale-while-revalidate=5");
     res.status(200).json({ events, src });
   } catch (e) {
     res.status(502).json({ error: String(e && e.message || e) });
