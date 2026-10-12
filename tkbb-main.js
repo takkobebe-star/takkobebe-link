@@ -3917,9 +3917,10 @@
    폰·PC 둘 다. 되돌리려면 이 블록만 지우면 된다. */
 (function(){
 	if (window.__TKBB_REVCNT) return; window.__TKBB_REVCNT = 1;
-	var CSS = '.tkbb-rc-wrap{position:relative;display:block;width:100%;}'
-		+ '#revWriteAjaxDiv .tkbb-rc-wrap textarea{padding-bottom:30px !important;}'
-		+ '.tkbb-rc{position:absolute;right:12px;bottom:9px;font-size:12px;font-weight:400;line-height:1;color:#9A9A94;letter-spacing:0;pointer-events:none;font-variant-numeric:tabular-nums;}';
+	// 2026-10-12 폰에서 숫자가 안 보인다는 제보 → 위사 스킨이 칸 안의 span 모양을 덮지 못하게 위치·표시를 !important 로 고정
+	var CSS = '#revWriteAjaxDiv .tkbb-rc-wrap{position:relative !important;display:block !important;width:100% !important;margin:0 !important;padding:0 !important;}'
+		+ '#revWriteAjaxDiv .tkbb-rc-wrap textarea{display:block;width:100% !important;padding-bottom:30px !important;}'
+		+ '#revWriteAjaxDiv .tkbb-rc{position:absolute !important;right:12px !important;bottom:9px !important;left:auto !important;top:auto !important;z-index:2 !important;display:block !important;margin:0 !important;padding:0 !important;font-size:12px !important;font-weight:400 !important;line-height:1 !important;color:#9A9A94 !important;-webkit-text-fill-color:#9A9A94;background:none !important;letter-spacing:0;pointer-events:none;font-variant-numeric:tabular-nums;}';
 	function add(){
 		var st = document.createElement('style');
 		st.appendChild(document.createTextNode(CSS));
@@ -3927,13 +3928,14 @@
 	}
 	function len(s){ return window.Array && Array.from ? Array.from(s).length : s.length; }
 	function setup(){
-		var ta = document.querySelector('#revWriteAjaxDiv form[name="revFrm"] textarea');
-		if (!ta || ta.getAttribute('data-tkbb-rc')) return;
+		// 폼 이름과 상관없이 쓰기 창의 글 칸을 찾는다 (창 모양 블록과 같은 기준). 댓글 칸(.layer_review_list)은 빼고
+		var ta = document.querySelector('#revWriteAjaxDiv .qnarev_write textarea:not([data-tkbb-rc])');
+		if (!ta || (ta.closest && ta.closest('.layer_review_list'))) return;
 		ta.setAttribute('data-tkbb-rc', '1');
-		var wrap = document.createElement('span'); wrap.className = 'tkbb-rc-wrap';
+		var wrap = document.createElement('div'); wrap.className = 'tkbb-rc-wrap';
 		ta.parentNode.insertBefore(wrap, ta);
 		wrap.appendChild(ta);
-		var c = document.createElement('span'); c.className = 'tkbb-rc';
+		var c = document.createElement('div'); c.className = 'tkbb-rc';
 		wrap.appendChild(c);
 		var max = parseInt(ta.getAttribute('maxlength'), 10);
 		function upd(){ var n = len(ta.value || ''); c.textContent = max > 0 ? n.toLocaleString() + ' / ' + max.toLocaleString() + '자' : n.toLocaleString() + '자'; }
