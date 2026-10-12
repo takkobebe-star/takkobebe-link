@@ -205,14 +205,6 @@
     <div><dt>분리형 가루통</dt><dd>넉넉해서 자주 비우지 않아도 됩니다</dd></div>
   </dl>
   <p class="pc-note">몸통 아래 청소 버튼을 한 번 누르면 작동합니다.</p>
-
-  <p class="pc-sub">지우개 가루통 비우는 법</p>
-  <ol class="pc-steps">
-    <li><i class="pc-num" aria-hidden="true">1</i><span>바닥 커버를 아래로 당겨 뺍니다.</span></li>
-    <li><i class="pc-num" aria-hidden="true">2</i><span>브러시 커버를 돌려서 분리합니다.</span></li>
-    <li><i class="pc-num" aria-hidden="true">3</i><span>먼지 방지 커버를 당겨 빼고, 함께 드리는 청소솔로 털어 냅니다.</span></li>
-    <li><i class="pc-num" aria-hidden="true">4</i><span>가루를 비운 뒤 커버들을 다시 끼웁니다.</span></li>
-  </ol>
 </div>
 
 <div class="pc-block">
@@ -288,6 +280,15 @@
         <li><img src="https://takkobebe-link.vercel.app/img/pencil/fix-4.jpg" width="344" height="221" loading="lazy" decoding="async" alt="칼날을 보호 커버에 끼우는 모습"><i class="pc-num" aria-hidden="true">4</i><span>칼날을 보호 커버에 먼저 끼운 뒤 뚜껑에 꽂습니다.</span></li>
         <li><img src="https://takkobebe-link.vercel.app/img/pencil/fix-5.jpg" width="344" height="221" loading="lazy" decoding="async" alt="나사 방향을 맞춰 칼날을 뚜껑에 눌러 끼우는 모습"><i class="pc-num" aria-hidden="true">5</i><span>나사 방향을 맞추고, 연필 구멍이 튀어나오도록 눌러 줍니다.</span></li>
         <li><img src="https://takkobebe-link.vercel.app/img/pencil/fix-6.jpg" width="344" height="221" loading="lazy" decoding="async" alt="드라이버로 보호 커버를 다시 나사로 고정하는 모습"><i class="pc-num" aria-hidden="true">6</i><span>보호 커버를 드라이버로 다시 나사 고정합니다.</span></li>
+      </ol>
+    </details>
+    <details>
+      <summary>지우개 가루통은 어떻게 비우나요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <ol class="pc-steps">
+        <li><i class="pc-num" aria-hidden="true">1</i><span>바닥 커버를 아래로 당겨 뺍니다.</span></li>
+        <li><i class="pc-num" aria-hidden="true">2</i><span>브러시 커버를 돌려서 분리합니다.</span></li>
+        <li><i class="pc-num" aria-hidden="true">3</i><span>먼지 방지 커버를 당겨 빼고, 함께 드리는 청소솔로 털어 냅니다.</span></li>
+        <li><i class="pc-num" aria-hidden="true">4</i><span>가루를 비운 뒤 커버들을 다시 끼웁니다.</span></li>
       </ol>
     </details>
     <details>
