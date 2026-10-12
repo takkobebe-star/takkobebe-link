@@ -210,6 +210,21 @@
 </div>
 
 <div class="pc-block">
+  <h3 class="pc-title">선 없이 쓰는 충전식</h3>
+  <img class="pc-media" src="https://takkobebe-link.vercel.app/img/pencil/charge.jpg" width="720" height="607" loading="lazy" decoding="async" alt="노란 뚜껑 연필깎이 옆면에 USB Type-C 케이블을 꽂아 충전하는 모습">
+  <ul class="pc-stat">
+    <li><small>배터리</small><b>2,500<em>mAh</em></b></li>
+    <li><small>충전 시간</small><b>약 2<em>시간</em></b></li>
+    <li><small>한 번 충전으로</small><b>약 350<em>회</em></b></li>
+  </ul>
+  <dl class="pc-rows pc-gap">
+    <div><dt>충전하면서</dt><dd>충전 중에도 그대로 쓸 수 있습니다</dd></div>
+    <div><dt>표시등</dt><dd>충전 중 (파란 LED 깜박임)<br>충전 완료 (파란 LED 켜짐)</dd></div>
+  </dl>
+  <p class="pc-note">함께 드리는 USB Type-C 케이블로 충전해 주세요. 5V보다 높은 충전기를 사용하지 말아주세요!</p>
+</div>
+
+<div class="pc-block">
   <h3 class="pc-title">아이가 써도 안심</h3>
   <ol class="pc-safe">
     <li>
@@ -231,21 +246,6 @@
       <p class="pc-safe-hl"><em>어린이제품 안전인증(CB113R10200-6001)</em>과 배터리 안전인증을 받았습니다.</p>
     </li>
   </ol>
-</div>
-
-<div class="pc-block">
-  <h3 class="pc-title">선 없이 쓰는 충전식</h3>
-  <img class="pc-media" src="https://takkobebe-link.vercel.app/img/pencil/charge.jpg" width="720" height="607" loading="lazy" decoding="async" alt="노란 뚜껑 연필깎이 옆면에 USB Type-C 케이블을 꽂아 충전하는 모습">
-  <ul class="pc-stat">
-    <li><small>배터리</small><b>2,500<em>mAh</em></b></li>
-    <li><small>충전 시간</small><b>약 2<em>시간</em></b></li>
-    <li><small>한 번 충전으로</small><b>약 350<em>회</em></b></li>
-  </ul>
-  <dl class="pc-rows pc-gap">
-    <div><dt>충전하면서</dt><dd>충전 중에도 그대로 쓸 수 있습니다</dd></div>
-    <div><dt>표시등</dt><dd>충전 중 (파란 LED 깜박임)<br>충전 완료 (파란 LED 켜짐)</dd></div>
-  </dl>
-  <p class="pc-note">함께 드리는 USB Type-C 케이블로 충전해 주세요. 5V보다 높은 충전기를 사용하지 말아주세요!</p>
 </div>
 
 <div class="pc-block">
