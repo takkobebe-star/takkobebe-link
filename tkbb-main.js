@@ -3911,6 +3911,43 @@
 	}
 	if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
 })();
+
+/* ===== 상품후기 쓰기 — 내용 칸 오른쪽 아래 글자 수 (2026-10-12 사용자 요청) =====
+   쓰는 동안 지금까지 몇 글자인지 '123자'로 보여 준다(띄어쓰기 포함). 위사가 글자 수 제한을 두면 '123 / 1000자'.
+   폰·PC 둘 다. 되돌리려면 이 블록만 지우면 된다. */
+(function(){
+	if (window.__TKBB_REVCNT) return; window.__TKBB_REVCNT = 1;
+	var CSS = '.tkbb-rc-wrap{position:relative;display:block;width:100%;}'
+		+ '#revWriteAjaxDiv .tkbb-rc-wrap textarea{padding-bottom:30px !important;}'
+		+ '.tkbb-rc{position:absolute;right:12px;bottom:9px;font-size:12px;font-weight:400;line-height:1;color:#9A9A94;letter-spacing:0;pointer-events:none;font-variant-numeric:tabular-nums;}';
+	function add(){
+		var st = document.createElement('style');
+		st.appendChild(document.createTextNode(CSS));
+		(document.head || document.documentElement).appendChild(st);
+	}
+	function len(s){ return window.Array && Array.from ? Array.from(s).length : s.length; }
+	function setup(){
+		var ta = document.querySelector('#revWriteAjaxDiv form[name="revFrm"] textarea');
+		if (!ta || ta.getAttribute('data-tkbb-rc')) return;
+		ta.setAttribute('data-tkbb-rc', '1');
+		var wrap = document.createElement('span'); wrap.className = 'tkbb-rc-wrap';
+		ta.parentNode.insertBefore(wrap, ta);
+		wrap.appendChild(ta);
+		var c = document.createElement('span'); c.className = 'tkbb-rc';
+		wrap.appendChild(c);
+		var max = parseInt(ta.getAttribute('maxlength'), 10);
+		function upd(){ var n = len(ta.value || ''); c.textContent = max > 0 ? n.toLocaleString() + ' / ' + max.toLocaleString() + '자' : n.toLocaleString() + '자'; }
+		ta.addEventListener('input', upd);
+		ta.addEventListener('change', upd);
+		upd();
+	}
+	function start(){
+		add();
+		if (!window.MutationObserver || !document.body) return;
+		new MutationObserver(function(){ try { setup(); } catch (e) {} }).observe(document.body, { childList: true, subtree: true });
+	}
+	if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
+})();
 /* ===== 상품후기 작성 팝업 끝 ===== */
 
 /* ===== 이거 공구해주세요 글쓰기(/board/?db=basic_2&mari_mode=write@write) — 상품후기 작성 팝업과 같은 모양 (2026-10-08 사용자 요청) =====
