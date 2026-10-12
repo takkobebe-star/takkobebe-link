@@ -332,6 +332,15 @@
           "value": "https://takkobebe.mywisa.com"
         }
       ]
+    },
+    {
+      "source": "/pencil-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
     }
   ]
 }
