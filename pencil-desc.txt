@@ -122,20 +122,15 @@
   body #detail .tkbb-pc .pc-stat b { display: block; margin-top: 6px; font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
   body #detail .tkbb-pc .pc-stat b em { font-size: 13px; font-weight: 500; font-style: normal; margin-left: 1px; }
   body #detail .tkbb-pc .pc-gap { margin-top: 16px; }
-  /* 아이가 써도 안심 — 포인트 3가지를 번호 카드로, 사진과 강조 문구 (2026-10-12 사용자 요청) */
-  body #detail .tkbb-pc .pc-safe { display: grid; gap: 12px; }
-  body #detail .tkbb-pc .pc-safe > li { padding: 20px 16px; border-radius: 10px; background: var(--pc-surface); }
-  body #detail .tkbb-pc .pc-safe-hd { display: flex; align-items: center; gap: 12px; }
-  body #detail .tkbb-pc .pc-safe-hd i { display: flex; flex: none; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #D1D798; color: #3E4220; font-style: normal; }
-  body #detail .tkbb-pc .pc-safe-hd i svg { width: 22px; height: 22px; }
-  body #detail .tkbb-pc .pc-safe-hd small { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; color: var(--pc-deep); }
-  body #detail .tkbb-pc .pc-safe-hd b { display: block; margin-top: 2px; font-size: 17px; font-weight: 700; letter-spacing: -0.02em; }
-  body #detail .tkbb-pc .pc-safe-img { margin-top: 14px; border-radius: 8px; background: var(--pc-white); }
-  body #detail .tkbb-pc .pc-safe p { margin-top: 12px; font-size: 14px; font-weight: 300; line-height: 1.55; }
-  body #detail .tkbb-pc .pc-safe .pc-safe-hl { font-weight: 500; }
-  body #detail .tkbb-pc .pc-safe .pc-safe-hl em { font-style: normal; font-weight: 700; background: linear-gradient(transparent 58%, #D1D798 58%); }
-  body #detail .tkbb-pc .pc-safe .pc-safe-sub { margin-top: 8px; font-size: 12.5px; color: var(--pc-muted); }
-  body #detail .tkbb-pc .pc-safe-cap { display: grid; grid-template-columns: 53fr 24fr 23fr; margin-top: 8px; font-size: 11.5px; color: var(--pc-muted); text-align: center; }
+  /* 아이가 써도 안심 — 색은 빼고 선으로만 나눈 차분한 3가지 (2026-10-12 사용자 요청) */
+  body #detail .tkbb-pc .pc-safe > li { padding: 16px 0; border-top: 1px solid var(--pc-line); }
+  body #detail .tkbb-pc .pc-safe > li:first-child { padding-top: 0; border-top: 0; }
+  body #detail .tkbb-pc .pc-safe-hd { display: flex; align-items: baseline; gap: 10px; }
+  body #detail .tkbb-pc .pc-safe-hd small { flex: none; font-size: 12.5px; font-weight: 500; color: var(--pc-muted); }
+  body #detail .tkbb-pc .pc-safe-hd b { font-size: 15.5px; font-weight: 600; }
+  body #detail .tkbb-pc .pc-safe p { margin-top: 6px; padding-left: 26px; font-size: 13.5px; font-weight: 300; color: var(--pc-muted); line-height: 1.5; }
+  body #detail .tkbb-pc .pc-safe-img { margin-top: 12px; border-radius: 8px; background: var(--pc-surface); }
+  body #detail .tkbb-pc .pc-safe-cap { display: grid; grid-template-columns: 53fr 24fr 23fr; margin-top: 6px; font-size: 11px; color: var(--pc-muted); text-align: center; }
 
   @media (min-width: 768px) {
     body #detail .tkbb-pc .pc-block { padding-block: 40px; }
@@ -228,22 +223,19 @@
   <h3 class="pc-title">아이가 써도 안심</h3>
   <ol class="pc-safe">
     <li>
-      <div class="pc-safe-hd"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 14.8V4a2 2 0 1 0-4 0v10.8a4 4 0 1 0 4 0Z"/><path d="M12 9v7"/></svg></i><div><small>POINT 01</small><b>과열·과부하 감지 자동 중단</b></div></div>
+      <div class="pc-safe-hd"><small>01</small><b>과열·과부하 감지 자동 중단</b></div>
+      <p>무리가 가면 빨간 LED가 30초간 깜빡이며 스스로 멈춥니다.</p>
       <img class="pc-safe-img" src="https://takkobebe-link.vercel.app/img/pencil/safe-led.jpg" width="838" height="320" loading="lazy" decoding="async" alt="연필깎이 몸통 앞 표시등에 빨간 불이 켜진 모습">
-      <p>무리가 가면 연필깎이가 스스로 멈춥니다.</p>
-      <p class="pc-safe-hl"><em>빨간 LED 표시등이 30초간 빠르게 깜빡이며</em> 작동이 멈춥니다.</p>
-      <p class="pc-safe-sub">※ 불이 꺼지면 식히거나 충전한 뒤 다시 쓰면 됩니다.</p>
     </li>
     <li>
-      <div class="pc-safe-hd"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0"/></svg></i><div><small>POINT 02</small><b>뚜껑 열림 시 자동 전원 차단</b></div></div>
-      <p class="pc-safe-hl">뚜껑이 연필가루통에 제대로 닫히지 않으면 <em>전원이 들어오지 않습니다.</em></p>
-      <p class="pc-safe-sub">※ 뚜껑을 끼울 때 센서가 반응해 잠깐 돌 수 있습니다. 고장이 아니니 안심하고 쓰세요.</p>
+      <div class="pc-safe-hd"><small>02</small><b>뚜껑 열림 시 자동 전원 차단</b></div>
+      <p>뚜껑이 제대로 닫혀야만 작동합니다.</p>
     </li>
     <li>
-      <div class="pc-safe-hd"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg></i><div><small>POINT 03</small><b>KC 인증</b></div></div>
+      <div class="pc-safe-hd"><small>03</small><b>KC 인증</b></div>
+      <p>어린이제품 안전인증(CB113R10200-6001)과 배터리 안전인증을 받았습니다.</p>
       <img class="pc-safe-img" src="https://takkobebe-link.vercel.app/img/pencil/safe-kc.jpg" width="880" height="345" loading="lazy" decoding="async" alt="어린이제품 안전 확인 신고서 두 장, 전파인증서, KC인증서">
       <div class="pc-safe-cap"><span>어린이제품 안전 확인 신고서</span><span>전파인증서</span><span>KC인증서</span></div>
-      <p class="pc-safe-hl"><em>어린이제품 안전인증(CB113R10200-6001)</em>과 배터리 안전인증을 받았습니다.</p>
     </li>
   </ol>
 </div>
