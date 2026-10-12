@@ -2,7 +2,7 @@
 <style>
   /* 첫 화면(사진·한눈에 보기)까지 보이고 나머지는 '상세설명 더보기'로 */
   /* 스킨이 상세설명 안 글씨 크기를 모두 inherit(13px)로 묶어 두어, 선택자 앞에 body #detail 을 붙여 이긴다 */
-  .wing-detail-more-contents { min-height: 770px; }
+  .wing-detail-more-contents { min-height: 1110px; }
 
   body #detail .tkbb-pc {
     --pc-surface: #F5F3EE;
@@ -39,6 +39,22 @@
   body #detail .tkbb-pc .pc-intro h2 span { display: block; font-weight: 300; }
   body #detail .tkbb-pc .pc-intro p { margin-top: 8px; font-size: 14.5px; font-weight: 300; }
   body #detail .tkbb-pc .pc-intro .pc-note { margin-top: 10px; font-size: 12.5px; }
+
+  /* 맨 위 옵션별 공구가 (급찐급빠 샐러드 '세트별 공구가'와 같은 틀, 2026-10-12)
+     클래스 이름이 pc-price-* 라서 오픈 전·마감 뒤에는 스킨이 자동으로 숨긴다 */
+  body #detail .tkbb-pc .pc-price-ttl { padding-bottom: 12px; border-bottom: 2px solid var(--pc-ink); font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+  body #detail .tkbb-pc .pc-price-list li { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--pc-line); }
+  body #detail .tkbb-pc .pc-price-list img { width: 64px; height: 80px; object-fit: cover; border-radius: 7px; background: var(--pc-surface); }
+  body #detail .tkbb-pc .pc-price-list .no { display: block; font-size: 11.5px; font-weight: 500; letter-spacing: 0.08em; color: var(--pc-muted); }
+  body #detail .tkbb-pc .pc-price-list .nm { display: block; margin-top: 4px; font-size: 16px; font-weight: 600; line-height: 1.35; }
+  body #detail .tkbb-pc .pc-price-list .cp { display: block; margin-top: 4px; font-size: 13px; font-weight: 300; line-height: 1.5; color: var(--pc-muted); }
+  body #detail .tkbb-pc .pc-price-list .r { text-align: right; white-space: nowrap; }
+  body #detail .tkbb-pc .pc-price-list .r s { display: block; font-size: 12.5px; color: #B5B2A8; }
+  body #detail .tkbb-pc .pc-price-list .r span { display: block; margin-top: 2px; font-size: 18px; font-weight: 700; }
+  body #detail .tkbb-pc .pc-price-list .r em { margin-right: 6px; font-style: normal; color: var(--pc-deep); }
+  body #detail .tkbb-pc .pc-price-ft { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; padding: 14px 0; border-radius: 7px; background: #D1D798; font-size: 15px; font-weight: 500; color: var(--pc-ink); }
+  body #detail .tkbb-pc .pc-price-ft svg { width: 22px; height: 22px; flex: none; }
+  body #detail .tkbb-pc .pc-price-ft b { font-weight: 700; }
 
   /* 무아스 사진·움직이는 사진(사용 허락 받음) — GIF는 흰 테두리를 잘라 16:9, 720px WebP로 줄임. 화면에 가까워질 때만 불러온다.
      비율은 img 의 width·height 값으로 잡힌다 */
@@ -88,12 +104,21 @@
 
   @media (min-width: 768px) {
     body #detail .tkbb-pc .pc-block { padding-block: 40px; }
-    .wing-detail-more-contents { min-height: 918px; }
+    .wing-detail-more-contents { min-height: 1260px; }
     body #detail .tkbb-pc .pc-title { font-size: 27px; }
     body #detail .tkbb-pc .pc-intro h2 { font-size: 26px; }
     body #detail .tkbb-pc .pc-glance { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 </style>
+
+<div class="pc-block pc-price">
+  <h3 class="pc-price-ttl">옵션별 공구가</h3>
+  <ul class="pc-price-list">
+      <li><img src="https://takkobebe-link.vercel.app/img/pencil/opt-yellow.jpg" width="240" height="300" alt="노란 뚜껑 자동연필깎이"><div class="l"><span class="no">01</span><b class="nm">옐로우</b><span class="cp">본체 · 케이블 · 청소솔 · UV 스티커</span></div><div class="r"><s>54,900원</s><span><em>33%</em>36,900원</span></div></li>
+      <li><img src="https://takkobebe-link.vercel.app/img/pencil/opt-green.jpg" width="240" height="300" alt="초록 뚜껑 자동연필깎이"><div class="l"><span class="no">02</span><b class="nm">그린</b><span class="cp">본체 · 케이블 · 청소솔 · UV 스티커</span></div><div class="r"><s>54,900원</s><span><em>33%</em>36,900원</span></div></li>
+  </ul>
+  <p class="pc-price-ft"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5h11v9H3z"/><path d="M14 9.5h3.6l3.4 3.4v2.6H14"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg><span><b>10/13(화)</b>부터 순차발송</span></p>
+</div>
 
 <div class="pc-block pc-intro">
   <img src="https://takkobebe-link.vercel.app/img/pencil/main.jpg" alt="옐로우와 그린 뚜껑의 자동연필깎이 두 대에 연필이 꽂혀 있는 모습">
