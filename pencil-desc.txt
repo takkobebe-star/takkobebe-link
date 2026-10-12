@@ -102,6 +102,21 @@
   body #detail .tkbb-pc .pc-gosi th { width: 38%; padding-right: 10px; color: var(--pc-muted); font-weight: 400; background: transparent; }
   body #detail .tkbb-pc .pc-gosi tr:first-child th, body #detail .tkbb-pc .pc-gosi tr:first-child td { border-top: 0; }
 
+  /* 안심 기능 · 충전 — 아이콘 카드와 큰 숫자로 (2026-10-12 사용자 요청) */
+  body #detail .tkbb-pc .pc-feat { display: grid; gap: 10px; }
+  body #detail .tkbb-pc .pc-feat li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: center; padding: 16px; border-radius: 8px; background: var(--pc-surface); }
+  body #detail .tkbb-pc .pc-feat i { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #D1D798; color: #3E4220; font-style: normal; }
+  body #detail .tkbb-pc .pc-feat i svg { width: 22px; height: 22px; }
+  body #detail .tkbb-pc .pc-feat b { display: block; font-size: 15px; font-weight: 600; }
+  body #detail .tkbb-pc .pc-feat span { display: block; margin-top: 4px; font-size: 13px; font-weight: 300; line-height: 1.5; color: var(--pc-muted); }
+  body #detail .tkbb-pc .pc-stat { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 2px solid var(--pc-ink); border-bottom: 1px solid var(--pc-line); }
+  body #detail .tkbb-pc .pc-stat li { padding: 18px 4px; text-align: center; }
+  body #detail .tkbb-pc .pc-stat li + li { border-left: 1px solid var(--pc-line); }
+  body #detail .tkbb-pc .pc-stat small { display: block; font-size: 12px; color: var(--pc-muted); }
+  body #detail .tkbb-pc .pc-stat b { display: block; margin-top: 6px; font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+  body #detail .tkbb-pc .pc-stat b em { font-size: 13px; font-weight: 500; font-style: normal; margin-left: 1px; }
+  body #detail .tkbb-pc .pc-gap { margin-top: 16px; }
+
   @media (min-width: 768px) {
     body #detail .tkbb-pc .pc-block { padding-block: 40px; }
     .wing-detail-more-contents { min-height: 1260px; }
@@ -184,19 +199,22 @@
 
 <div class="pc-block">
   <h3 class="pc-title">아이가 써도 안심</h3>
-  <dl class="pc-rows">
-    <div><dt>과열·과부하 감지</dt><dd>무리가 가면 스스로 멈추고 빨간 불이 30초간 깜빡입니다. 불이 꺼지면 식히거나 충전한 뒤 다시 쓰면 됩니다.</dd></div>
-    <div><dt>뚜껑 열림 차단</dt><dd>뚜껑이 제대로 닫히지 않으면 전원이 들어오지 않습니다.</dd></div>
-    <div><dt>안전 인증</dt><dd>KC · 어린이제품 안전인증을 받았습니다.</dd></div>
-  </dl>
+  <ul class="pc-feat">
+    <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 14.8V4a2 2 0 1 0-4 0v10.8a4 4 0 1 0 4 0Z"/><path d="M12 9v7"/></svg></i><div><b>과열·과부하 감지 자동 중단</b><span>무리가 가면 스스로 멈추고 빨간 불이 30초간 깜빡입니다. 불이 꺼지면 식히거나 충전한 뒤 다시 쓰면 됩니다.</span></div></li>
+    <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0"/></svg></i><div><b>뚜껑 열림 시 자동 전원 차단</b><span>뚜껑이 제대로 닫히지 않으면 전원이 들어오지 않습니다.</span></div></li>
+    <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg></i><div><b>KC 인증</b><span>어린이제품 안전인증(CB113R10200-6001)과 배터리 안전인증을 받았습니다.</span></div></li>
+  </ul>
 </div>
 
 <div class="pc-block">
-  <h3 class="pc-title">충전</h3>
-  <dl class="pc-rows">
-    <div><dt>배터리</dt><dd>2,500mAh</dd></div>
-    <div><dt>충전 시간</dt><dd>약 2시간 · 충전하면서도 쓸 수 있습니다</dd></div>
-    <div><dt>사용 횟수</dt><dd>한 번 충전으로 약 350회</dd></div>
+  <h3 class="pc-title">선 없이 쓰는 충전식</h3>
+  <ul class="pc-stat">
+    <li><small>배터리</small><b>2,500<em>mAh</em></b></li>
+    <li><small>충전 시간</small><b>약 2<em>시간</em></b></li>
+    <li><small>한 번 충전으로</small><b>약 350<em>회</em></b></li>
+  </ul>
+  <dl class="pc-rows pc-gap">
+    <div><dt>충전하면서</dt><dd>충전 중에도 그대로 쓸 수 있습니다</dd></div>
     <div><dt>표시등</dt><dd>충전 중 파란 불 깜빡임 · 충전 완료 파란 불 켜짐</dd></div>
   </dl>
   <p class="pc-note">함께 드리는 USB Type-C 케이블로 충전해 주세요. 5V보다 높은 충전기는 쓰지 않습니다.</p>
