@@ -1738,6 +1738,7 @@
 		var f = document.querySelector('#revWriteAjaxDiv form[name="revFrm"]');
 		if (!f || f.getAttribute('data-tkbb-pk') || !f.cate || !f.pno) return;
 		f.setAttribute('data-tkbb-pk', '1');
+		try { sessionStorage.removeItem(DONE_KEY); } catch (e) {}   // 지난번 등록이 실패했으면 남은 완료 표시를 지운다
 		var sel = f.cate, row = sel.parentNode;
 		var lb = row.querySelector('label'); if (lb) lb.textContent = '상품';
 		if (f.pno.value) {
@@ -1765,14 +1766,39 @@
 				window.alert('상품을 선택해 주세요.');
 				return false;
 			}
-			return orig.apply(this, arguments);
+			var r = orig.apply(this, arguments);
+			if (r !== false) sset(DONE_KEY, Date.now());   // 등록을 보냈다 → 저장 후 화면이 다시 열리면 완료 창
+			return r;
 		};
 		w.__tkbb = 1;
 		window.checkRevFrm = w;
 	}
 
+	// ── 후기 작성 완료 창 (2026-10-12 사용자 요청) ──
+	// 위사는 등록이 끝나면 화면을 새로 연다. 등록을 보낸 지 1분 안에 화면이 다시 열리면 한 번 띄운다.
+	// 등록이 실패하면 화면이 새로 열리지 않으므로 창도 안 뜬다. 쓰기 창을 다시 열면 표시를 지운다.
+	var DONE_KEY = 'tkbb_rev_done';
+	function doneMsg(){
+		var t = sget(DONE_KEY);
+		if (!t) return;
+		try { sessionStorage.removeItem(DONE_KEY); } catch (e) {}
+		if (Date.now() - t > 60000) return;
+		var ov = document.createElement('div');
+		ov.setAttribute('style', 'position:fixed;left:0;top:0;right:0;bottom:0;z-index:100004;display:flex;align-items:center;justify-content:center;padding:0 24px;background:rgba(22,22,22,.45);');
+		ov.innerHTML = '<div role="dialog" aria-modal="true" style="width:100%;max-width:320px;padding:24px 20px 16px;border-radius:12px;background:#fff;box-sizing:border-box;">'
+			+ '<p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:#161616;text-align:center;word-break:keep-all;letter-spacing:-0.01em;"><b style="display:block;margin-bottom:4px;font-size:16px;font-weight:600;">후기 작성이 완료되었어요.</b>소중한 후기 고마워요.</p>'
+			+ '<button type="button" data-a="ok" style="display:block;width:100%;height:48px;margin:0;padding:0;border:1px solid #161616;border-radius:5px;background:#161616;font:inherit;font-size:14px;font-weight:700;color:#fff;">확인</button>'
+			+ '</div>';
+		ov.addEventListener('click', function(e){
+			if (e.target !== ov && !(e.target.getAttribute && e.target.getAttribute('data-a'))) return;
+			if (ov.parentNode) ov.parentNode.removeChild(ov);
+		});
+		document.body.appendChild(ov);
+	}
+
 	function start(){
 		if (!window.MutationObserver || !document.body) return;
+		setTimeout(doneMsg, 300);
 		new MutationObserver(function(){ wrapCheck(); setup(); if (POP && !document.querySelector('#revWriteAjaxDiv form[name="revFrm"]')) closePop(); })
 			.observe(document.body, { childList: true });
 	}
