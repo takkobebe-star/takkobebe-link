@@ -234,7 +234,7 @@
     <li><i class="pc-num" aria-hidden="true">4</i><span>사용설명서</span></li>
     <li><i class="pc-num" aria-hidden="true">5</i><span>꾸밈 스티커<small>아이 취향대로 붙여 꾸밀 수 있습니다</small></span></li>
   </ol>
-  <img class="pc-media is-end" src="https://takkobebe-link.vercel.app/img/pencil/components.jpg" width="720" height="480" loading="lazy" decoding="async" alt="연필깎이 본체와 상자, 청소솔, 사용설명서, USB Type-C 케이블을 나란히 놓은 구성품 사진">
+  <img class="pc-media is-end" src="https://takkobebe-link.vercel.app/img/pencil/components.jpg" width="720" height="384" loading="lazy" decoding="async" alt="연필깎이 본체와 상자, 청소솔, 사용설명서, USB Type-C 케이블을 나란히 놓은 구성품 사진">
 </div>
 
 <div class="pc-block pc-faq">
