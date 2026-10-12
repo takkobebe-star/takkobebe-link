@@ -73,6 +73,10 @@
   body #detail .tkbb-pc .pc-steps li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; font-size: 14px; }
   body #detail .tkbb-pc .pc-steps .pc-num { margin-top: -1px; }
   body #detail .tkbb-pc .pc-steps small { display: block; margin-top: 2px; font-size: 12.5px; color: var(--pc-muted); }
+  /* 단계마다 사진 — 두 칸씩, 사진 아래 번호와 설명 (2026-10-12 사용자 요청) */
+  body #detail .tkbb-pc .pc-steps.pc-steps-img { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 10px; }
+  body #detail .tkbb-pc .pc-steps.pc-steps-img li { align-content: start; font-size: 13.5px; }
+  body #detail .tkbb-pc .pc-steps.pc-steps-img img { grid-column: 1 / -1; margin-bottom: 4px; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 8px; background: var(--pc-surface); }
 
   /* 이름 · 설명 두 칸 */
   body #detail .tkbb-pc .pc-rows { display: grid; gap: 10px; }
@@ -208,6 +212,7 @@
 
 <div class="pc-block">
   <h3 class="pc-title">선 없이 쓰는 충전식</h3>
+  <img class="pc-media" src="https://takkobebe-link.vercel.app/img/pencil/charge.jpg" width="720" height="720" loading="lazy" decoding="async" alt="노란 뚜껑 연필깎이 옆면에 USB Type-C 케이블을 꽂아 충전하는 모습">
   <ul class="pc-stat">
     <li><small>배터리</small><b>2,500<em>mAh</em></b></li>
     <li><small>충전 시간</small><b>약 2<em>시간</em></b></li>
@@ -229,7 +234,7 @@
     <li><i class="pc-num" aria-hidden="true">4</i><span>사용설명서</span></li>
     <li><i class="pc-num" aria-hidden="true">5</i><span>꾸밈 스티커<small>아이 취향대로 붙여 꾸밀 수 있습니다</small></span></li>
   </ol>
-  <img class="pc-media is-end" src="https://takkobebe-link.vercel.app/img/pencil/sticker.webp" width="720" height="405" loading="lazy" decoding="async" alt="꾸밈 스티커를 떼어 연필깎이 몸통에 붙이는 모습">
+  <img class="pc-media is-end" src="https://takkobebe-link.vercel.app/img/pencil/components.jpg" width="720" height="480" loading="lazy" decoding="async" alt="연필깎이 본체와 상자, 청소솔, 사용설명서, USB Type-C 케이블을 나란히 놓은 구성품 사진">
 </div>
 
 <div class="pc-block pc-faq">
@@ -247,13 +252,13 @@
     <details>
       <summary>칼날에 연필이 끼었어요<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
       <p class="pc-a">분해와 조립은 꼭 보호자가 해 주시고, 장갑을 끼는 것이 안전합니다.</p>
-      <ol class="pc-steps">
-        <li><i class="pc-num" aria-hidden="true">1</i><span>연필가루통 뚜껑을 돌려서 위로 빼냅니다.</span></li>
-        <li><i class="pc-num" aria-hidden="true">2</i><span>드라이버로 보호 커버의 나사 2개를 풀고 커버를 뺍니다.</span></li>
-        <li><i class="pc-num" aria-hidden="true">3</i><span>칼날을 당겨 빼고, 끼인 것을 뾰족한 도구로 빼냅니다.</span></li>
-        <li><i class="pc-num" aria-hidden="true">4</i><span>칼날을 보호 커버에 먼저 끼운 뒤 뚜껑에 꽂습니다.</span></li>
-        <li><i class="pc-num" aria-hidden="true">5</i><span>나사 방향을 맞추고, 연필 구멍이 튀어나오도록 눌러 줍니다.</span></li>
-        <li><i class="pc-num" aria-hidden="true">6</i><span>보호 커버를 드라이버로 다시 나사 고정합니다.</span></li>
+      <ol class="pc-steps pc-steps-img">
+        <li><img src="https://takkobebe-link.vercel.app/img/pencil/fix-1.jpg" width="480" height="320" loading="lazy" decoding="async" alt="연필가루통 뚜껑을 손으로 돌려 위로 빼는 모습"><i class="pc-num" aria-hidden="true">1</i><span>연필가루통 뚜껑을 돌려서 위로 빼냅니다.</span></li>
+        <li><img src="https://takkobebe-link.vercel.app/img/pencil/fix-2.jpg" width="480" height="320" loading="lazy" decoding="async" alt="드라이버로 보호 커버 나사를 푸는 모습"><i class="pc-num" aria-hidden="true">2</i><span>드라이버로 보호 커버의 나사 2개를 풀고 커버를 뺍니다.</span></li>
+        <li><img src="https://takkobebe-link.vercel.app/img/pencil/fix-3.jpg" width="480" height="320" loading="lazy" decoding="async" alt="빼낸 칼날에 끼인 연필 조각을 뾰족한 도구로 꺼내는 모습"><i class="pc-num" aria-hidden="true">3</i><span>칼날을 당겨 빼고, 끼인 것을 뾰족한 도구로 빼냅니다.</span></li>
+        <li><img src="https://takkobebe-link.vercel.app/img/pencil/fix-4.jpg" width="480" height="320" loading="lazy" decoding="async" alt="칼날을 보호 커버에 끼우는 모습"><i class="pc-num" aria-hidden="true">4</i><span>칼날을 보호 커버에 먼저 끼운 뒤 뚜껑에 꽂습니다.</span></li>
+        <li><img src="https://takkobebe-link.vercel.app/img/pencil/fix-5.jpg" width="480" height="320" loading="lazy" decoding="async" alt="나사 방향을 맞춰 칼날을 뚜껑에 눌러 끼우는 모습"><i class="pc-num" aria-hidden="true">5</i><span>나사 방향을 맞추고, 연필 구멍이 튀어나오도록 눌러 줍니다.</span></li>
+        <li><img src="https://takkobebe-link.vercel.app/img/pencil/fix-6.jpg" width="480" height="320" loading="lazy" decoding="async" alt="드라이버로 보호 커버를 다시 나사로 고정하는 모습"><i class="pc-num" aria-hidden="true">6</i><span>보호 커버를 드라이버로 다시 나사 고정합니다.</span></li>
       </ol>
     </details>
     <details>
