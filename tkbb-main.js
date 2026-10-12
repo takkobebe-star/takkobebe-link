@@ -4325,3 +4325,44 @@
 	setTimeout(function(){ if (mo) mo.disconnect(); fix(); done(); }, 3000);
 })();
 /* ===== 브라우니 소개 문구 끝 ===== */
+
+/* ===== 상세설명 자동 반영 =====
+   위사 상세설명 칸에 붙여 넣어 둔 HTML은 저장소를 고쳐도 그대로라, 아래 MAP에 적은 상품은
+   상품 페이지를 열 때 takkobebe-link.vercel.app 의 최신 *-desc.txt 로 상세설명 덩어리(최상위 클래스)를 바꿔 끼운다.
+   그래서 저장소에서 고치고 main에 Merge하면 위사에 다시 붙여 넣지 않아도 바로 반영된다.
+   깜빡임 없게 바꾸기 전엔 투명, 파일을 못 받거나 3초가 지나면 붙여 둔 내용을 그대로 보여 준다.
+   위사 템플릿 변수({{$...}})가 든 파일은 넣지 않는다(브라우저에선 변수가 채워지지 않음).
+   상품 추가: '상품 주소의 pno 값': ['파일 이름', '최상위 클래스']. 되돌리려면 이 블록만 지우면 된다. (2026-10-12 사용자 요청) */
+(function(){
+	if (window.__TKBB_DESC) return; window.__TKBB_DESC = 1;
+	if (location.pathname.indexOf('/shop/detail.php') < 0 || !window.fetch) return;
+	var MAP = {
+		'FA2431BF9D65058FE34E9713E32D60E6': ['pencil-desc.txt', 'tkbb-pc']   // 무아스 2in1 자동연필깎이
+	};
+	var m = /[?&]pno=([0-9A-Fa-f]+)/.exec(location.search);
+	var it = m && MAP[m[1].toUpperCase()];
+	if (!it) return;
+	var SEL = '.' + it[1];
+	var st = document.createElement('style');
+	st.textContent = SEL + ':not([data-tkbb-desc]){visibility:hidden;}';
+	(document.head || document.documentElement).appendChild(st);
+	function done(){ if (st.parentNode) st.parentNode.removeChild(st); }
+	var timer = setTimeout(done, 3000);
+	function swap(t){
+		var old = document.querySelector(SEL);
+		if (!old) return false;
+		var box = document.createElement('div');
+		box.innerHTML = t;
+		var neu = box.querySelector(SEL);
+		if (neu) { neu.setAttribute('data-tkbb-desc', '1'); old.parentNode.replaceChild(neu, old); }
+		return true;
+	}
+	fetch('https://takkobebe-link.vercel.app/' + it[0] + '?t=' + Date.now(), { cache: 'no-store' })
+		.then(function(r){ if (!r.ok) throw 0; return r.text(); })
+		.then(function(t){
+			if (swap(t)) { clearTimeout(timer); done(); return; }
+			var mo = window.MutationObserver ? new MutationObserver(function(){ if (swap(t)) { mo.disconnect(); clearTimeout(timer); done(); } }) : null;
+			if (mo) { mo.observe(document.documentElement, { childList: true, subtree: true }); setTimeout(function(){ mo.disconnect(); }, 3000); }
+		}).catch(done);
+})();
+/* ===== 상세설명 자동 반영 끝 ===== */
