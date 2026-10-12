@@ -73,10 +73,6 @@
   body #detail .tkbb-pc .pc-steps li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; font-size: 14px; }
   body #detail .tkbb-pc .pc-steps .pc-num { margin-top: -1px; }
   body #detail .tkbb-pc .pc-steps small { display: block; margin-top: 2px; font-size: 12.5px; color: var(--pc-muted); }
-  /* 단계마다 사진 — 두 칸씩, 사진 아래 번호와 설명 (2026-10-12 사용자 요청) */
-  body #detail .tkbb-pc .pc-steps.pc-steps-img { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 10px; }
-  body #detail .tkbb-pc .pc-steps.pc-steps-img li { align-content: start; font-size: 13.5px; }
-  body #detail .tkbb-pc .pc-steps.pc-steps-img img { grid-column: 1 / -1; margin-bottom: 4px; aspect-ratio: 344 / 221; object-fit: cover; border-radius: 8px; background: var(--pc-surface); }
 
   /* 이름 · 설명 두 칸 */
   body #detail .tkbb-pc .pc-rows { display: grid; gap: 10px; }
@@ -120,20 +116,6 @@
   body #detail .tkbb-pc .pc-stat b { display: block; margin-top: 6px; font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
   body #detail .tkbb-pc .pc-stat b em { font-size: 13px; font-weight: 500; font-style: normal; margin-left: 1px; }
   body #detail .tkbb-pc .pc-gap { margin-top: 16px; }
-  /* 아이가 써도 안심 — 포인트 3가지를 번호 카드로, 사진과 강조 문구 (2026-10-12 사용자 요청) */
-  body #detail .tkbb-pc .pc-safe { display: grid; gap: 12px; }
-  body #detail .tkbb-pc .pc-safe > li { padding: 20px 16px; border-radius: 10px; background: var(--pc-surface); }
-  body #detail .tkbb-pc .pc-safe-hd { display: flex; align-items: center; gap: 12px; }
-  body #detail .tkbb-pc .pc-safe-hd i { display: flex; flex: none; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #D1D798; color: #3E4220; font-style: normal; }
-  body #detail .tkbb-pc .pc-safe-hd i svg { width: 22px; height: 22px; }
-  body #detail .tkbb-pc .pc-safe-hd small { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; color: var(--pc-deep); }
-  body #detail .tkbb-pc .pc-safe-hd b { display: block; margin-top: 2px; font-size: 17px; font-weight: 700; letter-spacing: -0.02em; }
-  body #detail .tkbb-pc .pc-safe-img { margin-top: 14px; border-radius: 8px; background: var(--pc-white); }
-  body #detail .tkbb-pc .pc-safe p { margin-top: 12px; font-size: 14px; font-weight: 300; line-height: 1.55; }
-  body #detail .tkbb-pc .pc-safe .pc-safe-hl { font-weight: 500; }
-  body #detail .tkbb-pc .pc-safe .pc-safe-hl em { font-style: normal; font-weight: 700; background: linear-gradient(transparent 58%, #D1D798 58%); }
-  body #detail .tkbb-pc .pc-safe .pc-safe-sub { margin-top: 8px; font-size: 12.5px; color: var(--pc-muted); }
-  body #detail .tkbb-pc .pc-safe-cap { display: grid; grid-template-columns: 53fr 24fr 23fr; margin-top: 8px; font-size: 11.5px; color: var(--pc-muted); text-align: center; }
 
   @media (min-width: 768px) {
     body #detail .tkbb-pc .pc-block { padding-block: 40px; }
@@ -217,31 +199,15 @@
 
 <div class="pc-block">
   <h3 class="pc-title">아이가 써도 안심</h3>
-  <ol class="pc-safe">
-    <li>
-      <div class="pc-safe-hd"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 14.8V4a2 2 0 1 0-4 0v10.8a4 4 0 1 0 4 0Z"/><path d="M12 9v7"/></svg></i><div><small>POINT 01</small><b>과열·과부하 감지 자동 중단</b></div></div>
-      <img class="pc-safe-img" src="https://takkobebe-link.vercel.app/img/pencil/safe-led.jpg" width="838" height="320" loading="lazy" decoding="async" alt="연필깎이 몸통 앞 표시등에 빨간 불이 켜진 모습">
-      <p>무리가 가면 연필깎이가 스스로 멈춥니다.</p>
-      <p class="pc-safe-hl"><em>빨간 LED 표시등이 30초간 빠르게 깜빡이며</em> 작동이 멈춥니다.</p>
-      <p class="pc-safe-sub">※ 불이 꺼지면 식히거나 충전한 뒤 다시 쓰면 됩니다.</p>
-    </li>
-    <li>
-      <div class="pc-safe-hd"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0"/></svg></i><div><small>POINT 02</small><b>뚜껑 열림 시 자동 전원 차단</b></div></div>
-      <p class="pc-safe-hl">뚜껑이 연필가루통에 제대로 닫히지 않으면 <em>전원이 들어오지 않습니다.</em></p>
-      <p class="pc-safe-sub">※ 뚜껑을 끼울 때 센서가 반응해 잠깐 돌 수 있습니다. 고장이 아니니 안심하고 쓰세요.</p>
-    </li>
-    <li>
-      <div class="pc-safe-hd"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg></i><div><small>POINT 03</small><b>KC 인증</b></div></div>
-      <img class="pc-safe-img" src="https://takkobebe-link.vercel.app/img/pencil/safe-kc.jpg" width="880" height="345" loading="lazy" decoding="async" alt="어린이제품 안전 확인 신고서 두 장, 전파인증서, KC인증서">
-      <div class="pc-safe-cap"><span>어린이제품 안전 확인 신고서</span><span>전파인증서</span><span>KC인증서</span></div>
-      <p class="pc-safe-hl"><em>어린이제품 안전인증(CB113R10200-6001)</em>과 배터리 안전인증을 받았습니다.</p>
-    </li>
-  </ol>
+  <ul class="pc-feat">
+    <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 14.8V4a2 2 0 1 0-4 0v10.8a4 4 0 1 0 4 0Z"/><path d="M12 9v7"/></svg></i><div><b>과열·과부하 감지 자동 중단</b><span>무리가 가면 스스로 멈추고 빨간 불이 30초간 깜빡입니다. 불이 꺼지면 식히거나 충전한 뒤 다시 쓰면 됩니다.</span></div></li>
+    <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0"/></svg></i><div><b>뚜껑 열림 시 자동 전원 차단</b><span>뚜껑이 제대로 닫히지 않으면 전원이 들어오지 않습니다.</span></div></li>
+    <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg></i><div><b>KC 인증</b><span>어린이제품 안전인증(CB113R10200-6001)과 배터리 안전인증을 받았습니다.</span></div></li>
+  </ul>
 </div>
 
 <div class="pc-block">
   <h3 class="pc-title">선 없이 쓰는 충전식</h3>
-  <img class="pc-media" src="https://takkobebe-link.vercel.app/img/pencil/charge.jpg" width="720" height="607" loading="lazy" decoding="async" alt="노란 뚜껑 연필깎이 옆면에 USB Type-C 케이블을 꽂아 충전하는 모습">
   <ul class="pc-stat">
     <li><small>배터리</small><b>2,500<em>mAh</em></b></li>
     <li><small>충전 시간</small><b>약 2<em>시간</em></b></li>
@@ -249,21 +215,21 @@
   </ul>
   <dl class="pc-rows pc-gap">
     <div><dt>충전하면서</dt><dd>충전 중에도 그대로 쓸 수 있습니다</dd></div>
-    <div><dt>표시등</dt><dd>충전 중 (파란 LED 깜박임)<br>충전 완료 (파란 LED 켜짐)</dd></div>
+    <div><dt>표시등</dt><dd>충전 중 파란 불 깜빡임 · 충전 완료 파란 불 켜짐</dd></div>
   </dl>
-  <p class="pc-note">함께 드리는 USB Type-C 케이블로 충전해 주세요. 5V보다 높은 충전기를 사용하지 말아주세요!</p>
+  <p class="pc-note">함께 드리는 USB Type-C 케이블로 충전해 주세요. 5V보다 높은 충전기는 쓰지 않습니다.</p>
 </div>
 
 <div class="pc-block">
   <h3 class="pc-title">구성</h3>
   <ol class="pc-steps">
-    <li><i class="pc-num" aria-hidden="true">1</i><span>단상자</span></li>
-    <li><i class="pc-num" aria-hidden="true">2</i><span>본체 (그린 or 옐로우)</span></li>
+    <li><i class="pc-num" aria-hidden="true">1</i><span>본체</span></li>
+    <li><i class="pc-num" aria-hidden="true">2</i><span>USB Type-C 케이블</span></li>
     <li><i class="pc-num" aria-hidden="true">3</i><span>청소솔</span></li>
     <li><i class="pc-num" aria-hidden="true">4</i><span>사용설명서</span></li>
-    <li><i class="pc-num" aria-hidden="true">5</i><span>USB Type-C 케이블</span></li>
+    <li><i class="pc-num" aria-hidden="true">5</i><span>꾸밈 스티커<small>아이 취향대로 붙여 꾸밀 수 있습니다</small></span></li>
   </ol>
-  <img class="pc-media is-end" src="https://takkobebe-link.vercel.app/img/pencil/components.jpg" width="716" height="399" loading="lazy" decoding="async" alt="구성품 — 1 단상자, 2 본체(그린 또는 옐로우), 3 청소솔, 4 사용설명서, 5 USB Type-C 케이블">
+  <img class="pc-media is-end" src="https://takkobebe-link.vercel.app/img/pencil/sticker.webp" width="720" height="405" loading="lazy" decoding="async" alt="꾸밈 스티커를 떼어 연필깎이 몸통에 붙이는 모습">
 </div>
 
 <div class="pc-block pc-faq">
@@ -281,13 +247,13 @@
     <details>
       <summary>칼날에 연필이 끼었어요<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
       <p class="pc-a">분해와 조립은 꼭 보호자가 해 주시고, 장갑을 끼는 것이 안전합니다.</p>
-      <ol class="pc-steps pc-steps-img">
-        <li><img src="https://takkobebe-link.vercel.app/img/pencil/fix-1.jpg" width="344" height="221" loading="lazy" decoding="async" alt="연필가루통 뚜껑을 손으로 돌려 위로 빼는 모습"><i class="pc-num" aria-hidden="true">1</i><span>연필가루통 뚜껑을 돌려서 위로 빼냅니다.</span></li>
-        <li><img src="https://takkobebe-link.vercel.app/img/pencil/fix-2.jpg" width="344" height="221" loading="lazy" decoding="async" alt="드라이버로 보호 커버 나사를 푸는 모습"><i class="pc-num" aria-hidden="true">2</i><span>드라이버로 보호 커버의 나사 2개를 풀고 커버를 뺍니다.</span></li>
-        <li><img src="https://takkobebe-link.vercel.app/img/pencil/fix-3.jpg" width="344" height="221" loading="lazy" decoding="async" alt="빼낸 칼날에 끼인 연필 조각을 뾰족한 도구로 꺼내는 모습"><i class="pc-num" aria-hidden="true">3</i><span>칼날을 당겨 빼고, 끼인 것을 뾰족한 도구로 빼냅니다.</span></li>
-        <li><img src="https://takkobebe-link.vercel.app/img/pencil/fix-4.jpg" width="344" height="221" loading="lazy" decoding="async" alt="칼날을 보호 커버에 끼우는 모습"><i class="pc-num" aria-hidden="true">4</i><span>칼날을 보호 커버에 먼저 끼운 뒤 뚜껑에 꽂습니다.</span></li>
-        <li><img src="https://takkobebe-link.vercel.app/img/pencil/fix-5.jpg" width="344" height="221" loading="lazy" decoding="async" alt="나사 방향을 맞춰 칼날을 뚜껑에 눌러 끼우는 모습"><i class="pc-num" aria-hidden="true">5</i><span>나사 방향을 맞추고, 연필 구멍이 튀어나오도록 눌러 줍니다.</span></li>
-        <li><img src="https://takkobebe-link.vercel.app/img/pencil/fix-6.jpg" width="344" height="221" loading="lazy" decoding="async" alt="드라이버로 보호 커버를 다시 나사로 고정하는 모습"><i class="pc-num" aria-hidden="true">6</i><span>보호 커버를 드라이버로 다시 나사 고정합니다.</span></li>
+      <ol class="pc-steps">
+        <li><i class="pc-num" aria-hidden="true">1</i><span>연필가루통 뚜껑을 돌려서 위로 빼냅니다.</span></li>
+        <li><i class="pc-num" aria-hidden="true">2</i><span>드라이버로 보호 커버의 나사 2개를 풀고 커버를 뺍니다.</span></li>
+        <li><i class="pc-num" aria-hidden="true">3</i><span>칼날을 당겨 빼고, 끼인 것을 뾰족한 도구로 빼냅니다.</span></li>
+        <li><i class="pc-num" aria-hidden="true">4</i><span>칼날을 보호 커버에 먼저 끼운 뒤 뚜껑에 꽂습니다.</span></li>
+        <li><i class="pc-num" aria-hidden="true">5</i><span>나사 방향을 맞추고, 연필 구멍이 튀어나오도록 눌러 줍니다.</span></li>
+        <li><i class="pc-num" aria-hidden="true">6</i><span>보호 커버를 드라이버로 다시 나사 고정합니다.</span></li>
       </ol>
     </details>
     <details>
