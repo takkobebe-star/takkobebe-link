@@ -1,0 +1,266 @@
+<div class="tkbb-bd">
+<style>
+  /* NEW 겨울침구 (데코원 유어메이트 워싱 극세사 차렵침구) — 연필깎이(pencil-desc.txt) 틀, 2026-10-12
+     첫 화면(옵션별 공구가·사진·한눈에 보기)까지 보이고 나머지는 '상세설명 더보기'로
+     스킨이 상세설명 안 글씨 크기를 모두 inherit(13px)로 묶어 두어, 선택자 앞에 body #detail 을 붙여 이긴다 */
+  .wing-detail-more-contents { min-height: 1700px; }
+
+  body #detail .tkbb-bd {
+    --bd-surface: #F5F3EE;
+    --bd-ink: #161616;
+    --bd-muted: #6A6A66;
+    --bd-line: #E6E2D8;
+    --bd-deep: #7c8339;
+    --bd-white: #FFFFFF;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 8px 4px 0;
+    color: var(--bd-ink);
+    font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+  }
+  body #detail .tkbb-bd * { box-sizing: border-box; }
+  .tkbb-bd * { font-size: inherit; line-height: inherit; }
+  /* PC 스킨이 상세설명 이미지에 max-width:50%를 걸어 두어 덮어씀 */
+  body #detail .tkbb-bd img { display: block; width: 100%; max-width: 100% !important; height: auto; }
+  body #detail .tkbb-bd h2, body #detail .tkbb-bd h3, body #detail .tkbb-bd p, body #detail .tkbb-bd ul, body #detail .tkbb-bd ol, body #detail .tkbb-bd dl, body #detail .tkbb-bd dd, body #detail .tkbb-bd table, body #detail .tkbb-bd figure { margin: 0; padding: 0; }
+  body #detail .tkbb-bd ul, body #detail .tkbb-bd ol { list-style: none; }
+
+  body #detail .tkbb-bd .bd-block { padding-block: 32px; border-top: 1px solid var(--bd-line); }
+  body #detail .tkbb-bd .bd-block:first-of-type { padding-top: 8px; border-top: 0; }
+  body #detail .tkbb-bd .bd-title { margin-bottom: 14px; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+  body #detail .tkbb-bd .bd-note { margin-top: 12px; font-size: 12.5px; color: var(--bd-muted); }
+
+  body #detail .tkbb-bd .bd-intro img { border-radius: 8px; background: var(--bd-surface); }
+  body #detail .tkbb-bd .bd-intro h2 { margin-top: 18px; font-size: 22px; font-weight: 500; line-height: 1.3; letter-spacing: -0.02em; }
+  body #detail .tkbb-bd .bd-intro h2 span { display: block; font-weight: 300; }
+  body #detail .tkbb-bd .bd-intro p { margin-top: 8px; font-size: 14.5px; font-weight: 300; }
+  body #detail .tkbb-bd .bd-intro .bd-note { margin-top: 10px; font-size: 12.5px; }
+
+  /* 맨 위 옵션별 공구가 — 클래스 이름이 bd-price-* 라서 오픈 전·마감 뒤에는 스킨이 자동으로 숨긴다 */
+  body #detail .tkbb-bd .bd-price-ttl { padding-bottom: 12px; border-bottom: 2px solid var(--bd-ink); font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+  body #detail .tkbb-bd .bd-price-list li { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--bd-line); }
+  body #detail .tkbb-bd .bd-price-list img { width: 64px; height: 80px; object-fit: cover; border-radius: 7px; background: var(--bd-surface); }
+  body #detail .tkbb-bd .bd-price-list .no { display: block; font-size: 11.5px; font-weight: 500; letter-spacing: 0.08em; color: var(--bd-muted); }
+  body #detail .tkbb-bd .bd-price-list .nm { display: block; margin-top: 4px; font-size: 16px; font-weight: 600; line-height: 1.35; }
+  body #detail .tkbb-bd .bd-price-list .cp { display: block; margin-top: 4px; font-size: 13px; font-weight: 300; line-height: 1.5; color: var(--bd-muted); }
+  body #detail .tkbb-bd .bd-price-list .r { text-align: right; white-space: nowrap; }
+  body #detail .tkbb-bd .bd-price-list .r s { display: block; font-size: 12.5px; color: #B5B2A8; }
+  body #detail .tkbb-bd .bd-price-list .r span { display: block; margin-top: 2px; font-size: 18px; font-weight: 700; }
+  body #detail .tkbb-bd .bd-price-list .r em { margin-right: 6px; font-style: normal; color: var(--bd-deep); }
+  body #detail .tkbb-bd .bd-price-ft { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; padding: 14px 0; border-radius: 7px; background: #D1D798; font-size: 15px; font-weight: 500; color: var(--bd-ink); }
+  body #detail .tkbb-bd .bd-price-ft svg { width: 22px; height: 22px; flex: none; }
+  body #detail .tkbb-bd .bd-price-ft b { font-weight: 700; }
+
+  /* 데코원 사진 — 화면에 가까워질 때만 불러온다. 비율은 img 의 width·height 값으로 잡힌다 */
+  body #detail .tkbb-bd .bd-media { margin: 0 0 16px; border-radius: 8px; background: var(--bd-surface); }
+
+  /* 한눈에 보기 */
+  body #detail .tkbb-bd .bd-glance { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  body #detail .tkbb-bd .bd-glance li { padding: 13px 14px; border-radius: 8px; background: var(--bd-surface); }
+  body #detail .tkbb-bd .bd-glance b { display: block; font-size: 14px; font-weight: 500; }
+  body #detail .tkbb-bd .bd-glance span { display: block; margin-top: 4px; font-size: 12.5px; font-weight: 300; color: var(--bd-muted); line-height: 1.45; }
+
+  /* 이름 · 설명 두 칸 */
+  body #detail .tkbb-bd .bd-rows { display: grid; gap: 10px; }
+  body #detail .tkbb-bd .bd-rows > div { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 12px; }
+  body #detail .tkbb-bd .bd-rows dt { font-weight: 500; }
+  body #detail .tkbb-bd .bd-rows dd { font-weight: 300; }
+
+  body #detail .tkbb-bd .bd-sub { margin: 28px 0 12px; font-size: 16px; font-weight: 700; }
+  body #detail .tkbb-bd .bd-sub:first-of-type { margin-top: 0; }
+  body #detail .tkbb-bd .bd-text { font-size: 14px; font-weight: 300; line-height: 1.6; }
+
+  /* 컬러 네 가지 */
+  body #detail .tkbb-bd .bd-colors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  body #detail .tkbb-bd .bd-colors img { aspect-ratio: 1 / 1; object-fit: cover; border-radius: 8px; background: var(--bd-surface); }
+  body #detail .tkbb-bd .bd-colors b { display: block; margin-top: 10px; font-size: 14.5px; font-weight: 500; }
+  body #detail .tkbb-bd .bd-colors span { display: block; margin-top: 3px; font-size: 12.5px; font-weight: 300; color: var(--bd-muted); line-height: 1.45; }
+
+  /* 사이즈 — 큰 숫자 표 */
+  body #detail .tkbb-bd .bd-size { width: 100%; border-collapse: collapse; border-top: 2px solid var(--bd-ink); text-align: center; }
+  body #detail .tkbb-bd .bd-size th, body #detail .tkbb-bd .bd-size td { padding: 14px 4px; border-bottom: 1px solid var(--bd-line); vertical-align: middle; background: transparent; }
+  body #detail .tkbb-bd .bd-size thead th { font-size: 12.5px; font-weight: 400; color: var(--bd-muted); }
+  body #detail .tkbb-bd .bd-size tbody th { font-size: 14px; font-weight: 600; text-align: left; }
+  body #detail .tkbb-bd .bd-size td { font-size: 17px; font-weight: 700; letter-spacing: -0.02em; }
+  body #detail .tkbb-bd .bd-size td small { display: block; margin-top: 2px; font-size: 11.5px; font-weight: 400; color: var(--bd-muted); }
+
+  /* 시험 · 인증 — 아이콘 카드 */
+  body #detail .tkbb-bd .bd-feat { display: grid; gap: 10px; }
+  body #detail .tkbb-bd .bd-feat li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: center; padding: 16px; border-radius: 8px; background: var(--bd-surface); }
+  body #detail .tkbb-bd .bd-feat i { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #D1D798; color: #3E4220; font-style: normal; }
+  body #detail .tkbb-bd .bd-feat i svg { width: 22px; height: 22px; }
+  body #detail .tkbb-bd .bd-feat b { display: block; font-size: 15px; font-weight: 600; }
+  body #detail .tkbb-bd .bd-feat span { display: block; margin-top: 4px; font-size: 13px; font-weight: 300; line-height: 1.5; color: var(--bd-muted); }
+
+  /* 자주 묻는 질문 · 고시 */
+  body #detail .tkbb-bd .bd-acc details { border-top: 1px solid var(--bd-line); }
+  body #detail .tkbb-bd .bd-acc details:last-child { border-bottom: 1px solid var(--bd-line); }
+  body #detail .tkbb-bd .bd-block.bd-faq { padding-bottom: 8px; }
+  body #detail .tkbb-bd .bd-acc summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-block: 14px; font-size: 14.5px; cursor: pointer; }
+  body #detail .tkbb-bd .bd-acc summary::-webkit-details-marker { display: none; }
+  body #detail .tkbb-bd .bd-acc summary svg { width: 18px; height: 18px; flex: none; color: var(--bd-muted); transition: transform .15s; }
+  body #detail .tkbb-bd .bd-acc details[open] summary svg { transform: rotate(180deg); }
+  body #detail .tkbb-bd .bd-dots { padding-bottom: 16px; display: grid; gap: 6px; font-size: 13.5px; font-weight: 300; }
+  body #detail .tkbb-bd .bd-dots li { position: relative; padding-left: 10px; }
+  body #detail .tkbb-bd .bd-dots li::before { content: ""; position: absolute; left: 0; top: .62em; width: 3px; height: 3px; border-radius: 50%; background: var(--bd-muted); }
+
+  body #detail .tkbb-bd .bd-gosi { padding-bottom: 16px; }
+  body #detail .tkbb-bd .bd-gosi table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  body #detail .tkbb-bd .bd-gosi th, body #detail .tkbb-bd .bd-gosi td { padding: 9px 2px; border-top: 1px solid var(--bd-line); text-align: left; vertical-align: top; font-weight: 300; line-height: 1.5; }
+  body #detail .tkbb-bd .bd-gosi th { width: 38%; padding-right: 10px; color: var(--bd-muted); font-weight: 400; background: transparent; }
+  body #detail .tkbb-bd .bd-gosi tr:first-child th, body #detail .tkbb-bd .bd-gosi tr:first-child td { border-top: 0; }
+
+  @media (min-width: 768px) {
+    body #detail .tkbb-bd .bd-block { padding-block: 40px; }
+    .wing-detail-more-contents { min-height: 1900px; }
+    body #detail .tkbb-bd .bd-title { font-size: 27px; }
+    body #detail .tkbb-bd .bd-intro h2 { font-size: 26px; }
+    body #detail .tkbb-bd .bd-glance { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    body #detail .tkbb-bd .bd-colors { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+</style>
+
+<div class="bd-block bd-price">
+  <h3 class="bd-price-ttl">옵션별 공구가</h3>
+  <ul class="bd-price-list">
+      <li><img src="https://takkobebe-link.vercel.app/img/bedding/opt-full.jpg" width="240" height="300" alt="차렵이불과 베개커버, 침대패드를 모두 깐 침대"><div class="l"><span class="no">01</span><b class="nm">풀세트 SS</b><span class="cp">차렵이불 · 침대패드 · 베개커버 1장</span></div><div class="r"><s>69,900원</s><span><em>43%</em>39,900원</span></div></li>
+      <li><img src="https://takkobebe-link.vercel.app/img/bedding/opt-full.jpg" width="240" height="300" alt="차렵이불과 베개커버, 침대패드를 모두 깐 침대"><div class="l"><span class="no">02</span><b class="nm">풀세트 Q</b><span class="cp">차렵이불 · 침대패드 · 베개커버 2장</span></div><div class="r"><s>89,900원</s><span><em>38%</em>55,900원</span></div></li>
+      <li><img src="https://takkobebe-link.vercel.app/img/bedding/opt-pillow.jpg" width="240" height="300" alt="차렵이불 위에 놓인 줄무늬 베개"><div class="l"><span class="no">03</span><b class="nm">이불 + 베개 SS</b><span class="cp">차렵이불 · 베개커버 1장</span></div><div class="r"><s>49,900원</s><span><em>52%</em>23,900원</span></div></li>
+      <li><img src="https://takkobebe-link.vercel.app/img/bedding/opt-pillow.jpg" width="240" height="300" alt="차렵이불 위에 놓인 줄무늬 베개"><div class="l"><span class="no">04</span><b class="nm">이불 + 베개 Q</b><span class="cp">차렵이불 · 베개커버 2장</span></div><div class="r"><s>59,900원</s><span><em>40%</em>35,900원</span></div></li>
+      <li><img src="https://takkobebe-link.vercel.app/img/bedding/opt-quilt.jpg" width="240" height="300" alt="침대 위에 펼친 줄무늬 차렵이불"><div class="l"><span class="no">05</span><b class="nm">이불만 SS</b><span class="cp">차렵이불 1장</span></div><div class="r"><s>39,900원</s><span><em>50%</em>19,900원</span></div></li>
+      <li><img src="https://takkobebe-link.vercel.app/img/bedding/opt-quilt.jpg" width="240" height="300" alt="침대 위에 펼친 줄무늬 차렵이불"><div class="l"><span class="no">06</span><b class="nm">이불만 Q</b><span class="cp">차렵이불 1장</span></div><div class="r"><s>49,900원</s><span><em>46%</em>26,900원</span></div></li>
+  </ul>
+  <p class="bd-price-ft"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5h11v9H3z"/><path d="M14 9.5h3.6l3.4 3.4v2.6H14"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg><span><b>무료배송</b> · 컬러는 옵션에서 하나 고르기</span></p>
+</div>
+
+<div class="bd-block bd-intro">
+  <img src="https://takkobebe-link.vercel.app/img/bedding/main.jpg" width="1000" height="1000" alt="줄무늬 차렵이불과 극세사 안면이 함께 보이는 침대">
+  <h2><span>차렵의 가벼움, 극세사의 포근함</span>양면 반전 극세사 차렵침구</h2>
+  <p>겉은 가볍고 매끈한 세미마이크로, 안쪽은 포근한 극세사로 만든 양면 차렵이불입니다. 같은 무늬의 베개커버와 극세사 침대패드까지 한 번에 맞출 수 있습니다.</p>
+  <p class="bd-note">데코원 유어메이트 · 컬러 마크그린 / 제인핑크 / 폴베이지 / 찰리네이비</p>
+</div>
+
+<div class="bd-block">
+  <h3 class="bd-title">한눈에 보기</h3>
+  <ul class="bd-glance">
+    <li><b>양면 반전</b><span>겉 세미마이크로 · 안 극세사</span></li>
+    <li><b>사이즈 2가지</b><span>SS 슈퍼싱글 · Q 퀸</span></li>
+    <li><b>컬러 4가지</b><span>그린 · 핑크 · 베이지 · 네이비</span></li>
+    <li><b>일체형 차렵이불</b><span>커버 씌울 필요 없이 통세탁</span></li>
+    <li><b>지퍼 없는 베개커버</b><span>옆이 트인 호텔식</span></li>
+    <li><b>밴딩 침대패드</b><span>매트리스 높이 31cm까지</span></li>
+  </ul>
+</div>
+
+<div class="bd-block">
+  <h3 class="bd-title">양면이 다른 이불</h3>
+  <img class="bd-media" src="https://takkobebe-link.vercel.app/img/bedding/fleece.jpg" width="1000" height="750" loading="lazy" decoding="async" alt="손으로 극세사 안면을 쓸어 보는 모습">
+  <dl class="bd-rows">
+    <div><dt>겉면</dt><dd>저데니아 원사로 촘촘하게 짠 세미마이크로 원단에 피치스킨 가공을 더해 보들보들합니다</dd></div>
+    <div><dt>안면</dt><dd>털이 짧고 촘촘한 고밀도 단모 극세사라 털빠짐이 적고 포근합니다</dd></div>
+    <div><dt>충전재</dt><dd>폴리에스터 100%</dd></div>
+  </dl>
+  <p class="bd-note">추운 날엔 극세사 면을 몸 쪽으로, 덜 추운 날엔 매끈한 겉면을 몸 쪽으로 뒤집어 덮으면 됩니다.</p>
+</div>
+
+<div class="bd-block">
+  <h3 class="bd-title">구성품 살펴보기</h3>
+  <p class="bd-sub">이음선 없는 일체형 차렵이불</p>
+  <img class="bd-media" src="https://takkobebe-link.vercel.app/img/bedding/quilt.jpg" width="1000" height="750" loading="lazy" decoding="async" alt="침대 위에 펼친 차렵이불과 퀼팅 부분을 크게 본 모습">
+  <p class="bd-text">커버와 솜을 함께 누벼 만든 일체형이라 따로 커버를 씌우지 않아도 됩니다. 이음선이 없어 깔끔하고, 통째로 세탁할 수 있습니다.</p>
+
+  <p class="bd-sub">지퍼 없는 호텔식 베개커버</p>
+  <img class="bd-media" src="https://takkobebe-link.vercel.app/img/bedding/pillow.jpg" width="1000" height="750" loading="lazy" decoding="async" alt="침대 위에 겹쳐 놓은 줄무늬 베개 두 개">
+  <p class="bd-text">지퍼 없이 옆이 트인 자루형이라 베개를 넣고 빼기 쉽고, 세탁하기도 편합니다.</p>
+
+  <p class="bd-sub">밴딩으로 고정하는 극세사 침대패드</p>
+  <img class="bd-media" src="https://takkobebe-link.vercel.app/img/bedding/pad.jpg" width="1000" height="750" loading="lazy" decoding="async" alt="침대패드 모서리의 고무밴딩을 매트리스에 끼우는 모습">
+  <p class="bd-text">고주파 퀼팅으로 솜이 한쪽으로 쏠리지 않게 하고, 네 모서리의 35mm 고무밴딩이 매트리스에 고정해 줍니다.</p>
+  <p class="bd-note">매트리스 높이 31cm까지 쓰기를 권장합니다.</p>
+</div>
+
+<div class="bd-block">
+  <h3 class="bd-title">컬러 고르기</h3>
+  <ul class="bd-colors">
+    <li><img src="https://takkobebe-link.vercel.app/img/bedding/color-green.jpg" width="600" height="600" loading="lazy" decoding="async" alt="마크그린 차렵이불을 깐 침대"><b>마크그린</b><span>초록 줄무늬 · 네이비 안면</span></li>
+    <li><img src="https://takkobebe-link.vercel.app/img/bedding/color-pink.jpg" width="600" height="600" loading="lazy" decoding="async" alt="제인핑크 차렵이불을 깐 침대"><b>제인핑크</b><span>분홍 줄무늬 · 핑크 안면</span></li>
+    <li><img src="https://takkobebe-link.vercel.app/img/bedding/color-beige.jpg" width="600" height="600" loading="lazy" decoding="async" alt="폴베이지 차렵이불을 깐 침대"><b>폴베이지</b><span>주황 줄무늬 · 베이지 안면</span></li>
+    <li><img src="https://takkobebe-link.vercel.app/img/bedding/color-navy.jpg" width="600" height="600" loading="lazy" decoding="async" alt="찰리네이비 차렵이불을 깐 침대"><b>찰리네이비</b><span>네이비 줄무늬 · 네이비 안면</span></li>
+  </ul>
+  <p class="bd-note">세트로 고르시면 이불 · 베개커버 · 침대패드가 같은 컬러로 갑니다. 화면에 따라 실제 색과 조금 달라 보일 수 있습니다.</p>
+</div>
+
+<div class="bd-block">
+  <h3 class="bd-title">사이즈</h3>
+  <table class="bd-size">
+    <thead><tr><th></th><th>차렵이불</th><th>침대패드</th><th>베개커버</th></tr></thead>
+    <tbody>
+      <tr><th>SS</th><td>150×200<small>cm</small></td><td>110×200<small>cm</small></td><td>50×70<small>cm · 1장</small></td></tr>
+      <tr><th>Q</th><td>180×210<small>cm</small></td><td>150×200<small>cm</small></td><td>50×70<small>cm · 2장</small></td></tr>
+    </tbody>
+  </table>
+  <p class="bd-note">펼쳐 놓고 잰 길이라 ±3~5cm 차이가 날 수 있습니다.</p>
+</div>
+
+<div class="bd-block">
+  <h3 class="bd-title">시험 · 인증</h3>
+  <ul class="bd-feat">
+    <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg></i><div><b>OEKO-TEX® STANDARD 100</b><span>섬유 속 유해물질을 확인하는 국제 인증서를 받았습니다.</span></div></li>
+    <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6L5 18a2 2 0 0 0 1.8 3h10.4A2 2 0 0 0 19 18l-5-9V3"/><path d="M7.5 14h9"/></svg></i><div><b>유해물질 시험</b><span>pH · 아릴아민 · 폼알데하이드 시험에서 기준에 맞았습니다.</span></div></li>
+    <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/></svg></i><div><b>마찰 · 세탁 견뢰도 시험</b><span>문지르거나 빨았을 때 물빠짐 정도를 시험했습니다.</span></div></li>
+  </ul>
+</div>
+
+<div class="bd-block bd-faq">
+  <h3 class="bd-title">자주 묻는 질문 및 상품 정보</h3>
+  <div class="bd-acc">
+    <details>
+      <summary>세탁은 어떻게 하나요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <ul class="bd-dots">
+        <li>찬물에 따로 세탁해 주세요. 따뜻한 물에 빨면 줄어들 수 있습니다.</li>
+        <li>물에 충분히 적신 뒤 약하게 세탁하고, 세탁망을 쓰면 마찰로 상하는 것을 줄일 수 있습니다.</li>
+        <li>30℃ 이하 손세탁 · 약하게 짜기 · 그늘에서 말리기를 권장합니다.</li>
+        <li>건조기와 염소 표백제는 쓰지 않습니다. 강한 세탁과 기계 건조는 원단이 변형될 수 있습니다.</li>
+      </ul>
+    </details>
+    <details>
+      <summary>받아 보시기 전에 알아 둘 것<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <ul class="bd-dots">
+        <li>퀼팅 작업 특성상 실이 조금 남아 있을 수 있습니다. 남은 실을 너무 가까이 자르면 올이 풀릴 수 있으니 조금 떨어뜨려 잘라 주세요.</li>
+        <li>차렵이불 가장자리에 눈에 띄지 않게 마무리한 창구멍(솜을 넣는 구멍)이 있습니다. 불량이 아닙니다.</li>
+        <li>재단 위치에 따라 줄무늬 위치가 사진과 조금 다를 수 있습니다.</li>
+        <li>사이즈는 ±3~5cm 차이가 날 수 있고, 화면에 따라 색이 조금 달라 보일 수 있습니다.</li>
+      </ul>
+    </details>
+    <details>
+      <summary>교환 · 반품은 어떻게 하나요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <ul class="bd-dots">
+        <li>사용하거나 세탁한 제품은 교환 · 반품이 어렵습니다.</li>
+        <li>압축 포장을 뜯어 훼손된 경우 반품이 어렵습니다.</li>
+        <li>불량일 때는 받으신 상태 그대로 보내 주시면 같은 제품으로 교환해 드립니다.</li>
+        <li>제주 · 도서산간은 배송비가 더해집니다.</li>
+      </ul>
+    </details>
+    <details>
+      <summary>상품 정보 제공 고시<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <div class="bd-gosi">
+        <table>
+          <tr><th>제품명</th><td>유어메이트 워싱 극세사 차렵침구</td></tr>
+          <tr><th>소재</th><td>이불 겉면 · 베개커버 · 패드 뒷면: 폴리에스터 100% (세미마이크로)<br>이불 안면 · 패드 앞면: 극세사<br>충전재: 폴리에스터 100%</td></tr>
+          <tr><th>컬러</th><td>마크그린, 제인핑크, 폴베이지, 찰리네이비</td></tr>
+          <tr><th>사이즈</th><td>차렵이불 SS 150×200 / Q 180×210cm<br>침대패드 SS 110×200 / Q 150×200cm<br>베개커버 50×70cm</td></tr>
+          <tr><th>구성</th><td>풀세트: 차렵이불, 침대패드, 베개커버 (SS 1장 · Q 2장)<br>이불 + 베개: 차렵이불, 베개커버 (SS 1장 · Q 2장)<br>이불만: 차렵이불</td></tr>
+          <tr><th>세탁 방법</th><td>찬물 단독 손세탁(30℃ 이하), 기계 건조 · 염소 표백 금지, 그늘 건조</td></tr>
+          <tr><th>제조국</th><td>중국 (OEM)</td></tr>
+          <tr><th>제조사</th><td>데코원</td></tr>
+        </table>
+      </div>
+    </details>
+  </div>
+</div>
+</div>

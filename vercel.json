@@ -310,6 +310,28 @@
           "value": "https://takkobebe.mywisa.com"
         }
       ]
+    },
+    {
+      "source": "/bedding-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/img/bedding/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://takkobebe.mywisa.com"
+        }
+      ]
     }
   ]
 }
