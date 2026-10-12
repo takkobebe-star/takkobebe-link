@@ -98,6 +98,8 @@
   body #detail .tkbb-pc .pc-acc details[open] summary svg { transform: rotate(180deg); }
   body #detail .tkbb-pc .pc-acc .pc-a { padding-bottom: 16px; font-size: 14px; font-weight: 300; }
   body #detail .tkbb-pc .pc-acc .pc-steps { padding-bottom: 16px; }
+  /* 자주 묻는 질문 안 구성 사진 (2026-10-12 사용자 요청) */
+  body #detail .tkbb-pc .pc-acc .pc-acc-img { margin: 0 0 16px; }
   body #detail .tkbb-pc .pc-dots { padding-bottom: 16px; display: grid; gap: 6px; font-size: 13.5px; font-weight: 300; }
   body #detail .tkbb-pc .pc-dots li { position: relative; padding-left: 10px; }
   body #detail .tkbb-pc .pc-dots li::before { content: ""; position: absolute; left: 0; top: .62em; width: 3px; height: 3px; border-radius: 50%; background: var(--pc-muted); }
@@ -240,21 +242,20 @@
   </ol>
 </div>
 
-<div class="pc-block">
-  <h3 class="pc-title">구성</h3>
-  <ol class="pc-steps">
-    <li><i class="pc-num" aria-hidden="true">1</i><span>단상자</span></li>
-    <li><i class="pc-num" aria-hidden="true">2</i><span>본체 (그린 or 옐로우)</span></li>
-    <li><i class="pc-num" aria-hidden="true">3</i><span>청소솔</span></li>
-    <li><i class="pc-num" aria-hidden="true">4</i><span>사용설명서</span></li>
-    <li><i class="pc-num" aria-hidden="true">5</i><span>USB Type-C 케이블</span></li>
-  </ol>
-  <img class="pc-media is-end" src="https://takkobebe-link.vercel.app/img/pencil/components.jpg" width="716" height="399" loading="lazy" decoding="async" alt="구성품 — 1 단상자, 2 본체(그린 또는 옐로우), 3 청소솔, 4 사용설명서, 5 USB Type-C 케이블">
-</div>
-
 <div class="pc-block pc-faq">
   <h3 class="pc-title">자주 묻는 질문 및 상품 정보</h3>
   <div class="pc-acc">
+    <details>
+      <summary>제품 구성 확인하기<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <ol class="pc-steps">
+        <li><i class="pc-num" aria-hidden="true">1</i><span>단상자</span></li>
+        <li><i class="pc-num" aria-hidden="true">2</i><span>본체 (그린 or 옐로우)</span></li>
+        <li><i class="pc-num" aria-hidden="true">3</i><span>청소솔</span></li>
+        <li><i class="pc-num" aria-hidden="true">4</i><span>사용설명서</span></li>
+        <li><i class="pc-num" aria-hidden="true">5</i><span>USB Type-C 케이블</span></li>
+      </ol>
+      <img class="pc-media pc-acc-img" src="https://takkobebe-link.vercel.app/img/pencil/components.jpg" width="716" height="399" loading="lazy" decoding="async" alt="구성품 — 1 단상자, 2 본체(그린 또는 옐로우), 3 청소솔, 4 사용설명서, 5 USB Type-C 케이블">
+    </details>
     <details>
       <summary>쓰기 전에 꼭 알아 둘 것이 있나요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
       <ul class="pc-dots">
