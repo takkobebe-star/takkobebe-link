@@ -4377,3 +4377,23 @@
 		}).catch(done);
 })();
 /* ===== 상세설명 자동 반영 끝 ===== */
+
+/* ===== 상세설명 접이식(details) 닫은 뒤 남는 여백 없애기 =====
+   위사 '상세설명 더보기'를 펼치면 shop.js 가 상세설명 칸 높이를 scrollHeight 로 고정해 계속 맞추는데,
+   scrollHeight 는 고정 높이보다 작아지지 않아서 상세설명 안의 접이식 항목을 펼쳤다 닫으면 펼친 만큼 빈칸이 남는다.
+   펼친 상태에서 접이식 항목이 열리고 닫힐 때 높이를 auto 로 풀어 주면, 위사가 다음 계산에서 실제 높이로 다시 맞춘다.
+   되돌리려면 이 블록만 지우면 된다. (2026-10-13 사용자 요청) */
+(function(){
+	if (window.__TKBB_DGAP) return; window.__TKBB_DGAP = 1;
+	if (location.pathname.indexOf('/shop/detail.php') < 0) return;
+	document.addEventListener('toggle', function(e){
+		var d = e.target;
+		if (!d || d.tagName !== 'DETAILS' || !d.closest) return;
+		var more = d.closest('.wing-detail-more-contents');
+		var area = more && more.closest('.wing-detail-more-area');
+		if (!area || !more.style.height) return;
+		if (more.style.height.replace(/\s/g, '') === String(area.getAttribute('data-height') || '').replace(/\s/g, '')) return;   // 접힌 상태(첫 화면)는 그대로
+		more.style.height = 'auto';
+	}, true);
+})();
+/* ===== 상세설명 접이식 여백 끝 ===== */
