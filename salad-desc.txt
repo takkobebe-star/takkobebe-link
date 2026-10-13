@@ -148,7 +148,12 @@
   .tkbb-sd .sd-menu li { padding: 0 !important; }
   .tkbb-sd .sd-menu label { display: inline-flex; align-items: center; gap: 4px; padding: 7px 12px; border-radius: 999px; cursor: pointer; }
   .tkbb-sd .sd-menu label::after { content: "+"; font-weight: 300; color: var(--sd-muted); }
-  .tkbb-sd .sd-tip { margin-top: 8px; }
+  .tkbb-sd .sd-tip { margin-top: 14px; }
+  .tkbb-sd .sd-tip + .sd-menu { margin-top: 8px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .tkbb-sd .sd-tip + .sd-menu label { display: flex; justify-content: center; width: 100%; padding: 8px 4px; white-space: nowrap; }
+  @media (min-width: 768px) {
+    .tkbb-sd .sd-tip + .sd-menu { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  }
   .tkbb-sd .sd-tops > div { display: none; position: relative; margin-top: 12px; }
   .tkbb-sd .sd-tops img { border-radius: 7px; }
   .tkbb-sd .sd-top-nm { display: block; margin-bottom: 8px; font-size: 14.5px; font-weight: 600; }
@@ -211,10 +216,10 @@
   <input type="radio" name="sdt" id="sdt-shrimp" class="sd-tr">
   <input type="radio" name="sdt" id="sdt-duck" class="sd-tr">
   <input type="radio" name="sdt" id="sdt-bulgogi" class="sd-tr">
+  <p class="sd-note sd-tip">샐러드 이름을 누르면 토핑 구성을 볼 수 있어요.</p>
   <ul class="sd-perks sd-menu">
     <li><label for="sdt-chicken">닭가슴살</label></li><li><label for="sdt-ricotta">리코타치즈</label></li><li><label for="sdt-shrimp">쉬림프</label></li><li><label for="sdt-duck">훈제오리</label></li><li><label for="sdt-bulgogi">소불고기</label></li>
   </ul>
-  <p class="sd-note sd-tip">샐러드 이름을 누르면 토핑 구성을 볼 수 있어요.</p>
   <div class="sd-tops">
     <div class="sd-top-chicken"><b class="sd-top-nm">닭가슴살 샐러드 토핑 구성</b><img src="https://takkobebe-link.vercel.app/img/salad/top-chicken.jpg" alt="닭가슴살 샐러드 토핑 구성" loading="lazy"><label for="sdt-none" class="sd-top-x">접기</label></div>
     <div class="sd-top-ricotta"><b class="sd-top-nm">리코타치즈 샐러드 토핑 구성</b><img src="https://takkobebe-link.vercel.app/img/salad/top-ricotta.jpg" alt="리코타치즈 샐러드 토핑 구성" loading="lazy"><label for="sdt-none" class="sd-top-x">접기</label></div>
