@@ -2295,6 +2295,15 @@
 		'/shop/product_qna_list.php': qnaBoard, '/shop/product_qna.php': qnaBoard, '/shop/product_review_list.php': reviewBoard, '/board/': wishBoard, '/board/index.php': wishBoard, '/shop/order_finish.php': orderFinish, '/shop/order.php': orderForm, '/shop/cart.php': cartPage,
 		'/member/edit_step1.php': editInfo, '/member/edit_step2.php': editInfo, '/mypage/withdraw_step1.php': withdraw };
 	if (!PAGES[P]) return;
+	// 상품후기 게시판: 새 모양으로 바꾸기 전 원래 화면이 1초쯤 보이던 것 막기 (2026-10-13 사용자 요청). 늦어도 3초 뒤엔 보임
+	var RVWAIT = P === '/shop/product_review_list.php';
+	if (RVWAIT) {
+		var rvSt = document.createElement('style');
+		rvSt.textContent = 'html.tkbb-rvwait #cnt{opacity:0;}';
+		(document.head || document.documentElement).appendChild(rvSt);
+		document.documentElement.classList.add('tkbb-rvwait');
+		setTimeout(function(){ document.documentElement.classList.remove('tkbb-rvwait'); }, 3000);
+	}
 
 	var CSS = ''
 		+ '#cnt.tkbb-my{background:#F4F2EC;padding:0 0 24px;letter-spacing:-.02em;color:#161616;}'
@@ -3730,6 +3739,7 @@
 			(document.head || document.documentElement).appendChild(st);
 			cnt.classList.add('tkbb-my');
 			if (!PAGES[P](cnt)) { cnt.classList.remove('tkbb-my'); st.parentNode.removeChild(st); }
+			if (RVWAIT) document.documentElement.classList.remove('tkbb-rvwait');
 		} catch (e) {
 			// 실패하면 원래 화면으로 다시 연다 (옮긴 요소까지 확실히 되돌리기 위해)
 			location.replace(location.href + (location.search ? '&' : '?') + 'tkbb_old=1');
