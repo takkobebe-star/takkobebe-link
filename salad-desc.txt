@@ -143,6 +143,23 @@
   .tkbb-sd .sd-menu { margin-top: 14px; }
   .tkbb-sd .sd-menu li { background: var(--sd-surface) !important; color: var(--sd-ink) !important; font-size: 13.5px !important; padding: 7px 12px !important; }
   .tkbb-sd .sd-perks li { padding: 5px 10px; border-radius: 999px; background: var(--sd-point); font-size: 12.5px; color: #3E4220; }
+  /* 샐러드 이름을 누르면 토핑 구성 이미지 (스크립트 없이 라디오로 열고 닫음) */
+  .tkbb-sd .sd-tr { position: absolute; opacity: 0; pointer-events: none; }
+  .tkbb-sd .sd-menu li { padding: 0 !important; }
+  .tkbb-sd .sd-menu label { display: inline-flex; align-items: center; gap: 4px; padding: 7px 12px; border-radius: 999px; cursor: pointer; }
+  .tkbb-sd .sd-menu label::after { content: "+"; font-weight: 300; color: var(--sd-muted); }
+  .tkbb-sd .sd-tip { margin-top: 8px; }
+  .tkbb-sd .sd-tops > div { display: none; position: relative; margin-top: 12px; }
+  .tkbb-sd .sd-tops img { border-radius: 7px; }
+  .tkbb-sd .sd-top-nm { display: block; margin-bottom: 8px; font-size: 14.5px; font-weight: 600; }
+  .tkbb-sd .sd-top-x { display: block; margin-top: 8px; padding: 10px 0; border-radius: 7px; background: var(--sd-surface); text-align: center; font-size: 13px; color: var(--sd-muted); cursor: pointer; }
+  .tkbb-sd #sdt-chicken:checked ~ .sd-tops .sd-top-chicken { display: block; }
+  .tkbb-sd #sdt-ricotta:checked ~ .sd-tops .sd-top-ricotta { display: block; }
+  .tkbb-sd #sdt-shrimp:checked ~ .sd-tops .sd-top-shrimp { display: block; }
+  .tkbb-sd #sdt-duck:checked ~ .sd-tops .sd-top-duck { display: block; }
+  .tkbb-sd #sdt-bulgogi:checked ~ .sd-tops .sd-top-bulgogi { display: block; }
+  .tkbb-sd #sdt-chicken:checked ~ .sd-menu label[for="sdt-chicken"], .tkbb-sd #sdt-ricotta:checked ~ .sd-menu label[for="sdt-ricotta"], .tkbb-sd #sdt-shrimp:checked ~ .sd-menu label[for="sdt-shrimp"], .tkbb-sd #sdt-duck:checked ~ .sd-menu label[for="sdt-duck"], .tkbb-sd #sdt-bulgogi:checked ~ .sd-menu label[for="sdt-bulgogi"] { background: var(--sd-point); color: var(--sd-ink); font-weight: 500; }
+  .tkbb-sd #sdt-chicken:checked ~ .sd-menu label[for="sdt-chicken"]::after, .tkbb-sd #sdt-ricotta:checked ~ .sd-menu label[for="sdt-ricotta"]::after, .tkbb-sd #sdt-shrimp:checked ~ .sd-menu label[for="sdt-shrimp"]::after, .tkbb-sd #sdt-duck:checked ~ .sd-menu label[for="sdt-duck"]::after, .tkbb-sd #sdt-bulgogi:checked ~ .sd-menu label[for="sdt-bulgogi"]::after { content: "−"; color: var(--sd-ink); }
 
   @media (min-width: 768px) {
     .tkbb-sd .sd-block { padding-block: 40px; }
@@ -199,9 +216,23 @@
   <figure class="sd-photo">
     <img src="https://takkobebe-link.vercel.app/img/salad/group.jpg" alt="닭가슴살, 리코타치즈, 쉬림프, 훈제오리, 소불고기 샐러드 다섯 그릇과 드레싱" loading="lazy">
   </figure>
+  <input type="radio" name="sdt" id="sdt-none" class="sd-tr" checked>
+  <input type="radio" name="sdt" id="sdt-chicken" class="sd-tr">
+  <input type="radio" name="sdt" id="sdt-ricotta" class="sd-tr">
+  <input type="radio" name="sdt" id="sdt-shrimp" class="sd-tr">
+  <input type="radio" name="sdt" id="sdt-duck" class="sd-tr">
+  <input type="radio" name="sdt" id="sdt-bulgogi" class="sd-tr">
   <ul class="sd-perks sd-menu">
-    <li>닭가슴살</li><li>리코타치즈</li><li>쉬림프</li><li>훈제오리</li><li>소불고기</li>
+    <li><label for="sdt-chicken">닭가슴살</label></li><li><label for="sdt-ricotta">리코타치즈</label></li><li><label for="sdt-shrimp">쉬림프</label></li><li><label for="sdt-duck">훈제오리</label></li><li><label for="sdt-bulgogi">소불고기</label></li>
   </ul>
+  <p class="sd-note sd-tip">샐러드 이름을 누르면 토핑 구성을 볼 수 있어요.</p>
+  <div class="sd-tops">
+    <div class="sd-top-chicken"><b class="sd-top-nm">닭가슴살 샐러드 토핑 구성</b><img src="https://takkobebe-link.vercel.app/img/salad/top-chicken.jpg" alt="닭가슴살 샐러드 토핑 구성" loading="lazy"><label for="sdt-none" class="sd-top-x">접기</label></div>
+    <div class="sd-top-ricotta"><b class="sd-top-nm">리코타치즈 샐러드 토핑 구성</b><img src="https://takkobebe-link.vercel.app/img/salad/top-ricotta.jpg" alt="리코타치즈 샐러드 토핑 구성" loading="lazy"><label for="sdt-none" class="sd-top-x">접기</label></div>
+    <div class="sd-top-shrimp"><b class="sd-top-nm">쉬림프 파스타 샐러드 토핑 구성</b><img src="https://takkobebe-link.vercel.app/img/salad/top-shrimp.jpg" alt="쉬림프 파스타 샐러드 토핑 구성" loading="lazy"><label for="sdt-none" class="sd-top-x">접기</label></div>
+    <div class="sd-top-duck"><b class="sd-top-nm">훈제오리 샐러드 토핑 구성</b><img src="https://takkobebe-link.vercel.app/img/salad/top-duck.jpg" alt="훈제오리 샐러드 토핑 구성" loading="lazy"><label for="sdt-none" class="sd-top-x">접기</label></div>
+    <div class="sd-top-bulgogi"><b class="sd-top-nm">소불고기 샐러드 토핑 구성</b><img src="https://takkobebe-link.vercel.app/img/salad/top-bulgogi.jpg" alt="소불고기 샐러드 토핑 구성" loading="lazy"><label for="sdt-none" class="sd-top-x">접기</label></div>
+  </div>
   <p class="sd-note">세트마다 담기는 샐러드는 맨 위 세트별 공구가에서 확인해 주세요.</p>
 </div>
 
