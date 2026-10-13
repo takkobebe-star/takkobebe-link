@@ -212,7 +212,6 @@
     <img src="https://takkobebe-link.vercel.app/img/salad/kale.jpg" alt="밭에서 자란 싱싱한 케일" loading="lazy">
   </figure>
   <p class="sd-text" style="margin-top:16px">매일 아침 꼼꼼하게 고른 채소를 엄격한 품질 관리 아래 여러 번 씻은 뒤, 그날 샐러드로 만들어 그날 보내 드립니다. 가장 맛있을 때 받아 보실 수 있어요.</p>
-  <p class="sd-note">당일 발송은 오전 9시 이전 주문 건에만 적용됩니다.</p>
 </div>
 
 <div class="sd-block">
