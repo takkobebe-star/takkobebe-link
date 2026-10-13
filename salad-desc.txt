@@ -216,7 +216,7 @@
   <input type="radio" name="sdt" id="sdt-shrimp" class="sd-tr">
   <input type="radio" name="sdt" id="sdt-duck" class="sd-tr">
   <input type="radio" name="sdt" id="sdt-bulgogi" class="sd-tr">
-  <p class="sd-note sd-tip">샐러드 이름을 누르면 토핑 구성을 볼 수 있어요.</p>
+  <p class="sd-note sd-tip">샐러드 이름을 누르면 토핑 구성을 볼 수 있어요!</p>
   <ul class="sd-perks sd-menu">
     <li><label for="sdt-chicken">닭가슴살</label></li><li><label for="sdt-ricotta">리코타치즈</label></li><li><label for="sdt-shrimp">쉬림프</label></li><li><label for="sdt-duck">훈제오리</label></li><li><label for="sdt-bulgogi">소불고기</label></li>
   </ul>
