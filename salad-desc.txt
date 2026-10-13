@@ -201,17 +201,6 @@
 </div>
 
 <div class="sd-block">
-  <p class="sd-eyebrow">샐러드, 왜 자꾸 미루게 될까요</p>
-  <h3 class="sd-title">이런 고민을 덜었어요</h3>
-  <ul class="sd-solve">
-    <li><span class="q">재료 사고 손질하기 번거로워요</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="a">씻고 손질해서 담아 보내요</span></li>
-    <li><span class="q">포장 샐러드는 신선할까 걱정돼요</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="a">그날 만들어 그날 보내요</span></li>
-    <li><span class="q">먹고 나면 금방 배고파요</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="a">한 팩 평균 320g이에요</span></li>
-    <li><span class="q">드레싱 맛이 늘 똑같아 질려요</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="a">샐러드마다 맞춘 드레싱 4종</span></li>
-  </ul>
-</div>
-
-<div class="sd-block">
   <h3 class="sd-title">질리지 않는 5가지 샐러드</h3>
   <figure class="sd-photo">
     <img src="https://takkobebe-link.vercel.app/img/salad/group.jpg" alt="닭가슴살, 리코타치즈, 쉬림프, 훈제오리, 소불고기 샐러드 다섯 그릇과 드레싱" loading="lazy">
