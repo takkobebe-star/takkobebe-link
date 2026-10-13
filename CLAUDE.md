@@ -3,6 +3,33 @@
 이 저장소는 세 계정(takkobebe2015@gmail.com, takkobebe@gmail.com, takkobebe@naver.com)이 번갈아 수정합니다.
 다른 사람이 고친 내용이 옛날 버전으로 덮이지 않도록, 어느 계정으로 작업하든 아래 규칙을 지킵니다.
 
+## 0. 저장소 한눈에 보기
+
+| 경로 | 역할 |
+|---|---|
+| `tkbb-main.js` | 쇼핑몰 화면(메인·마이페이지·주문·후기·Q&A 등)을 고치는 스크립트. 스킨 수정은 대부분 여기 |
+| `*-desc.txt`, `*-desc.js`, `img/<상품>/` | 상품 상세설명 HTML과 이미지 |
+| `vercel.json` | 파일별 CORS 헤더. 새 상세·이미지 폴더를 만들면 헤더 블록을 추가 |
+| `api/` | 공구 일정 등 API. 고치기 전 반드시 사용자 확인 |
+| `month.html`, `calendar.html`, `index.html`, `keywords.html` | 공구 달력·운영 페이지 |
+| `qm/` | 메인 퀵메뉴 아이콘 |
+| `.claude/skills/` | 타코베베 작업 스킬 (아래 표) |
+
+## 0-1. 작업별 스킬
+
+Claude Code는 `.claude/skills/`의 스킬을 자동으로 읽습니다. 요청에 맞는 스킬의 절차와 기준을 따릅니다.
+
+| 요청 | 스킬 |
+|---|---|
+| 화면 수정(여백·모서리·글자·버튼·문구) | `tacobebe-skin-edit` |
+| 상품 상세설명 HTML 만들기·고치기 | `tacobebe-detail-desc` |
+| 화면 열 때 수정 전 모습이 잠깐 보임(깜빡임) | `tacobebe-flash-fix` |
+| 인스타 카피, 상품명·서브카피 | `tacobebe-hook-copy` |
+| 새 스킬 만들기·스킬 고치기 | `tacobebe-skill-builder` |
+
+- 스킬과 이 파일의 규칙이 다르면 PR·Merge 방법(REST `gh api` 사용 등)은 이 파일을 따릅니다.
+- 스킬을 고칠 때도 일반 수정과 똑같이 브랜치 → PR → Merge로 올립니다. Merge되면 세 계정 모두 같은 스킬을 쓰게 됩니다.
+
 ## 1. 작업 시작 전: 항상 최신 main에서 출발
 
 - 수정 요청을 받으면 파일을 열기 전에 먼저 최신 내용을 받습니다.
