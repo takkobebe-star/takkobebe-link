@@ -2295,8 +2295,8 @@
 		'/shop/product_qna_list.php': qnaBoard, '/shop/product_qna.php': qnaBoard, '/shop/product_review_list.php': reviewBoard, '/board/': wishBoard, '/board/index.php': wishBoard, '/shop/order_finish.php': orderFinish, '/shop/order.php': orderForm, '/shop/cart.php': cartPage,
 		'/member/edit_step1.php': editInfo, '/member/edit_step2.php': editInfo, '/mypage/withdraw_step1.php': withdraw };
 	if (!PAGES[P]) return;
-	// 상품후기 게시판: 새 모양으로 바꾸기 전 원래 화면이 1초쯤 보이던 것 막기 (2026-10-13 사용자 요청). 늦어도 3초 뒤엔 보임
-	var RVWAIT = P === '/shop/product_review_list.php';
+	// 상품후기 게시판 · Q&A 게시판: 새 모양으로 바꾸기 전 원래 화면이 1초쯤 보이던 것 막기 (2026-10-13 사용자 요청). 늦어도 3초 뒤엔 보임
+	var RVWAIT = P === '/shop/product_review_list.php' || P === '/shop/product_qna_list.php' || P === '/shop/product_qna.php';
 	if (RVWAIT) {
 		var rvSt = document.createElement('style');
 		rvSt.textContent = 'html.tkbb-rvwait #cnt{opacity:0;}';
