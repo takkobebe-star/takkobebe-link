@@ -341,6 +341,15 @@
           "value": "*"
         }
       ]
+    },
+    {
+      "source": "/salad-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
     }
   ]
 }
