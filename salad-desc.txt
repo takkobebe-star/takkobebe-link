@@ -212,7 +212,7 @@
 </div>
 
 <div class="sd-block">
-  <h3 class="sd-title">골라 먹는 5가지 샐러드</h3>
+  <h3 class="sd-title">질리지 않는 5가지 샐러드</h3>
   <figure class="sd-photo">
     <img src="https://takkobebe-link.vercel.app/img/salad/group.jpg" alt="닭가슴살, 리코타치즈, 쉬림프, 훈제오리, 소불고기 샐러드 다섯 그릇과 드레싱" loading="lazy">
   </figure>
