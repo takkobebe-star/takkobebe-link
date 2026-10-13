@@ -4347,7 +4347,8 @@
 	if (window.__TKBB_DESC) return; window.__TKBB_DESC = 1;
 	if (location.pathname.indexOf('/shop/detail.php') < 0 || !window.fetch) return;
 	var MAP = {
-		'FA2431BF9D65058FE34E9713E32D60E6': ['pencil-desc.txt', 'tkbb-pc']   // 무아스 2in1 자동연필깎이
+		'FA2431BF9D65058FE34E9713E32D60E6': ['pencil-desc.txt', 'tkbb-pc'],  // 무아스 2in1 자동연필깎이
+		'7B4773C039D539AF17C883EB9283DD14': ['salad-desc.txt', 'tkbb-sd']    // 급찐급빠 리셋 샐러드 (위사 변수는 tkbb-sd 바깥에만 있음)
 	};
 	var m = /[?&]pno=([0-9A-Fa-f]+)/.exec(location.search);
 	var it = m && MAP[m[1].toUpperCase()];

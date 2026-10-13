@@ -99,6 +99,27 @@
   .tkbb-sd .sd-gosi th { width: 38%; padding-right: 10px; color: var(--sd-muted); font-weight: 400; background: transparent; }
   .tkbb-sd .sd-gosi tr:first-child th, .tkbb-sd .sd-gosi tr:first-child td { border-top: 0; }
 
+  .tkbb-sd .sd-sub { border-top: 1px solid var(--sd-line); }
+  .tkbb-sd .sd-sub summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-block: 12px; font-size: 13.5px; cursor: pointer; }
+  .tkbb-sd .sd-sub summary::-webkit-details-marker { display: none; }
+  .tkbb-sd .sd-sub summary span { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--sd-muted); }
+  .tkbb-sd .sd-acc details.sd-sub summary svg { width: 16px; height: 16px; flex: none; transform: none; transition: transform .15s; }
+  .tkbb-sd .sd-acc details.sd-sub[open] summary svg { transform: rotate(180deg); }
+  .tkbb-sd .sd-sub-in { padding-bottom: 14px; }
+  .tkbb-sd .sd-acc details.sd-sub:last-child { border-bottom: 0; }
+  .tkbb-sd .sd-gosi .sd-nut th, .tkbb-sd .sd-gosi .sd-nut td { padding: 6px 2px; color: var(--sd-ink); }
+  .tkbb-sd .sd-gosi .sd-nut th { width: auto; font-weight: 500; }
+  .tkbb-sd .sd-gosi .sd-nut td:last-child { width: 30%; text-align: right; font-weight: 500; }
+  .tkbb-sd .sd-gosi .sd-nut tr.s th { padding-left: 14px; font-weight: 300; }
+  .tkbb-sd .sd-gosi .sd-nut tr.h th, .tkbb-sd .sd-gosi .sd-nut tr.h td { font-size: 11.5px; font-weight: 300; color: var(--sd-muted); }
+  .tkbb-sd .sd-nut-ft { margin-top: 6px; font-size: 11.5px; color: var(--sd-muted); }
+  .tkbb-sd .sd-raw { margin-top: 14px; display: grid; gap: 8px; font-size: 12.5px; line-height: 1.55; }
+  .tkbb-sd .sd-raw > div { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 10px; }
+  .tkbb-sd .sd-raw dt { color: var(--sd-muted); }
+  .tkbb-sd .sd-raw dd { font-weight: 300; }
+  .tkbb-sd .sd-raw dd b { font-weight: 500; }
+  .tkbb-sd .sd-raw .sd-alg { padding: 1px 4px; border-radius: 3px; background: var(--sd-point); }
+
   /* 맨 위 세트별 가격 (위사 옵션 가격 기준 2026-10-01 — 가격을 바꾸면 여기도 같이 고쳐야 함) */
   .tkbb-sd .sd-price { margin-top: 28px; }
   .tkbb-sd .sd-price-ttl { padding-bottom: 12px; border-bottom: 2px solid var(--sd-ink); font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
@@ -236,22 +257,108 @@
   <h3 class="sd-title">배송 · 교환 및 상품 정보</h3>
   <div class="sd-acc">
     <details>
-      <summary>언제 받을 수 있나요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
-      <p class="sd-a">오전 9시 이전 주문은 그날 만들어 그날 발송합니다. 그 이후 주문은 다음 날 만들어 보내 드려요.</p>
+      <summary>보관은 어떻게 하나요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="sd-a">받으시면 바로 냉장 보관해 주세요. 냉장고에서 얼지 않도록 되도록 야채칸에 넣어 주시는 게 좋아요. 되도록 4일 안에 드시고, 개봉한 샐러드는 바로 드셔 주세요.</p>
+    </details>
+    <details>
+      <summary>계절마다 포장이 다른가요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="sd-a">잎채소는 온도에 민감해요. 기온이 높은 여름에는 신선도가 떨어지지 않도록 아이스팩을 넣어 포장하고, 봄 · 가을 · 겨울에는 날씨에 맞춰 아이스팩 양을 조절해 보내 드립니다.</p>
+    </details>
+    <details>
+      <summary>샐러드 원재료 및 영양정보<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <div class="sd-gosi">
+        <details class="sd-sub">
+          <summary>쉬림프 파스타 샐러드<span>244kcal<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span></summary>
+          <div class="sd-sub-in">
+            <table class="sd-nut"><tr class="h"><th>총 내용량 320g당</th><td></td><td>1일 영양성분 기준치에 대한 비율</td></tr><tr><th>나트륨</th><td>654mg</td><td>33%</td></tr><tr><th>탄수화물</th><td>28g</td><td>9%</td></tr><tr class="s"><th>당류</th><td>4g</td><td>4%</td></tr><tr><th>지방</th><td>7g</td><td>12%</td></tr><tr class="s"><th>트랜스지방</th><td>0g</td><td></td></tr><tr class="s"><th>포화지방</th><td>1.7g</td><td>11%</td></tr><tr><th>콜레스테롤</th><td>70mg</td><td>23%</td></tr><tr><th>단백질</th><td>18g</td><td>33%</td></tr></table>
+            <p class="sd-nut-ft">1일 영양성분 기준치에 대한 비율(%)은 2,000kcal 기준이므로 개인의 필요 열량에 따라 다를 수 있습니다.</p>
+            <dl class="sd-raw">
+              <div><dt>품목보고번호</dt><dd>20220098201302</dd></div>
+              <div><dt>원재료명</dt><dd>소스(<b>미국산</b>: 토마토혼합주스, 할라피뇨, 양파, 토마토페이스트, 정제수, 고수), 흰다리새우 11.21%(<b>베트남산</b>), 계란(<b>국산</b>), 푸실리 7.79%(<b>이탈리아산</b>), 스위트콘, 통로메인, 블랙올리브, 할라피뇨다이스, 적양파, 표고버섯, 양상추, 정제수, 그린치커리, 적근대, 라디치오, 재제소금, 콩기름</dd></div>
+              <div><dt>알레르기 유발 성분</dt><dd><b class="sd-alg">대두, 밀, 계란, 토마토, 쇠고기, 아황산류, 조개류(굴)</b> 함유</dd></div>
+              <div><dt>같은 시설 제조</dt><dd>이 제품은 알류, 메밀, 우유, 복숭아, 고등어, 게, 땅콩, 돼지고기, 쇠고기, 닭고기, 잣, 오징어, 아황산류, 조개류(굴, 전복, 홍합 포함)를 원료로 사용한 제품과 같은 제조 시설에서 제조하고 있습니다.</dd></div>
+            </dl>
+          </div>
+        </details>
+        <details class="sd-sub">
+          <summary>닭가슴살 샐러드<span>296kcal<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span></summary>
+          <div class="sd-sub-in">
+            <table class="sd-nut"><tr class="h"><th>총 내용량 320g당</th><td></td><td>1일 영양성분 기준치에 대한 비율</td></tr><tr><th>나트륨</th><td>468mg</td><td>23%</td></tr><tr><th>탄수화물</th><td>30g</td><td>9%</td></tr><tr class="s"><th>당류</th><td>5g</td><td>5%</td></tr><tr><th>지방</th><td>10g</td><td>19%</td></tr><tr class="s"><th>트랜스지방</th><td>0g</td><td></td></tr><tr class="s"><th>포화지방</th><td>6g</td><td>42%</td></tr><tr><th>콜레스테롤</th><td>165mg</td><td>55%</td></tr><tr><th>단백질</th><td>21g</td><td>38%</td></tr></table>
+            <p class="sd-nut-ft">1일 영양성분 기준치에 대한 비율(%)은 2,000kcal 기준이므로 개인의 필요 열량에 따라 다를 수 있습니다.</p>
+            <dl class="sd-raw">
+              <div><dt>품목보고번호</dt><dd>20220098201303</dd></div>
+              <div><dt>원재료명</dt><dd>햄 15.63%(닭가슴살(<b>국내산</b>), 치킨마리네이드-BF), 소스(마요네즈(식물성유지: <b>외국산/아르헨티나, 미국, 중국 등</b>), 소스(<b>태국산</b>), 과채주스, 농후발효유, 잡화청), 계란(<b>국산</b>), 당근라페(당근, 향신료조제품, 올리브유, 과채주스, 설탕), 방울토마토, 통로메인, 브로컬리, 블랙올리브, 이집트콩, 표고버섯, 양상추, 그린치커리, 적근대, 라디치오</dd></div>
+              <div><dt>알레르기 유발 성분</dt><dd><b class="sd-alg">대두, 밀, 계란, 토마토, 닭고기, 아황산류</b> 함유</dd></div>
+              <div><dt>같은 시설 제조</dt><dd>이 제품은 메밀, 우유, 복숭아, 고등어, 게, 땅콩, 돼지고기, 쇠고기, 새우, 잣, 오징어, 조개류(굴, 전복, 홍합 포함)를 원료로 사용한 제품과 같은 제조 시설에서 제조하고 있습니다.</dd></div>
+            </dl>
+          </div>
+        </details>
+        <details class="sd-sub">
+          <summary>훈제오리 샐러드<span>277kcal<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span></summary>
+          <div class="sd-sub-in">
+            <table class="sd-nut"><tr class="h"><th>총 내용량 320g당</th><td></td><td>1일 영양성분 기준치에 대한 비율</td></tr><tr><th>나트륨</th><td>648mg</td><td>32%</td></tr><tr><th>탄수화물</th><td>18g</td><td>6%</td></tr><tr class="s"><th>당류</th><td>11g</td><td>11%</td></tr><tr><th>지방</th><td>12g</td><td>22%</td></tr><tr class="s"><th>트랜스지방</th><td>0g</td><td></td></tr><tr class="s"><th>포화지방</th><td>7g</td><td>45%</td></tr><tr><th>콜레스테롤</th><td>87mg</td><td>29%</td></tr><tr><th>단백질</th><td>24g</td><td>44%</td></tr></table>
+            <p class="sd-nut-ft">1일 영양성분 기준치에 대한 비율(%)은 2,000kcal 기준이므로 개인의 필요 열량에 따라 다를 수 있습니다.</p>
+            <dl class="sd-raw">
+              <div><dt>품목보고번호</dt><dd>20220098201305</dd></div>
+              <div><dt>원재료명</dt><dd>훈제오리슬라이스 14.75%(<b>중국산</b>: 오리육, 설탕, 정제염, 폴리인산나트륨, 대두단백(유전자변형대두포함가능성있음)), 소스(양조간장(대두: <b>인도산</b>), 설탕, 발효식초, 기타과당, 양파), 계란(<b>국산</b>), 방울토마토, 통로메인, 적양파, 블랙올리브, 그린빈스, 파프리카, 표고버섯, 양상추, 그린치커리, 적근대, 라디치오</dd></div>
+              <div><dt>알레르기 유발 성분</dt><dd><b class="sd-alg">대두, 밀, 계란, 토마토, 아황산류, 조개류(굴)</b> 함유</dd></div>
+              <div><dt>같은 시설 제조</dt><dd>이 제품은 메밀, 우유, 복숭아, 고등어, 게, 땅콩, 돼지고기, 쇠고기, 닭고기, 새우, 잣, 오징어를 원료로 사용한 제품과 같은 제조 시설에서 제조하고 있습니다.</dd></div>
+            </dl>
+          </div>
+        </details>
+        <details class="sd-sub">
+          <summary>리코타치즈 샐러드<span>430kcal<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span></summary>
+          <div class="sd-sub-in">
+            <table class="sd-nut"><tr class="h"><th>총 내용량 320g당</th><td></td><td>1일 영양성분 기준치에 대한 비율</td></tr><tr><th>나트륨</th><td>86mg</td><td>4%</td></tr><tr><th>탄수화물</th><td>51g</td><td>16%</td></tr><tr class="s"><th>당류</th><td>28g</td><td>28%</td></tr><tr><th>지방</th><td>20g</td><td>38%</td></tr><tr class="s"><th>트랜스지방</th><td>0g</td><td></td></tr><tr class="s"><th>포화지방</th><td>18g</td><td>121%</td></tr><tr><th>콜레스테롤</th><td>50mg</td><td>17%</td></tr><tr><th>단백질</th><td>11g</td><td>20%</td></tr></table>
+            <p class="sd-nut-ft">1일 영양성분 기준치에 대한 비율(%)은 2,000kcal 기준이므로 개인의 필요 열량에 따라 다를 수 있습니다.</p>
+            <dl class="sd-raw">
+              <div><dt>품목보고번호</dt><dd>20220098201304</dd></div>
+              <div><dt>원재료명</dt><dd>리코타치즈 17.19%(원유(<b>국산</b>), 농축유청(<b>국산</b>), 유크림(<b>국산</b>), 산도조절제, 정제소금), 소스(기타과당, 발사믹식초(<b>이탈리아산</b>), 정제수, 설탕, 사과식초, 변성전분), 청포도(<b>국산</b>), 방울토마토(<b>국산</b>), 파인애플청크, 적양파, 통로메인, 양상추, 그린치커리, 적근대, 건크랜베리, 구운아몬드, 라디치오</dd></div>
+              <div><dt>알레르기 유발 성분</dt><dd><b class="sd-alg">우유, 토마토</b> 함유</dd></div>
+              <div><dt>같은 시설 제조</dt><dd>이 제품은 알류, 메밀, 밀, 우유, 대두, 복숭아, 고등어, 게, 땅콩, 돼지고기, 쇠고기, 닭고기, 새우, 잣, 오징어, 아황산류, 조개류(굴, 전복, 홍합 포함)를 원료로 사용한 제품과 같은 제조 시설에서 제조하고 있습니다.</dd></div>
+            </dl>
+          </div>
+        </details>
+        <details class="sd-sub">
+          <summary>소불고기 샐러드<span>292kcal<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span></summary>
+          <div class="sd-sub-in">
+            <table class="sd-nut"><tr class="h"><th>총 내용량 320g당</th><td></td><td>1일 영양성분 기준치에 대한 비율</td></tr><tr><th>나트륨</th><td>783mg</td><td>39%</td></tr><tr><th>탄수화물</th><td>29g</td><td>9%</td></tr><tr class="s"><th>당류</th><td>10g</td><td>10%</td></tr><tr><th>지방</th><td>11g</td><td>12%</td></tr><tr class="s"><th>트랜스지방</th><td>0g</td><td></td></tr><tr class="s"><th>포화지방</th><td>3.3g</td><td>22%</td></tr><tr><th>콜레스테롤</th><td>136mg</td><td>45%</td></tr><tr><th>단백질</th><td>19g</td><td>35%</td></tr></table>
+            <p class="sd-nut-ft">1일 영양성분 기준치에 대한 비율(%)은 2,000kcal 기준이므로 개인의 필요 열량에 따라 다를 수 있습니다.</p>
+            <dl class="sd-raw">
+              <div><dt>품목보고번호</dt><dd>20220098201301</dd></div>
+              <div><dt>원재료명</dt><dd>소불고기 15.63%(소고기(<b>호주산</b>), 소스), 소스(양조간장(대두: <b>인도산</b>), 설탕, 발효식초, 기타과당, 양파), 계란(<b>국산</b>), 스위트콘, 방울토마토, 통로메인, 블랙올리브, 할라피뇨다이스, 그린빈스, 양상추, 그린치커리, 적근대, 라디치오</dd></div>
+              <div><dt>알레르기 유발 성분</dt><dd><b class="sd-alg">대두, 밀, 계란, 토마토, 쇠고기, 아황산류, 조개류(굴)</b> 함유</dd></div>
+              <div><dt>같은 시설 제조</dt><dd>이 제품은 메밀, 우유, 복숭아, 고등어, 게, 땅콩, 돼지고기, 닭고기, 새우, 잣, 오징어를 원료로 사용한 제품과 같은 제조 시설에서 제조하고 있습니다.</dd></div>
+            </dl>
+          </div>
+        </details>
+      </div>
+    </details>
+    <details>
+      <summary>공통 상품정보고시<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <div class="sd-gosi">
+        <table>
+          <tr><th>식품의 유형</th><td>신선편의식품</td></tr>
+          <tr><th>내용량</th><td>320g (샐러드 1팩)</td></tr>
+          <tr><th>포장재질</th><td>PET</td></tr>
+          <tr><th>소비기한</th><td>상품별도표시</td></tr>
+          <tr><th>보관방법</th><td>냉장보관(0~10℃)</td></tr>
+          <tr><th>판매원</th><td>(주)헬로시즈닝 서울시 구로구 디지털로27길 24, 801호 59호실</td></tr>
+          <tr><th>제조원</th><td>어스메이드 서울시 구로구 디지털로 27길 24, 104호, 802호</td></tr>
+          <tr><th>반품 및 교환</th><td>구입처 및 판매원</td></tr>
+          <tr><th>주의사항</th><td>냉장보관하시고 개봉 후 변질의 우려가 있으니 빨리 드시기 바랍니다.<br>본 제품은 소비자 피해보상규정에 의거 교환 또는 보상 받을 수 있습니다.<br>부정 · 불량식품 신고는 국번없이 1399</td></tr>
+        </table>
+      </div>
     </details>
     <details>
       <summary>배송 · 교환 · 환불<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
       <ul class="sd-list">
+        <li>발송 당일 새벽 신선한 재료를 수급하여 만들어 보내드립니다.</li>
         <li>전 제품 무료배송입니다.</li>
         <li>주문 양만큼 만들어 보내는 신선 식품이라 장터 마감 후에는 취소가 어렵습니다.</li>
         <li>배송 중 파손되면 운송장 · 상태 사진 · 주문자 정보를 1:1 게시판에 올려 주세요.</li>
         <li>배송지를 잘못 입력해 생긴 오배송은 책임지기 어렵습니다.</li>
-        <li>네이버페이 주문의 반품 · 교환은 네이버톡톡으로 접수해 주세요.</li>
       </ul>
-    </details>
-    <details>
-      <summary>상품정보 고시<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
-      <div class="sd-gosi">{{$상품정보고시리스트}}</div>
     </details>
   </div>
 </div>
