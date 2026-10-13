@@ -99,8 +99,6 @@
   .tkbb-sd .sd-gosi th { width: 38%; padding-right: 10px; color: var(--sd-muted); font-weight: 400; background: transparent; }
   .tkbb-sd .sd-gosi tr:first-child th, .tkbb-sd .sd-gosi tr:first-child td { border-top: 0; }
 
-  .tkbb-sd .sd-gosi-hd { margin-top: 22px; padding-bottom: 8px; font-size: 13.5px; font-weight: 500; }
-  .tkbb-sd .sd-gosi-hd1 { margin-top: 0; }
   .tkbb-sd .sd-sub { border-top: 1px solid var(--sd-line); }
   .tkbb-sd .sd-sub summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-block: 12px; font-size: 13.5px; cursor: pointer; }
   .tkbb-sd .sd-sub summary::-webkit-details-marker { display: none; }
@@ -281,9 +279,8 @@
       </ul>
     </details>
     <details>
-      <summary>상품정보 고시<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <summary>샐러드 원재료 및 영양정보<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
       <div class="sd-gosi">
-        <p class="sd-gosi-hd sd-gosi-hd1">샐러드별 영양정보 · 원재료</p>
         <details class="sd-sub">
           <summary>쉬림프 파스타 샐러드<span>244kcal<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span></summary>
           <div class="sd-sub-in">
@@ -349,22 +346,22 @@
             </dl>
           </div>
         </details>
-        <details class="sd-sub">
-          <summary>공통 정보<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span></summary>
-          <div class="sd-sub-in">
-            <table>
-              <tr><th>식품의 유형</th><td>신선편의식품</td></tr>
-              <tr><th>내용량</th><td>320g (샐러드 1팩)</td></tr>
-              <tr><th>포장재질</th><td>PET</td></tr>
-              <tr><th>소비기한</th><td>상품별도표시</td></tr>
-              <tr><th>보관방법</th><td>냉장보관(0~10℃)</td></tr>
-              <tr><th>판매원</th><td>(주)헬로시즈닝 서울시 구로구 디지털로27길 24, 801호 59호실</td></tr>
-              <tr><th>제조원</th><td>어스메이드 서울시 구로구 디지털로 27길 24, 104호, 802호</td></tr>
-              <tr><th>반품 및 교환</th><td>구입처 및 판매원</td></tr>
-              <tr><th>주의사항</th><td>냉장보관하시고 개봉 후 변질의 우려가 있으니 빨리 드시기 바랍니다.<br>본 제품은 소비자 피해보상규정에 의거 교환 또는 보상 받을 수 있습니다.<br>부정 · 불량식품 신고는 국번없이 1399</td></tr>
-            </table>
-          </div>
-        </details>
+      </div>
+    </details>
+    <details>
+      <summary>공통 상품정보고시<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <div class="sd-gosi">
+        <table>
+          <tr><th>식품의 유형</th><td>신선편의식품</td></tr>
+          <tr><th>내용량</th><td>320g (샐러드 1팩)</td></tr>
+          <tr><th>포장재질</th><td>PET</td></tr>
+          <tr><th>소비기한</th><td>상품별도표시</td></tr>
+          <tr><th>보관방법</th><td>냉장보관(0~10℃)</td></tr>
+          <tr><th>판매원</th><td>(주)헬로시즈닝 서울시 구로구 디지털로27길 24, 801호 59호실</td></tr>
+          <tr><th>제조원</th><td>어스메이드 서울시 구로구 디지털로 27길 24, 104호, 802호</td></tr>
+          <tr><th>반품 및 교환</th><td>구입처 및 판매원</td></tr>
+          <tr><th>주의사항</th><td>냉장보관하시고 개봉 후 변질의 우려가 있으니 빨리 드시기 바랍니다.<br>본 제품은 소비자 피해보상규정에 의거 교환 또는 보상 받을 수 있습니다.<br>부정 · 불량식품 신고는 국번없이 1399</td></tr>
+        </table>
       </div>
     </details>
   </div>
