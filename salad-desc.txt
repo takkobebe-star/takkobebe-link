@@ -184,10 +184,10 @@
   <div class="sd-price">
     <h3 class="sd-price-ttl">세트별 공구가</h3>
     <ul class="sd-price-list">
-      <li><div class="l"><span class="no">01</span><b class="nm">맛보기 세트</b><span class="cp">5팩 · 닭가슴살 · 리코타치즈 · 쉬림프 · 훈제오리 · 소불고기 각 1개</span></div><div class="r"><s>52,500원</s><span><em>30%</em>36,900원</span></div></li>
-      <li><div class="l"><span class="no">02</span><b class="nm">단백질! 고기 많이~ 세트</b><span class="cp">5팩 · 훈제오리 2 · 소불고기 2 · 닭가슴살 1</span></div><div class="r"><s>52,500원</s><span><em>29%</em>37,200원</span></div></li>
-      <li><div class="l"><span class="no">03</span><b class="nm">산뜻! 라이트 세트</b><span class="cp">5팩 · 닭가슴살 2 · 쉬림프 2 · 리코타치즈 1</span></div><div class="r"><s>52,500원</s><span><em>30%</em>36,900원</span></div></li>
-      <li><div class="l"><span class="no">04</span><b class="nm">2배! 더블 세트</b><span class="cp">10팩 · 닭가슴살 · 리코타치즈 · 쉬림프 · 훈제오리 · 소불고기 각 2개</span></div><div class="r"><s>105,000원</s><span><em>34%</em>68,900원</span></div></li>
+      <li><div class="l"><span class="no">01</span><b class="nm">맛보기 세트</b><span class="cp">5팩 (닭가슴살 · 리코타치즈 · 쉬림프 · 훈제오리 · 소불고기 각 1)</span></div><div class="r"><s>52,500원</s><span><em>30%</em>36,900원</span></div></li>
+      <li><div class="l"><span class="no">02</span><b class="nm">단백질! 고기 많이~ 세트</b><span class="cp">5팩 (훈제오리 2 · 소불고기 2 · 닭가슴살 1)</span></div><div class="r"><s>52,500원</s><span><em>29%</em>37,200원</span></div></li>
+      <li><div class="l"><span class="no">03</span><b class="nm">산뜻! 라이트 세트</b><span class="cp">5팩 (닭가슴살 2 · 쉬림프 2 · 리코타치즈 1)</span></div><div class="r"><s>52,500원</s><span><em>30%</em>36,900원</span></div></li>
+      <li><div class="l"><span class="no">04</span><b class="nm">2배! 더블 세트</b><span class="cp">10팩 (닭가슴살 · 리코타치즈 · 쉬림프 · 훈제오리 · 소불고기 각 2)</span></div><div class="r"><s>105,000원</s><span><em>34%</em>68,900원</span></div></li>
     </ul>
     <p class="sd-price-ft"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5h11v9H3z"/><path d="M14 9.5h3.6l3.4 3.4v2.6H14"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg><span>전 제품 <b>무료배송</b></span></p>
   </div>
