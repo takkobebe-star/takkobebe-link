@@ -389,10 +389,11 @@ module.exports = async (req, res) => {
       if (hit) { if (ev.url && ev.url !== hit[1]) ev.shop = ev.url; ev.url = hit[1]; }   // shop = 원래 쇼핑몰 상품 (상품 상세의 판매예정 표시용)
     }
 
-    // CDN 캐시 5초 + 묵은 결과 허용 5초 → 캘린더 수정 후 10초 안에 반영 (2026-10-12 30초+30초 → 5초+5초)
-    // 5초가 지나면 다음 손님 한 명은 이전 결과를 받고 그동안 새로 만든다. 10초 넘게 묵은 결과는 주지 않는다.
+    // CDN 캐시 5초 + 묵은 결과 허용 5분 (2026-10-14: 5초+5초 → 5초+300초)
+    // 5초가 지나면 손님은 이전 결과를 바로 받고 그동안 뒤에서 새로 만든다 → 메인 배너가 서버 응답을 기다리지 않는다.
+    // 5분 넘게 아무도 안 들어왔다 오면 그 첫 손님만 새로 만들 때까지 기다린다. 캘린더 수정은 여전히 다음 손님부터 반영.
     // 쇼핑몰 상품 페이지는 위 PAGE_CACHE로 1분 재사용하므로 자주 새로 만들어도 쇼핑몰 부담은 그대로다.
-    res.setHeader("Cache-Control", "s-maxage=5, stale-while-revalidate=5");
+    res.setHeader("Cache-Control", "s-maxage=5, stale-while-revalidate=300");
     res.status(200).json({ events, src });
   } catch (e) {
     res.status(502).json({ error: String(e && e.message || e) });
