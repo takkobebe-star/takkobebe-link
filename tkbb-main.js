@@ -215,10 +215,12 @@
 
 		// 연결된 상품 페이지를 한 번씩만 읽어 대표사진을 챙긴다.
 		var all = live.concat(soon);
-		Promise.all(all.slice(0,6).map(function(e){
+		// 링크 없는 일정(주로 오픈 예정) 검색은 쇼핑몰 검색 페이지를 3번까지 차례로 받아 몇 초씩 걸린다.
+		// 그걸 다 기다리느라 상단 배너가 빈 칸으로 남았다(2026-10-14) → 1초만 기다리고 나머지는 그냥 그린다.
+		Promise.race([Promise.all(all.slice(0,6).map(function(e){
 			if (e.url) return Promise.resolve();
 			return findProduct(e.title).then(function(u){ if (u) e.url = u; }).catch(function(){});
-		})).then(function(){
+		})), new Promise(function(ok){ setTimeout(ok, 1000); })]).then(function(){
 		return Promise.all(all.map(function(e){
 			if (!e.url) return Promise.resolve();
 			// 일정 API 가 대표사진까지 담아 보내면 상품 페이지를 따로 받지 않는다 (배너가 훨씬 빨리 뜬다)
