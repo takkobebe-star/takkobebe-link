@@ -4276,9 +4276,9 @@
 		+ '#tkbb-pop .bx{width:100%;max-width:360px;background:#fff;border-radius:12px;overflow:hidden;}'
 		+ '#tkbb-pop .bx a.im{display:block;}'
 		+ '#tkbb-pop .bx img{display:block;width:100% !important;max-width:100% !important;height:auto;}'
-		// 사진 아래 참고사항(.ev)과 안내 문구(.nt) — 같은 글꼴·크기 11px (2026-10-14 사용자 요청)
+		// 사진 아래 참고사항(.ev) 11px, 안내 문구(.nt) 10px·줄 간격 1.4 (2026-10-14 사용자 요청)
 		+ '#tkbb-pop .ev{margin:0;padding:2px 28px 14px;font-size:11px;font-weight:400;line-height:1.6;color:#6A6A66;word-break:keep-all;text-align:left;}'
-		+ '#tkbb-pop .nt{margin:0;padding:12px 28px 14px;border-top:1px solid #EFEDE6;font-size:11px;font-weight:400;line-height:1.5;color:#6A6A66;word-break:keep-all;text-align:left;}'
+		+ '#tkbb-pop .nt{margin:0;padding:12px 28px 14px;border-top:1px solid #EFEDE6;font-size:10px;font-weight:400;line-height:1.4;color:#6A6A66;word-break:keep-all;text-align:left;}'
 		+ '#tkbb-pop .bt{display:flex;border-top:1px solid #EFEDE6;}'
 		+ '#tkbb-pop .bt button{flex:1 1 0;margin:0;padding:0;height:48px;border:0;border-radius:0;background:#fff;font:inherit;font-size:14px;font-weight:400;color:#6A6A66;cursor:pointer;-webkit-appearance:none;}'
 		+ '#tkbb-pop .bt button+button{border-left:1px solid #EFEDE6;color:#161616;font-weight:500;}'
