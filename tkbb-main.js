@@ -4269,15 +4269,16 @@
 	var KEY = 'tkbb_pop1110_hide';
 	var today = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);   // 한국 날짜
 	try { if (!PREVIEW && localStorage.getItem(KEY) === today) return; } catch (e) {}
-	var IMG = 'https://takkobebe-link.vercel.app/img/popup/review-event-1110-v4.jpg';
+	var IMG = 'https://takkobebe-link.vercel.app/img/popup/review-event-1110-v5.jpg';   // v4에서 맨 아래 참고사항 두 줄을 잘라 낸 사진 (그 두 줄은 아래 .ev 글자로, 2026-10-14)
 	var LINK = '/shop/product_review_list.php';
 	var css = '#tkbb-pop{position:fixed;inset:0;z-index:100002;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(22,22,22,.5);opacity:0;transition:opacity .2s;font-family:inherit;letter-spacing:-.02em;box-sizing:border-box;}'
 		+ '#tkbb-pop.on{opacity:1;}'
 		+ '#tkbb-pop .bx{width:100%;max-width:360px;background:#fff;border-radius:12px;overflow:hidden;}'
 		+ '#tkbb-pop .bx a.im{display:block;}'
 		+ '#tkbb-pop .bx img{display:block;width:100% !important;max-width:100% !important;height:auto;}'
-		// 사진 아래 안내 문구 (2026-10-14 사용자 요청)
-		+ '#tkbb-pop .nt{margin:0;padding:12px 16px 14px;border-top:1px solid #EFEDE6;font-size:12px;font-weight:400;line-height:1.5;color:#6A6A66;word-break:keep-all;text-align:left;}'
+		// 사진 아래 참고사항(.ev)과 안내 문구(.nt) — 같은 글꼴·크기 11px (2026-10-14 사용자 요청)
+		+ '#tkbb-pop .ev{margin:0;padding:2px 28px 14px;font-size:11px;font-weight:400;line-height:1.6;color:#6A6A66;word-break:keep-all;text-align:left;}'
+		+ '#tkbb-pop .nt{margin:0;padding:12px 28px 14px;border-top:1px solid #EFEDE6;font-size:11px;font-weight:400;line-height:1.5;color:#6A6A66;word-break:keep-all;text-align:left;}'
 		+ '#tkbb-pop .bt{display:flex;border-top:1px solid #EFEDE6;}'
 		+ '#tkbb-pop .bt button{flex:1 1 0;margin:0;padding:0;height:48px;border:0;border-radius:0;background:#fff;font:inherit;font-size:14px;font-weight:400;color:#6A6A66;cursor:pointer;-webkit-appearance:none;}'
 		+ '#tkbb-pop .bt button+button{border-left:1px solid #EFEDE6;color:#161616;font-weight:500;}'
@@ -4290,6 +4291,7 @@
 		var w = document.createElement('div'); w.id = 'tkbb-pop';
 		w.setAttribute('role', 'dialog'); w.setAttribute('aria-modal', 'true'); w.setAttribute('aria-label', '후기 이벤트 안내');
 		w.innerHTML = '<div class="bx"><a class="im" href="' + LINK + '"><img alt="후기 남기면 최대 1,000원 적립. 텍스트 후기 300원, 사진 첨부 시 700원 추가. 이벤트 기간 2026.10.08 – 11.10"></a>'
+			+ '<p class="ev">· 이벤트 기간 : 2026.10.08 – 11.10<br>· 텍스트 후기 300원, 사진을 함께 올리면 700원이 더해져요</p>'
 			+ '<p class="nt">이벤트 참여 시 꼭 구매하신 제품의 사진으로 올려주세요.<br>제품과 관련 없는 사진·내용으로 참여하신 경우, 지급된 혜택이 회수될 수 있는 점 양해 부탁드립니다.</p>'
 			+ '<div class="bt"><button type="button" data-x="day">오늘 하루 보지 않기</button><button type="button" data-x="close">닫기</button></div></div>';
 		function close(){ w.classList.remove('on'); document.body.classList.remove('tkbb-pop-open'); setTimeout(function(){ if (w.parentNode) w.parentNode.removeChild(w); }, 220); }
