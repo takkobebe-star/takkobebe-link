@@ -491,8 +491,8 @@
 			+ '.tkbb-hero .hb .pr b{font-size:24px;font-weight:600;color:#161616;}'
 			+ '.tkbb-hero .hb .pr small{font-size:16px;font-weight:500;}'
 			+ '.tkbb-hero .hb .pr s{font-size:14px;color:#B5B2A8;}'
-			// 연필깎이 배너 사진 108% 줌인 (2026-10-15). 넘치는 가장자리는 칸(.ib overflow:hidden)이 잘라 준다
-			+ '.tkbb-hero .ib.full.pz img{transform:scale(1.08);}'));
+			// 연필깎이 배너 사진 115% 줌인 (2026-10-15, 108→115 사용자 요청). 넘치는 가장자리는 칸(.ib overflow:hidden)이 잘라 준다
+			+ '.tkbb-hero .ib.full.pz img{transform:scale(1.15);}'));
 		(document.head || document.documentElement).appendChild(cs);
 	}
 
