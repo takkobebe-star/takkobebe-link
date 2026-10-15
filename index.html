@@ -378,7 +378,7 @@
 
     const soonList = document.getElementById("soonList");
     soonList.innerHTML = "";
-    soon.forEach((ev) => soonList.appendChild(soonRow(ev)));
+    soon.slice(0, 4).forEach((ev) => soonList.appendChild(soonRow(ev))); // 가까운 순 최대 4개 (2026-10-15)
     document.getElementById("soonSec").hidden = !soon.length;
   }
 
