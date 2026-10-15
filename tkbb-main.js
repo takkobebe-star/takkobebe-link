@@ -344,12 +344,16 @@
 		for (var n=0;n<items.length;n++){
 			var e = items[n], s = md(e.start), sd = ymd(e.start);
 			var when = s.m+'/'+s.d+' ('+wd(sd)+') '+(sd === today ? '오전 '+OPEN_HOUR+'시 ' : '')+(e.onSale ? '공구' : '오픈');
-			var tag = e.url ? 'a href="'+e.url+'"' : 'div';
-			var endt = e.url ? 'a' : 'div';
+			// 2026-10-15: 미리보기는 오픈일 3일 전부터만 (그 전엔 '오픈 예정' 버튼, 링크 없음)
+			var tp = (today||'').split('-'), sp = sd.split('-');
+			var dLeft = Math.round((Date.UTC(+sp[0], +sp[1]-1, +sp[2]) - Date.UTC(+tp[0], +tp[1]-1, +tp[2])) / 86400000);
+			var pv = e.url && dLeft <= 3;
+			var tag = pv ? 'a href="'+e.url+'"' : 'div';
+			var endt = pv ? 'a' : 'div';
 			rows += '<li data-d="'+sd+'"><'+tag+' class="rw">'
 			     +   '<div class="th">' + (e.img ? '<img src="'+e.img+'" alt="">' : '') + '</div>'
 			     +   '<div class="tx"><div class="n">'+esc(e.title)+'</div><div class="s">'+when+'</div></div>'
-			     +   (e.url ? '<span class="bt">미리보기</span>' : '<span class="bt off">오픈 예정</span>')
+			     +   (pv ? '<span class="bt">미리보기</span>' : '<span class="bt off">오픈 예정</span>')
 			     + '</'+endt+'></li>';
 		}
 		if (!rows) rows = '<li style="border:0"><div class="empty">예정된 공구가 곧 올라옵니다</div></li>';
