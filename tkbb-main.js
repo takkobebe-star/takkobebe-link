@@ -4367,7 +4367,8 @@
 	if (location.pathname.indexOf('/shop/detail.php') < 0 || !window.fetch) return;
 	var MAP = {
 		'FA2431BF9D65058FE34E9713E32D60E6': ['pencil-desc.txt', 'tkbb-pc'],  // 무아스 2in1 자동연필깎이
-		'7B4773C039D539AF17C883EB9283DD14': ['salad-desc.txt', 'tkbb-sd']    // 급찐급빠 리셋 샐러드 (위사 변수는 tkbb-sd 바깥에만 있음)
+		'7B4773C039D539AF17C883EB9283DD14': ['salad-desc.txt', 'tkbb-sd'],   // 급찐급빠 리셋 샐러드 (위사 변수는 tkbb-sd 바깥에만 있음)
+		'70FEB62B69F16E0238F741FAB228FEC2': ['apple-desc.txt', 'tkbb-ap']    // 감홍사과 (위사 상세설명이 비어 있어도 채워 넣음)
 	};
 	var m = /[?&]pno=([0-9A-Fa-f]+)/.exec(location.search);
 	var it = m && MAP[m[1].toUpperCase()];
@@ -4380,7 +4381,12 @@
 	var timer = setTimeout(done, 3000);
 	function swap(t){
 		var old = document.querySelector(SEL);
-		if (!old) return false;
+		if (!old) {   // 위사 상세설명 칸이 비어 있으면(사진·글 없음) 그 안에 새로 넣는다 (2026-10-15 감홍사과)
+			var wrap = document.querySelector('.wing-detail-more-contents');
+			if (!wrap || wrap.querySelector('img, video, table') || wrap.textContent.replace(/\s/g, '')) return false;
+			wrap.innerHTML = '';
+			old = wrap.appendChild(document.createElement('div'));
+		}
 		var box = document.createElement('div');
 		box.innerHTML = t;
 		var neu = box.querySelector(SEL);
