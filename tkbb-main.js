@@ -4383,8 +4383,12 @@
 		var old = document.querySelector(SEL);
 		if (!old) {   // 위사 상세설명 칸이 비어 있으면(사진·글 없음) 그 안에 새로 넣는다 (2026-10-15 감홍사과)
 			var wrap = document.querySelector('.wing-detail-more-contents');
-			if (!wrap || wrap.querySelector('img, video, table') || wrap.textContent.replace(/\s/g, '')) return false;
+			if (!wrap) return false;
+			var chk = wrap.cloneNode(true), ops = chk.querySelectorAll('.tkbb-op');   // 옵션별 공구가 자동 표(tkbb-op)는 빈 칸으로 친다
+			for (var k = 0; k < ops.length; k++) ops[k].parentNode.removeChild(ops[k]);
+			if (chk.querySelector('img, video, table') || chk.textContent.replace(/\s/g, '')) return false;
 			wrap.innerHTML = '';
+			wrap.style.minHeight = '';   // 자동 표가 늘려 둔 접힘 높이는 풀고 상세설명 CSS 높이를 쓴다
 			old = wrap.appendChild(document.createElement('div'));
 		}
 		var box = document.createElement('div');
