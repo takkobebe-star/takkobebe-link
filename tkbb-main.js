@@ -433,8 +433,8 @@
 		// 이 사진만 살짝 줌인 (2026-10-15 사용자 요청 '조금만 줌인') → CSS .ib.pz
 		var pz = '';
 		if (/연필깎이/.test(nm + ' ' + (tg.title || ''))) { o.img = 'https://takkobebe-link.vercel.app/img/pencil/banner.jpg'; pz = ' pz'; }
-		// 샐러드 배너도 전용 사진 (2026-10-15 사용자 요청). 배너 칸 비율(1:0.96)에 맞춰 접시 둘레 바탕을 늘려 둔 사진
-		else if (/샐러드/.test(nm + ' ' + (tg.title || ''))) o.img = 'https://takkobebe-link.vercel.app/img/salad/banner.jpg';
+		// 샐러드 배너도 전용 사진 (2026-10-15 사용자 요청). 흰 바탕 사진으로 교체, ?v=2 는 폰에 남은 예전 사진 대신 새로 받게
+		else if (/샐러드/.test(nm + ' ' + (tg.title || ''))) o.img = 'https://takkobebe-link.vercel.app/img/salad/banner.jpg?v=2';
 		var box = o.img
 		    ? '<div class="ib' + pz + '" style="background-image:url(\'' + o.img + '\')">'
 		      +   '<i class="bg l"></i><i class="bg r"></i>'
