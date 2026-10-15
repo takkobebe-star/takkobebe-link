@@ -429,8 +429,10 @@
 		else if (dleft <= 0) { badge = '마감 임박'; msg = '이 공구는 <b>오늘 밤 마감</b>돼요'; }
 		else if (dleft === 1) { badge = '마감 임박'; msg = '이 공구는 <b>내일 밤 마감</b>돼요'; }
 		else { badge = 'D-' + dleft; msg = '이 공구는 <b>' + e2.m + '/' + e2.d + ' (' + wd(ymd(tg.end)) + ')</b>까지예요'; }
+		// 연필깎이 배너만 사진을 살짝 줌 아웃해 배경이 더 보이게 (2026-10-15 사용자 요청) → CSS .ib.zo
+		var zo = /연필깎이/.test(nm + ' ' + (tg.title || '')) ? ' zo' : '';
 		var box = o.img
-		    ? '<div class="ib" style="background-image:url(\'' + o.img + '\')">'
+		    ? '<div class="ib' + zo + '" style="background-image:url(\'' + o.img + '\')">'
 		      +   '<i class="bg l"></i><i class="bg r"></i>'
 		      +   '<img src="' + o.img + '" alt="">'
 		      // 쌀빵·브라우니(noDetail)는 사진 위 문구('레옹아저씨의 야심작' 등)를 넣지 않는다 (2026-10-07)
@@ -486,7 +488,11 @@
 			+ '.tkbb-hero .hb .pr em{font-style:normal;font-size:24px;font-weight:600;color:#7c8339;}'
 			+ '.tkbb-hero .hb .pr b{font-size:24px;font-weight:600;color:#161616;}'
 			+ '.tkbb-hero .hb .pr small{font-size:16px;font-weight:500;}'
-			+ '.tkbb-hero .hb .pr s{font-size:14px;color:#B5B2A8;}'));
+			+ '.tkbb-hero .hb .pr s{font-size:14px;color:#B5B2A8;}'
+			// 연필깎이 배너만 줌 아웃 (2026-10-15): 사진을 86%로 줄이고, 둘레는 같은 사진의 왼쪽 위 귀퉁이를 크게 늘려 깐다
+			// (= 사진 배경색과 같은 색으로 채워져 경계가 안 보인다)
+			+ '.tkbb-hero .ib.full.zo{background-size:20000% 20000% !important;background-position:0 0 !important;}'
+			+ '.tkbb-hero .ib.full.zo img{transform:scale(.86);}'));
 		(document.head || document.documentElement).appendChild(cs);
 	}
 
