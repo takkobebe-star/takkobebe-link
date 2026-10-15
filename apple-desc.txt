@@ -1,0 +1,263 @@
+<div class="tkbb-ap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  /* 첫 화면(가격 · 사진 · 한눈에 보기)까지 보이고 나머지는 '상세설명 더보기'로 */
+  .wing-detail-more-contents { min-height: 1300px; }
+
+  .tkbb-ap {
+    --ap-surface: #F6F2EF;
+    --ap-ink: #161616;
+    --ap-muted: #6A6A66;
+    --ap-line: #E8E1DC;
+    --ap-point: #F6D9D3;
+    --ap-deep: #B3261E;
+    --ap-white: #FFFFFF;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 8px 4px 0;
+    color: var(--ap-ink);
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+  }
+  .tkbb-ap * { box-sizing: border-box; }
+  .tkbb-ap * { font-size: inherit; line-height: inherit; font-family: inherit; }
+  /* PC 스킨이 상세설명 이미지에 max-width:50%를 걸어 두어 덮어씀 */
+  .tkbb-ap img, .tkbb-ap video { display: block; width: 100%; max-width: 100% !important; height: auto; }
+  .tkbb-ap h2, .tkbb-ap h3, .tkbb-ap p, .tkbb-ap ul, .tkbb-ap ol, .tkbb-ap dl, .tkbb-ap dd { margin: 0; padding: 0; }
+  .tkbb-ap ul, .tkbb-ap ol { list-style: none; }
+
+  .tkbb-ap .ap-block { padding-block: 32px; border-top: 1px solid var(--ap-line); }
+  .tkbb-ap .ap-top { padding-top: 8px; padding-bottom: 0; border-top: 0; }
+  .tkbb-ap .ap-top + .ap-intro { padding-top: 20px; border-top: 0; }
+  .tkbb-ap .ap-eyebrow { margin-bottom: 6px; font-size: 13px; font-weight: 500; color: var(--ap-deep); }
+  .tkbb-ap .ap-title { margin-bottom: 14px; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.3; }
+  .tkbb-ap .ap-text { margin-top: 16px; font-size: 14.5px; font-weight: 300; line-height: 1.6; }
+  .tkbb-ap .ap-note { margin-top: 10px; font-size: 12.5px; color: var(--ap-muted); }
+
+  .tkbb-ap .ap-intro img { border-radius: 5px; background: var(--ap-surface); }
+  .tkbb-ap .ap-intro h2 { margin-top: 18px; font-size: 22px; font-weight: 500; line-height: 1.3; letter-spacing: -0.02em; }
+  .tkbb-ap .ap-intro h2 span { display: block; font-weight: 300; }
+  .tkbb-ap .ap-intro p { margin-top: 8px; font-size: 14.5px; font-weight: 300; line-height: 1.6; }
+  .tkbb-ap .ap-glance { margin-top: 18px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tkbb-ap .ap-glance li { padding: 12px 14px; border-radius: 7px; background: var(--ap-surface); }
+  .tkbb-ap .ap-glance b { display: block; font-size: 13.5px; font-weight: 500; }
+  .tkbb-ap .ap-glance span { display: block; margin-top: 4px; font-size: 13px; font-weight: 300; color: var(--ap-muted); }
+
+  .tkbb-ap .ap-photo { margin: 0; }
+  .tkbb-ap .ap-photo img, .tkbb-ap .ap-photo video { border-radius: 5px; background: var(--ap-surface); }
+
+  .tkbb-ap .ap-checks { margin-top: 16px; display: grid; gap: 8px; }
+  .tkbb-ap .ap-checks li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: center; padding: 12px 14px; border-radius: 7px; background: var(--ap-surface); font-size: 14px; }
+  .tkbb-ap .ap-num { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--ap-point); color: var(--ap-deep); font-size: 12px; font-weight: 600; font-style: normal; }
+
+  .tkbb-ap .ap-weigh { margin-top: 14px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tkbb-ap .ap-weigh li { padding: 14px; border-radius: 7px; background: var(--ap-surface); text-align: center; }
+  .tkbb-ap .ap-weigh li.on { background: var(--ap-point); }
+  .tkbb-ap .ap-weigh span { display: block; font-size: 12.5px; color: var(--ap-muted); }
+  .tkbb-ap .ap-weigh li.on span { color: #7A1F18; }
+  .tkbb-ap .ap-weigh b { display: block; margin-top: 4px; font-size: 22px; font-weight: 700; }
+
+  .tkbb-ap .ap-steps { margin-top: 4px; display: grid; gap: 10px; }
+  .tkbb-ap .ap-steps li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 12px; padding: 14px; border-radius: 7px; background: var(--ap-surface); }
+  .tkbb-ap .ap-steps b { display: block; font-size: 14.5px; font-weight: 600; }
+  .tkbb-ap .ap-steps span { display: block; margin-top: 4px; font-size: 13.5px; font-weight: 300; line-height: 1.55; color: var(--ap-muted); }
+
+  .tkbb-ap .ap-acc details { border-top: 1px solid var(--ap-line); }
+  .tkbb-ap .ap-acc details:last-child { border-bottom: 1px solid var(--ap-line); }
+  .tkbb-ap .ap-block.ap-faq { padding-bottom: 8px; }
+  .tkbb-ap .ap-acc summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-block: 14px; font-size: 14.5px; cursor: pointer; }
+  .tkbb-ap .ap-acc summary::-webkit-details-marker { display: none; }
+  .tkbb-ap .ap-acc summary svg { width: 18px; height: 18px; flex: none; color: var(--ap-muted); transition: transform .15s; }
+  .tkbb-ap .ap-acc details[open] summary svg { transform: rotate(180deg); }
+  .tkbb-ap .ap-acc .ap-a { padding-bottom: 16px; font-size: 14px; font-weight: 300; line-height: 1.6; }
+  .tkbb-ap .ap-acc .ap-a + .ap-a { margin-top: -8px; }
+  .tkbb-ap .ap-acc .ap-a-img { margin: -4px 0 16px; border-radius: 7px; overflow: hidden; }
+  .tkbb-ap .ap-acc .ap-a-img.half { max-width: 360px; }
+  .tkbb-ap .ap-acc .ap-list { padding-bottom: 16px; display: grid; gap: 6px; font-size: 13.5px; font-weight: 300; }
+  .tkbb-ap .ap-acc .ap-list li { position: relative; padding-left: 10px; }
+  .tkbb-ap .ap-acc .ap-list li::before { content: ""; position: absolute; left: 0; top: .62em; width: 3px; height: 3px; border-radius: 50%; background: var(--ap-muted); }
+
+  .tkbb-ap .ap-gosi { padding-bottom: 16px; }
+  .tkbb-ap .ap-gosi table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .tkbb-ap .ap-gosi th, .tkbb-ap .ap-gosi td { padding: 9px 2px; border-top: 1px solid var(--ap-line); text-align: left; vertical-align: top; font-weight: 300; line-height: 1.5; }
+  .tkbb-ap .ap-gosi th { width: 38%; padding-right: 10px; color: var(--ap-muted); font-weight: 400; background: transparent; }
+  .tkbb-ap .ap-gosi tr:first-child th, .tkbb-ap .ap-gosi tr:first-child td { border-top: 0; }
+
+  /* 맨 위 옵션별 가격 (위사 옵션 가격 기준 2026-10-15 — 가격을 바꾸면 여기도 같이 고쳐야 함) */
+  .tkbb-ap .ap-price { margin-top: 28px; }
+  .tkbb-ap .ap-price-ttl { padding-bottom: 12px; border-bottom: 2px solid var(--ap-ink); font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+  .tkbb-ap .ap-price-list li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: end; padding: 18px 0; border-bottom: 1px solid var(--ap-line); }
+  .tkbb-ap .ap-price-list .no { display: block; font-size: 11.5px; font-weight: 500; letter-spacing: 0.08em; color: var(--ap-muted); }
+  .tkbb-ap .ap-price-list .nm { display: block; margin-top: 4px; font-size: 16px; font-weight: 600; line-height: 1.35; }
+  .tkbb-ap .ap-price-list .cp { display: block; margin-top: 6px; font-size: 13px; font-weight: 300; line-height: 1.5; color: var(--ap-muted); }
+  .tkbb-ap .ap-price-list .r { text-align: right; white-space: nowrap; }
+  .tkbb-ap .ap-price-list .r s { display: block; font-size: 12.5px; color: #B5B2A8; }
+  .tkbb-ap .ap-price-list .r span { display: block; margin-top: 2px; font-size: 18px; font-weight: 700; }
+  .tkbb-ap .ap-price-list .r em { margin-right: 6px; font-style: normal; color: var(--ap-deep); }
+  .tkbb-ap .ap-price-ft { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; padding: 14px 0; border-radius: 7px; background: var(--ap-point); font-size: 15px; font-weight: 500; color: var(--ap-ink); }
+  .tkbb-ap .ap-price-ft svg { width: 22px; height: 22px; flex: none; }
+  .tkbb-ap .ap-price-ft b { font-weight: 700; }
+  .tkbb-ap .ap-gift { margin: 0; padding: 20px 18px 18px; border-radius: 7px; background: #161616; color: #fff; }
+  .tkbb-ap .ap-gift .tag { display: inline-block; padding: 3px 9px; border-radius: 999px; background: var(--ap-point); color: #7A1F18; font-size: 11.5px; font-weight: 700; }
+  .tkbb-ap .ap-gift .hd { margin-top: 12px; font-size: 18px; font-weight: 500; line-height: 1.45; color: #fff; }
+  .tkbb-ap .ap-gift .hd b { color: #FF8A7A; font-weight: 700; }
+  .tkbb-ap .ap-gift .sub { margin-top: 6px; font-size: 14px; font-weight: 300; color: rgba(255,255,255,.75); }
+
+  @media (min-width: 768px) {
+    .tkbb-ap .ap-block { padding-block: 40px; }
+    .wing-detail-more-contents { min-height: 1800px; }
+    .tkbb-ap .ap-title { font-size: 27px; }
+    .tkbb-ap .ap-intro h2 { font-size: 26px; }
+  }
+</style>
+
+<div class="ap-block ap-top">
+  <div class="ap-gift">
+    <span class="tag">제철 한정</span>
+    <p class="hd"><b>1년에 한 달</b>만 만나는 <b>명품</b> 감홍사과</p>
+    <p class="sub">당도와 상품성을 꼼꼼히 확인해 골라 보내 드립니다</p>
+  </div>
+  <div class="ap-price">
+    <h3 class="ap-price-ttl">옵션별 공구가</h3>
+    <ul class="ap-price-list">
+      <li><div class="l"><span class="no">01</span><b class="nm">감홍사과 2kg</b><span class="cp">7~10과</span></div><div class="r"><s>35,000원</s><span><em>15%</em>29,900원</span></div></li>
+      <li><div class="l"><span class="no">02</span><b class="nm">감홍사과 4kg</b><span class="cp">14~16과</span></div><div class="r"><span>49,900원</span></div></li>
+    </ul>
+    <p class="ap-price-ft"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5h11v9H3z"/><path d="M14 9.5h3.6l3.4 3.4v2.6H14"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg><span>전 옵션 <b>무료배송</b></span></p>
+  </div>
+</div>
+
+<div class="ap-block ap-intro">
+  <img src="https://takkobebe-link.vercel.app/img/apple/hero.jpg" alt="접시 위와 옆에 놓인 빨간 감홍사과 네 알">
+  <h2><span>사과계의 명품</span>감홍사과</h2>
+  <p>농촌진흥청에서 개발한 국내 품종으로, 1년에 한 번 짧은 수확 기간에만 만날 수 있는 귀한 사과예요. 진한 향과 높은 당도에 상큼함이 어우러지고, 과즙이 풍부하고 아삭합니다.</p>
+  <ul class="ap-glance">
+    <li><b>당도 15~20brix</b><span>후숙하면 더 진한 단맛</span></li>
+    <li><b>국내산</b><span>감홍을 잘 아는 전문 농가 재배</span></li>
+    <li><b>제철 감홍만</b><span>1년에 한 달만 판매</span></li>
+    <li><b>전 옵션 무료배송</b><span>사과 전용 난좌에 개별 포장</span></li>
+  </ul>
+</div>
+
+<div class="ap-block">
+  <p class="ap-eyebrow">왜 이번 감홍사과일까요?</p>
+  <h3 class="ap-title">골라서 보내는 제철 감홍</h3>
+  <figure class="ap-photo">
+    <video src="https://takkobebe-link.vercel.app/img/apple/slice.mp4" poster="https://takkobebe-link.vercel.app/img/apple/slice.jpg" autoplay muted loop playsinline preload="metadata" aria-label="감홍사과를 칼로 반 가르는 모습"></video>
+  </figure>
+  <ul class="ap-checks">
+    <li><i class="ap-num">1</i><span>1년에 한 달만 만날 수 있는 제철 감홍만 보내요</span></li>
+    <li><i class="ap-num">2</i><span>높은 당도와 상품성을 꼼꼼하게 확인해 골라요</span></li>
+    <li><i class="ap-num">3</i><span>감홍의 특성을 잘 아는 전문 농가에서 키웠어요</span></li>
+  </ul>
+</div>
+
+<div class="ap-block">
+  <p class="ap-eyebrow">남다른 달콤함</p>
+  <h3 class="ap-title">특유의 진한 풍미</h3>
+  <figure class="ap-photo">
+    <img src="https://takkobebe-link.vercel.app/img/apple/sweet.jpg" alt="반으로 자른 감홍사과와 통사과가 놓인 접시" loading="lazy">
+  </figure>
+  <ul class="ap-weigh">
+    <li class="on"><span>감홍사과 당도</span><b>15~20brix</b></li>
+    <li><span>후숙</span><b>실온 2~3일</b></li>
+  </ul>
+  <p class="ap-text">감홍은 일반 사과보다 향이 진하고 당도가 높은 품종이에요. 한 입 베어 물면 달콤함과 상큼함이 함께 퍼지고, 풍부한 과즙과 아삭한 식감을 느낄 수 있어요.</p>
+</div>
+
+<div class="ap-block">
+  <p class="ap-eyebrow">한 입 먹어 보면 알아요</p>
+  <h3 class="ap-title">얼마나 맛있을까요?</h3>
+  <figure class="ap-photo">
+    <video src="https://takkobebe-link.vercel.app/img/apple/bite.mp4" poster="https://takkobebe-link.vercel.app/img/apple/bite.jpg" autoplay muted loop playsinline preload="metadata" aria-label="한 입 베어 문 감홍사과"></video>
+  </figure>
+  <ul class="ap-checks">
+    <li><i class="ap-num">1</i><span>후숙하면 15~20brix 이상의 진한 단맛</span></li>
+    <li><i class="ap-num">2</i><span>꽃향기처럼 깊고 진한 감홍 특유의 향</span></li>
+    <li><i class="ap-num">3</i><span>탄탄한 과육과 풍부한 과즙의 아삭한 식감</span></li>
+  </ul>
+</div>
+
+<div class="ap-block">
+  <p class="ap-eyebrow">투박한 모습에 가려진</p>
+  <h3 class="ap-title">진짜 매력</h3>
+  <figure class="ap-photo">
+    <img src="https://takkobebe-link.vercel.app/img/apple/looks.jpg" alt="점이 많고 표면이 거칠며 모양이 제각각인 감홍사과 여섯 가지 모습" loading="lazy">
+  </figure>
+  <p class="ap-text">감홍은 겉면에 점이 많고 표면이 거칠며, 모양이 일정하지 않은 것이 특징이에요. 당도가 높아 과분이 올라와 하얗게 보이기도 합니다. 겉모습은 투박해도 진한 향과 깊은 맛이 감홍의 진짜 매력이에요.</p>
+</div>
+
+<div class="ap-block">
+  <h3 class="ap-title">이렇게 보관하세요</h3>
+  <ol class="ap-steps">
+    <li><i class="ap-num">1</i><div><b>받자마자 상태를 확인해 주세요</b><span>받으신 뒤 상태를 확인하고, 바로 드실 것은 실온에 두세요.</span></div></li>
+    <li><i class="ap-num">2</i><div><b>후숙하면 더 달콤해져요</b><span>실온에서 2~3일 정도 후숙하면 더 진한 단맛을 느낄 수 있어요.</span></div></li>
+    <li><i class="ap-num">3</i><div><b>하나씩 감싸 냉장 보관해 주세요</b><span>오래 두실 때는 씻지 않은 채로 하나씩 감싸 냉장 보관해 주세요. 사과의 에틸렌 가스가 다른 과일을 빨리 익게 하니 따로 두는 게 좋아요.</span></div></li>
+  </ol>
+</div>
+
+<div class="ap-block">
+  <p class="ap-eyebrow">꼼꼼하게 검수해서</p>
+  <h3 class="ap-title">안전하게 포장해요</h3>
+  <figure class="ap-photo">
+    <img src="https://takkobebe-link.vercel.app/img/apple/package.jpg" alt="흰 난좌에 하나씩 감싼 사과와 배송 상자" loading="lazy">
+  </figure>
+  <p class="ap-text">배송 중 충격을 줄이려고 사과 전용 난좌에 하나씩 개별 포장해 보내 드립니다.</p>
+  <p class="ap-note">포장 부자재는 산지 사정에 따라 바뀔 수 있으며, 이로 인한 교환 · 환불은 어렵습니다.</p>
+</div>
+
+<div class="ap-block ap-faq">
+  <h3 class="ap-title">배송 · 교환 및 상품 정보</h3>
+  <div class="ap-acc">
+    <details>
+      <summary>상품 정보<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <div class="ap-gosi">
+        <table>
+          <tr><th>품목</th><td>사과 (감홍)</td></tr>
+          <tr><th>원산지</th><td>국내산</td></tr>
+          <tr><th>중량 · 과수</th><td>2kg (7~10과) / 4kg (14~16과)</td></tr>
+          <tr><th>당도</th><td>15~20brix (후숙 시)</td></tr>
+          <tr><th>포장</th><td>사과 전용 난좌 개별 포장</td></tr>
+          <tr><th>보관방법</th><td>바로 드실 것은 실온, 오래 두실 것은 하나씩 감싸 냉장 보관</td></tr>
+        </table>
+      </div>
+    </details>
+    <details>
+      <summary>껍질이 거칠고 울퉁불퉁해요<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="ap-a">감홍은 일반 사과보다 껍질 표면이 거칠거나 울퉁불퉁하게 보일 때가 있는 품종이에요. 감홍의 자연스러운 생김새라 맛이나 품질과는 상관없으니 안심하고 드셔도 괜찮아요.</p>
+      <div class="ap-a-img"><img src="https://takkobebe-link.vercel.app/img/apple/faq-skin.jpg" alt="표면이 거친 부분을 동그라미로 표시한 감홍사과" loading="lazy"></div>
+    </details>
+    <details>
+      <summary>속에 꿀처럼 투명한 부분이 있어요<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="ap-a">과육 안쪽에 당분이 모여 생기는 '밀병현상'이에요. 당도가 높은 사과에서 자연스럽게 생기는 특징으로, 맛과 안전에는 전혀 문제가 없어요. 밀병은 개체마다 다르게 나타나고 후숙하면서 옅어지거나 사라지기도 해서, 밀병이 없다고 덜 단 것은 아니에요.</p>
+      <div class="ap-a-img half"><img src="https://takkobebe-link.vercel.app/img/apple/faq-honey.jpg" alt="밀병현상이 없는 사과 단면과 있는 사과 단면 비교" loading="lazy"></div>
+    </details>
+    <details>
+      <summary>겉면에 스크래치나 멍이 있어요<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="ap-a">자라는 동안이나 배송 중에 겉면에 작은 흠집, 스크래치, 멍이 생길 수 있어요. 겉모습의 차이일 뿐 과육과 맛에는 영향이 없고, 신경 쓰이시면 껍질을 벗겨 드셔도 좋아요.</p>
+      <div class="ap-a-img"><img src="https://takkobebe-link.vercel.app/img/apple/faq-scratch.jpg" alt="겉면 스크래치를 동그라미로 표시한 감홍사과 두 알" loading="lazy"></div>
+    </details>
+    <details>
+      <summary>사과마다 모양이나 크기가 달라요<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="ap-a">같은 품종이라도 재배 환경에 따라 크기, 모양, 껍질 색이 조금씩 달라요. 농산물이라 모든 사과의 모양이 같지 않은 점 참고해 주세요.</p>
+      <p class="ap-a">물량이 부족하면 더 크고 품질이 좋은 상위 과수로 바꿔 보내 드릴 수 있어요. 무게 기준으로 보내 드리기 때문에 이때는 적힌 과수보다 개수가 적을 수 있습니다.</p>
+    </details>
+    <details>
+      <summary>배송 · 교환 · 환불<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <ul class="ap-list">
+        <li>전 옵션 무료배송입니다.</li>
+        <li>산지에서 바로 보내는 상품이라 날씨와 농가 사정, 주문이 몰리는 정도에 따라 발송이 늦어질 수 있어요.</li>
+        <li>신선 농산물이라 단순 변심(모양 · 크기 · 색 · 맛 포함)으로 인한 교환 · 환불은 어렵습니다.</li>
+        <li>위에 안내한 감홍의 생김새, 밀병, 겉면 흠집, 과수 변경으로 인한 교환 · 환불은 어렵습니다.</li>
+        <li>상품에 문제가 있으면 받으신 뒤 48시간 안에 사진과 주문자 성함을 1:1 게시판에 남겨 주세요.</li>
+        <li>주소 · 연락처를 잘못 적어 생긴 오배송이나 반송은 교환 · 환불이 어렵습니다.</li>
+        <li>선물로 보내실 때는 배송 메모에 보내는 분 성함을 꼭 적어 주세요.</li>
+      </ul>
+    </details>
+  </div>
+</div>
+</div>
