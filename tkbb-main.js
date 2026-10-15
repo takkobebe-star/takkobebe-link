@@ -482,14 +482,7 @@
 			+ '.tkbb-hero .hb .pr em{font-style:normal;font-size:24px;font-weight:600;color:#7c8339;}'
 			+ '.tkbb-hero .hb .pr b{font-size:24px;font-weight:600;color:#161616;}'
 			+ '.tkbb-hero .hb .pr small{font-size:16px;font-weight:500;}'
-			+ '.tkbb-hero .hb .pr s{font-size:14px;color:#B5B2A8;}'
-			// 배너 사진 살짝 줌 아웃 (2026-10-15 사용자 요청 '너무 꽉 차 보여'): 사진을 사방 16px 안으로 넣고,
-			// 둘레는 같은 사진을 흐리게 깔아 색이 이어지게 한다. 딱지·장수 표시도 사진 안쪽으로 같이 옮긴다.
-			+ '.tkbb-hero .ib.full:before{display:block;}'
-			+ '.tkbb-hero .ib.full img{width:calc(100% - 32px);margin:16px auto;border-radius:7px;}'
-			+ '.tkbb-hero .ib.full .tag{top:26px;left:26px;}'
-			+ '.tkbb-hero .ib.full .cnt{right:26px;bottom:26px;}'
-			+ '.tkbb-hero .ib.full .copy{top:62px;left:28px;right:28px;}'));
+			+ '.tkbb-hero .hb .pr s{font-size:14px;color:#B5B2A8;}'));
 		(document.head || document.documentElement).appendChild(cs);
 	}
 
