@@ -4368,7 +4368,8 @@
 	var MAP = {
 		'FA2431BF9D65058FE34E9713E32D60E6': ['pencil-desc.txt', 'tkbb-pc'],  // 무아스 2in1 자동연필깎이
 		'7B4773C039D539AF17C883EB9283DD14': ['salad-desc.txt', 'tkbb-sd'],   // 급찐급빠 리셋 샐러드 (위사 변수는 tkbb-sd 바깥에만 있음)
-		'70FEB62B69F16E0238F741FAB228FEC2': ['apple-desc.txt', 'tkbb-ap']    // 감홍사과 (위사 상세설명이 비어 있어도 채워 넣음)
+		'70FEB62B69F16E0238F741FAB228FEC2': ['apple-desc.txt', 'tkbb-ap'],   // 감홍사과 (위사 상세설명이 비어 있어도 채워 넣음)
+		'35936504A37D53E03ABDFBC7318D9EC7': ['gongsin-desc.txt', 'tkbb-gs']  // 공신폰 (2026-10-16)
 	};
 	var m = /[?&]pno=([0-9A-Fa-f]+)/.exec(location.search);
 	var it = m && MAP[m[1].toUpperCase()];
