@@ -124,8 +124,8 @@
   <div class="ap-price">
     <h3 class="ap-price-ttl">옵션별 공구가</h3>
     <ul class="ap-price-list">
-      <li><div class="l"><span class="no">01</span><b class="nm">감홍사과 2kg</b><span class="cp">7~10과</span></div><div class="r"><s>35,000원</s><span><em>15%</em>29,900원</span></div></li>
-      <li><div class="l"><span class="no">02</span><b class="nm">감홍사과 4kg</b><span class="cp">14~16과</span></div><div class="r"><span>49,900원</span></div></li>
+      <li><div class="l"><span class="no">01</span><b class="nm">로얄과 2.5kg</b><span class="cp">6~8과</span></div><div class="r"><s>70,000원</s><span><em>10%</em>62,800원</span></div></li>
+      <li><div class="l"><span class="no">02</span><b class="nm">로얄과 4kg</b><span class="cp">10~13과</span></div><div class="r"><s>110,000원</s><span><em>14%</em>94,800원</span></div></li>
     </ul>
     <p class="ap-price-ft"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5h11v9H3z"/><path d="M14 9.5h3.6l3.4 3.4v2.6H14"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg><span>전 옵션 <b>무료배송</b></span></p>
   </div>
@@ -219,7 +219,7 @@
         <table>
           <tr><th>품목</th><td>사과 (감홍)</td></tr>
           <tr><th>원산지</th><td>국내산</td></tr>
-          <tr><th>중량 · 과수</th><td>2kg (7~10과) / 4kg (14~16과)</td></tr>
+          <tr><th>중량 · 과수</th><td>로얄과 2.5kg (6~8과) / 4kg (10~13과)</td></tr>
           <tr><th>당도</th><td>15~20brix (후숙 시)</td></tr>
           <tr><th>포장</th><td>사과 전용 난좌 개별 포장</td></tr>
           <tr><th>보관방법</th><td>바로 드실 것은 실온, 오래 두실 것은 하나씩 감싸 냉장 보관</td></tr>
