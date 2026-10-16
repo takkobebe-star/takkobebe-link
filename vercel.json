@@ -373,6 +373,19 @@
           "value": "*"
         }
       ]
+    },
+    {
+      "source": "/gongsin-desc.txt",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
     }
   ]
 }

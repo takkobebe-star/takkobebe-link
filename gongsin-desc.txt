@@ -1,0 +1,365 @@
+<div class="tkbb-gs">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  /* 첫 화면(소개 · 한눈에 보기)까지 보이고 나머지는 '상세설명 더보기'로 */
+  .wing-detail-more-contents { min-height: 1300px; }
+
+  .tkbb-gs {
+    --gs-surface: #F3F6FB;
+    --gs-ink: #161616;
+    --gs-muted: #63676E;
+    --gs-line: #E3E8F0;
+    --gs-blue: #1C6EF2;
+    --gs-blue-soft: #DCE9FF;
+    --gs-red: #E5372E;
+    --gs-red-soft: #FDE3E1;
+    --gs-yellow: #FFD43B;
+    --gs-orange: #F59A0C;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 8px 4px 0;
+    color: var(--gs-ink);
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+  }
+  .tkbb-gs * { box-sizing: border-box; }
+  .tkbb-gs * { font-size: inherit; line-height: inherit; font-family: inherit; }
+  .tkbb-gs img { display: block; width: 100%; max-width: 100% !important; height: auto; }
+  .tkbb-gs h2, .tkbb-gs h3, .tkbb-gs p, .tkbb-gs ul, .tkbb-gs ol, .tkbb-gs dl, .tkbb-gs dd { margin: 0; padding: 0; }
+  .tkbb-gs ul, .tkbb-gs ol { list-style: none; }
+
+  .tkbb-gs .gs-block { padding-block: 32px; border-top: 1px solid var(--gs-line); }
+  .tkbb-gs .gs-top { padding-top: 8px; border-top: 0; }
+  .tkbb-gs .gs-eyebrow { margin-bottom: 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: var(--gs-blue); }
+  .tkbb-gs .gs-eyebrow.red { color: var(--gs-red); }
+  .tkbb-gs .gs-title { margin-bottom: 14px; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.3; }
+  .tkbb-gs .gs-title em { font-style: normal; color: var(--gs-blue); }
+  .tkbb-gs .gs-title em.red { color: var(--gs-red); }
+  .tkbb-gs .gs-text { margin-top: 14px; font-size: 14.5px; font-weight: 300; line-height: 1.6; }
+  .tkbb-gs .gs-note { margin-top: 10px; font-size: 12.5px; color: var(--gs-muted); }
+  .tkbb-gs svg { display: block; }
+
+  /* 맨 위 소개 */
+  .tkbb-gs .gs-hero { padding: 26px 20px 24px; border-radius: 10px; background: var(--gs-blue); color: #fff; }
+  .tkbb-gs .gs-hero .tag { display: inline-block; padding: 3px 10px; border-radius: 999px; background: var(--gs-yellow); color: #3A2C00; font-size: 11.5px; font-weight: 700; }
+  .tkbb-gs .gs-hero h2 { margin-top: 12px; font-size: 25px; font-weight: 700; line-height: 1.3; letter-spacing: -0.02em; color: #fff; }
+  .tkbb-gs .gs-hero h2 span { display: block; font-size: 17px; font-weight: 400; color: rgba(255,255,255,.85); }
+  .tkbb-gs .gs-hero p { margin-top: 10px; font-size: 14px; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,.88); }
+  .tkbb-gs .gs-stats { margin-top: 18px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .tkbb-gs .gs-stats li { padding: 12px 6px; border-radius: 7px; background: rgba(255,255,255,.14); text-align: center; }
+  .tkbb-gs .gs-stats b { display: block; font-size: 18px; font-weight: 700; color: #fff; }
+  .tkbb-gs .gs-stats span { display: block; margin-top: 2px; font-size: 11.5px; color: rgba(255,255,255,.8); }
+
+  .tkbb-gs .gs-glance { margin-top: 18px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tkbb-gs .gs-glance li { padding: 12px 14px; border-radius: 7px; background: var(--gs-surface); }
+  .tkbb-gs .gs-glance b { display: block; font-size: 13.5px; font-weight: 600; }
+  .tkbb-gs .gs-glance span { display: block; margin-top: 4px; font-size: 13px; font-weight: 300; color: var(--gs-muted); }
+
+  /* 문제 제기 */
+  .tkbb-gs .gs-worry { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 4px; }
+  .tkbb-gs .gs-worry li { padding: 16px 6px 14px; border-radius: 7px; background: var(--gs-red-soft); text-align: center; font-size: 13px; font-weight: 600; color: #8E1F19; }
+  .tkbb-gs .gs-worry svg { width: 30px; height: 30px; margin: 0 auto 8px; color: var(--gs-red); }
+  .tkbb-gs .gs-dark { margin-top: 16px; padding: 22px 18px; border-radius: 10px; background: #17181C; color: #fff; text-align: center; }
+  .tkbb-gs .gs-dark .s { font-size: 13.5px; font-weight: 300; color: rgba(255,255,255,.75); }
+  .tkbb-gs .gs-dark .b { margin-top: 6px; font-size: 26px; font-weight: 700; color: #FF6157; }
+  .tkbb-gs .gs-dark .m { margin-top: 12px; font-size: 14.5px; font-weight: 400; line-height: 1.6; }
+  .tkbb-gs .gs-dark .m b { color: #FF6157; font-weight: 700; }
+
+  /* 체크 목록 */
+  .tkbb-gs .gs-checks { margin-top: 14px; display: grid; gap: 8px; }
+  .tkbb-gs .gs-checks li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: center; padding: 12px 14px; border-radius: 7px; background: var(--gs-surface); font-size: 14px; }
+  .tkbb-gs .gs-checks li b { color: var(--gs-red); font-weight: 700; }
+  .tkbb-gs .gs-ck { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--gs-red); color: #fff; }
+  .tkbb-gs .gs-ck svg { width: 13px; height: 13px; }
+
+  /* 기능 아이콘 */
+  .tkbb-gs .gs-feat { margin-top: 8px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .tkbb-gs .gs-feat li { padding: 16px 6px 14px; border-radius: 7px; background: var(--gs-surface); text-align: center; }
+  .tkbb-gs .gs-feat .ic { display: grid; place-items: center; width: 44px; height: 44px; margin: 0 auto 10px; border-radius: 12px; background: #fff; color: var(--gs-blue); }
+  .tkbb-gs .gs-feat .ic svg { width: 24px; height: 24px; }
+  .tkbb-gs .gs-feat span { display: block; font-size: 11.5px; font-weight: 300; color: var(--gs-muted); line-height: 1.4; }
+  .tkbb-gs .gs-feat b { display: block; margin-top: 3px; font-size: 13px; font-weight: 600; line-height: 1.35; }
+
+  /* 전후 비교 */
+  .tkbb-gs .gs-ba { margin-top: 6px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tkbb-gs .gs-ba > div { border-radius: 8px; overflow: hidden; background: var(--gs-surface); }
+  .tkbb-gs .gs-ba .hd { padding: 10px; background: #2A2B30; color: #fff; text-align: center; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; }
+  .tkbb-gs .gs-ba .after { background: var(--gs-red-soft); }
+  .tkbb-gs .gs-ba .after .hd { background: var(--gs-red); }
+  .tkbb-gs .gs-ba li { padding: 11px 6px; border-top: 1px solid var(--gs-line); text-align: center; font-size: 13.5px; color: var(--gs-muted); }
+  .tkbb-gs .gs-ba li:first-child { border-top: 0; }
+  .tkbb-gs .gs-ba .after li { border-color: #F7C9C5; color: var(--gs-red); font-weight: 700; }
+
+  /* 후기 · 숫자 */
+  .tkbb-gs .gs-quotes { margin-top: 6px; display: grid; gap: 8px; }
+  .tkbb-gs .gs-quotes li { padding: 14px 16px; border-radius: 7px; background: var(--gs-surface); font-size: 14.5px; font-weight: 500; }
+  .tkbb-gs .gs-quotes li::before { content: "“"; margin-right: 4px; color: var(--gs-red); font-weight: 700; }
+  .tkbb-gs .gs-nums { margin-top: 14px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .tkbb-gs .gs-nums li { padding: 14px 6px; border-radius: 7px; background: var(--gs-blue-soft); text-align: center; }
+  .tkbb-gs .gs-nums span { display: block; font-size: 12px; color: #2A4F8F; }
+  .tkbb-gs .gs-nums b { display: block; margin-top: 4px; font-size: 20px; font-weight: 700; color: var(--gs-blue); }
+
+  /* 버전 카드 */
+  .tkbb-gs .gs-ver { margin-top: 14px; padding: 20px 16px 16px; border-radius: 10px; border: 2px solid var(--gs-blue); }
+  .tkbb-gs .gs-ver.v2 { border-color: var(--gs-red); }
+  .tkbb-gs .gs-ver.v3 { border-color: var(--gs-orange); }
+  .tkbb-gs .gs-ver .no { display: inline-block; padding: 3px 11px; border-radius: 999px; background: var(--gs-blue); color: #fff; font-size: 12px; font-weight: 700; }
+  .tkbb-gs .gs-ver.v2 .no { background: var(--gs-red); }
+  .tkbb-gs .gs-ver.v3 .no { background: var(--gs-orange); }
+  .tkbb-gs .gs-ver .nm { margin-top: 10px; font-size: 21px; font-weight: 700; letter-spacing: -0.02em; }
+  .tkbb-gs .gs-ver .cp { margin-top: 6px; font-size: 14px; font-weight: 300; line-height: 1.55; }
+  .tkbb-gs .gs-ver .cp b { font-weight: 700; }
+  .tkbb-gs .gs-ver .fx { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .tkbb-gs .gs-ver .fx li { padding: 6px 10px; border-radius: 999px; background: var(--gs-surface); font-size: 12.5px; font-weight: 500; }
+  .tkbb-gs .gs-ver .fx li.key { background: var(--gs-blue-soft); color: #1B4FA8; font-weight: 700; }
+  .tkbb-gs .gs-ver.v2 .fx li.key { background: var(--gs-red-soft); color: #8E1F19; }
+  .tkbb-gs .gs-ver.v3 .fx li.key { background: #FFEFD3; color: #7A4A00; }
+
+  /* 믿음 포인트 */
+  .tkbb-gs .gs-trust { margin-top: 14px; display: grid; gap: 8px; }
+  .tkbb-gs .gs-trust li { padding: 13px 14px; border-radius: 999px; background: var(--gs-red); color: #fff; text-align: center; font-size: 14.5px; font-weight: 400; }
+  .tkbb-gs .gs-trust li:nth-child(2) { background: #17181C; }
+  .tkbb-gs .gs-trust li b { font-weight: 700; }
+
+  /* 구성품 */
+  .tkbb-gs .gs-comp { margin-top: 6px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .tkbb-gs .gs-comp li { padding: 14px; border-radius: 7px; background: var(--gs-surface); }
+  .tkbb-gs .gs-comp span { display: block; font-size: 12px; font-weight: 300; color: var(--gs-muted); }
+  .tkbb-gs .gs-comp b { display: block; margin-top: 3px; font-size: 14.5px; font-weight: 600; }
+
+  /* 단계 · 혜택 */
+  .tkbb-gs .gs-steps { margin-top: 6px; display: grid; gap: 10px; }
+  .tkbb-gs .gs-steps li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 12px; padding: 14px; border-radius: 7px; background: var(--gs-surface); }
+  .tkbb-gs .gs-num { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--gs-blue-soft); color: var(--gs-blue); font-size: 12px; font-weight: 700; font-style: normal; }
+  .tkbb-gs .gs-steps b { display: block; font-size: 14.5px; font-weight: 600; }
+  .tkbb-gs .gs-steps span { display: block; margin-top: 4px; font-size: 13.5px; font-weight: 300; line-height: 1.55; color: var(--gs-muted); }
+
+  /* SNS 후기 이벤트 */
+  .tkbb-gs .gs-ev { margin-top: 6px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .tkbb-gs .gs-ev li { padding: 14px 6px; border-radius: 7px; background: var(--gs-surface); text-align: center; }
+  .tkbb-gs .gs-ev span { display: block; font-size: 12.5px; color: var(--gs-muted); }
+  .tkbb-gs .gs-ev b { display: block; margin-top: 4px; font-size: 17px; font-weight: 700; color: var(--gs-blue); }
+
+  /* 접이식 */
+  .tkbb-gs .gs-acc details { border-top: 1px solid var(--gs-line); }
+  .tkbb-gs .gs-acc details:last-child { border-bottom: 1px solid var(--gs-line); }
+  .tkbb-gs .gs-block.gs-faq { padding-bottom: 8px; }
+  .tkbb-gs .gs-acc summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-block: 14px; font-size: 14.5px; cursor: pointer; }
+  .tkbb-gs .gs-acc summary::-webkit-details-marker { display: none; }
+  .tkbb-gs .gs-acc summary svg { width: 18px; height: 18px; flex: none; color: var(--gs-muted); transition: transform .15s; }
+  .tkbb-gs .gs-acc details[open] summary svg { transform: rotate(180deg); }
+  .tkbb-gs .gs-acc .gs-a { padding-bottom: 16px; font-size: 14px; font-weight: 300; line-height: 1.6; }
+  .tkbb-gs .gs-acc .gs-list { padding-bottom: 16px; display: grid; gap: 6px; font-size: 13.5px; font-weight: 300; }
+  .tkbb-gs .gs-acc .gs-list li { position: relative; padding-left: 10px; }
+  .tkbb-gs .gs-acc .gs-list li::before { content: ""; position: absolute; left: 0; top: .62em; width: 3px; height: 3px; border-radius: 50%; background: var(--gs-muted); }
+
+  @media (min-width: 768px) {
+    .tkbb-gs .gs-block { padding-block: 40px; }
+    .wing-detail-more-contents { min-height: 1800px; }
+    .tkbb-gs .gs-title { font-size: 27px; }
+    .tkbb-gs .gs-hero h2 { font-size: 29px; }
+  }
+</style>
+
+<div class="gs-block gs-top">
+  <div class="gs-hero">
+    <span class="tag">원조 공신폰</span>
+    <h2><span>우리 아이 스마트폰 습관 바꿔 주는</span>공부폰을 소개합니다</h2>
+    <p>게임 · 유튜브 · 유해 앱은 막고, 연령에 맞는 꼭 필요한 기능과 공부를 돕는 기능만 남긴 스마트폰이에요.</p>
+    <ul class="gs-stats">
+      <li><b>5만 대</b><span>누적 판매량</span></li>
+      <li><b>4.9점</b><span>평균 만족도</span></li>
+      <li><b>2017년~</b><span>쌓아 온 차단 기술</span></li>
+    </ul>
+  </div>
+  <ul class="gs-glance">
+    <li><b>데이터 완벽 차단</b><span>뚫리면 환불 보장</span></li>
+    <li><b>삼성 정품 새 제품</b><span>전국 삼성서비스센터 무상 A/S</span></li>
+    <li><b>3가지 버전</b><span>아이 상황에 맞게 골라요</span></li>
+    <li><b>풀패키지 구성</b><span>워치 · 케이스 · 강의 쿠폰까지</span></li>
+  </ul>
+</div>
+
+<div class="gs-block">
+  <p class="gs-eyebrow red">이대로 괜찮을까요?</p>
+  <h3 class="gs-title">집에서도 학교에서도<br>손에서 놓지 않는 스마트폰</h3>
+  <ul class="gs-worry">
+    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 15c1.2-1 2.5-1.5 4-1.5s2.8.5 4 1.5M9 9.5h.01M15 9.5h.01"/></svg>집중력 저하</li>
+    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5V5a2 2 0 0 1 2-2h12v15H6a2 2 0 0 0-2 1.5Z"/><path d="M4 19.5A2 2 0 0 0 6 21h12v-3M3 3l18 18"/></svg>학습 의욕 저하</li>
+    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>수면 부족</li>
+  </ul>
+  <div class="gs-dark">
+    <p class="s">아이들의 평균 스마트폰 사용 시간은</p>
+    <p class="b">하루 약 3시간</p>
+    <p class="m">아직 인지 능력이 충분히 자라지 않은 아이들에게<br>유튜브 · 게임이 되는 <b>스마트폰은 독</b>이에요.<br>지금이라도 스마트폰 습관을 바꿔야 해요.</p>
+  </div>
+</div>
+
+<div class="gs-block">
+  <p class="gs-eyebrow red">HIGHLIGHT</p>
+  <h3 class="gs-title">스마트폰의 <em class="red">필요한 기능만 ON</em></h3>
+  <ul class="gs-checks">
+    <li><i class="gs-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></i><span>게임 · 유튜브 · 유해 앱은 <b>차단</b></span></li>
+    <li><i class="gs-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></i><span>연령에 맞춰 <b>필요한 기능</b>만 사용</span></li>
+    <li><i class="gs-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></i><span>성적까지 챙기는 <b>스터디 기능</b></span></li>
+  </ul>
+</div>
+
+<div class="gs-block">
+  <p class="gs-eyebrow">KEY POINT 1</p>
+  <h3 class="gs-title">어떤 기능이 있는지<br><em>자세히 보여 드릴게요</em></h3>
+  <ul class="gs-feat">
+    <li><i class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10" r="2.3"/></svg></i><span>우리 아이</span><b>실시간 위치 확인</b></li>
+    <li><i class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.4a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M12 19.5h.01M3 3l18 18"/></svg></i><span>100% 뚫리지 않는</span><b>데이터 완벽 차단</b></li>
+    <li><i class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V6a2 2 0 0 1 2-2h13v13H6a2 2 0 0 0-2 2Zm0 0a2 2 0 0 0 2 2h13"/><path d="M9 8h6M9 11.5h4"/></svg></i><span>8,400 필수 영단어</span><b>SKY VOCA 단어장</b></li>
+    <li><i class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg></i><span>긴급 자동 수신 전화</span><b>SOS 긴급 수신</b></li>
+    <li><i class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5.5C5.5 4 8.5 4 12 6c3.5-2 6.5-2 9-.5V19c-2.5-1.5-5.5-1.5-9 .5-3.5-2-6.5-2-9-.5Z"/><path d="M12 6v13.5"/></svg></i><span>33만 개 단어</span><b>라이트 영한사전</b></li>
+    <li><i class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M5 3 2 6M19 3l3 3"/></svg></i><span>공부 목표 달성</span><b>학습 타이머 · 스톱워치</b></li>
+  </ul>
+</div>
+
+<div class="gs-block">
+  <p class="gs-eyebrow red">KEY POINT 2</p>
+  <h3 class="gs-title">공부폰, 어떤 <em class="red">효과가 있나요?</em></h3>
+  <div class="gs-ba">
+    <div><p class="hd">BEFORE</p><ul><li>스마트폰만 찾음</li><li>집중력 떨어짐</li><li>절제력 · 책임감 상실</li><li>스마트폰에 의존</li></ul></div>
+    <div class="after"><p class="hd">AFTER</p><ul><li>방해 요소 감소</li><li>집중력 향상</li><li>미래 역량 강화</li><li>자율성 성장</li></ul></div>
+  </div>
+</div>
+
+<div class="gs-block">
+  <p class="gs-eyebrow">REVIEW</p>
+  <h3 class="gs-title">먼저 써 본 <em>부모님들의 후기</em></h3>
+  <ul class="gs-quotes">
+    <li>마음 놓고 줄 수 있어서 좋아요</li>
+    <li>데이터가 완벽하게 차단돼서 좋아요</li>
+    <li>잔소리 할 일도 없고 싸우지 않아요</li>
+    <li>아이 첫 폰으로 최고의 선택이에요</li>
+  </ul>
+  <ul class="gs-nums">
+    <li><span>누적 판매량</span><b>50,000대</b></li>
+    <li><span>평균 만족도</span><b>4.9점</b></li>
+    <li><span>네이버 공부폰</span><b>인기 1위</b></li>
+  </ul>
+</div>
+
+<div class="gs-block">
+  <p class="gs-eyebrow">CHOOSE YOUR TYPE</p>
+  <h3 class="gs-title">우리 아이에게 <em>맞는 공부폰</em></h3>
+  <div class="gs-ver v1">
+    <span class="no">버전 1</span>
+    <p class="nm">완벽차단형</p>
+    <p class="cp">2017년부터 쌓아 온 데이터를 바탕으로 <b>100% 완벽한 차단율</b>을 자랑하는 원조 공부폰이에요.</p>
+    <ul class="fx">
+      <li class="key">실시간 위치 확인</li><li class="key">데이터 완벽 차단</li><li>블루투스 워치</li><li>SOS 긴급 수신</li><li>안심폰 알림</li><li>학습 타이머 · 스톱워치</li><li>SKY VOCA 단어장</li><li>라이트 영한사전</li>
+    </ul>
+  </div>
+  <div class="gs-ver v2">
+    <span class="no">NEW · 버전 2</span>
+    <p class="nm">하이브리드형</p>
+    <p class="cp">차단 모드와 카톡 허용 모드, <b>두 가지 모드를 한 번에</b>. 자녀 상황에 맞게 부모님이 직접 켜고 끌 수 있어요.</p>
+    <ul class="fx">
+      <li class="key">차단 모드</li><li class="key">카톡 허용 모드</li><li>실시간 아이 위치 확인</li><li>안심폰 알림</li>
+    </ul>
+  </div>
+  <div class="gs-ver v3">
+    <span class="no">버전 3</span>
+    <p class="nm">기본형</p>
+    <p class="cp">버전 1에서 <b>위치 확인 기능만 뺀</b> 기본형 공부폰이에요. 데이터 차단은 똑같이 100%예요.</p>
+    <ul class="fx">
+      <li class="key">데이터 완벽 차단</li><li>블루투스 워치</li><li>학습 타이머 · 스톱워치</li><li>SKY VOCA 단어장</li><li>라이트 영한사전</li>
+    </ul>
+  </div>
+  <p class="gs-note">버전별 약정(1년 · 2년)과 요금제, 가격은 상담 때 자세히 안내해 드려요.</p>
+</div>
+
+<div class="gs-block">
+  <p class="gs-eyebrow red">YELLOW MARKET ONLY</p>
+  <h3 class="gs-title">2017년 첫 공신폰부터<br><em class="red">10년 가까이 쌓아 온</em> 원조 공신폰</h3>
+  <p class="gs-text">노란마켓에서만 판매하는 삼성 독점 계약 공부폰이에요.</p>
+  <ul class="gs-trust">
+    <li>데이터 뚫릴 시 <b>환불 보장</b></li>
+    <li>10년 가까이 쌓아 온 <b>보안 설계</b></li>
+    <li>다른 곳과 비교할 수 없는 <b>구성과 품질</b></li>
+  </ul>
+</div>
+
+<div class="gs-block">
+  <p class="gs-eyebrow">PACKAGE</p>
+  <h3 class="gs-title">정말 이걸 다? <em>완벽한 풀패키지</em></h3>
+  <ul class="gs-comp">
+    <li><span>데이터 완전 차단</span><b>공부폰 본품</b></li>
+    <li><span>1년 무상 A/S</span><b>블루투스 워치</b></li>
+    <li><span>필름 & 케이스</span><b>스트랩 세트</b></li>
+    <li><span>Believe</span><b>필통 파우치</b></li>
+    <li><span>고속 충전</span><b>어댑터</b></li>
+    <li><span>정품 충전</span><b>케이블</b></li>
+    <li><span>공신닷컴</span><b>평생 강의 쿠폰</b></li>
+    <li><span>강성태</span><b>영단어 학습기</b></li>
+  </ul>
+  <p class="gs-note">재고 상황에 따라 일부 사은품 구성이 바뀔 수 있어요.</p>
+</div>
+
+<div class="gs-block">
+  <p class="gs-eyebrow">SIGNATURE</p>
+  <h3 class="gs-title">아이를 위한 응원 <em>시그니처 패키지</em></h3>
+  <ol class="gs-steps">
+    <li><i class="gs-num">1</i><div><b>따뜻한 응원 메시지</b><span>의지 활활! 수험생을 위한 응원 메시지 카드를 함께 보내 드려요.</span></div></li>
+    <li><i class="gs-num">2</i><div><b>레터링 서비스</b><span>우리 아이만을 위한 응원 문구를 손글씨로 적어 드려요.</span></div></li>
+    <li><i class="gs-num">3</i><div><b>감성 패키지</b><span>받는 순간 모두가 탐내는 선물 포장이에요.</span></div></li>
+  </ol>
+</div>
+
+<div class="gs-block">
+  <p class="gs-eyebrow">BONUS</p>
+  <h3 class="gs-title">여기서 또? <em>공부폰 구매 혜택</em></h3>
+  <ol class="gs-steps">
+    <li><i class="gs-num">1</i><div><b>기기 파손 · 분실 · 침수 시 무상 교체</b><span>문제가 생기면 임대폰(같은 공부폰)을 무상으로 빌려 드려요.</span></div></li>
+    <li><i class="gs-num">2</i><div><b>가족 · 지인 소개 시 1+1 혜택</b><span>소개해 주시면 공부폰 1+1 혜택이 적용돼요.</span></div></li>
+    <li><i class="gs-num">3</i><div><b>아이가 싫어하면 데이터 모드 전환</b><span>부모님이 승인하시면 데이터 기능 모드로 바꿀 수 있어요.</span></div></li>
+    <li><i class="gs-num">4</i><div><b>전국 삼성서비스센터 무상 A/S</b><span>무상 A/S는 삼성서비스센터 기준을 따릅니다.</span></div></li>
+    <li><i class="gs-num">5</i><div><b>공부의 신 PERFECT 패키지</b><span>자사 브랜드 티키톡 키즈워치까지 포함돼요.</span></div></li>
+  </ol>
+</div>
+
+<div class="gs-block">
+  <p class="gs-eyebrow">EVENT</p>
+  <h3 class="gs-title">SNS 후기 올리면 <em>최대 5만 원</em></h3>
+  <ul class="gs-ev">
+    <li><span>유튜브 촬영 후기</span><b>5만 원</b></li>
+    <li><span>인스타 후기</span><b>1만 원</b></li>
+    <li><span>맘카페 후기</span><b>2만 원</b></li>
+  </ul>
+  <p class="gs-text">공부폰을 구매하신 분이 유튜브 · 인스타그램 · 맘카페에 언박싱, 제품 소개, 기능 설명 등 후기를 올리고 인증해 주시면 바로 입금해 드려요. 구매 날짜와 구매자 이름을 함께 보내 주세요.</p>
+</div>
+
+<div class="gs-block gs-faq">
+  <h3 class="gs-title">자주 묻는 질문</h3>
+  <div class="gs-acc">
+    <details>
+      <summary>온라인 접수라 개인정보가 걱정돼요<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="gs-a">노란마켓은 삼성화재 배상책임보험에 가입되어 있어, 고객님의 개인정보를 안전하게 보호합니다.</p>
+    </details>
+    <details>
+      <summary>데이터 해제가 아예 안 되나요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="gs-a">아이 쪽에서는 100% 뚫리지 않지만, 부모님이 원하시면 노란마켓 본사 전산 시스템으로 언제든 데이터 차단을 풀 수 있어요.</p>
+    </details>
+    <details>
+      <summary>A/S가 되나요?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <p class="gs-a">삼성전자 정품 미개봉 새 제품이라 전국 삼성서비스센터에서 무상 A/S를 받으실 수 있어요.</p>
+    </details>
+    <details>
+      <summary>구매 안내<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <ul class="gs-list">
+        <li>공부폰은 통신 개통이 필요한 상품이라 판매처(노란마켓) 상담을 거쳐 진행돼요.</li>
+        <li>버전 · 약정 · 요금제와 가격은 상담 때 안내해 드려요.</li>
+        <li>상품 소개 내용의 저작권은 노란마켓에 있습니다.</li>
+      </ul>
+    </details>
+  </div>
+</div>
+</div>
