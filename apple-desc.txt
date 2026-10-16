@@ -125,7 +125,7 @@
     <h3 class="ap-price-ttl">옵션별 공구가</h3>
     <ul class="ap-price-list">
       <li><div class="l"><span class="no">01</span><b class="nm">로얄과 2.5kg</b><span class="cp">6~8과</span></div><div class="r"><s>70,000원</s><span><em>10%</em>62,800원</span></div></li>
-      <li><div class="l"><span class="no">02</span><b class="nm">로얄과 4kg</b><span class="cp">10~13과</span></div><div class="r"><s>100,000원</s><span><em>5%</em>94,800원</span></div></li>
+      <li><div class="l"><span class="no">02</span><b class="nm">로얄과 4kg</b><span class="cp">10~13과</span></div><div class="r"><s>110,000원</s><span><em>14%</em>94,800원</span></div></li>
     </ul>
     <p class="ap-price-ft"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5h11v9H3z"/><path d="M14 9.5h3.6l3.4 3.4v2.6H14"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg><span>전 옵션 <b>무료배송</b></span></p>
   </div>
