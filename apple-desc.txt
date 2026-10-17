@@ -119,7 +119,7 @@
   <div class="ap-gift">
     <span class="tag">제철 한정</span>
     <p class="hd"><b>1년에 한 달</b>만 만나는 <b>명품</b> 감홍사과</p>
-    <p class="sub">당도와 상품성을 꼼꼼히 확인해 골라 보내 드립니다</p>
+    <p class="sub">최상의 신선도와 당도로 선별해 보내 드립니다</p>
   </div>
   <div class="ap-price">
     <h3 class="ap-price-ttl">옵션별 공구가</h3>
