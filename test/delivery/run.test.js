@@ -38,11 +38,11 @@ function fakeTracker(table, { failWith } = {}) {
 
 test('도착한 상품만 배송완료 처리하고 재조회로 확인한다', async () => {
   const orders = [
-    order('O1', '2026-10-21 10:00:00', [prod(11, 1, '600820908970'), prod(12, 1, '600820908971')]), // 수요일 발송, 비상 규칙 아직
-    order('O2', '2026-10-21 11:00:00', [prod(21, 6, '260176992213')]),
+    order('O1', '2026-10-21 10:00:00', [prod(11, 1, '100000000001'), prod(12, 1, '100000000002')]), // 수요일 발송, 비상 규칙 아직
+    order('O2', '2026-10-21 11:00:00', [prod(21, 6, '200000000001')]),
   ];
   const wisa = fakeWisa(orders);
-  const tracker = fakeTracker({ '600820908970': 'DELIVERED', '600820908971': 'IN_TRANSIT', '260176992213': 'OUT_FOR_DELIVERY' });
+  const tracker = fakeTracker({ '100000000001': 'DELIVERED', '100000000002': 'IN_TRANSIT', '200000000001': 'OUT_FOR_DELIVERY' });
   const s = await run({ wisa, tracker, carrierMap: MAP, nowMs: NOW });
   assert.equal(s.shippingOrders, 2);
   assert.equal(s.products, 3);
