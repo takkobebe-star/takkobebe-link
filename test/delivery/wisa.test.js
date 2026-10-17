@@ -33,9 +33,9 @@ test('listShipping: orders가 없으면 빈 배열', async () => {
 test('setDelivered: setOrderStat stat=5, 빈 응답도 성공', async () => {
   let seen;
   const w = makeWisa({ base: BASE, hash: 'h', fetchFn: async (url) => { seen = new URL(String(url)); return res(''); } });
-  await w.setDelivered('20261012-E8849', 777);
+  await w.setDelivered('20990101-TEST1', 777);
   assert.equal(seen.pathname, '/api/openapi/setOrderStat');
-  assert.equal(seen.searchParams.get('ono'), '20261012-E8849');
+  assert.equal(seen.searchParams.get('ono'), '20990101-TEST1');
   assert.equal(seen.searchParams.get('order_product_no'), '777');
   assert.equal(seen.searchParams.get('stat'), '5');
 });

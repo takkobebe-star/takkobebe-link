@@ -14,8 +14,8 @@ test('요청마다 TRACKQL-API-KEY 헤더를 붙이고 track 결과의 마지막
     return jsonRes({ data: { track: { lastEvent: { time: '2026-10-13T05:00:00+09:00', status: { code: 'DELIVERED' } } } } });
   };
   const t = makeTracker({ clientId: 'test-id', clientSecret: 'test-secret', fetchFn, sleep: async () => {} });
-  const r1 = await t.track('kr.cjlogistics', '600820908970');
-  const r2 = await t.track('kr.lotte', '260176992213');
+  const r1 = await t.track('kr.cjlogistics', '100000000001');
+  const r2 = await t.track('kr.lotte', '200000000001');
   assert.deepEqual(r1, { code: 'DELIVERED', time: '2026-10-13T05:00:00+09:00' });
   assert.equal(r2.code, 'DELIVERED');
   assert.equal(calls.filter(c => c.url === TOKEN_URL).length, 0, '토큰 서버는 부르지 않는다');
@@ -23,7 +23,7 @@ test('요청마다 TRACKQL-API-KEY 헤더를 붙이고 track 결과의 마지막
   assert.equal(gql.length, 2);
   assert.equal(gql[0].auth, 'TRACKQL-API-KEY test-id:test-secret');
   const sent = JSON.parse(gql[0].body);
-  assert.deepEqual(sent.variables, { carrierId: 'kr.cjlogistics', trackingNumber: '600820908970' });
+  assert.deepEqual(sent.variables, { carrierId: 'kr.cjlogistics', trackingNumber: '100000000001' });
 });
 
 test('UNAUTHENTICATED/FORBIDDEN 오류는 그 코드로 던진다', async () => {
