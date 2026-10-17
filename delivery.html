@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>배송완료 자동 처리 상태</title>
+<style>
+  :root { --bg:#f6f1ea; --card:#fff; --ink:#111; --sub:#777; --sky:#bfe0f2; --warn:#c0392b; --ok:#2e7d32; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system,"Apple SD Gothic Neo",sans-serif; font-weight:300; line-height:1.45; }
+  main { max-width:720px; margin:0 auto; padding:24px 16px 48px; }
+  h1 { font-size:20px; font-weight:400; margin:0 0 4px; }
+  .sub { color:var(--sub); font-size:13px; margin-bottom:18px; }
+  .sub a { color:#1a6fb0; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-bottom:18px; }
+  .card { background:var(--card); border-radius:10px; padding:14px; }
+  .card b { display:block; font-size:26px; font-weight:400; }
+  .card span { font-size:12px; color:var(--sub); }
+  .banner { padding:12px 14px; border-radius:10px; background:var(--sky); font-size:14px; margin-bottom:14px; }
+  .banner.warn { background:#fde8e6; color:var(--warn); }
+  .banner.ok { background:#e6f4e8; color:var(--ok); }
+  table { width:100%; border-collapse:collapse; background:var(--card); border-radius:10px; overflow:hidden; font-size:13px; }
+  th, td { text-align:left; padding:8px 10px; border-bottom:1px solid #eee; white-space:nowrap; }
+  th { font-weight:400; color:var(--sub); }
+  .wrap { overflow-x:auto; }
+  .errors { font-size:12px; color:var(--warn); white-space:pre-wrap; margin-top:12px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>배송완료 자동 처리</h1>
+  <div class="sub" id="when">불러오는 중…</div>
+  <div id="banners"></div>
+  <div class="grid" id="cards"></div>
+  <div class="wrap"><table id="tbl"><thead><tr><th>주문</th><th>판정</th><th>송장</th><th>택배사</th><th>택배 상태</th><th>발송</th></tr></thead><tbody></tbody></table></div>
+  <div class="errors" id="errors"></div>
+</main>
+<script>
+(async () => {
+  const el = (id) => document.getElementById(id);
+  const esc = (v) => String(v ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const card = (n, label) => `<div class="card"><b>${esc(n ?? '-')}</b><span>${label}</span></div>`;
+  const banner = (cls, text) => `<div class="banner ${cls}">${esc(text)}</div>`;
+  try {
+    const full = new URLSearchParams(location.search).get('full') === '1';
+    if (full) el('when').textContent = '택배 조회까지 포함해 계산하는 중입니다. 송장 수에 따라 몇 분 걸릴 수 있습니다…';
+    const r = await fetch('/api/delivery-status' + (full ? '?full=1' : ''), { cache: 'no-store' });
+    const s = await r.json();
+    el('when').innerHTML = '확인 시각 ' + esc(new Date(s.checkedAt).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }))
+      + (s.missing && s.missing.length ? ' · 설정 누락: ' + esc(s.missing.join(', ')) : '')
+      + (full ? ' · 택배 조회 포함' : ' · 빠른 요약(택배 조회 생략) · <a href="?full=1">택배 조회까지 포함해 다시 계산</a>');
+    const b = [];
+    const c = s.credential || {};
+    if (c.daysLeft === null || c.daysLeft === undefined) b.push(banner('warn', '택배 조회 키 만료일을 모릅니다 (DT_CREDENTIAL_EXPIRES_AT 설정 필요)'));
+    else if (c.daysLeft < 0) b.push(banner('warn', `택배 조회 키가 ${-c.daysLeft}일 전에 만료됐습니다. 콘솔에서 새 키를 만들어 Vercel에 넣어 주세요.`));
+    else if (c.warn) b.push(banner('warn', `택배 조회 키 만료까지 ${c.daysLeft}일 남았습니다. 콘솔에서 새 키를 만들어 Vercel에 넣어 주세요.`));
+    else b.push(banner('ok', `택배 조회 키 만료까지 ${c.daysLeft}일 남았습니다.`));
+    if (s.wisaLogin === false) b.push(banner('warn', '위사 API 키가 유효하지 않습니다. 자동 처리가 멈춰 있습니다.'));
+    if (s.trackerDown) b.push(banner('warn', '택배 조회 인증에 실패했습니다. 지금은 평일 3일 규칙으로만 처리됩니다.'));
+    if (s.error) b.push(banner('warn', '상태 계산 실패: ' + s.error));
+    el('banners').innerHTML = b.join('');
+    const q = s.skipTracking;
+    el('cards').innerHTML = card(s.shippingOrders, '배송중 주문') + card(s.products, '배송중 상품') + card(q ? '-' : s.trackedDelivered, '택배 도착 확인') + card(q ? s.dueFallback : s.due, q ? '평일 3일 경과(완료 예정)' : '다음 실행 때 완료 예정') + card(s.unknownCarrier, '택배사 미대응') + card(q ? '-' : s.trackErrors, '조회 오류');
+    const label = (i) => i.reason === 'tracked' ? '도착 → 완료' : i.reason === 'fallback' ? '평일 3일 경과 → 완료' : '유지';
+    const rows = (s.items || []).map(i => `<tr><td>${esc(i.ono)}</td><td>${label(i)}</td><td>${esc(i.invoice || '-')}</td><td>${esc(i.carrierName || i.carrierId || '-')}</td><td>${esc(i.trackCode || '-')}</td><td>${esc((i.shippedAt || '').slice(0, 16))}</td></tr>`);
+    el('tbl').querySelector('tbody').innerHTML = rows.join('') || '<tr><td colspan="6">배송중 상품이 없습니다.</td></tr>';
+    el('errors').textContent = (s.errors || []).join('\n');
+  } catch (e) {
+    el('when').textContent = '상태를 불러오지 못했습니다: ' + e.message;
+  }
+})();
+</script>
+</body>
+</html>
